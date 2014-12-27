@@ -1,6 +1,8 @@
 #include "build.h"
 #include "names.h"
 #include "pragmas.h"
+#include "cache1d.h"
+#include "baselayer.h"
 
 #define TICSPERFRAME 3
 #define MOVEFIFOSIZ 256
@@ -72,7 +74,6 @@ char      oldjoyb;
 //** Les  END  - 09/26/95
 short     yaw,pitch,roll,vrangle,vrpitch;
 int       joyx,joyy;
-char      joyb;
 
 #endif
 
@@ -353,7 +354,7 @@ char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
 int
-main(int argc,char **argv)
+app_main(int argc, char const * const argv[])
 {
 	int      i, j, k, l, fil, waitplayers, x1, y1, x2, y2;
      short     other, tempbufleng;
@@ -363,18 +364,16 @@ main(int argc,char **argv)
 
      initgroupfile("stuff.dat");
      tekargv(argc, argv);
-     lm("tektextmode");
-     tektextmode();
      lm("tekloadsetup");
      tekloadsetup();
      lm("inittimer");
-	inittimer();
+	inittimer(CLKIPS);
      lm("tekinitmultiplayers");
      tekinitmultiplayers();
      lm("initsb");
 	initsb(option[1],option[2],0,0,0,0,0);
      lm("loadpics");
-	loadpics("tiles000.art");                     
+	loadpics("tiles000.art", 8*1048576);
      lm("tekpreinit");
      tekpreinit();
      lm("tekgamestarted");

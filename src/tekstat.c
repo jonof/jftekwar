@@ -2297,7 +2297,7 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
           z=posz[target];     // instead of calculating a dot product angle
           hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                sintable[(daang2+2048)&2047],daz2,
-               &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz);
+               &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( hitsprite > 0 ) {
                if( playerhit(hitsprite, &pnum) ) {
                     playerpainsound(pnum);

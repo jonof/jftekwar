@@ -2382,7 +2382,7 @@ int  coopmode,
      switchlevelsflag;
 
 void
-tekargv(short int argc,char **argv)
+tekargv(int argc, char const * const argv[]);
 {
      int       p,sl;
      char      argmatch=0;

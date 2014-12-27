@@ -130,7 +130,7 @@ drawoverheadmap(long cposx, long cposy, long czoom, short cang)
 								daang = (spr->ang-cang)&2047;
 								if (j == playersprite[screenpeek])
 									{ x1 = 0; y1 = (yxaspect<<2); daang = 0; }
-								rotatesprite((x1<<4)+(xdim<<15),(y1<<4)+(ydim<<15),mulscale(czoom*spr->yrepeat,yxaspect,16),daang,spr->picnum,spr->shade,spr->pal,(spr->cstat&2)>>1);
+								rotatesprite((x1<<4)+(xdim<<15),(y1<<4)+(ydim<<15),mulscale(czoom*spr->yrepeat,yxaspect,16),daang,spr->picnum,spr->shade,spr->pal,(spr->cstat&2)>>1, windowx1, windowy1, windowx2, windowy2);
 							}
 						}
 						break;

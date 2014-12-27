@@ -899,7 +899,7 @@ teknetpickmap(void)
                rotangle=0;
           }
           clearview(0);
-          rotatesprite(xdim<<15,ydim<<15,zoom,rotangle,mappic[map],0,0,0);
+          rotatesprite(xdim<<15,ydim<<15,zoom,rotangle,mappic[map],0,0,0, 0, 0, xdim-1, ydim-1);
           overwritesprite((xdim>>1)-160,0,408,0,0,0);
           sprintf(tempbuf,"MULTIPLAYER MAP %d",map+1);
           printext((xdim>>1)-(strlen(tempbuf)<<2),ydim-16,tempbuf,ALPHABET2,255);

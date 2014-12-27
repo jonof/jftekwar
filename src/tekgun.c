@@ -253,7 +253,7 @@ playerwoundplayer(short plrhit, short plr, char guntype)
 void
 killscore(short hs, short snum, char guntype)
 {
-     int       ext=sprptr[hs]->extra,j;
+     int       ext=sprptr[hs]->extra;
      short     score;
 
      if( !validplayer(snum) ) {
@@ -376,7 +376,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
           daz2=(100-dahoriz)*2000;
           hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                   sintable[(daang2+2048)&2047],daz2,
-                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz);
+                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( (hitsprite >= 0) && (sprptr[hitsprite]->statnum < MAXSTATUS)) {
                if( playerhit(hitsprite, &pnum) ) {
                     playerpainsound(pnum);
@@ -393,7 +393,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
                                    // thus the bloodxhitx, bloodwall, etc...
                                    hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                                            sintable[(daang2+2048)&2047],daz2,
-                                           &bloodhitsect,&bloodhitwall,&bloodhitsprite,&bloodhitx,&bloodhity,&bloodhitz);
+                                           &bloodhitsect,&bloodhitwall,&bloodhitsprite,&bloodhitx,&bloodhity,&bloodhitz,CLIPMASK1);
                                    if( bloodhitwall != -1 ) {
                                         bloodonwall(bloodhitwall,sprptr[hitsprite]->x,sprptr[hitsprite]->y,sprptr[hitsprite]->z,
                                                     sprptr[hitsprite]->sectnum,daang2,bloodhitx,bloodhity,bloodhitz);
@@ -472,7 +472,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
           daz2=(100-dahoriz)*2000;
           hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                   sintable[(daang2+2048)&2047],daz2,
-                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz);
+                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( (hitsprite >= 0) && (sprptr[hitsprite]->statnum < MAXSTATUS)) {
                xydist=klabs(posx[snum]-sprptr[hitsprite]->x)+klabs(posy[snum]-sprptr[hitsprite]->y);
                zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) ); 
@@ -501,7 +501,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
           daz2=(100-dahoriz)*2000;
           hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                   sintable[(daang2+2048)&2047],daz2,
-                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz);
+                  &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( (hitsprite >= 0) && (sprptr[hitsprite]->statnum < MAXSTATUS)) {
                xydist=klabs(posx[snum]-sprptr[hitsprite]->x)+klabs(posy[snum]-sprptr[hitsprite]->y);
                zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) ); 
