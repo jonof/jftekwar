@@ -1,27 +1,12 @@
-#include <fcntl.h>
-#include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <string.h>
-#include <stdlib.h>
-#include <dos.h>
-
-#include "stdarg.h"
 #include "build.h"
 #include "names.h"
-
-#include <stdio.h>
-#include <string.h>
+#include "pragmas.h"
 
 #define TICSPERFRAME 3
 #define MOVEFIFOSIZ 256
 
 #define   TEKWAR
 #define   SECT_LOTAG_CLIMB                    5060
-
-#ifdef    GAMEC
-#define   WASSTATIC static
-#endif
 
 #ifdef    TEKWAR
 #define   WASSTATIC        
@@ -48,7 +33,6 @@ extern    int  missionfailed(void);
 extern    void cduninit(void);
 extern    char debrief;
 extern    void jstick(void);
-#pragma   aux  jstick modify exact [eax ebx ecx edx esi edi];
 extern    void clearpal(void);
 extern    int  autocenter[];
 extern    char tektempbuf[];
@@ -97,40 +81,14 @@ typedef struct
 	long x, y, z;
 } point3d;
 
-#ifdef    GAMEC
-void (__interrupt __far *oldtimerhandler)();
-void __interrupt __far timerhandler(void);
-#endif
-
-#define KEYFIFOSIZ 64
-void (__interrupt __far *oldkeyhandler)();
-void __interrupt __far keyhandler(void);
-volatile char keystatus[256], keyfifo[KEYFIFOSIZ], keyfifoplc, keyfifoend;
-volatile char readch, oldreadch, extended, keytemp;
-
 WASSTATIC long vel, svel, angvel;
 WASSTATIC long vel2, svel2, angvel2;
 
 extern volatile long recsnddone, recsndoffs;
 WASSTATIC long recording = -2;
 
-WASSTATIC long chainxres[4] = {256,320,360,400};
-WASSTATIC long chainyres[11] = {200,240,256,270,300,350,360,400,480,512,540};
 WASSTATIC long vesares[7][2] = {320,200,640,400,640,480,800,600,1024,768,
 									  1280,1024,1600,1200};
-#ifdef    GAMEC
-#define NUMOPTIONS 8
-#define NUMKEYS 19
-WASSTATIC char option[NUMOPTIONS] = {0,0,0,0,0,0,1,0};
-WASSTATIC char keys[NUMKEYS] =
-{
-	0xc8,0xd0,0xcb,0xcd,0x2a,0x9d,0x1d,0x39,
-	0x1e,0x2c,0xd1,0xc9,0x33,0x34,
-	0x9c,0x1c,0xd,0xc,0xf,
-};
-WASSTATIC long digihz[7] = {6000,8000,11025,16000,22050,32000,44100};
-#endif
-
 #ifdef    TEKWAR
 #define   NUMOPTIONS          8
 #define   NUMKEYS             32
@@ -225,15 +183,6 @@ WASSTATIC long frameskipcnt[MAXPLAYERS];
 
 WASSTATIC char gundmost[320];
 
-#define LAVASIZ 128
-#define LAVALOGSIZ 7
-#define LAVAMAXDROPS 32
-WASSTATIC char lavabakpic[(LAVASIZ+2)*(LAVASIZ+2)], lavainc[LAVASIZ];
-WASSTATIC long lavanumdrops, lavanumframes;
-WASSTATIC long lavadropx[LAVAMAXDROPS], lavadropy[LAVAMAXDROPS];
-WASSTATIC long lavadropsiz[LAVAMAXDROPS], lavadropsizlookup[LAVAMAXDROPS];
-WASSTATIC long lavaradx[32][128], lavarady[32][128], lavaradcnt[32];
-
 	//Shared player variables
 WASSTATIC long posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
 WASSTATIC long horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
@@ -312,7 +261,7 @@ WASSTATIC short screensize, screensizeflag = 0;
 WASSTATIC short neartagsector, neartagwall, neartagsprite;
 WASSTATIC long lockclock, neartagdist, neartaghitdist;
 WASSTATIC long masterslavetexttime;
-extern long frameplace, pageoffset, ydim16, chainnumpages;
+extern long pageoffset, ydim16, chainnumpages;
 WASSTATIC long globhiz, globloz, globhihit, globlohit;
 extern long stereofps, stereowidth, stereopixelwidth;
 
@@ -373,119 +322,6 @@ WASSTATIC char scantoascwithshift[128] =
 WASSTATIC long *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
 WASSTATIC long animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt = 0;
 
-	//Here are some nice in-line assembly pragmas that make life easier.
-	//(at least for Ken)
-#pragma aux setvmode =\
-	"int 0x10",\
-	parm [eax]\
-
-#pragma aux clearbuf =\
-	"rep stosd",\
-	parm [edi][ecx][eax]\
-
-#pragma aux clearbufbyte =\
-	"shr ecx, 1",\
-	"jnc skip1",\
-	"stosb",\
-	"skip1: shr ecx, 1",\
-	"jnc skip2",\
-	"stosw",\
-	"skip2: test ecx, ecx",\
-	"jz skip3",\
-	"rep stosd",\
-	"skip3:",\
-	parm [edi][ecx][eax]\
-
-#pragma aux copybuf =\
-	"rep movsd",\
-	parm [esi][edi][ecx]\
-
-#pragma aux copybufbyte =\
-	"shr ecx, 1",\
-	"jnc skip1",\
-	"movsb",\
-	"skip1: shr ecx, 1",\
-	"jnc skip2",\
-	"movsw",\
-	"skip2: test ecx, ecx",\
-	"jz skip3",\
-	"rep movsd",\
-	"skip3:",\
-	parm [esi][edi][ecx]\
-
-#pragma aux copybufreverse =\
-	"shr ecx, 1",\
-	"jnc skipit1",\
-	"mov al, byte ptr [esi]",\
-	"dec esi",\
-	"mov byte ptr [edi], al",\
-	"inc edi",\
-	"skipit1: shr ecx, 1",\
-	"jnc skipit2",\
-	"mov ax, word ptr [esi-1]",\
-	"sub esi, 2",\
-	"ror ax, 8",\
-	"mov word ptr [edi], ax",\
-	"add edi, 2",\
-	"skipit2: test ecx, ecx",\
-	"jz endloop",\
-	"begloop: mov eax, dword ptr [esi-3]",\
-	"sub esi, 4",\
-	"bswap eax",\
-	"mov dword ptr [edi], eax",\
-	"add edi, 4",\
-	"dec ecx",\
-	"jnz begloop",\
-	"endloop:",\
-	parm [esi][edi][ecx]\
-
-#pragma aux klabs =\
-	"test eax, eax",\
-	"jns skipnegate",\
-	"neg eax",\
-	"skipnegate:",\
-	parm [eax]\
-
-#pragma aux ksgn =\
-	"add ebx, ebx",\
-	"sbb eax, eax",\
-	"cmp eax, ebx",\
-	"adc eax, 0",\
-	parm [ebx]\
-
-#pragma aux koutp =\
-	"out dx, al",\
-	parm [edx][eax]\
-
-#pragma aux koutpw =\
-	"out dx, ax",\
-	parm [edx][eax]\
-
-#pragma aux kinp =\
-	"in al, dx",\
-	parm [edx]\
-
-#pragma aux mulscale =\
-	"imul ebx",\
-	"shrd eax, edx, cl",\
-	parm [eax][ebx][ecx]\
-	modify [edx]\
-
-#pragma aux divscale =\
-	"mov edx, eax",\
-	"sar edx, 31",\
-	"shld edx, eax, cl",\
-	"sal eax, cl",\
-	"idiv ebx",\
-	parm [eax][ebx][ecx]\
-	modify [edx]\
-
-#pragma aux scale =\
-	"imul ebx",\
-	"idiv ecx",\
-	parm [eax][ebx][ecx]\
-	modify [eax edx]\
-
 
 void
 debugout(short p)
@@ -531,8 +367,6 @@ main(short int argc,char **argv)
      tektextmode();
      lm("tekloadsetup");
      tekloadsetup();
-     lm("initkeys");
-	initkeys();
      lm("inittimer");
 	inittimer();
      lm("tekinitmultiplayers");
@@ -662,7 +496,6 @@ gameends:
 	uninitsb();
      cduninit();
 	uninittimer();
-	uninitkeys();
 	uninitengine();
 	uninitgroupfile();
 
@@ -1267,18 +1100,6 @@ drawscreen(short snum, long dasmoothratio)
 		}
 		drawoverheadmap(cposx,cposy,czoom,cang);
 	}
-
-	// tell who's master or slave in multiplayer
-    #ifdef MASTERSLAVEGAMEC
-	if( numplayers >= 2 ) {
-		if( lockclock < masterslavetexttime+120 ) {
-			if (myconnectindex == connecthead)
-				printext256(152L,0L,31,-1,"Master",0);
-			else
-				printext256(152L,0L,31,-1,"Slave",0);
-		}
-	}
-    #endif
 
 	if( typemode != 0 ) {
 		charsperline = 40;
@@ -2137,7 +1958,6 @@ playback()
 
     uninitmultiplayers();
 	uninittimer();
-	uninitkeys();
 	uninitengine();
 	uninitsb();
 	uninitgroupfile();
@@ -2244,56 +2064,6 @@ checkmasterslaveswitch()
 		}
 		i = j; j = connectpoint2[i];
 	}
-}
-
-initkeys()
-{
-	long i;
-
-	keyfifoplc = 0; keyfifoend = 0;
-	for(i=0;i<256;i++) keystatus[i] = 0;
-	oldkeyhandler = _dos_getvect(0x9);
-	_disable(); _dos_setvect(0x9, keyhandler); _enable();
-}
-
-uninitkeys()
-{
-	short *ptr;
-
-	_dos_setvect(0x9, oldkeyhandler);
-	// turn off shifts to prevent stucks with quitting
-	ptr = (short *)0x417; *ptr &= ~0x030f;
-}
-
-void __interrupt __far keyhandler()
-{
-	koutp(0x20,0x20);
-	oldreadch = readch; readch = kinp(0x60);
-	keytemp = kinp(0x61); koutp(0x61,keytemp|128); koutp(0x61,keytemp&127);
-	if ((readch|1) == 0xe1) { extended = 128; return; }
-	if (oldreadch != readch)
-	{
-		if ((readch&128) == 0)
-		{
-			keytemp = readch+extended;
-			if (keystatus[keytemp] == 0)
-			{
-				keystatus[keytemp] = 1;
-				keyfifo[keyfifoend] = keytemp;
-				keyfifo[(keyfifoend+1)&(KEYFIFOSIZ-1)] = 1;
-				keyfifoend = ((keyfifoend+2)&(KEYFIFOSIZ-1));
-			}
-		}
-		else
-		{
-			keytemp = (readch&127)+extended;
-			keystatus[keytemp] = 0;
-			keyfifo[keyfifoend] = keytemp;
-			keyfifo[(keyfifoend+1)&(KEYFIFOSIZ-1)] = 0;
-			keyfifoend = ((keyfifoend+2)&(KEYFIFOSIZ-1));
-		}
-	}
-	extended = 0;
 }
 
 faketimerhandler()

@@ -1,3 +1,5 @@
+#if 0
+
 /***************************************************************************
  *   TEKTXT.C  - text based & MiSCcellaneous routines for Tekwar game      *
  *   Uses BIOS modes for compatibility and scrolling.                      *
@@ -178,7 +180,6 @@ crash(char *s,...)
 	uninitsb();
      cduninit();
 	uninittimer();
-	uninitkeys();
 	uninitengine();
 	uninitgroupfile();
      teksavesetup();
@@ -748,5 +749,4 @@ tektextmode(void)
      videocheck();
 }
 
-
-
+#endif

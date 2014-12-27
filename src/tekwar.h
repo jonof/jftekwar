@@ -28,29 +28,13 @@ typedef struct
 	long x, y, z;
 } point3d;
 
-#define KEYFIFOSIZ 64
-extern    void (__interrupt __far *oldkeyhandler)();
-extern    void __interrupt __far keyhandler(void);
-extern    volatile char keystatus[256], keyfifo[KEYFIFOSIZ], keyfifoplc, keyfifoend;
-extern    volatile char readch, oldreadch, extended, keytemp;
-
 WASSTATIC long vel, svel, angvel;
 WASSTATIC long vel2, svel2, angvel2;
 
 extern volatile long recsnddone, recsndoffs;
 WASSTATIC long recording;
 
-WASSTATIC long chainxres[4];
-WASSTATIC long chainyres[11];
 WASSTATIC long vesares[7][2];
-
-#ifdef    GAMEC
-#define NUMOPTIONS 8
-#define NUMKEYS 19
-WASSTATIC char option[NUMOPTIONS];
-WASSTATIC char keys[NUMKEYS];
-WASSTATIC long digihz[7];
-#endif
 
 #ifdef    TEKWAR
 #define   NUMOPTIONS          8
@@ -69,15 +53,6 @@ extern    int  krand_intercept(char *);
 WASSTATIC char frame2draw[MAXPLAYERS];
 WASSTATIC long frameskipcnt[MAXPLAYERS];
 WASSTATIC char gundmost[320];
-
-#define LAVASIZ 128
-#define LAVALOGSIZ 7
-#define LAVAMAXDROPS 32
-WASSTATIC char lavabakpic[(LAVASIZ+2)*(LAVASIZ+2)], lavainc[LAVASIZ];
-WASSTATIC long lavanumdrops, lavanumframes;
-WASSTATIC long lavadropx[LAVAMAXDROPS], lavadropy[LAVAMAXDROPS];
-WASSTATIC long lavadropsiz[LAVAMAXDROPS], lavadropsizlookup[LAVAMAXDROPS];
-WASSTATIC long lavaradx[32][128], lavarady[32][128], lavaradcnt[32];
 
 	//Shared player variables
 WASSTATIC long posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
@@ -157,7 +132,7 @@ WASSTATIC short screensize, screensizeflag;
 WASSTATIC short neartagsector, neartagwall, neartagsprite;
 WASSTATIC long lockclock, neartagdist, neartaghitdist;
 WASSTATIC long masterslavetexttime;
-extern long frameplace, pageoffset, ydim16, chainnumpages;
+extern long pageoffset, ydim16, chainnumpages;
 WASSTATIC long globhiz, globloz, globhihit, globlohit;
 extern long stereofps, stereowidth, stereopixelwidth;
 

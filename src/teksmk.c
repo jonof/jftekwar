@@ -1,3 +1,5 @@
+#if 0
+
 /***************************************************************************
  *   TEKSMK.C  -   smack flic stuff etc. for Tekwar                        *
  *                                                                         *
@@ -251,3 +253,5 @@ smkclosemenu()
           uninitcache();
      }
 }
+
+#endif

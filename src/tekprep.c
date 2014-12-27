@@ -4,22 +4,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <string.h>
-#include <stdlib.h>
-#include <dos.h>
 #include "build.h"
 #include "names.h"
+#include "pragmas.h"
 
 #include "tekwar.h"
-
-#pragma aux copybuf =         \
-	"rep movsd",             \
-	parm [esi][edi][ecx]     \
 
 #define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
 		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
@@ -35,21 +24,11 @@
 	spr2->picnum = picnum2; spr2->ang = ang2;                             \
 	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
 	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \ 
+	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
 	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
 }
 
 #define   lm(_str_) printf(" %s...\n", _str_);
-
-#pragma aux setvmode =        \
- 	"int 0x10",              \
-	parm [eax]               \
-
-#pragma aux mulscale =        \
-	"imul ebx",              \
-	"shrd eax, edx, cl",     \
-	parm [eax][ebx][ecx]     \
-	modify [edx]             \
 
 extern    void      cdpreinit(void);
 extern    int       ovmode;
@@ -113,7 +92,6 @@ prepareboard(char *daboardfilename)
 		musicoff();
 		uninitmultiplayers();
 		uninittimer();
-		uninitkeys();
 		uninitengine();
 		uninitsb();
 		setvmode(ovmode);        //Set back to text mode

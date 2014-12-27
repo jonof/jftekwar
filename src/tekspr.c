@@ -4,17 +4,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "string.h"
 #include "build.h"
 #include "names.h"
+#include "pragmas.h"
 
 #include "tekwar.h"
-
-#pragma aux mulscale =        \
-	"imul ebx",              \
-	"shrd eax, edx, cl",     \
-	parm [eax][ebx][ecx]     \
-	modify [edx]             \
 
 // from tekstat
 #define   FLOATING       322  
@@ -32,10 +26,6 @@ extern    char      rearviewdraw;
 extern    long      flags32[],weapons[];                                                  
 extern    void      placerandompic(long picnum);
 
-#pragma aux copybuf =         \
-	"rep movsd",             \
-	parm [esi][edi][ecx]     \
-
 #define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
 		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
 		xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
@@ -50,7 +40,7 @@ extern    void      placerandompic(long picnum);
 	spr2->picnum = picnum2; spr2->ang = ang2;                             \
 	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
 	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \ 
+	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
 	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
 }
 

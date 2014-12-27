@@ -5,25 +5,10 @@
  ***************************************************************************/
 
 #include "build.h"
+#include "pragmas.h"
 #include "names.h"
 
 #include "tekwar.h"
-
-#pragma aux mulscale =        \
-	"imul ebx",              \
-	"shrd eax, edx, cl",     \
-	parm [eax][ebx][ecx]     \
-	modify [edx]             \
-
-#pragma aux divscale =        \
-	"mov edx, eax",          \
-	"sar edx, 31",           \
-	"shld edx, eax, cl",     \
-	"sal eax, cl",           \
-	"idiv ebx",              \
-	parm [eax][ebx][ecx]     \
-	modify [edx]             \
-
 
 drawoverheadmap(long cposx, long cposy, long czoom, short cang)
 {

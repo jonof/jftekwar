@@ -4,18 +4,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "stdio.h"
-#include "string.h"
-#include "stdarg.h"
-#include "stdlib.h"
-#include "time.h"
-#include "io.h"
-#include "fcntl.h"       
-#include "sys\types.h"   
-#include "sys\stat.h"    
-#include "dos.h"
 #include "build.h"
 #include "names.h"
+#include "pragmas.h"
 
 #include "tekwar.h"
 
@@ -57,26 +48,10 @@ extern    void cd_retardtrack(void);
 extern    void updatesounds(void);
 extern    void smkplayseq(char *name);
 extern    void smkshowmenu(void);
-extern    void near asmwaitvrt(int parm1);
-#pragma aux asmwaitvrt  "*_"       \ 
-    parm caller     [ecx]          \
-    modify          [eax edx];
-extern    void near asmsetpalette(char *pal); 
-#pragma aux asmsetpalette "*_"     \           
-   parm caller     [esi]           \  
-   modify          [eax ecx edx]; 
-extern    void near asmoverscan(int parm1); 
-#pragma aux asmoverscan "*_"       \           
-   parm caller     [ebx]           \  
-   modify          [eax edx]; 
-extern    void near asmoverflash(int parm1); 
-#pragma aux asmoverflash "*_"      \           
-   parm caller     [ebx]           \  
-   modify          [eax edx]; 
-
-#pragma aux copybuf =\
-	"rep movsd",\
-	parm [esi][edi][ecx]\
+extern    void asmwaitvrt(int parm1);
+extern    void asmsetpalette(char *pal);
+extern    void asmoverscan(int parm1);
+extern    void asmoverflash(int parm1);
 
 #define   MAXNAMESIZE    11
 #define   NETNAMES
@@ -259,16 +234,6 @@ int       newnetleader=0,oldnetleader=0;
 long      netclock;
 int       allsymsdeposited=0;
 int       killedsonny=0;
-
-#pragma aux mulscale =        \
-	"imul ebx",              \
-	"shrd eax, edx, cl",     \
-	parm [eax][ebx][ecx]     \
-	modify [edx]             \
-
-#pragma aux setvmode =        \
- 	"int 0x10",              \
-    parm [eax]                \
 
 
 

@@ -4,13 +4,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <fcntl.h>
-#include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include <string.h>
-#include <stdlib.h>
-#include <dos.h>
 #include "build.h"
 #include "names.h"
 
@@ -82,7 +75,6 @@ loadgame(int loadno)
 {
 	long      i, fil;
      short     dummyscreensize;
-     long      ft;
      int       rv;
      struct    stat buf;
 
@@ -285,7 +277,6 @@ loadgame(int loadno)
 
      tekloadmissioninfo(fil);
  
-     ft=tell(fil);
      rv=close(fil);
 
 	for(i=connecthead;i>=0;i=connectpoint2[i]) initplayersprite((short)i);
@@ -301,7 +292,6 @@ loadgame(int loadno)
 savegame(int saveno)
 {
 	long      i, fil;
-     long      ft;
      int       rv;
      struct    stat buf;
 
@@ -502,9 +492,7 @@ savegame(int saveno)
 
      teksavemissioninfo(fil);
  
-     ft=tell(fil);
      rv=close(fil);
-     flushall();
 
      showmessage("GAME SAVED");
 

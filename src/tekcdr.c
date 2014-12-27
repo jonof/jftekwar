@@ -1,3 +1,5 @@
+#if 0
+
 /***************************************************************************
  *    CDROM.C  - CD-ROM interface code (audio routines)                    *
  *                                                                         *
@@ -544,3 +546,4 @@ cd_resetdisc(void)
      showmessage("CD DISC RESET");
 }
 
+#endif

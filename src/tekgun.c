@@ -7,12 +7,9 @@
 
 #include "build.h"
 #include "names.h"
+#include "pragmas.h"
 
 #include "tekwar.h"
-
-#pragma aux copybuf =         \
-	"rep movsd",             \
-	parm [esi][edi][ecx]     \
 
 #define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
 		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
@@ -28,16 +25,9 @@
 	spr2->picnum = picnum2; spr2->ang = ang2;                             \
 	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
 	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \ 
+	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
 	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
-}                                                                          \ 
-
-#pragma aux klabs =\
-	"test eax, eax",\
-	"jns skipnegate",\
-	"neg eax",\
-	"skipnegate:",\
-	parm [eax]\
+}                                                                          \
 
 #define   NUMWEAPONS               8
                                    
@@ -93,17 +83,17 @@ struct guntype {
      char action[8];          // 8 frame action bytes - 1=shootgun()
      char pos;                // position on screen 0=center, 1=left, 2=right
      short tics;              // tics to delay for each frame
-} guntype[NUMWEAPONS]={  
-     //   pic         firepic    endfirepic rep /           \ pos  tics/frame
-     {GUN07READY,GUN07FIRESTART,GUN07FIREEND,0,0,1,0,0,0,0,0,0,2,TICSPERFRAME*8}, 
-     {GUN04READY,GUN04FIRESTART,GUN04FIREEND,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*4}, 
-     {GUN01READY,GUN01FIRESTART,GUN01FIREEND,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*4},
-     {GUN03READY,GUN03FIRESTART,GUN03FIREEND,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*2},
-     {GUN02READY,GUN02FIRESTART,GUN02FIREEND,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*2},
-     {GUN08READY,GUN08FIRESTART,GUN08FIREEND,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*2},
-     {GUN05READY,GUN05FIRESTART,GUN05FIREEND,0,0,1,1,0,0,0,0,0,2,TICSPERFRAME*8},
+} guntype[NUMWEAPONS]={
+     //   pic         firepic    endfirepic rep /             \ pos  tics/frame
+     {GUN07READY,GUN07FIRESTART,GUN07FIREEND,0,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*8}, 
+     {GUN04READY,GUN04FIRESTART,GUN04FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*4}, 
+     {GUN01READY,GUN01FIRESTART,GUN01FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*4},
+     {GUN03READY,GUN03FIRESTART,GUN03FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*2},
+     {GUN02READY,GUN02FIRESTART,GUN02FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*2},
+     {GUN08READY,GUN08FIRESTART,GUN08FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*2},
+     {GUN05READY,GUN05FIRESTART,GUN05FIREEND,0,{0,1,1,0,0,0,0,0},2,TICSPERFRAME*8},
      // matrix hand
-     {      3980,          3981,        3984,1,0,1,0,0,0,0,0,0,2,TICSPERFRAME*3}
+     {      3980,          3981,        3984,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*3}
 };
 
 int  gunbobx[10]={0,2,4,6,8,8,8,6,4,2};

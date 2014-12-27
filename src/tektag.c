@@ -4,13 +4,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "stdio.h"
-#include "fcntl.h"
-#include "io.h"
-#include "sys\types.h"
-#include "sys\stat.h"
 #include "build.h"
 #include "names.h"
+#include "pragmas.h"
 
 #include "tekwar.h"
 
@@ -287,18 +283,6 @@ short     numdelayfuncs;
 int       loopinsound=-1;
 int       baydoorloop=-1;
 int       ambsubloop=-1;
-
-#pragma aux copybuf =\
-	"rep movsd",\
-	parm [esi][edi][ecx]\
-
-#pragma aux klabs =\
-	"test eax, eax",\
-	"jns skipnegate",\
-	"neg eax",\
-	"skipnegate:",\
-	parm [eax]\
-
 
 operatesector(short dasector)
 {     //Door code

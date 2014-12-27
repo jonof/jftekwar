@@ -1,3 +1,4 @@
+#if 0
 
 /***************************************************************************
  *   TEKSND.C  - HMI library replaces Kens sound stuff                     *
@@ -1906,3 +1907,4 @@ readhmicfg()
       return( _TRUE );
 }
 
+#endif
