@@ -81,7 +81,7 @@ int vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
-char option[NUMOPTIONS] = {
+unsigned char option[NUMOPTIONS] = {
       1,       // 0  VIDEO MODE CHAINED OR NO
       0,       // 1  SOUND CHOICE
       0,       // 2  MUSIC CHOICE
@@ -91,7 +91,7 @@ char option[NUMOPTIONS] = {
       0,       // 6  VIDEO RES CHOICE
       0        // 7  SOUND FREQ
 };
-char keys[NUMKEYS] = {
+unsigned char keys[NUMKEYS] = {
      200,         // 0  FWD
      208,         // 1  BKWD
      203,         // 2  RIGHT  
@@ -125,7 +125,7 @@ char keys[NUMKEYS] = {
       26,         // 30 N/U
       26          // 31 N/U
 };
-char moreoptions[MAXMOREOPTIONS] = {
+unsigned char moreoptions[MAXMOREOPTIONS] = {
         1,     // 0  MOUSE ON/OFF         
        29,     // 1  MOUSE BUTTON 1 MAP
       200,     // 2  MOUSE BUTTON 2 MAP

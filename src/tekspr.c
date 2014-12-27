@@ -766,7 +766,7 @@ operatesprite(short dasprite)
 
 #define   DROPSIES       406    
 #define   MAXDROPANGLES  6
-char      dropanglecnt;
+unsigned char      dropanglecnt;
 short     dropangles[MAXDROPANGLES] = { 0, 1792, 512, 768, 1536, 1024 };
 
 void

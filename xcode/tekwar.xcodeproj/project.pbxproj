@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB3AE6C21A4D423600CE4329 /* b5compat.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6C11A4D423600CE4329 /* b5compat.c */; };
+		AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D01A4E561600CE4329 /* tekcdr.c */; };
+		AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D31A4E565A00CE4329 /* teksmk.c */; };
+		AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D41A4E565A00CE4329 /* teksnd.c */; };
 		ABC75BD71A49C19A007D0D43 /* game.osxmain.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABC75BD51A49C19A007D0D43 /* game.osxmain.nib */; };
 		ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABC75BD61A49C19A007D0D43 /* startwin.game.nib */; };
 		ABC75BDB1A49C2D8007D0D43 /* libengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BC91A49BFB1007D0D43 /* libengine.a */; };
@@ -79,6 +83,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AB3AE6C11A4D423600CE4329 /* b5compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = b5compat.c; sourceTree = "<group>"; };
+		AB3AE6D01A4E561600CE4329 /* tekcdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekcdr.c; sourceTree = "<group>"; };
+		AB3AE6D31A4E565A00CE4329 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
+		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; };
 		ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JFTekWar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JFTekWar-Info.plist"; sourceTree = "<group>"; };
 		ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = engine.xcodeproj; path = ../jfbuild/xcode/engine.xcodeproj; sourceTree = "<group>"; };
@@ -87,23 +95,18 @@
 		ABC75BDC1A49C30C007D0D43 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Users/jonof/Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		ABC75BDF1A49C347007D0D43 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		ABC75BE61A49C3DB007D0D43 /* names.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = names.h; sourceTree = "<group>"; };
-		ABC75BE81A49C3DB007D0D43 /* tekcdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekcdr.c; sourceTree = "<group>"; };
 		ABC75BE91A49C3DB007D0D43 /* tekchng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekchng.c; sourceTree = "<group>"; };
-		ABC75BEA1A49C3DB007D0D43 /* tekctm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekctm.c; sourceTree = "<group>"; };
 		ABC75BEB1A49C3DB007D0D43 /* tekgame.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekgame.c; sourceTree = "<group>"; };
 		ABC75BEC1A49C3DB007D0D43 /* tekgun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekgun.c; sourceTree = "<group>"; };
 		ABC75BED1A49C3DB007D0D43 /* tekldsv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekldsv.c; sourceTree = "<group>"; };
 		ABC75BEE1A49C3DB007D0D43 /* tekmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekmap.c; sourceTree = "<group>"; };
 		ABC75BEF1A49C3DB007D0D43 /* tekmsc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekmsc.c; sourceTree = "<group>"; };
 		ABC75BF01A49C3DB007D0D43 /* tekprep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekprep.c; sourceTree = "<group>"; };
-		ABC75BF11A49C3DB007D0D43 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
-		ABC75BF21A49C3DB007D0D43 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; };
 		ABC75BF31A49C3DB007D0D43 /* tekspr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekspr.c; sourceTree = "<group>"; };
 		ABC75BF41A49C3DB007D0D43 /* tekstat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekstat.c; sourceTree = "<group>"; };
 		ABC75BF51A49C3DB007D0D43 /* tektag.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tektag.c; sourceTree = "<group>"; };
 		ABC75BF61A49C3DB007D0D43 /* tektxt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tektxt.c; sourceTree = "<group>"; };
 		ABC75BF71A49C3DB007D0D43 /* tekver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekver.c; sourceTree = "<group>"; };
-		ABC75BF81A49C3DB007D0D43 /* tekvfx1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekvfx1.c; sourceTree = "<group>"; };
 		ABC75BF91A49C3DB007D0D43 /* tekwar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tekwar.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,24 +178,23 @@
 		ABC75BE41A49C3DB007D0D43 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				AB3AE6C11A4D423600CE4329 /* b5compat.c */,
 				ABC75BE61A49C3DB007D0D43 /* names.h */,
-				ABC75BE81A49C3DB007D0D43 /* tekcdr.c */,
+				AB3AE6D01A4E561600CE4329 /* tekcdr.c */,
 				ABC75BE91A49C3DB007D0D43 /* tekchng.c */,
-				ABC75BEA1A49C3DB007D0D43 /* tekctm.c */,
 				ABC75BEB1A49C3DB007D0D43 /* tekgame.c */,
 				ABC75BEC1A49C3DB007D0D43 /* tekgun.c */,
 				ABC75BED1A49C3DB007D0D43 /* tekldsv.c */,
 				ABC75BEE1A49C3DB007D0D43 /* tekmap.c */,
 				ABC75BEF1A49C3DB007D0D43 /* tekmsc.c */,
 				ABC75BF01A49C3DB007D0D43 /* tekprep.c */,
-				ABC75BF11A49C3DB007D0D43 /* teksmk.c */,
-				ABC75BF21A49C3DB007D0D43 /* teksnd.c */,
+				AB3AE6D31A4E565A00CE4329 /* teksmk.c */,
+				AB3AE6D41A4E565A00CE4329 /* teksnd.c */,
 				ABC75BF31A49C3DB007D0D43 /* tekspr.c */,
 				ABC75BF41A49C3DB007D0D43 /* tekstat.c */,
 				ABC75BF51A49C3DB007D0D43 /* tektag.c */,
 				ABC75BF61A49C3DB007D0D43 /* tektxt.c */,
 				ABC75BF71A49C3DB007D0D43 /* tekver.c */,
-				ABC75BF81A49C3DB007D0D43 /* tekvfx1.c */,
 				ABC75BF91A49C3DB007D0D43 /* tekwar.h */,
 			);
 			name = src;
@@ -323,13 +325,17 @@
 				ABC75C021A49C3DB007D0D43 /* tekmsc.c in Sources */,
 				ABC75C071A49C3DB007D0D43 /* tekstat.c in Sources */,
 				ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */,
+				AB3AE6C21A4D423600CE4329 /* b5compat.c in Sources */,
 				ABC75C011A49C3DB007D0D43 /* tekmap.c in Sources */,
 				ABC75BFF1A49C3DB007D0D43 /* tekgun.c in Sources */,
+				AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */,
 				ABC75C001A49C3DB007D0D43 /* tekldsv.c in Sources */,
 				ABC75C031A49C3DB007D0D43 /* tekprep.c in Sources */,
 				ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */,
+				AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */,
 				ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */,
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
+				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,
 				ABC75C061A49C3DB007D0D43 /* tekspr.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

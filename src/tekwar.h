@@ -534,6 +534,70 @@ extern    int  playsound(int,int,int,int,short);
 #define   S_DIM_TEKRULES            	206
 #define   S_HOLOGRAMDIE                 207
 
+// b5compat.c
+
+void overwritesprite(int thex, int they, short tilenum, signed char shade,
+                     char orientation, unsigned char dapalnum);
+void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
+        int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
+
+// tekchng.c
+
+int changehealth(short snum, short deltahealth);
+void changescore(short snum, short deltascore);
+
+// tekgame.c
+
+void domovethings();
+
+// tekgun.c
+
+int tekexplodebody(int i);
+void tekgunload(int fil);
+void tekgunsave(int fil);
+
+// tekmsc.c
+
+void bonusflash();
+void criticalflash();
+void newgame(char *mapname);
+void nextnetlevel();
+void tekargv(int argc,char **argv);
+void tekgamestarted(void);
+void woundflash();
+
+// tekprep.c
+
+void initplayersprite(short snum);
+void tekinitmultiplayers();
+void tekloadsetup();
+int tekpreinit(void);
+
 // teksmk.c
 
 void smkplayseq(char *name);
+
+// teksnd.c
+
+void initsb(char option1,char option2,long digihz,char option7a,char option7b,int val,char option7c);
+
+// tekspr.c
+
+void checktouchsprite(short snum, short sectnum);
+short movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+void playerdropitems(int snum);
+
+// tekstat.c
+
+int damagesprite(int hitsprite, int points);
+int pickupsprite(short sn);
+void tekstatload(int fh);
+void tekstatsave(int fh);
+
+// tektag.c
+
+void setanimpic(short *pic,short tics,short frames);
+void teksetdelayfunc(void (*delayfunc)(short),int tics,short parm);
+void tektagload(int fil);
+void tektagsave(int fil);
+

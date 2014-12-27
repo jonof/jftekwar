@@ -91,73 +91,73 @@ struct menu {
      struct menu *nextopt;
      char tomenu,backmenu;
 } menu[][MAXSUBOPTIONS]={
-     {-1,1,1,0,0,NULL,NULL,0,0,                        // 0
-      -1,1,1,0,0,NULL,NULL,0,0,
-      -1,1,1,0,0,NULL,NULL,0,0,
-      -1,1,1,0,0,NULL,NULL,0,0,
-      -1,1,1,0,0,NULL,NULL,0,0,
-      -1,1,1,0,0,NULL,NULL,0,0},
-     {-1,1,1,0,0,"TEKWAR MENU",&menu[1][1],0,0,        // 1 MAIN MENU
-      -1,3,1,0,2,"NEW GAME",&menu[1][2],2,0,
-      -1,4,1,2,2,"OPTIONS",&menu[1][3],3,0,
-      -1,5,1,4,2,"LOAD GAME",&menu[1][4],6,0,
-      -1,6,1,6,2,"SAVE GAME",&menu[1][5],7,0,
-      -1,7,1,8,2,"  ABORT  ",NULL,4,0},
-     {-1,1,1,0,0,"DIFFICULTY",&menu[2][1],0,1,         // 2 DIFFICULTY LEVEL
-      -1,3,1,0,2,"EASY",&menu[2][2],0,1,
-      -1,4,1,0,2,"MEDIUM",&menu[2][3],0,1,
-      -1,5,1,0,2,"HARD",NULL,0,1,
-      -1,6,1,0,2,NULL,NULL,0,1,
-      -1,7,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,0,"OPTIONS MENU",&menu[3][1],0,1,       // 3 OPTIONS MENU
-      //-1,3,1,0,2,"SELECT MISSION",&menu[3][2],5,1,
-      -1,4,1,0,2,"MOUSE SENSITIVITY",&menu[3][2],9,1,
-      -1,5,1,0,2,"SOUND/MUSIC VOLUME",&menu[3][3],8,1,
-      -1,6,1,0,2,&headbobstr,NULL,0,1,
-      -1,3,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,5,1,0,3,"ABORT MISSION Y/N?",NULL,0,1,        // 4 QUIT TO DOS
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,0,"SELECT LOCATIONS",&menu[5][1],0,3,// 5 DAY/NIGHT MISSION
-      -1,3,1,0,2,"CITY",&menu[5][2],0,3,
-      -1,4,1,0,2,"HOSPITAL",&menu[5][3],0,3,
-      -1,5,1,0,2,"POLICE STATION",&menu[5][4],0,3,
-      -1,6,1,0,2,"WAREHOUSE",NULL,0,3,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,3,"LOAD GAME MENU",NULL,0,1,            // 6 LOAD GAME MENU
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,3,"SAVE GAME MENU",NULL,0,1,            // 7 SAVE GAME MENU
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,3,"SOUND/MUSIC VOLUME",&menu[8][1],0,3, // 8 SOUND EFFECTS VOLUME
-      -1,3,1,0,2,"SOUND VOLUME",&menu[8][2],0,3,
-      -1,6,1,0,2,"MUSIC VOLUME",NULL,0,3,
-      -1,0,1,0,2,NULL,NULL,0,3,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,3,"MOUSE SENSITIVITY",NULL,0,3,         // 9 MOUSE SENSITIVITY
-      -1,0,1,0,2,NULL,NULL,0,3,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1},
-     {-1,1,1,0,3,"SCREEN SIZE",NULL,0,3,               // 10 SCREEN SIZE
-      -1,0,1,0,2,NULL,NULL,0,3,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1,
-      -1,0,1,0,2,NULL,NULL,0,1}
+     {{-1,1,1,0,0,NULL,NULL,0,0},                        // 0
+      {-1,1,1,0,0,NULL,NULL,0,0},
+      {-1,1,1,0,0,NULL,NULL,0,0},
+      {-1,1,1,0,0,NULL,NULL,0,0},
+      {-1,1,1,0,0,NULL,NULL,0,0},
+      {-1,1,1,0,0,NULL,NULL,0,0}},
+     {{-1,1,1,0,0,"TEKWAR MENU",&menu[1][1],0,0},        // 1 MAIN MENU
+      {-1,3,1,0,2,"NEW GAME",&menu[1][2],2,0},
+      {-1,4,1,2,2,"OPTIONS",&menu[1][3],3,0},
+      {-1,5,1,4,2,"LOAD GAME",&menu[1][4],6,0},
+      {-1,6,1,6,2,"SAVE GAME",&menu[1][5],7,0},
+      {-1,7,1,8,2,"  ABORT  ",NULL,4,0}},
+     {{-1,1,1,0,0,"DIFFICULTY",&menu[2][1],0,1},         // 2 DIFFICULTY LEVEL
+      {-1,3,1,0,2,"EASY",&menu[2][2],0,1},
+      {-1,4,1,0,2,"MEDIUM",&menu[2][3],0,1},
+      {-1,5,1,0,2,"HARD",NULL,0,1},
+      {-1,6,1,0,2,NULL,NULL,0,1},
+      {-1,7,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,0,"OPTIONS MENU",&menu[3][1],0,1},       // 3 OPTIONS MENU
+      //{-1,3,1,0,2,"SELECT MISSION",&menu[3][2],5,1},
+      {-1,4,1,0,2,"MOUSE SENSITIVITY",&menu[3][2],9,1},
+      {-1,5,1,0,2,"SOUND/MUSIC VOLUME",&menu[3][3],8,1},
+      {-1,6,1,0,2,&headbobstr,NULL,0,1},
+      {-1,3,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,5,1,0,3,"ABORT MISSION Y/N?",NULL,0,1},        // 4 QUIT TO DOS
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,0,"SELECT LOCATIONS",&menu[5][1],0,3},// 5 DAY/NIGHT MISSION
+      {-1,3,1,0,2,"CITY",&menu[5][2],0,3},
+      {-1,4,1,0,2,"HOSPITAL",&menu[5][3],0,3},
+      {-1,5,1,0,2,"POLICE STATION",&menu[5][4],0,3},
+      {-1,6,1,0,2,"WAREHOUSE",NULL,0,3},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,3,"LOAD GAME MENU",NULL,0,1},            // 6 LOAD GAME MENU
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,3,"SAVE GAME MENU",NULL,0,1},            // 7 SAVE GAME MENU
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,3,"SOUND/MUSIC VOLUME",&menu[8][1],0,3}, // 8 SOUND EFFECTS VOLUME
+      {-1,3,1,0,2,"SOUND VOLUME",&menu[8][2],0,3},
+      {-1,6,1,0,2,"MUSIC VOLUME",NULL,0,3},
+      {-1,0,1,0,2,NULL,NULL,0,3},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,3,"MOUSE SENSITIVITY",NULL,0,3},         // 9 MOUSE SENSITIVITY
+      {-1,0,1,0,2,NULL,NULL,0,3},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}},
+     {{-1,1,1,0,3,"SCREEN SIZE",NULL,0,3},               // 10 SCREEN SIZE
+      {-1,0,1,0,2,NULL,NULL,0,3},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1},
+      {-1,0,1,0,2,NULL,NULL,0,1}}
 };
 int  lastselopt[16]={
      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
@@ -2619,7 +2619,6 @@ choosemission()
      int      clock,helpclock;
      char      nogo,missiondone;
      char      onlymission8=0;
-     int       cfh;
      char      cdstopped=0;
 
      if( generalplay ) {
@@ -2662,11 +2661,6 @@ choosemission()
           if( killedsonny == 1 ) {
                smkplayseq("FINALDB");
                smkplayseq("CREDITS");
-               cfh=creat("tekv.dat", S_IWRITE|S_IREAD);
-               if( cfh == -1 ) {
-                    crash("chsmssin: cant write file");
-               }
-               close(cfh);
                return(0);
           }
           else {
