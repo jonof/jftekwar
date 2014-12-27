@@ -23,8 +23,8 @@
 
 extern    int       difficulty;
 extern    char      rearviewdraw;
-extern    long      flags32[],weapons[];                                                  
-extern    void      placerandompic(long picnum);
+extern    int       flags32[],weapons[];
+extern    void      placerandompic(int picnum);
 
 #define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
 		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
@@ -47,9 +47,9 @@ extern    void      placerandompic(long picnum);
 
 
 short
-kenmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype)
+kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	long daz, zoffs, templong;
+	int daz, zoffs;
 	short retval, dasectnum, tempshort;
 	spritetype *spr;
 
@@ -69,7 +69,7 @@ kenmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
 	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((long)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -79,7 +79,7 @@ kenmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 	tempshort = spr->cstat; spr->cstat &= ~1;
 	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((long)spr->clipdist)<<2,cliptype);
+				 ((int)spr->clipdist)<<2,cliptype);
 	spr->cstat = tempshort;
 
 	daz = spr->z+zoffs + dz;
@@ -93,10 +93,10 @@ kenmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 }
 
 short
-floatmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype)
+floatmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	long daz, zoffs, templong;
-	short retval, dasectnum, tempshort;
+	int daz, zoffs;
+	short retval, dasectnum;
 	spritetype *spr;
 
     #ifdef PLRSPRDEBUG
@@ -115,7 +115,7 @@ floatmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long 
 	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
 	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((long)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -124,11 +124,11 @@ floatmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long 
 }
 
 short
-movesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype)
+movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	long           daz,zoffs;
-     long           jumpz,deltaz;
-     long           px,py,pz;
+	int           daz,zoffs;
+     int           jumpz,deltaz;
+     int           px,py,pz;
 	short          retval,dasectnum,tempshort;
      short          failedsectnum;
 	spritetype     *spr;
@@ -152,7 +152,7 @@ movesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flord
      pz=spr->z;
 	daz = spr->z+zoffs; 
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((long)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
 	if( (dasectnum != spr->sectnum) && (dasectnum >= 0) ) {
 		changespritesect(spritenum,dasectnum);
      }
@@ -171,7 +171,7 @@ movesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flord
 	tempshort = spr->cstat; spr->cstat &= ~1;
 	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((long)spr->clipdist)<<2,cliptype);
+				 ((int)spr->clipdist)<<2,cliptype);
 	spr->cstat = tempshort;
 	daz = spr->z+zoffs + dz;
 	if( (daz <= globhiz) || (daz > globloz) ) {
@@ -201,9 +201,9 @@ movesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flord
 }
 
 short
-flymovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype)
+flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	long           daz, zoffs, templong;
+	int           daz;
 	short          retval, dasectnum, tempshort;
 	spritetype *spr;
 
@@ -217,7 +217,7 @@ flymovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 
 	dasectnum = spr->sectnum; 
 	retval = clipmove(&spr->x,&spr->y,&spr->z,&dasectnum,dx,dy,
-							((long)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -226,7 +226,7 @@ flymovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 	     tempshort = spr->cstat; spr->cstat &= ~1;
 	     getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 	     			 &globhiz,&globhihit,&globloz,&globlohit,
-	     			 ((long)spr->clipdist)<<2,cliptype);
+	     			 ((int)spr->clipdist)<<2,cliptype);
 	     spr->cstat = tempshort;
           daz=(globloz+globhiz);
           spr->z=(daz>>1);
@@ -235,9 +235,9 @@ flymovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long fl
 	return(retval);
 }
 
-analyzesprites(long dax, long day)
+analyzesprites(int dax, int day)
 {
-	long           i, j, k;
+	int           i, k;
      int            ext;
 	point3d        *ospr;
 	spritetype     *tspr;
@@ -445,7 +445,7 @@ analyzesprites(long dax, long day)
 
 checktouchsprite(short snum, short sectnum)
 {
-	long      i, nexti;
+	int      i, nexti;
      int       healthmax;
      char      dosound=0;
      char      str[30];
@@ -699,9 +699,7 @@ int  switchlevelsflag;
 
 operatesprite(short dasprite)
 {
-	long           datag;
-     int            healthmax;
-     long           dx,dy,dz;
+	int           datag;
      spritetype     *spr;
      int            pu;
 
@@ -768,7 +766,7 @@ operatesprite(short dasprite)
 char      dropanglecnt;
 short     dropangles[MAXDROPANGLES] = { 0, 1792, 512, 768, 1536, 1024 };
 
-dropit(long x, long y, long z, short sect, int pic)
+dropit(int x, int y, int z, short sect, int pic)
 {
      int       j,ang;
 

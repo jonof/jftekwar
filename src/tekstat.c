@@ -154,14 +154,14 @@ FILE      *dbgfp2;
 #define   RMOD10(s) ( (krand_intercept(s))&9L )
 #define   RMOD16(s) ( (krand_intercept(s))&15L )
 
-extern    int       tekexplodebody(long);
+extern    int       tekexplodebody(int);
 extern    void      missionaccomplished(int);
 extern    int       validplayer(int snum);
 extern    void      newstatus(short sn, int  seq);
-extern    short     movesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype);
-extern    short     kenmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype);
-extern    short     floatmovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype);
-extern    short     flymovesprite(short spritenum, long dx, long dy, long dz, long ceildist, long flordist, char cliptype);
+extern    short     movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+extern    short     kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+extern    short     floatmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+extern    short     flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
 
 extern    char      activemenu;
 extern    int       difficulty;
@@ -190,22 +190,22 @@ int      pickupsprite(short sn);
 void     toss(short snum);
 void     triggersprite(short sn);
 void     sectortriggersprites(short snum);
-void     bloodonwall(int wn, long x,long y,long z, short sect, short daang, long hitx, long hity, long hitz);
-int      spewblood(int sprnum, long hitz, short daang);
-int      playervirus(short pnum, long pic);
-int      attachvirus(short i, long pic);
+void     bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz);
+int      spewblood(int sprnum, int hitz, short daang);
+int      playervirus(short pnum, int pic);
+int      attachvirus(short i, int pic);
 void     deathdropitem(short sprnum);
-void     deathsounds(int pic, long x,long y);
+void     deathsounds(int pic, int x,int y);
 void     hideplea(short sn, short ext);
 void     fleescream(short sn, short ext);
 void     rubitinsound(int p, int sn);
 void     newstatus(short sn, int  seq);
 int      damagesprite(int hitsprite, int points);
-void     attackifclose(short i, int snum, long dist);
+void     attackifclose(short i, int snum, int dist);
 void     enemygunshot(int  sn);
 void     playergunshot(int snum);
 void     enemywoundplayer(short plrhit, short sprnum, char guntype);
-void     enemyshootgun(short sprnum,long x,long y,long z,short daang,long dahoriz,
+void     enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
                        short dasectnum,char guntype);
 int      isahologram(int i);
 int      isanandroid(int i);
@@ -220,19 +220,19 @@ void     genexplosion2(int i);
 void     bombexplosion(int i);
 void     androidexplosion(int i);
 void     blastmark(int i);
-void     forceexplosion(long i);
+void     forceexplosion(int i);
 void     tekstatsave(int fh);
 void     tekstatload(int fh);
 void     sectorflash(short s);
 void     dosectorflash(void);
 
-long           pickupclock;
+int           pickupclock;
 spritetype     pickup;
 struct    picattribtype  picinfo;
 struct    picattribtype  *picinfoptr=&picinfo;
 
 #define   MAXBOBS   32
-long      bobbing[MAXBOBS] = { 
+int      bobbing[MAXBOBS] = { 
      0,  2,  4,  6,  8, 10, 12, 14,
     16, 14, 12, 10,  8,  6,  4,  2, 
      0, -2, -4, -6, -8,-10,-12,-14,
@@ -256,8 +256,8 @@ struct    XTsavetype {
 };
 struct XTsavetype XTsave;
 struct    XTtrailertype {
-     long      numXTs;          
-     long      start;
+     int      numXTs;          
+     int      start;
      char      mapname[13];
      char      ID[13];
 };
@@ -273,7 +273,7 @@ struct    sectflashtype  sectflash;
 
 int       vadd;     
 char      ensfirsttime=1;
-long      stackedcheck;
+int      stackedcheck;
 
 #define STATLISTDEBUG
 #ifdef  STATLISTDEBUG
@@ -638,7 +638,7 @@ noext:
 int
 isvisible(short i, short target)
 {
-     long      angtotarg;
+     int      angtotarg;
 
      if( !validplayer(target) ) {
           crash("isvisible: bad targetnum");
@@ -657,7 +657,7 @@ isvisible(short i, short target)
 void
 getpicinfo(short picnum)
 {
-     long      amask=picanm[picnum];
+     int      amask=picanm[picnum];
 
      picinfoptr->numframes=amask&0x0000003F;     
      picinfoptr->animtype =( amask&0x000000C0 )>>6;
@@ -669,7 +669,7 @@ getpicinfo(short picnum)
 short
 wallangle(int wn)
 {
-     long      w1x,w1y, w2x,w2y;
+     int      w1x,w1y, w2x,w2y;
      short     wang;
 
      w1x=wallptr[wn]->x; w1y=wallptr[wn]->y;
@@ -697,7 +697,7 @@ arbitraryangle(void)
 short
 wallnormal(int wn)
 {
-     long      w1x,w1y, w2x,w2y;
+     int      w1x,w1y, w2x,w2y;
      short     wnorm;
 
      w1x=wallptr[wn]->x; w1y=wallptr[wn]->y;
@@ -759,7 +759,7 @@ spritedeflect(int sn, short angin)
 void
 tweakdeathdist(short i)
 {
-	long      dax,day;
+	int      dax,day;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
@@ -905,7 +905,7 @@ toss(short snum)
 void
 triggersprite(short sn)
 {
-     long      datag;
+     int      datag;
      short     j;
      short     newext;
 
@@ -1060,7 +1060,7 @@ sectortriggersprites(short snum)
 }
 
 void
-bloodonwall(int wn, long x,long y,long z, short sect, short daang, long hitx, long hity, long hitz)
+bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz)
 {
      int  j;
 
@@ -1126,7 +1126,7 @@ bloodonwall(int wn, long x,long y,long z, short sect, short daang, long hitx, lo
 }
 
 int
-spewblood(int sprnum, long hitz, short daang)
+spewblood(int sprnum, int hitz, short daang)
 {
      int       j,ext=sprptr[sprnum]->extra;
 
@@ -1177,7 +1177,7 @@ spewblood(int sprnum, long hitz, short daang)
 }
 
 int
-playervirus(short pnum, long pic)
+playervirus(short pnum, int pic)
 {
      int       j,nextj;
 
@@ -1219,7 +1219,7 @@ playervirus(short pnum, long pic)
 }
 
 int
-attachvirus(short i, long pic)
+attachvirus(short i, int pic)
 {
      int       j,ext,nextj;
 
@@ -1286,7 +1286,7 @@ deathdropitem(short sprnum)
 {
      short       j,ext;
      int         pic;
-     long        dax,day;
+     int        dax,day;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sprnum) ) {
@@ -1354,7 +1354,7 @@ deathdropitem(short sprnum)
 }
 
 void
-deathsounds(int pic, long x,long y)
+deathsounds(int pic, int x,int y)
 {
      switch( pic ) {
      case ANTDEATHPIC:   //anton        boss
@@ -1521,7 +1521,7 @@ newstatus(short sn, int  seq)
 {
      short     newpic;
      short     ext;
-     long      zoffs;
+     int      zoffs;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
@@ -1918,9 +1918,9 @@ damagesprite(int hitsprite, int points)
 }
 
 void
-attackifclose(short i, int snum, long dist)
+attackifclose(short i, int snum, int dist)
 {
-     long      mindist;
+     int      mindist;
      short     ext;
 
     #ifdef PLRSPRDEBUG
@@ -1991,7 +1991,7 @@ void
 enemygunshot(int  sn) 
 {
      int       j,nextj,ext;
-     long      dist;
+     int      dist;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
@@ -2063,7 +2063,7 @@ void
 playergunshot(int snum)
 {
      int       j,nextj,ext;
-     long      dist;
+     int      dist;
 
      if( !validplayer(snum) ) {
           crash("plgunsht: bad plrnum");
@@ -2166,11 +2166,11 @@ enemywoundplayer(short plrhit, short sprnum, char guntype)
 }
 
 void                
-enemyshootgun(short sprnum,long x,long y,long z,short daang,long dahoriz,
+enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
               short dasectnum,char guntype)
 {
      short     hitsect,hitwall,hitsprite,daang2;
-     long      cx,cy,i,j,daz2,hitx,hity,hitz,discrim;
+     int      cx,cy,i,j,daz2,hitx,hity,hitz,discrim;
      int       ext,target,pnum;
 
     #ifdef PLRSPRDEBUG
@@ -2496,7 +2496,7 @@ ambushyell(short sn, short ext)
 void
 givewarning(short i, short ext)
 {
-     long dist = 0L;
+     int dist = 0L;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
@@ -2530,15 +2530,15 @@ void
 statuslistcode()
 {
 	short     p, target, hitobject, daang, osectnum, movestat, hitsprite,ext;
-	long      i, nexti, j, nextj, k, l, dax, day, daz, dist, ox, oy, mindist;
-     long      prevx,prevy,prevz;
-     long      lastpinballx,lastpinbally;
+	int      i, nexti, j, nextj, k, l, dax, day, daz, dist, ox, oy, mindist;
+     int      prevx,prevy,prevz;
+     int      lastpinballx,lastpinbally;
      short     prevsect=0,prevang;
      int       seecan;
-     long      targx,targy,targz;
+     int      targx,targy,targz;
      short     targang,targsect,host,tempshort;
      int       pnum;
-     long      px,py,pz,deltapy,zoffs,goalz;
+     int      px,py,pz,deltapy,zoffs,goalz;
      spritetype     *spr;
 
      dosectorflash();
@@ -2563,7 +2563,7 @@ statuslistcode()
                     spr->cstat&=~1;
                	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
      				     &globhiz,&globhihit,&globloz,&globlohit,
-     				     ((long)spr->clipdist)<<2,1);
+     				     ((int)spr->clipdist)<<2,1);
                	spr->cstat=tempshort;
                     if( spr->z != globloz ) {
                          spr->hitag=0;
@@ -2600,7 +2600,7 @@ statuslistcode()
           spr->cstat&=~1;
          	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 			     &globhiz,&globhihit,&globloz,&globlohit,
-     	          ((long)spr->clipdist)<<2,1);
+     	          ((int)spr->clipdist)<<2,1);
          	spr->cstat=tempshort;
           if( spr->z >= globloz ) {
                spr->z=globloz;
@@ -2808,8 +2808,8 @@ statuslistcode()
 	{
 		nexti = nextspritestat[i];
 
-		dax = ((((long)sprite[i].xvel)*TICSPERFRAME)<<7);
-		day = ((((long)sprite[i].yvel)*TICSPERFRAME)<<7);
+		dax = ((((int)sprite[i].xvel)*TICSPERFRAME)<<7);
+		day = ((((int)sprite[i].yvel)*TICSPERFRAME)<<7);
 		daz = 0;
 
 		osectnum = sprite[i].sectnum;
@@ -2908,8 +2908,8 @@ dropsiescontinue:
 	{
 		nexti = nextspritestat[i];
 
-		dax = ((((long)sprite[i].xvel)*TICSPERFRAME)<<11);
-		day = ((((long)sprite[i].yvel)*TICSPERFRAME)<<11);
+		dax = ((((int)sprite[i].xvel)*TICSPERFRAME)<<11);
+		day = ((((int)sprite[i].yvel)*TICSPERFRAME)<<11);
 		daz = 0;
 		movestat=kenmovesprite((short)i,dax,day,daz,4L<<8,4L<<8,1);
           switch( movestat&0xC000 ) {
@@ -3794,7 +3794,7 @@ rodentcontinue:
                        sprptr[i]->lotag=0;
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
 			newstatus(i, sprXTptr[ext]->basestat);
@@ -3824,7 +3824,7 @@ rodentcontinue:
                              sprXTptr[ext]->weapon);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
@@ -3855,7 +3855,7 @@ rodentcontinue:
                noextcrash(i,10);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
@@ -3887,9 +3887,9 @@ rodentcontinue:
                newstatus(i, sprXTptr[ext]->basestat);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
-               sprptr[i]->hitag -= ((long)TICSPERFRAME);
+               sprptr[i]->hitag -= ((int)TICSPERFRAME);
                if( sprptr[i]->hitag < 0 ) {
                     sprptr[i]->lotag=0;
                     sprptr[i]->hitag=0;
@@ -3918,7 +3918,7 @@ rodentcontinue:
                noextcrash(i,12);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
                sprptr[i]->hitag=0;
@@ -3959,9 +3959,9 @@ rodentcontinue:
                sprptr[i]->hitag=0;
           }                    
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
-               sprptr[i]->hitag -= ((long)TICSPERFRAME);
+               sprptr[i]->hitag -= ((int)TICSPERFRAME);
                if( sprptr[i]->hitag < 0 ) {
                     sprptr[i]->lotag=0;
                     sprptr[i]->hitag=0;
@@ -3990,7 +3990,7 @@ rodentcontinue:
                noextcrash(i,14);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
                sprptr[i]->hitag=0;
@@ -4019,7 +4019,7 @@ rodentcontinue:
                noextcrash(i,15);
           }
 
-		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
                newstatus(i, sprXTptr[ext]->basestat);
@@ -4058,7 +4058,7 @@ rodentcontinue:
                }
           }
 
-		sprptr[i]->lotag-=((long)TICSPERFRAME<<1);
+		sprptr[i]->lotag-=((int)TICSPERFRAME<<1);
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
                tweakdeathdist(i);
@@ -4097,7 +4097,7 @@ deathcontinue:
           sprptr[i]->y=posy[host];
           sprptr[i]->z=posz[host]+(8<<8);
 
-   		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+   		sprptr[i]->lotag -= ((int)TICSPERFRAME);
           if( (sprptr[i]->lotag > 0) && ((sprptr[i]->lotag&3) == 0) ) {
                if( changehealth(host, -64) != 0 ) {
                     sprptr[i]->lotag=0;
@@ -4153,7 +4153,7 @@ deathcontinue:
                }
           }
           else {
-     		sprptr[i]->lotag -= ((long)TICSPERFRAME);
+     		sprptr[i]->lotag -= ((int)TICSPERFRAME);
                if( damagesprite(host, 4) == 1 ) {  // killed 'em
                     // NOT NETWORK COMPATIBLE
                     killscore(host, screenpeek, 0);
@@ -4250,9 +4250,9 @@ menuison:
 	{
 		nexti = nextspritestat[i];
 
-		dax = ((((long)sprptr[i]->xvel)*TICSPERFRAME)<<11);
-		day = ((((long)sprptr[i]->yvel)*TICSPERFRAME)<<11);
-		daz = ((((long)sprptr[i]->zvel)*TICSPERFRAME)>>2); // was 3
+		dax = ((((int)sprptr[i]->xvel)*TICSPERFRAME)<<11);
+		day = ((((int)sprptr[i]->yvel)*TICSPERFRAME)<<11);
+		daz = ((((int)sprptr[i]->zvel)*TICSPERFRAME)>>2); // was 3
 
 		hitobject = movesprite((short)i,dax,day,daz,4L<<8,4L<<8,1);
 
@@ -4320,7 +4320,7 @@ playerhit(int hitsprite, int *pnum)
 void
 checkblastarea(int spr)
 {
-     long      sect,i,j,nexti,xydist,zdist;
+     int      sect,i,j,nexti,xydist,zdist;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spr) ) {
@@ -4485,9 +4485,9 @@ blastmark(int i)
 }
 
 void
-forceexplosion(long i)
+forceexplosion(int i)
 {
-	long      j,k, daang, dax, day, dist;
+	int      j,k, daang, dax, day, dist;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {

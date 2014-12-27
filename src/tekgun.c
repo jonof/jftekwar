@@ -42,19 +42,19 @@
 
 #define   DRAWWEAPSPEED       4
 
-extern    int       playervirus(short pnum, long pic);
+extern    int       playervirus(short pnum, int pic);
 extern    int       isahologram(int i);
 extern    int       isanandroid(int i);
 extern    int       playerhit(int hitsprite, int *pnum);
-extern    int       spewblood(int snum, long hitz, short daang);
-extern    void      bloodonwall(int wn, long x,long y,long z, short sect, short daang, long hitx, long hity, long hitz);
+extern    int       spewblood(int snum, int hitz, short daang);
+extern    void      bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz);
 extern    void      bombexplosion(int i);   
 extern    void      missionaccomplished(int);
 extern    void      forceexplosion(int i);
 extern    int       difficulty;
-extern    long      flags32[];                                                  
-extern    long      ydim;
-extern    long      fallz[],stun[];
+extern    int      flags32[];                                                  
+extern    int      ydim;
+extern    int      fallz[],stun[];
 extern    int       mission;
 extern    char      generalplay;
 extern    char      singlemapmode;
@@ -70,9 +70,9 @@ short     ammo5[MAXPLAYERS];
 short     ammo6[MAXPLAYERS];
 short     ammo7[MAXPLAYERS];
 short     ammo8[MAXPLAYERS];
-long      weapons[MAXPLAYERS];          // flags for weapons onself   
-long      firedonetics[MAXPLAYERS];
-long      lastgun[MAXPLAYERS];
+int      weapons[MAXPLAYERS];          // flags for weapons onself   
+int      firedonetics[MAXPLAYERS];
+int      lastgun[MAXPLAYERS];
 int       drawweap[MAXPLAYERS];
 
 struct guntype {
@@ -132,13 +132,13 @@ restockammo(int snum)
 }
 
 int
-tekgunrep(long gun)                // is "gun" an automatic weapon?
+tekgunrep(int gun)                // is "gun" an automatic weapon?
 {
      return(guntype[gun+1].rep);
 }
 
 int
-tekgundamage(int gun,long x,long y,long z,int hitsprite)
+tekgundamage(int gun,int x,int y,int z,int hitsprite)
 {
      int       damage;
 
@@ -159,7 +159,7 @@ tekgundamage(int gun,long x,long y,long z,int hitsprite)
 }
 
 int
-hasammo(long gun,short p)     // does player[p] have ammo for "gun"?
+hasammo(int gun,short p)     // does player[p] have ammo for "gun"?
 {
      switch (gun+1) {
      case GUN1FLAG:
@@ -207,7 +207,7 @@ hasammo(long gun,short p)     // does player[p] have ammo for "gun"?
 }
 
 void
-tekfiregun(long gun,short p)  // this kicks off an animation sequence
+tekfiregun(int gun,short p)  // this kicks off an animation sequence
 {
      if( fireseq[p] != 0 ) {
           return;
@@ -335,14 +335,14 @@ playerpainsound(int p)
 }
 
 void                          
-shootgun(short snum,long x,long y,long z,short daang,long dahoriz,
+shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
      short dasectnum,char guntype)
 {
      short hitsect,hitwall,hitsprite,daang2;
      short bloodhitsect,bloodhitwall,bloodhitsprite;
-     long  bloodhitx,bloodhity,bloodhitz;
-     long  cx,cy,i,j,daz2,hitx,hity,hitz,xydist,zdist;
-     long  rn;
+     int  bloodhitx,bloodhity,bloodhitz;
+     int  cx,cy,i,j,daz2,hitx,hity,hitz,xydist,zdist;
+     int  rn;
      int   rv,pnum,ext;
 
      if( health[snum] <= 0 ) {     
@@ -409,8 +409,8 @@ shootgun(short snum,long x,long y,long z,short daang,long dahoriz,
                     fillsprite(j,hitx,hity,hitz+(8<<8),2,0,0,32,22,22,0,0,
                                EXPLOSION,daang,0,0,0,snum+MAXSPRITES,hitsect,3,63,0,-1);
                     movesprite((short)j,
-                               -(((long)sintable[(512+daang)&2047]*TICSPERFRAME)<<4),
-                               -(((long)sintable[daang]*TICSPERFRAME)<<4),0L,4L<<8,4L<<8,1);
+                               -(((int)sintable[(512+daang)&2047]*TICSPERFRAME)<<4),
+                               -(((int)sintable[daang]*TICSPERFRAME)<<4),0L,4L<<8,4L<<8,1);
                     playsound(S_RIC1,hitx,hity,0,ST_NOUPDATE);
                }
           }
@@ -565,10 +565,10 @@ short dieframe[MAXPLAYERS],
      firepicdelay[MAXPLAYERS];
 
 void
-tekanimweap(long gun,short p)
+tekanimweap(int gun,short p)
 {
      int  ammo,firekey,fseq,seq,tics;
-     long usegun;
+     int usegun;
      struct guntype *gunptr;
 
      short pic;               // gun frame when carrying weapon
@@ -739,7 +739,7 @@ tekanimweap(long gun,short p)
 }
 
 int       
-tekexplodebody(long i)
+tekexplodebody(int i)
 {
      int  j,k,r,ext;
 
@@ -823,16 +823,16 @@ void
 gunstatuslistcode(void)
 {
      short     hitobject,movestat,p,hitsprite,ext;
-     long      i,nexti,dax,day,daz,j;
+     int      i,nexti,dax,day,daz,j;
      int       pnum,rv;
      char      killed=0;
 
      i=headspritestat[FORCEPROJECTILESTAT];   //moving force ball
      while (i >= 0) {
           nexti=nextspritestat[i];
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<11);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<11);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<3);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<11);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<11);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<3);
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
                hitsprite=hitobject&0x0FFF;
@@ -888,9 +888,9 @@ gunstatuslistcode(void)
      while (i >= 0) {
           nexti=nextspritestat[i];
 
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<10);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<10);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<3);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<10);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<10);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<3);
 
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
@@ -934,9 +934,9 @@ gunstatuslistcode(void)
      while (i >= 0) {
           nexti=nextspritestat[i];
 
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<12);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<12);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<4);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<12);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<12);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<4);
 
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
@@ -959,9 +959,9 @@ gunstatuslistcode(void)
      while (i >= 0) {
           nexti=nextspritestat[i];
 
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<12);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<12);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<4);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<12);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<12);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<4);
 
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
@@ -1009,9 +1009,9 @@ gunstatuslistcode(void)
           sprptr[i]->yvel+=( ((krand_intercept(" GUN1026")&64)-32)>>1 );
           sprptr[i]->zvel+=( ((krand_intercept(" GUN1027")&31)-16)>>1 );
 
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<12);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<12);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<4);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<12);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<12);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<4);
 
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
@@ -1054,9 +1054,9 @@ gunstatuslistcode(void)
      i=headspritestat[DARTPROJECTILESTAT];  
      while (i >= 0) {
           nexti=nextspritestat[i];
-          dax=((((long)sprptr[i]->xvel)*TICSPERFRAME)<<13);
-          day=((((long)sprptr[i]->yvel)*TICSPERFRAME)<<13);
-          daz=((((long)sprptr[i]->zvel)*TICSPERFRAME)<<5);
+          dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<13);
+          day=((((int)sprptr[i]->yvel)*TICSPERFRAME)<<13);
+          daz=((((int)sprptr[i]->zvel)*TICSPERFRAME)<<5);
 
           hitobject=movesprite((short)i,dax,day,daz,4<<8,4<<8,1);
           if( (hitobject&0xC000) == 49152 ) {  // hit a sprite
@@ -1141,10 +1141,10 @@ gunstatuslistcode(void)
 int       matgunpic;
 
 void
-tekdrawgun(long gun,short p)
+tekdrawgun(int gun,short p)
 {
      int  pic,x,i,j,apic;
-     long usegun;
+     int usegun;
 
      if (fireseq[p] == 0) {
           pic=guntype[gun].pic;
@@ -1222,7 +1222,7 @@ tekdrawgun(long gun,short p)
 extern    char notininventory;
 
 int
-tekhasweapon(long gun,short snum)
+tekhasweapon(int gun,short snum)
 {  
      int       hasit=0;
      
@@ -1266,9 +1266,9 @@ tekgunsave(int fil)
      write(fil,ammo6,MAXPLAYERS*sizeof(short));
      write(fil,ammo7,MAXPLAYERS*sizeof(short));
      write(fil,ammo8,MAXPLAYERS*sizeof(short));
-     write(fil,weapons,MAXPLAYERS*sizeof(long));
-     write(fil,firedonetics,MAXPLAYERS*sizeof(long));
-     write(fil,lastgun,MAXPLAYERS*sizeof(long));
+     write(fil,weapons,MAXPLAYERS*sizeof(int));
+     write(fil,firedonetics,MAXPLAYERS*sizeof(int));
+     write(fil,lastgun,MAXPLAYERS*sizeof(int));
      write(fil,&goreflag,sizeof(int));
 }
 
@@ -1284,8 +1284,8 @@ tekgunload(int fil)
      read(fil,ammo6,MAXPLAYERS*sizeof(short));
      read(fil,ammo7,MAXPLAYERS*sizeof(short));
      read(fil,ammo8,MAXPLAYERS*sizeof(short));
-     read(fil,weapons,MAXPLAYERS*sizeof(long));
-     read(fil,firedonetics,MAXPLAYERS*sizeof(long));
-     read(fil,lastgun,MAXPLAYERS*sizeof(long));
+     read(fil,weapons,MAXPLAYERS*sizeof(int));
+     read(fil,firedonetics,MAXPLAYERS*sizeof(int));
+     read(fil,lastgun,MAXPLAYERS*sizeof(int));
      read(fil,&goreflag,sizeof(int));
 }

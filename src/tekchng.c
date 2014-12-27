@@ -15,8 +15,8 @@ extern    char      winner;
 extern    int       difficulty;
 extern    int       goreflag;
 
-long      stun[MAXPLAYERS],stuntics[MAXPLAYERS];                     
-long      fallz[MAXPLAYERS];                                         
+int      stun[MAXPLAYERS],stuntics[MAXPLAYERS];                     
+int      fallz[MAXPLAYERS];                                         
 
 
 changehealth(short snum, short deltahealth)
@@ -135,7 +135,7 @@ tekhealstun(short snum)
      }
 }
 
-tekchangefallz(short snum,long loz,long hiz)
+tekchangefallz(short snum,int loz,int hiz)
 {
      int  died=0;
 

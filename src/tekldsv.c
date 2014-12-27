@@ -73,10 +73,10 @@ readrle(int fil,void *data,int size)
 
 loadgame(int loadno)                                             
 {
-	long      i, fil;
+	int      i, fil;
      short     dummyscreensize;
      int       rv;
-     struct    stat buf;
+    intptr_t tmpanimates[MAXANIMATES];
 
      sprintf(tempbuf,"savegam%d.tek",loadno);
      if( (fil=open(tempbuf,O_BINARY|O_RDWR,S_IREAD)) == -1 ) {
@@ -237,9 +237,9 @@ loadgame(int loadno)
 	read(fil,slimesoundcnt,MAXPLAYERS<<1);
 
 	// Warning: only works if all pointers are in sector structures!
-	read(fil,animateptr,MAXANIMATES<<2);
+    read(fil,tmpanimates,sizeof(intptr_t) * MAXANIMATES);
 	for(i=MAXANIMATES-1;i>=0;i--)
-		animateptr[i] = (long *)(animateptr[i]+((long)sector));
+		animateptr[i] = (int *)(tmpanimates[i] + (intptr_t)sector);
 	read(fil,animategoal,MAXANIMATES<<2);
 	read(fil,animatevel,MAXANIMATES<<2);
 	read(fil,animateacc,MAXANIMATES<<2);
@@ -291,9 +291,9 @@ loadgame(int loadno)
 
 savegame(int saveno)
 {
-	long      i, fil;
+	int      i, fil;
      int       rv;
-     struct    stat buf;
+    intptr_t tmpanimates[MAXANIMATES];
 
      sprintf(tempbuf,"savegam%d.tek",saveno);
    
@@ -451,10 +451,8 @@ savegame(int saveno)
 
 	// Warning: only works if all pointers are in sector structures!
 	for(i=MAXANIMATES-1;i>=0;i--)
-		animateptr[i] = (long *)(animateptr[i]-((long)sector));
-	rv=write(fil,animateptr,MAXANIMATES<<2);
-	for(i=MAXANIMATES-1;i>=0;i--)
-		animateptr[i] = (long *)(animateptr[i]+((long)sector));
+        tmpanimates[i] = (intptr_t)animateptr[i] - (intptr_t)sector;
+	rv=write(fil,tmpanimates, sizeof(intptr_t)*MAXANIMATES);
 	rv=write(fil,animategoal,MAXANIMATES<<2);
 	rv=write(fil,animatevel,MAXANIMATES<<2);
 	rv=write(fil,animateacc,MAXANIMATES<<2);

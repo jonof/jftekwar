@@ -39,19 +39,19 @@ extern    char      activemenu;
 extern    char      generalplay;
 extern    char      singlemapmode;
 
-void      placerandompic(long picnum);
+void      placerandompic(int picnum);
 
 sectortype          *sectptr[MAXSECTORS];
 spritetype          *sprptr[MAXSPRITES];
 walltype            *wallptr[MAXWALLS];
 struct    spriteextension     spriteXT[MAXSPRITES];
 struct    spriteextension     *sprXTptr[MAXSPRITES];
-long      startx,starty,startz,starta,starts;
+int      startx,starty,startz,starta,starts;
 
 #define   MAXSTARTSPOTS  16
 int       startspotcnt;
 struct    startspottype {
-     long      x,y,z;
+     int      x,y,z;
      short     sectnum;
 };
 struct    startspottype       startspot[MAXSTARTSPOTS];
@@ -64,7 +64,7 @@ int       subwaysound[4];
 prepareboard(char *daboardfilename)
 {
 	short     startwall, endwall, dasector;
-	long      i, j, k, s, dax, day, daz, dax2, day2;
+	int      i, j, k, s, dax, day, daz, dax2, day2;
      int       rdonly;
      int       l;
 
@@ -488,10 +488,10 @@ prepareboard(char *daboardfilename)
      }
 }
 
-findrandomspot(long *x, long *y, short *sectnum)
+findrandomspot(int *x, int *y, short *sectnum)
 {
 	short startwall, endwall, s;
-	long dax, day, minx, maxx, miny, maxy, cnt, k;
+	int dax, day, minx, maxx, miny, maxy, cnt, k;
 
 	cnt = 256;
 	while (cnt > 0)
@@ -537,7 +537,7 @@ findrandomspot(long *x, long *y, short *sectnum)
 }
 
 void
-netstartspot(long *x, long *y,short *sectnum)
+netstartspot(int *x, int *y,short *sectnum)
 {
      int       rv;
 
@@ -551,10 +551,10 @@ netstartspot(long *x, long *y,short *sectnum)
 }
 
 void
-placerandompic(long picnum)
+placerandompic(int picnum)
 {
 	short     startwall, endwall, s;
-	long      dax, day, minx, maxx, miny, maxy, cnt, k;
+	int      dax, day, minx, maxx, miny, maxy, cnt, k;
      int       j;
 
 	cnt = 256;
@@ -639,7 +639,7 @@ tekrestoreplayer(short snum)
 
 initplayersprite(short snum)
 {
-	long      i;
+	int      i;
 
 	if (playersprite[snum] >= 0) return;
 
@@ -752,7 +752,7 @@ tekpreinit(void)
 #define   NUMSETOPTS          2
 
 short     comp;
-long      bps;
+int      bps;
 
 char *setopts[]={
 	 "COM PORT:",
@@ -763,7 +763,7 @@ void
 mdmreadsettings(void)
 {
 	 short i,n;
-	 long l;
+	 int l;
 	 char buf[80],*ptr;
 	 FILE *fp;
 
@@ -843,7 +843,7 @@ void
 teknetpickmap(void)
 {
      short i,map=0;
-     long lastclock=0L,rotangle=0L,zoom=0L;
+     int lastclock=0L,rotangle=0L,zoom=0L;
 
      noenemiesflag=1;
      if (coopmode) {
@@ -951,7 +951,7 @@ teksavesetup(void)
      }
 }
 
-tekview(long *x1,long *y1, long *x2,long *y2)
+tekview(int *x1,int *y1, int *x2,int *y2)
 {
      if( screensize <= xdim ) {
           *y1+=16;

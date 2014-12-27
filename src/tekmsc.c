@@ -64,14 +64,14 @@ extern    int       digiloopflag;
 extern    int       ovmode;
 extern    char      syncstate;
 extern    int       goreflag;
-extern    long      vel,svel,angvel;
+extern    int      vel,svel,angvel;
 extern    int       headbobon;
 extern    char      biasthreshholdon;  
 extern    short     biasthreshhold;
 extern    volatile int   LoopPending;
-extern    long      stun[];
+extern    int      stun[];
 extern    short     cybyaw,cybpit,cybrol;
-extern    long      qsetmode;
+extern    int      qsetmode;
 extern    char      jcalibration,
                     jstickenabled;
 extern    int       jctrx,jctry;
@@ -164,9 +164,9 @@ int  lastselopt[16]={
      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
-long      framecnt,frameval[AVERAGEFRAMES];
+int      framecnt,frameval[AVERAGEFRAMES];
 char      blink=0xFF;
-long      menuspincnt=0L;
+int      menuspincnt=0L;
 char      activemenu=0;
 char      requesttoquit;
 char      palette1[256][3],palette2[256][3];
@@ -186,10 +186,10 @@ char      rearviewdraw;
 int       timedinv;
 char      loadsavenames[MAXLOADSAVEOPTS][MAXLOADSAVESIZE];
 char      lockeybuf[MAXLOADSAVESIZE];                                
-long      invredcards[MAXPLAYERS], invbluecards[MAXPLAYERS];
+int      invredcards[MAXPLAYERS], invbluecards[MAXPLAYERS];
 short     symbols[7];
 short     symbolsdeposited[7];
-long      invaccutrak[MAXPLAYERS];
+int      invaccutrak[MAXPLAYERS];
 int       noenemiesflag;
 int       noguardflag;
 int       nostalkflag;
@@ -202,7 +202,7 @@ char      redrawborders;
 int       curblink,loadnewgame;
 int       locmessagelen,loctypemode;
 int       mousesensitivity,musicv=16,soundv=16;
-long      curblinkclock;
+int      curblinkclock;
 int       messagex;
 short     hcpos,wppos,rvpos;                                         
 int       autocenter[MAXPLAYERS],menudirect;
@@ -217,12 +217,12 @@ char      lasttimetoggle;
 char      lastscoretoggle;
 char      lastinvtoggle;
 int       lastwx2;
-long      lastinvr,lastinvb,lastinvacc;
+int      lastinvr,lastinvb,lastinvacc;
 int       fortieth;
 int       difficulty;
 int       currentmapno=0;
-long      warpretang,warpretsect;
-long      warpretx,warprety,warpretz;
+int      warpretang,warpretsect;
+int      warpretx,warprety,warpretz;
 int       mission=0;
 char      numlives=0;
 char      mission_accomplished=0;
@@ -231,7 +231,7 @@ char      generalplay;
 char      novideoid;
 char      singlemapmode;
 int       newnetleader=0,oldnetleader=0;
-long      netclock;
+int      netclock;
 int       allsymsdeposited=0;
 int       killedsonny=0;
 
@@ -526,7 +526,7 @@ updatepaletteshifts(void)
 
 setup3dscreen()
 {
-	long      i, dax, day, dax2, day2;
+	int      i, dax, day, dax2, day2;
 
 	setgamemode();
 	if( screensize > xdim ) {
@@ -1055,7 +1055,7 @@ void
 nextnetlevel()
 {
      int  i,j,len,other,readyplayers,playerreadyflag[MAXPLAYERS];
-     long lastpacketclock,packets=0L;
+     int lastpacketclock,packets=0L;
 
      if( strcmp(boardfilename,"NET1.MAP") == 0) {
           strcpy(boardfilename,"NET2.MAP");
@@ -1179,7 +1179,7 @@ netstats()
                }
               #endif
                if( (toggles[TOGGLE_SCORE]) && (screensize >= xdim) ) {
-                    sprintf(tektempbuf,"%2d %10s %6ld",i,netnames[i],score[i]);
+                    sprintf(tektempbuf,"%2d %10s %6d",i,netnames[i],score[i]);
                     printext(12,(windowy1+32)+(i<<3),tektempbuf,ALPHABET,255);
                }
           }
@@ -1201,7 +1201,7 @@ int
 tekscreenfx(void)
 {
      int  ammo,n;
-     long i;
+     int i;
      static short hcpic,rvpic,wppic;                            
 
      updatepaletteshifts();
@@ -1912,7 +1912,7 @@ domenu(void)
 {
      char pal;
      int  i,stepy;
-     long dax,dax2,day,day2;
+     int dax,dax2,day,day2;
      struct menu *mptr;
      static int firstpass,odiff,osoundv,omusicv,omousesens,oheadb;
 
@@ -2306,7 +2306,7 @@ domenuinput(void)
 
 rearview(int snum)
 {
-	long      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
+	int      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
 	short     cang, tang;
      short     plrang,plrhoriz;
      short     xstrt,ystrt;
@@ -2530,7 +2530,7 @@ teksavemoreoptions(int fil)
 tekendscreen()
 {
      int       i,j,k,l;
-     long      clocknow;
+     int      clocknow;
 
      if( demowon ) 
          return;
@@ -2595,7 +2595,7 @@ int
 choosemission()
 {
      int       lastmission,before7;
-     long      clock,helpclock;
+     int      clock,helpclock;
      char      nogo,missiondone;
      char      onlymission8=0;
      int       cfh;
@@ -3100,7 +3100,7 @@ int
 choosemap()
 {
      int       lastmap,map,set;
-     long      clock,helpclock,stall;
+     int      clock,helpclock,stall;
 
      musicfade();          
 

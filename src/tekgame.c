@@ -19,11 +19,11 @@
 extern    void copyrightscreen(void);
 extern    void depositsymbol(int snum);
 extern    void showmessage(char *fmt,...);
-extern    void netstartspot(long *x, long *y, short *sectnum);
-extern    int  placerandompic(long);
+extern    void netstartspot(int *x, int *y, short *sectnum);
+extern    int  placerandompic(int);
 extern    void domenuinput(void);
 extern    void toss(short);
-extern    long pickupclock;
+extern    int pickupclock;
 extern    spritetype   pickup;
 extern    void smkplayseq(char *name);
 extern    void startgametime(void);
@@ -36,9 +36,9 @@ extern    void jstick(void);
 extern    void clearpal(void);
 extern    int  autocenter[];
 extern    char tektempbuf[];
-extern    long startx,starty,startz,starta,starts;
+extern    int startx,starty,startz,starta,starts;
 extern    char onelev[];
-extern    long headbob;
+extern    int headbob;
 extern    char gameover;
 extern    char outofsync;
 extern    char dofadein;
@@ -78,17 +78,17 @@ char      joyb;
 
 typedef struct
 {
-	long x, y, z;
+	int x, y, z;
 } point3d;
 
-WASSTATIC long vel, svel, angvel;
-WASSTATIC long vel2, svel2, angvel2;
+WASSTATIC int vel, svel, angvel;
+WASSTATIC int vel2, svel2, angvel2;
 
-extern volatile long recsnddone, recsndoffs;
-WASSTATIC long recording = -2;
+extern volatile int recsnddone, recsndoffs;
+WASSTATIC int recording = -2;
 
-WASSTATIC long vesares[7][2] = {320,200,640,400,640,480,800,600,1024,768,
-									  1280,1024,1600,1200};
+WASSTATIC int vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
+                               {1280,1024},{1600,1200}};
 #ifdef    TEKWAR
 #define   NUMOPTIONS          8
 #define   NUMKEYS             32
@@ -179,36 +179,36 @@ int  gamestuff[MAXGAMESTUFF] = {
 #endif
 
 WASSTATIC char frame2draw[MAXPLAYERS];
-WASSTATIC long frameskipcnt[MAXPLAYERS];
+WASSTATIC int frameskipcnt[MAXPLAYERS];
 
 WASSTATIC char gundmost[320];
 
 	//Shared player variables
-WASSTATIC long posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
-WASSTATIC long horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
+WASSTATIC int posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
+WASSTATIC int horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
 WASSTATIC short ang[MAXPLAYERS], cursectnum[MAXPLAYERS], ocursectnum[MAXPLAYERS];
 WASSTATIC short playersprite[MAXPLAYERS], deaths[MAXPLAYERS];
-WASSTATIC long lastchaingun[MAXPLAYERS];
-WASSTATIC long health[MAXPLAYERS], score[MAXPLAYERS], saywatchit[MAXPLAYERS];
+WASSTATIC int lastchaingun[MAXPLAYERS];
+WASSTATIC int health[MAXPLAYERS], score[MAXPLAYERS], saywatchit[MAXPLAYERS];
 WASSTATIC short numbombs[MAXPLAYERS], oflags[MAXPLAYERS];
 WASSTATIC char dimensionmode[MAXPLAYERS];
 WASSTATIC char revolvedoorstat[MAXPLAYERS];
 WASSTATIC short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
-WASSTATIC long revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
+WASSTATIC int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
 
 	//ENGINE CONTROLLED MULTIPLAYER VARIABLES:
 extern short numplayers, myconnectindex;
 extern short connecthead, connectpoint2[MAXPLAYERS];   //Player linked list variables (indeces, not connection numbers)
 
 	//Local multiplayer variables
-WASSTATIC long locselectedgun;
+WASSTATIC int locselectedgun;
 WASSTATIC signed char locvel, olocvel;
 WASSTATIC short locsvel, olocsvel;                          // Les 09/27/95
 WASSTATIC short locangvel, olocangvel;                      // Les 09/27/95
 WASSTATIC short locbits, olocbits;
 
 	//Local multiplayer variables for second player
-WASSTATIC long locselectedgun2;
+WASSTATIC int locselectedgun2;
 WASSTATIC signed char locvel2, olocvel2;
 WASSTATIC short locsvel2, olocsvel2;                        // Les 09/27/95
 WASSTATIC short locangvel2, olocangvel2;                    // Les 09/27/95
@@ -221,14 +221,14 @@ WASSTATIC short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAX
 WASSTATIC unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
 
 WASSTATIC char frameinterpolate = 1, detailmode = 0, ready2send = 0;
-WASSTATIC long ototalclock = 0, gotlastpacketclock = 0, smoothratio;
-WASSTATIC long oposx[MAXPLAYERS], oposy[MAXPLAYERS], oposz[MAXPLAYERS];
-WASSTATIC long ohoriz[MAXPLAYERS], ozoom[MAXPLAYERS];
+WASSTATIC int ototalclock = 0, gotlastpacketclock = 0, smoothratio;
+WASSTATIC int oposx[MAXPLAYERS], oposy[MAXPLAYERS], oposz[MAXPLAYERS];
+WASSTATIC int ohoriz[MAXPLAYERS], ozoom[MAXPLAYERS];
 WASSTATIC short oang[MAXPLAYERS];
 
 WASSTATIC point3d osprite[MAXSPRITESONSCREEN];
 
-WASSTATIC long movefifoplc, movefifoend;
+WASSTATIC int movefifoplc, movefifoend;
 WASSTATIC signed char baksyncvel[MOVEFIFOSIZ][MAXPLAYERS];
 WASSTATIC short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/27/95
 WASSTATIC short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/27/95
@@ -238,17 +238,17 @@ WASSTATIC short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 extern char syncstate;
 	//GAME.C sync state variables
 WASSTATIC short syncstat = 0;
-WASSTATIC long syncvalplc, othersyncvalplc;
-WASSTATIC long syncvalend, othersyncvalend;
-WASSTATIC long syncvalcnt, othersyncvalcnt;
+WASSTATIC int syncvalplc, othersyncvalplc;
+WASSTATIC int syncvalend, othersyncvalend;
+WASSTATIC int syncvalcnt, othersyncvalcnt;
 WASSTATIC short syncval[MOVEFIFOSIZ], othersyncval[MOVEFIFOSIZ];
 
-extern long crctable[256];
+extern int crctable[256];
 #define updatecrc16(dacrc,dadat) dacrc = (((dacrc<<8)&65535)^crctable[((((unsigned short)dacrc)>>8)&65535)^dadat])
 WASSTATIC char playerreadyflag[MAXPLAYERS];
 
 	//Game recording variables
-WASSTATIC long reccnt, recstat = 1;
+WASSTATIC int reccnt, recstat = 1;
 WASSTATIC signed char recsyncvel[16384][2];
 WASSTATIC short recsyncsvel[16384][2];                      // Les 09/27/95
 WASSTATIC short recsyncangvel[16384][2];                    // Les 09/27/95
@@ -259,11 +259,11 @@ WASSTATIC char tempbuf[max(576,MAXXDIM)], boardfilename[80];
 WASSTATIC short screenpeek = 0, oldmousebstatus = 0, brightness = 0;
 WASSTATIC short screensize, screensizeflag = 0;
 WASSTATIC short neartagsector, neartagwall, neartagsprite;
-WASSTATIC long lockclock, neartagdist, neartaghitdist;
-WASSTATIC long masterslavetexttime;
-extern long pageoffset, ydim16, chainnumpages;
-WASSTATIC long globhiz, globloz, globhihit, globlohit;
-extern long stereofps, stereowidth, stereopixelwidth;
+WASSTATIC int lockclock, neartagdist, neartaghitdist;
+WASSTATIC int masterslavetexttime;
+extern int pageoffset, ydim16, chainnumpages;
+WASSTATIC int globhiz, globloz, globhihit, globlohit;
+extern int stereofps, stereowidth, stereopixelwidth;
 
 	//Board animation variables
 WASSTATIC short rotatespritelist[16], rotatespritecnt;
@@ -272,25 +272,25 @@ WASSTATIC short xpanningsectorlist[16], xpanningsectorcnt;
 WASSTATIC short ypanningwalllist[64], ypanningwallcnt;
 WASSTATIC short floorpanninglist[64], floorpanningcnt;
 WASSTATIC short dragsectorlist[16], dragxdir[16], dragydir[16], dragsectorcnt;
-WASSTATIC long dragx1[16], dragy1[16], dragx2[16], dragy2[16], dragfloorz[16];
+WASSTATIC int dragx1[16], dragy1[16], dragx2[16], dragy2[16], dragfloorz[16];
 WASSTATIC short swingcnt, swingwall[32][5], swingsector[32];
 WASSTATIC short swingangopen[32], swingangclosed[32], swingangopendir[32];
 WASSTATIC short swingang[32], swinganginc[32];
-WASSTATIC long swingx[32][8], swingy[32][8];
+WASSTATIC int swingx[32][8], swingy[32][8];
 WASSTATIC short revolvesector[4], revolveang[4], revolvecnt;
-WASSTATIC long revolvex[4][16], revolvey[4][16];
-WASSTATIC long revolvepivotx[4], revolvepivoty[4];
+WASSTATIC int revolvex[4][16], revolvey[4][16];
+WASSTATIC int revolvepivotx[4], revolvepivoty[4];
 WASSTATIC short subwaytracksector[4][128], subwaynumsectors[4], subwaytrackcnt;
-WASSTATIC long subwaystop[4][8], subwaystopcnt[4];
-WASSTATIC long subwaytrackx1[4], subwaytracky1[4];
-WASSTATIC long subwaytrackx2[4], subwaytracky2[4];
-WASSTATIC long subwayx[4], subwaygoalstop[4], subwayvel[4], subwaypausetime[4];
+WASSTATIC int subwaystop[4][8], subwaystopcnt[4];
+WASSTATIC int subwaytrackx1[4], subwaytracky1[4];
+WASSTATIC int subwaytrackx2[4], subwaytracky2[4];
+WASSTATIC int subwayx[4], subwaygoalstop[4], subwayvel[4], subwaypausetime[4];
 WASSTATIC short waterfountainwall[MAXPLAYERS], waterfountaincnt[MAXPLAYERS];
 WASSTATIC short slimesoundcnt[MAXPLAYERS];
 
 	//Variables that let you type messages to other player
 WASSTATIC char getmessage[162], getmessageleng;
-WASSTATIC long getmessagetimeoff;
+WASSTATIC int getmessagetimeoff;
 WASSTATIC char typemessage[162], typemessageleng = 0, typemode = 0;
 WASSTATIC char scantoasc[128] =
 {
@@ -319,9 +319,8 @@ WASSTATIC char scantoascwithshift[128] =
 	//walls, or sprites (They are NOT to be used for changing the [].picnum's)
 	//See the setanimation(), and getanimategoal() functions for more details.
 #define MAXANIMATES 512
-WASSTATIC long *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
-WASSTATIC long animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt = 0;
-
+WASSTATIC int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
+WASSTATIC int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt = 0;
 
 void
 debugout(short p)
@@ -331,7 +330,7 @@ debugout(short p)
      if (dbgcolumn != 0) {
           fprintf(dbgfp,"\n");
      }
-     fprintf(dbgfp,"%2d %6ld %3ld %04X %04d %06ld %06ld %06ld %06ld %ld\n",
+     fprintf(dbgfp,"%2d %6d %3d %04X %04d %06d %06d %06d %06d %d\n",
                     p,lockclock,movefifoplc,syncbits[p],ang[p],posx[p],posy[p],posz[p],
                     health[p],randomseed);
      dbglines++;
@@ -355,7 +354,7 @@ char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
 main(short int argc,char **argv)
 {
-	long      i, j, k, l, fil, waitplayers, x1, y1, x2, y2;
+	int      i, j, k, l, fil, waitplayers, x1, y1, x2, y2;
      short     other, tempbufleng;
 	char      *ptr;
 
@@ -519,9 +518,9 @@ void crash(char *,...);
 
 processinput(short snum)
 {
-	long      oldposx, oldposy, nexti;
-	long      i,j,k, doubvel, xvect, yvect, goalz;
-	long      dax, day, dax2, day2, odax, oday, odax2, oday2;
+	int      oldposx, oldposy, nexti;
+	int      i,j,k, doubvel, xvect, yvect, goalz;
+	int      dax, day, dax2, day2, odax, oday, odax2, oday2;
 	short     startwall, endwall;
 	char      *ptr;
 
@@ -546,12 +545,12 @@ processinput(short snum)
           }
 		xvect = 0, yvect = 0;
 		if( syncvel[snum] != 0 ) {
-			xvect += ((((long)syncvel[snum])*doubvel*(long)sintable[(ang[snum]+2560)&2047])>>3);
-			yvect += ((((long)syncvel[snum])*doubvel*(long)sintable[(ang[snum]+2048)&2047])>>3);
+			xvect += ((((int)syncvel[snum])*doubvel*(int)sintable[(ang[snum]+2560)&2047])>>3);
+			yvect += ((((int)syncvel[snum])*doubvel*(int)sintable[(ang[snum]+2048)&2047])>>3);
 		}
 		if( syncsvel[snum] != 0 ) {
-			xvect += ((((long)syncsvel[snum])*doubvel*(long)sintable[(ang[snum]+2048)&2047])>>3);
-			yvect += ((((long)syncsvel[snum])*doubvel*(long)sintable[(ang[snum]+1536)&2047])>>3);
+			xvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+2048)&2047])>>3);
+			yvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+1536)&2047])>>3);
 		}
 		clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],xvect,yvect,128L,4<<8,4<<8,0);
 		frameinterpolate = 1;
@@ -597,7 +596,7 @@ processinput(short snum)
 		if( (syncbits[snum]&256) > 0 ) {
 			doubvel += (TICSPERFRAME>>1);
           }
-		ang[snum] += ((((long)syncangvel[snum])*doubvel)>>4);
+		ang[snum] += ((((int)syncangvel[snum])*doubvel)>>4);
 		ang[snum] = (ang[snum]+2048)&2047;
 	}
 
@@ -965,11 +964,11 @@ processinput(short snum)
 	oflags[snum] = syncbits[snum];
 }
 
-drawscreen(short snum, long dasmoothratio)
+drawscreen(short snum, int dasmoothratio)
 {
-	long      i, j, k, charsperline, templong, dx, dy, top, bot;
-	long      x1, y1, x2, y2, ox1, oy1, ox2, oy2, dist, maxdist;
-	long      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
+	int      i, j, k, charsperline, tempint, dx, dy, top, bot;
+	int      x1, y1, x2, y2, ox1, oy1, ox2, oy2, dist, maxdist;
+	int      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
 	short     cang, tang;
 	char      ch, *ptr, *ptr2, *ptr3, *ptr4;
 
@@ -1118,7 +1117,7 @@ drawscreen(short snum, long dasmoothratio)
 	}
 	else {
 		if( dimensionmode[myconnectindex] == 3 ) {
-			templong = screensize;
+			tempint = screensize;
 			if( ((locbits&32) > (screensizeflag&32)) && (screensize > 64) ) {
 				ox1 = (xdim>>1)-(screensize>>1);
 				ox2 = ox1+screensize-1;
@@ -1126,7 +1125,7 @@ drawscreen(short snum, long dasmoothratio)
 				oy2 = oy1+((screensize*(ydim-32))/xdim)-1;
                     tekview(&ox1,&oy1, &ox2,&oy2);
 				screensize -= (screensize>>3);
-				if( templong > xdim ) {
+				if( tempint > xdim ) {
 					screensize = xdim;
 					permanentwritesprite((xdim-320)>>1,ydim-32,STATUSBAR,0,0,0,xdim-1,ydim-1,0);
 					i = ((xdim-320)>>1);
@@ -1157,7 +1156,7 @@ drawscreen(short snum, long dasmoothratio)
 			}
 			if( ((locbits&16) > (screensizeflag&16)) && (screensize <= xdim) ) {
 				screensize += (screensize>>3);
-				if( (screensize > xdim) && (templong == xdim) ) {
+				if( (screensize > xdim) && (tempint == xdim) ) {
 					screensize = xdim+1;
 					x1 = 0; y1 = 0;
 					x2 = xdim-1; y2 = ydim-1;
@@ -1316,7 +1315,7 @@ drawscreen(short snum, long dasmoothratio)
 
 movethings()
 {
-	long      i;
+	int      i;
 
 	gotlastpacketclock = totalclock;
 	for( i=connecthead; i>=0; i=connectpoint2[i] ) {
@@ -1463,10 +1462,10 @@ short moreoptionbits[]={
 getinput()
 {
 	char      ch, keystate, *ptr;
-	long      i, j, k;
+	int      i, j, k;
 	short     mousx, mousy, bstatus;
      short     jx,jy;    
-     long      angdelta,cybangle,pitdelta;
+     int      angdelta,cybangle,pitdelta;
      short     moving,strafing,turning;
 
      if( activemenu != 0 ) {              
@@ -1692,7 +1691,7 @@ getinput()
 		if( vel2  > 0 )   vel2    = max(vel2-2*TICSPERFRAME,0);
 	}
      if( keystatus[keys[28]] ) {
-          i=horiz[myconnectindex]+((( long)mousy)>>3);
+          i=horiz[myconnectindex]+((( int)mousy)>>3);
           if( i > 200 ) i=200;
           if( i < 0   ) i=0;
           horiz[myconnectindex]=i;               
@@ -1906,7 +1905,7 @@ getinput()
 
 playback()
 {
-	long i, j, k;
+	int i, j, k;
 
 	ready2send = 0;
 	recstat = 0; i = reccnt;
@@ -1968,7 +1967,7 @@ playback()
 
 doanimations()
 {
-	long i, j;
+	int i, j;
 
 	for(i=animatecnt-1;i>=0;i--)
 	{
@@ -1996,18 +1995,18 @@ doanimations()
 	}
 }
 
-getanimationgoal(long animptr)
+getanimationgoal(int *animptr)
 {
-	long i;
+	int i;
 
 	for(i=animatecnt-1;i>=0;i--)
 		if (animptr == animateptr[i]) return(i);
 	return(-1);
 }
 
-setanimation(long *animptr, long thegoal, long thevel, long theacc)
+setanimation(int *animptr, int thegoal, int thevel, int theacc)
 {
-	long i, j;
+	int i, j;
 
 	if (animatecnt >= MAXANIMATES) return(-1);
 
@@ -2026,7 +2025,7 @@ setanimation(long *animptr, long thegoal, long thevel, long theacc)
 
 checkmasterslaveswitch()
 {
-	long i, j;
+	int i, j;
 
 	if (option[4] == 0) return;
 
@@ -2069,7 +2068,7 @@ checkmasterslaveswitch()
 faketimerhandler()
 {
 	short other, tempbufleng;
-	long i, j, k, l;
+	int i, j, k, l;
 
 	if (totalclock < ototalclock+TICSPERFRAME) return;
 	if (ready2send == 0) return;
@@ -2211,7 +2210,7 @@ faketimerhandler()
 
 getpackets()
 {
-	long i, j, k, l;
+	int i, j, k, l;
 	short other, tempbufleng;
 
 	if (option[4] == 0) return;
@@ -2246,8 +2245,8 @@ getpackets()
 #if 0
 				while (j != tempbufleng)
 				{
-					othersyncval[othersyncvalend] = ((long)tempbuf[j]);
-					othersyncval[othersyncvalend] += (((long)tempbuf[j+1])<<8);
+					othersyncval[othersyncvalend] = ((int)tempbuf[j]);
+					othersyncval[othersyncvalend] += (((int)tempbuf[j+1])<<8);
 					j += 2;
 					othersyncvalend = ((othersyncvalend+1)&(MOVEFIFOSIZ-1));
 				}
@@ -2322,7 +2321,7 @@ getpackets()
 
 waitforeverybody()
 {
-	long i, j, oldtotalclock;
+	int i, j, oldtotalclock;
 
 	if (numplayers < 2) return;
 
@@ -2367,7 +2366,7 @@ waitforeverybody()
 #if 0
 getsyncstat()
 {
-	long i, j;
+	int i, j;
 	unsigned short crc;
 	spritetype *spr;
 
