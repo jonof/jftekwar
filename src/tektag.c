@@ -283,6 +283,7 @@ int       loopinsound=-1;
 int       baydoorloop=-1;
 int       ambsubloop=-1;
 
+void
 operatesector(short dasector)
 {     //Door code
 	long i, j, k, s, nexti, good, cnt, datag;
@@ -402,6 +403,7 @@ operatesector(short dasector)
 
 extern    int  subwaysound[4];
 
+void
 tagcode()
 {
 	long      i, nexti, j, k, l, s, dax, day, daz, dax2, day2, cnt, good;
@@ -716,6 +718,7 @@ tagcode()
      tektagcode();
 }
 
+int
 testneighborsectors(short sect1, short sect2)
 {
 	short i, startwall, num1, num2;
@@ -739,6 +742,7 @@ testneighborsectors(short sect1, short sect2)
 	return(0);
 }
 
+void
 tekpreptags()
 {
      int       angle,hitag,i,j,k,lotag,n,s,w1,w2,w3,w4;
@@ -1190,6 +1194,7 @@ tekpreptags()
      }
 }
 
+void
 tekoperatesector(short dasector)
 {
      short          endwall,s,startwall;
@@ -1233,6 +1238,7 @@ tekoperatesector(short dasector)
      }
 }
 
+void
 warp(long *x, long *y, long *z, short *daang, short *dasector)
 {
 	short          startwall, endwall, s;
@@ -1269,6 +1275,7 @@ warp(long *x, long *y, long *z, short *daang, short *dasector)
 	updatesector(*x,*y,dasector);
 }
 
+void
 tekwarp(long *x, long *y, long *z, short *dasector)
 {
 	short          startwall, endwall, s;
@@ -1291,6 +1298,7 @@ tekwarp(long *x, long *y, long *z, short *dasector)
 	updatesector(*x,*y,dasector);
 }
 
+void
 warpsprite(short spritenum)
 {
 	short dasectnum;
@@ -1302,6 +1310,7 @@ warpsprite(short spritenum)
 	changespritesect(spritenum,dasectnum);
 }
 
+void
 teknewsector(short p)
 {
      long           i,n,nexti,s;
@@ -1363,6 +1372,7 @@ teknewsector(short p)
 
 extern    int       mission;
 
+void
 tektagcode(void)
 {
      int            floorz,hi,i,j,k,lo,oldang,p,r,s,tics;
@@ -1585,6 +1595,7 @@ stepdoor(long z,long z2,struct doortype *door,int newstate)
      return(z);
 }
 
+void
 showwall2d(int w,int onoff)
 {
      if (onoff) {
@@ -1595,6 +1606,7 @@ showwall2d(int w,int onoff)
      }
 }
 
+void
 showsect2d(int s,int z)
 {
      int  endwall,i,startwall;
@@ -1615,6 +1627,7 @@ showsect2d(int s,int z)
      }
 }
 
+void
 showsect2dtoggle(int s,int onoff)
 {
      int  endwall,i,startwall;
@@ -1648,6 +1661,7 @@ sectorblocked(int   s)
      return(rv);
 }
 
+void
 movedoors(int d)
 {
      int            hitag,i,j,s,sx;
@@ -2153,6 +2167,7 @@ movedoors(int d)
 
 }
 
+void
 movesprelevs(int e)
 {
      int            i,j,n,tics;
@@ -2233,6 +2248,7 @@ movesprelevs(int e)
      }
 }
 
+void
 movefloordoor(int d)
 {
      int  i,j,s,tics;
@@ -2321,6 +2337,7 @@ movefloordoor(int d)
      }
 }
 
+void
 clearvehiclesoundindexes()
 {
      int       i;
@@ -2330,6 +2347,7 @@ clearvehiclesoundindexes()
      }
 }
 
+void
 movevehicles(int v)
 {
      short     a,angv,ato,angto,curang,i,n,p,rotang,s,sto,stoptrack,track;
@@ -2897,6 +2915,7 @@ tekheadbob(void)
      }
 }
 
+void
 tekswitchtrigger(short snum)
 {
      int       i,j;

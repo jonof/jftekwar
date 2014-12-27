@@ -71,6 +71,7 @@ readrle(int fil,void *data,int size)
 }
 #endif
 
+int
 loadgame(int loadno)                                             
 {
 	int      i, fil;
@@ -289,6 +290,7 @@ loadgame(int loadno)
 	return(0);
 }
 
+int
 savegame(int saveno)
 {
 	int      i, fil;

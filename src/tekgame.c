@@ -352,7 +352,8 @@ debugout(short p)
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
-main(short int argc,char **argv)
+int
+main(int argc,char **argv)
 {
 	int      i, j, k, l, fil, waitplayers, x1, y1, x2, y2;
      short     other, tempbufleng;
@@ -516,6 +517,7 @@ gameends:
 
 void crash(char *,...);
 
+void
 processinput(short snum)
 {
 	int      oldposx, oldposy, nexti;
@@ -964,6 +966,7 @@ processinput(short snum)
 	oflags[snum] = syncbits[snum];
 }
 
+void
 drawscreen(short snum, int dasmoothratio)
 {
 	int      i, j, k, charsperline, tempint, dx, dy, top, bot;
@@ -1313,6 +1316,7 @@ drawscreen(short snum, int dasmoothratio)
     #endif
 }
 
+void
 movethings()
 {
 	int      i;
@@ -1336,6 +1340,7 @@ movethings()
      tektime();
 }
 
+void
 domovethings()
 {
 	short          i, j, startwall, endwall;
@@ -1459,6 +1464,7 @@ short moreoptionbits[]={
 };
 //** Les END   - 09/27/95
 
+void
 getinput()
 {
 	char      ch, keystate, *ptr;
@@ -1903,6 +1909,7 @@ getinput()
      tekprivatekeys();
 }
 
+void
 playback()
 {
 	int i, j, k;
@@ -1965,6 +1972,7 @@ playback()
 	exit(0);
 }
 
+void
 doanimations()
 {
 	int i, j;
@@ -1995,6 +2003,7 @@ doanimations()
 	}
 }
 
+int
 getanimationgoal(int *animptr)
 {
 	int i;
@@ -2004,6 +2013,7 @@ getanimationgoal(int *animptr)
 	return(-1);
 }
 
+int
 setanimation(int *animptr, int thegoal, int thevel, int theacc)
 {
 	int i, j;
@@ -2023,6 +2033,7 @@ setanimation(int *animptr, int thegoal, int thevel, int theacc)
 	return(j);
 }
 
+void
 checkmasterslaveswitch()
 {
 	int i, j;
@@ -2065,6 +2076,7 @@ checkmasterslaveswitch()
 	}
 }
 
+void
 faketimerhandler()
 {
 	short other, tempbufleng;
@@ -2208,6 +2220,7 @@ faketimerhandler()
 	}
 }
 
+void
 getpackets()
 {
 	int i, j, k, l;
@@ -2319,6 +2332,7 @@ getpackets()
 	}
 }
 
+void
 waitforeverybody()
 {
 	int i, j, oldtotalclock;
@@ -2364,6 +2378,7 @@ waitforeverybody()
 }
 
 #if 0
+unsigned short
 getsyncstat()
 {
 	int i, j;

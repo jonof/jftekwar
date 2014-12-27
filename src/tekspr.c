@@ -235,6 +235,7 @@ flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 	return(retval);
 }
 
+void
 analyzesprites(int dax, int day)
 {
 	int           i, k;
@@ -443,6 +444,7 @@ analyzesprites(int dax, int day)
 	}
 }
 
+void
 checktouchsprite(short snum, short sectnum)
 {
 	int      i, nexti;
@@ -697,6 +699,7 @@ checktouchsprite(short snum, short sectnum)
 extern
 int  switchlevelsflag;
 
+void
 operatesprite(short dasprite)
 {
 	int           datag;
@@ -766,6 +769,7 @@ operatesprite(short dasprite)
 char      dropanglecnt;
 short     dropangles[MAXDROPANGLES] = { 0, 1792, 512, 768, 1536, 1024 };
 
+void
 dropit(int x, int y, int z, short sect, int pic)
 {
      int       j,ang;
@@ -785,6 +789,7 @@ dropit(int x, int y, int z, short sect, int pic)
      }
 }
 
+void
 playerdropitems(int snum)
 {
      if( !validplayer(snum) ) {

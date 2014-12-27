@@ -19,6 +19,7 @@ int      stun[MAXPLAYERS],stuntics[MAXPLAYERS];
 int      fallz[MAXPLAYERS];                                         
 
 
+int
 changehealth(short snum, short deltahealth)
 {
      int       healthmax;
@@ -87,6 +88,7 @@ changehealth(short snum, short deltahealth)
 	return(health[snum] <= 0);     
 }
 
+void
 changescore(short snum, short deltascore)
 {
      if( toggles[TOGGLE_GODMODE] != 0 ) {
@@ -101,6 +103,7 @@ changescore(short snum, short deltascore)
 
 }
 
+void
 tekchangestun(short snum,short deltastun)
 {
      if( toggles[TOGGLE_GODMODE] != 0 ) {
@@ -121,6 +124,7 @@ tekchangestun(short snum,short deltastun)
      }
 }
 
+void
 tekhealstun(short snum)
 {
      if( toggles[TOGGLE_GODMODE] != 0 ) {
@@ -135,6 +139,7 @@ tekhealstun(short snum)
      }
 }
 
+void
 tekchangefallz(short snum,int loz,int hiz)
 {
      int  died=0;

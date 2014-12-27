@@ -61,6 +61,7 @@ int       firsttimethru=1;
 
 int       subwaysound[4];
 
+void
 prepareboard(char *daboardfilename)
 {
 	short     startwall, endwall, dasector;
@@ -488,6 +489,7 @@ prepareboard(char *daboardfilename)
      }
 }
 
+void
 findrandomspot(int *x, int *y, short *sectnum)
 {
 	short startwall, endwall, s;
@@ -610,6 +612,7 @@ placerandompic(int picnum)
 extern
 short dieframe[];
 
+void
 tekrestoreplayer(short snum)
 {
 	setsprite(playersprite[snum],posx[snum],posy[snum],posz[snum]+(KENSPLAYERHEIGHT<<8));
@@ -637,6 +640,7 @@ tekrestoreplayer(short snum)
      }
 }
 
+void
 initplayersprite(short snum)
 {
 	int      i;
@@ -680,6 +684,7 @@ initplayersprite(short snum)
      tekrestoreplayer(snum);
 }
 
+int
 initptrlists()
 {
      int       i;
@@ -698,6 +703,7 @@ initptrlists()
      return 0;
 }
 
+int
 tekpreinit(void)
 {
      int  i,j,k,l;
@@ -797,6 +803,7 @@ mdmreadsettings(void)
 	 fclose(fp);
 }
 
+void
 tekinitmultiplayers()
 {
      char      opt5=0;
@@ -914,6 +921,7 @@ skippick:
      fadein(0,255,16);
 }
 
+void
 tekloadsetup()
 {
 	int  fil;
@@ -936,6 +944,7 @@ tekloadsetup()
 	}
 }
 
+void
 teksavesetup(void)
 {
      int  fil;
@@ -951,6 +960,7 @@ teksavesetup(void)
      }
 }
 
+void
 tekview(int *x1,int *y1, int *x2,int *y2)
 {
      if( screensize <= xdim ) {

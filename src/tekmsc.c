@@ -363,6 +363,7 @@ fadein(int start, int end, int steps)
      clearkeys();
 }
 
+void
 fog()
 {
      char      *temp;
@@ -372,6 +373,7 @@ fog()
      palookup[255]=temp;
 }
 
+int
 initpaletteshifts(void)
 {
 	char      *workptr,*baseptr;
@@ -437,6 +439,7 @@ startwhiteflash(int bonus)
      return 0;
 }
 
+void
 woundflash()
 {
      if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
@@ -447,6 +450,7 @@ woundflash()
      }
 }
 
+void
 criticalflash()
 {
      if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
@@ -457,6 +461,7 @@ criticalflash()
      }
 }
 
+void
 bonusflash()
 {
      if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
@@ -467,6 +472,7 @@ bonusflash()
      }
 }
 
+void
 burnflash()
 {
      startredflash(8);
@@ -524,6 +530,7 @@ updatepaletteshifts(void)
  return;
 }
 
+void
 setup3dscreen()
 {
 	int      i, dax, day, dax2, day2;
@@ -584,6 +591,7 @@ showmessage(char *fmt,...)
 }
 
 #ifdef DOANNOYINGTITLESCREEN
+void
 tektitlescreen()
 {
      int  i,j,k,l;
@@ -608,11 +616,13 @@ tektitlescreen()
 }
 #endif
 
+void
 tekfirstpass()
 {
      setbrightness(brightness);
 }
 
+void
 tekgamestarted(void)
 {
      hcpos=-tilesizx[HCDEVICE];        
@@ -842,6 +852,7 @@ redrawbackfx(void)
      }
 }
 
+void
 holyon()
 {
      if( screensize <= xdim ) {
@@ -849,6 +860,7 @@ holyon()
      }
 }
 
+void
 holyoff()
 {
      if( screensize <= xdim ) {
@@ -857,6 +869,7 @@ holyoff()
      }
 }
 
+void
 showtime()
 {
      int   alphabet=ALPHABET+(xdim > 360);
@@ -890,6 +903,7 @@ showtime()
      }
 }
 
+void
 showscore()
 {
      int   alphabet=ALPHABET+(xdim > 360);
@@ -935,6 +949,7 @@ showscore()
      }
 }
 
+void
 showinv(int snum)
 {
      char      ti=toggles[TOGGLE_INVENTORY];
@@ -1147,6 +1162,7 @@ nextnetlevel()
 }
 
 #ifdef WONMESSAGE
+void
 postwonmessage(int nw)
 {
      int       len;
@@ -1162,6 +1178,7 @@ postwonmessage(int nw)
 }
 #endif
 
+void
 netstats()
 {
      int       icnt,i;
@@ -1455,6 +1472,7 @@ tekscreenfx(void)
     return 0;
 }
 
+void
 tektime(void)
 {
      fortieth++;
@@ -2346,6 +2364,7 @@ rearview(int snum)
      setview(oldwx1,oldwy1, oldwx2,oldwy2);
 }
 
+void
 usage()
 {
      printf("\ntekwar [option1] [option2] .... [optionN]\n");
@@ -2362,6 +2381,7 @@ extern
 int  coopmode,
      switchlevelsflag;
 
+void
 tekargv(short int argc,char **argv)
 {
      int       p,sl;
@@ -2481,6 +2501,7 @@ tekloadmoreoptions(int fil)
      }
 }
 
+void
 initmoreoptions()
 {
      difficulty=moreoptions[8];
@@ -2527,6 +2548,7 @@ teksavemoreoptions(int fil)
      write(fil,&gamestuff[0],MAXGAMESTUFF<<2);
 }
 
+void
 tekendscreen()
 {
      int       i,j,k,l;
@@ -3057,6 +3079,7 @@ tekloadmissioninfo(int fil)
      }
 }
 
+void
 teknetmenu()
 {
      initpaletteshifts();

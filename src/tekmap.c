@@ -10,6 +10,7 @@
 
 #include "tekwar.h"
 
+void
 drawoverheadmap(long cposx, long cposy, long czoom, short cang)
 {
 	long i, j, k, l, x1, y1, x2, y2, x3, y3, x4, y4, ox, oy, xoff, yoff;

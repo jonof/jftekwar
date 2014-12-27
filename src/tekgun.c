@@ -119,6 +119,7 @@ validplayer(int snum)
      return(0);
 }
 
+void
 restockammo(int snum)
 {
      ammo1[snum]=MAXAMMO;     
@@ -220,6 +221,7 @@ tekfiregun(int gun,short p)  // this kicks off an animation sequence
      }
 }
 
+void
 playerwoundplayer(short plrhit, short plr, char guntype)
 {
      int       killed=0,damage=0,score=0;
@@ -248,6 +250,7 @@ playerwoundplayer(short plrhit, short plr, char guntype)
      }
 }
 
+void
 killscore(short hs, short snum, char guntype)
 {
      int       ext=sprptr[hs]->extra,j;
@@ -323,6 +326,7 @@ killscore(short hs, short snum, char guntype)
      changescore(snum, score);
 }
 
+void
 playerpainsound(int p)
 {
      if( !validplayer(p) ) {
