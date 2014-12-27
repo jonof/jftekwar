@@ -46,7 +46,6 @@ extern    void cd_stopplay(void);
 extern    void cd_advancetrack(void);
 extern    void cd_retardtrack(void);
 extern    void updatesounds(void);
-extern    void smkplayseq(char *name);
 extern    void smkshowmenu(void);
 extern    void asmwaitvrt(int parm1);
 extern    void asmsetpalette(char *pal);

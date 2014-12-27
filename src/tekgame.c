@@ -18,7 +18,6 @@ extern    void domenuinput(void);
 extern    void toss(short);
 extern    int pickupclock;
 extern    spritetype   pickup;
-extern    void smkplayseq(char *name);
 extern    void startgametime(void);
 extern    void endgametime(void);
 extern    int  choosemission(void);

@@ -1908,3 +1908,8 @@ readhmicfg()
 }
 
 #endif
+
+void
+initsb(char option1,char option2,long digihz,char option7a,char option7b,int val,char option7c)
+{
+}

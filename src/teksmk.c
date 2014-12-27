@@ -1,3 +1,6 @@
+#include "compat.h"
+#include "baselayer.h"
+
 #if 0
 
 /***************************************************************************
@@ -255,3 +258,9 @@ smkclosemenu()
 }
 
 #endif
+
+void
+smkplayseq(char *name)
+{
+    debugprintf("smkplayseq(\"%s\")\n", name);
+}

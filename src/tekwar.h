@@ -533,3 +533,7 @@ extern    int  playsound(int,int,int,int,short);
 #define   S_DIM_CANTSTOPTEKLORDS    	205
 #define   S_DIM_TEKRULES            	206
 #define   S_HOLOGRAMDIE                 207
+
+// teksmk.c
+
+void smkplayseq(char *name);
