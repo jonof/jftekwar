@@ -19,8 +19,6 @@
 
 #define TEKTEMPBUFSIZE  256
 
-#define   WASSTATIC extern
-
 #define GAMECVARSGLOBAL
 #ifdef  GAMECVARSGLOBAL
 typedef struct
@@ -28,13 +26,13 @@ typedef struct
 	int x, y, z;
 } point3d;
 
-WASSTATIC int vel, svel, angvel;
-WASSTATIC int vel2, svel2, angvel2;
+extern int vel, svel, angvel;
+extern int vel2, svel2, angvel2;
 
 extern volatile int recsnddone, recsndoffs;
-WASSTATIC int recording;
+extern int recording;
 
-WASSTATIC int vesares[7][2];
+extern int vesares[7][2];
 
 #ifdef    TEKWAR
 #define   NUMOPTIONS          8
@@ -42,136 +40,136 @@ WASSTATIC int vesares[7][2];
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
-extern    char option[NUMOPTIONS];
-extern    char keys[NUMKEYS];
-extern    char moreoptions[MAXMOREOPTIONS];
+extern    unsigned char option[NUMOPTIONS];
+extern    unsigned char keys[NUMKEYS];
+extern    unsigned char moreoptions[MAXMOREOPTIONS];
 extern    char toggles[MAXTOGGLES];
 extern    int  gamestuff[MAXGAMESTUFF];
 extern    int  krand_intercept(char *);
 #endif
 
-WASSTATIC char frame2draw[MAXPLAYERS];
-WASSTATIC int frameskipcnt[MAXPLAYERS];
-WASSTATIC char gundmost[320];
+extern char frame2draw[MAXPLAYERS];
+extern int frameskipcnt[MAXPLAYERS];
+extern char gundmost[320];
 
 	//Shared player variables
-WASSTATIC int posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
-WASSTATIC int horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
-WASSTATIC short ang[MAXPLAYERS], cursectnum[MAXPLAYERS], ocursectnum[MAXPLAYERS];
-WASSTATIC short playersprite[MAXPLAYERS], deaths[MAXPLAYERS];
-WASSTATIC int lastchaingun[MAXPLAYERS];
-WASSTATIC int health[MAXPLAYERS], score[MAXPLAYERS], saywatchit[MAXPLAYERS];
-WASSTATIC short numbombs[MAXPLAYERS], oflags[MAXPLAYERS];
-WASSTATIC char dimensionmode[MAXPLAYERS];
-WASSTATIC char revolvedoorstat[MAXPLAYERS];
-WASSTATIC short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
-WASSTATIC int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
+extern int posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
+extern int horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
+extern short ang[MAXPLAYERS], cursectnum[MAXPLAYERS], ocursectnum[MAXPLAYERS];
+extern short playersprite[MAXPLAYERS], deaths[MAXPLAYERS];
+extern int lastchaingun[MAXPLAYERS];
+extern int health[MAXPLAYERS], score[MAXPLAYERS], saywatchit[MAXPLAYERS];
+extern short numbombs[MAXPLAYERS], oflags[MAXPLAYERS];
+extern char dimensionmode[MAXPLAYERS];
+extern char revolvedoorstat[MAXPLAYERS];
+extern short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
+extern int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
 
 	//ENGINE CONTROLLED MULTIPLAYER VARIABLES:
 extern short numplayers, myconnectindex;
 extern short connecthead, connectpoint2[MAXPLAYERS];   //Player linked list variables (indeces, not connection numbers)
 
 	//Local multiplayer variables
-WASSTATIC int locselectedgun;
-WASSTATIC signed char locvel, olocvel;
-WASSTATIC short locsvel, olocsvel;                          // Les 09/30/95
-WASSTATIC short locangvel, olocangvel;                      // Les 09/30/95
-WASSTATIC short locbits, olocbits;
+extern int locselectedgun;
+extern signed char locvel, olocvel;
+extern short locsvel, olocsvel;                          // Les 09/30/95
+extern short locangvel, olocangvel;                      // Les 09/30/95
+extern short locbits, olocbits;
 
 	//Local multiplayer variables for second player
-WASSTATIC int locselectedgun2;
-WASSTATIC signed char locvel2, olocvel2;
-WASSTATIC short locsvel2, olocsvel2;                        // Les 09/30/95
-WASSTATIC short locangvel2, olocangvel2;                    // Les 09/30/95
-WASSTATIC short locbits2, olocbits2;
+extern int locselectedgun2;
+extern signed char locvel2, olocvel2;
+extern short locsvel2, olocsvel2;                        // Les 09/30/95
+extern short locangvel2, olocangvel2;                    // Les 09/30/95
+extern short locbits2, olocbits2;
 
   //Multiplayer syncing variables
-WASSTATIC signed char fsyncvel[MAXPLAYERS], osyncvel[MAXPLAYERS], syncvel[MAXPLAYERS];
-WASSTATIC short fsyncsvel[MAXPLAYERS], osyncsvel[MAXPLAYERS], syncsvel[MAXPLAYERS];  // Les 09/30/95
-WASSTATIC short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAXPLAYERS]; // Les 09/30/95
-WASSTATIC unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
+extern signed char fsyncvel[MAXPLAYERS], osyncvel[MAXPLAYERS], syncvel[MAXPLAYERS];
+extern short fsyncsvel[MAXPLAYERS], osyncsvel[MAXPLAYERS], syncsvel[MAXPLAYERS];  // Les 09/30/95
+extern short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAXPLAYERS]; // Les 09/30/95
+extern unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
 
-WASSTATIC char frameinterpolate, detailmode, ready2send;
-WASSTATIC int ototalclock, gotlastpacketclock, smoothratio;
-WASSTATIC int oposx[MAXPLAYERS], oposy[MAXPLAYERS], oposz[MAXPLAYERS];
-WASSTATIC int ohoriz[MAXPLAYERS], ozoom[MAXPLAYERS];
-WASSTATIC short oang[MAXPLAYERS];
+extern char frameinterpolate, detailmode, ready2send;
+extern int ototalclock, gotlastpacketclock, smoothratio;
+extern int oposx[MAXPLAYERS], oposy[MAXPLAYERS], oposz[MAXPLAYERS];
+extern int ohoriz[MAXPLAYERS], ozoom[MAXPLAYERS];
+extern short oang[MAXPLAYERS];
 
-WASSTATIC point3d osprite[MAXSPRITESONSCREEN];
+extern point3d osprite[MAXSPRITESONSCREEN];
 
-WASSTATIC int movefifoplc, movefifoend;
-WASSTATIC signed char baksyncvel[MOVEFIFOSIZ][MAXPLAYERS];
-WASSTATIC short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/30/95
-WASSTATIC short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/30/95
-WASSTATIC short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
+extern int movefifoplc, movefifoend;
+extern signed char baksyncvel[MOVEFIFOSIZ][MAXPLAYERS];
+extern short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/30/95
+extern short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/30/95
+extern short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
 	//MULTI.OBJ sync state variables
 extern char syncstate;
 	//GAME.C sync state variables
-WASSTATIC short syncstat;
-WASSTATIC int syncvalplc, othersyncvalplc;
-WASSTATIC int syncvalend, othersyncvalend;
-WASSTATIC int syncvalcnt, othersyncvalcnt;
-WASSTATIC short syncval[MOVEFIFOSIZ], othersyncval[MOVEFIFOSIZ];
+extern short syncstat;
+extern int syncvalplc, othersyncvalplc;
+extern int syncvalend, othersyncvalend;
+extern int syncvalcnt, othersyncvalcnt;
+extern short syncval[MOVEFIFOSIZ], othersyncval[MOVEFIFOSIZ];
 
 extern int crctable[256];
 #define updatecrc16(dacrc,dadat) dacrc = (((dacrc<<8)&65535)^crctable[((((unsigned short)dacrc)>>8)&65535)^dadat])
-WASSTATIC char playerreadyflag[MAXPLAYERS];
+extern char playerreadyflag[MAXPLAYERS];
 
 	//Game recording variables
-WASSTATIC int reccnt, recstat;
-WASSTATIC signed char recsyncvel[16384][2];
-WASSTATIC short recsyncsvel[16384][2];                      // Les 09/30/95
-WASSTATIC short recsyncangvel[16384][2];                    // Les 09/30/95
-WASSTATIC short recsyncbits[16384][2];
+extern int reccnt, recstat;
+extern signed char recsyncvel[16384][2];
+extern short recsyncsvel[16384][2];                      // Les 09/30/95
+extern short recsyncangvel[16384][2];                    // Les 09/30/95
+extern short recsyncbits[16384][2];
 
 	//Miscellaneous variables
-WASSTATIC char tempbuf[], boardfilename[80];
-WASSTATIC short screenpeek, oldmousebstatus, brightness;
-WASSTATIC short screensize, screensizeflag;
-WASSTATIC short neartagsector, neartagwall, neartagsprite;
-WASSTATIC int lockclock, neartagdist, neartaghitdist;
-WASSTATIC int masterslavetexttime;
+extern char tempbuf[], boardfilename[80];
+extern short screenpeek, oldmousebstatus, brightness;
+extern short screensize, screensizeflag;
+extern short neartagsector, neartagwall, neartagsprite;
+extern int lockclock, neartagdist, neartaghitdist;
+extern int masterslavetexttime;
 extern int pageoffset, ydim16, chainnumpages;
-WASSTATIC int globhiz, globloz, globhihit, globlohit;
+extern int globhiz, globloz, globhihit, globlohit;
 extern int stereofps, stereowidth, stereopixelwidth;
 
 	//Board animation variables
-WASSTATIC short rotatespritelist[16], rotatespritecnt;
-WASSTATIC short warpsectorlist[64], warpsectorcnt;
-WASSTATIC short xpanningsectorlist[16], xpanningsectorcnt;
-WASSTATIC short ypanningwalllist[64], ypanningwallcnt;
-WASSTATIC short floorpanninglist[64], floorpanningcnt;
-WASSTATIC short dragsectorlist[16], dragxdir[16], dragydir[16], dragsectorcnt;
-WASSTATIC int dragx1[16], dragy1[16], dragx2[16], dragy2[16], dragfloorz[16];
-WASSTATIC short swingcnt, swingwall[32][5], swingsector[32];
-WASSTATIC short swingangopen[32], swingangclosed[32], swingangopendir[32];
-WASSTATIC short swingang[32], swinganginc[32];
-WASSTATIC int swingx[32][8], swingy[32][8];
-WASSTATIC short revolvesector[4], revolveang[4], revolvecnt;
-WASSTATIC int revolvex[4][16], revolvey[4][16];
-WASSTATIC int revolvepivotx[4], revolvepivoty[4];
-WASSTATIC short subwaytracksector[4][128], subwaynumsectors[4], subwaytrackcnt;
-WASSTATIC int subwaystop[4][8], subwaystopcnt[4];
-WASSTATIC int subwaytrackx1[4], subwaytracky1[4];
-WASSTATIC int subwaytrackx2[4], subwaytracky2[4];
-WASSTATIC int subwayx[4], subwaygoalstop[4], subwayvel[4], subwaypausetime[4];
-WASSTATIC short waterfountainwall[MAXPLAYERS], waterfountaincnt[MAXPLAYERS];
-WASSTATIC short slimesoundcnt[MAXPLAYERS];
+extern short rotatespritelist[16], rotatespritecnt;
+extern short warpsectorlist[64], warpsectorcnt;
+extern short xpanningsectorlist[16], xpanningsectorcnt;
+extern short ypanningwalllist[64], ypanningwallcnt;
+extern short floorpanninglist[64], floorpanningcnt;
+extern short dragsectorlist[16], dragxdir[16], dragydir[16], dragsectorcnt;
+extern int dragx1[16], dragy1[16], dragx2[16], dragy2[16], dragfloorz[16];
+extern short swingcnt, swingwall[32][5], swingsector[32];
+extern short swingangopen[32], swingangclosed[32], swingangopendir[32];
+extern short swingang[32], swinganginc[32];
+extern int swingx[32][8], swingy[32][8];
+extern short revolvesector[4], revolveang[4], revolvecnt;
+extern int revolvex[4][16], revolvey[4][16];
+extern int revolvepivotx[4], revolvepivoty[4];
+extern short subwaytracksector[4][128], subwaynumsectors[4], subwaytrackcnt;
+extern int subwaystop[4][8], subwaystopcnt[4];
+extern int subwaytrackx1[4], subwaytracky1[4];
+extern int subwaytrackx2[4], subwaytracky2[4];
+extern int subwayx[4], subwaygoalstop[4], subwayvel[4], subwaypausetime[4];
+extern short waterfountainwall[MAXPLAYERS], waterfountaincnt[MAXPLAYERS];
+extern short slimesoundcnt[MAXPLAYERS];
 
 	//Variables that let you type messages to other player
-WASSTATIC char getmessage[162], getmessageleng;
-WASSTATIC int getmessagetimeoff;
-WASSTATIC char typemessage[162], typemessageleng, typemode;
-WASSTATIC char scantoasc[128];
-WASSTATIC char scantoascwithshift[128];
+extern char getmessage[162], getmessageleng;
+extern int getmessagetimeoff;
+extern char typemessage[162], typemessageleng, typemode;
+extern char scantoasc[128];
+extern char scantoascwithshift[128];
 
 	//These variables are for animating x, y, or z-coordinates of sectors,
 	//walls, or sprites (They are NOT to be used for changing the [].picnum's)
 	//See the setanimation(), and getanimategoal() functions for more details.
 #define MAXANIMATES 512
-WASSTATIC int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
-WASSTATIC int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt;
+extern int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
+extern int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt;
 #endif
 
 
