@@ -61,9 +61,6 @@ extern    char dofadein;
 extern    char activemenu;
 extern    int  ovmode;  
 extern    int  mousesensitivity;
-extern    int  cyberenabled;
-extern    int  iglassenabled;
-extern    int  vfx1enabled;
 extern    char puckbuttons;
 extern    short puckpitch,puckroll,puckbutton[];
 extern    int  difficulty;
@@ -92,14 +89,7 @@ char      oldjoyb;
 short     yaw,pitch,roll,vrangle,vrpitch;
 int       joyx,joyy;
 char      joyb;
-char      spaceballon=0;
 
-//** Les START - 09/26/95
-#include "avlib.h"
-
-short     spaceballinitflag;
-SPW_InputEvent sbpacket;
-//** Les END   - 09/26/95
 #endif
 
 typedef struct
@@ -558,16 +548,6 @@ main(short int argc,char **argv)
      lm("initmouse");
 	if( option[3] != 0 ) initmouse();
 
-//** Les START - 09/26/95
-     if( spaceballon ) {
-          lm("spaceball init");
-          spaceballinitflag=SPW_InputCheckForSpaceball(0);
-          if (spaceballinitflag) {
-               lm("Spaceball initialized");
-          }
-     }
-//** Les END   - 09/26/95
-
      if (dbgflag) {
           lm("debug mode: ON");
           sprintf(dbgfname,"DEBUG.%03d",dbgfilen++);
@@ -686,12 +666,6 @@ gameends:
 	uninitengine();
 	uninitgroupfile();
 
-//** Les START - 09/26/95
-    if (spaceballinitflag) {
-        SPW_InputShutdown(0);
-    }
-//** Les END   - 09/26/95
-
      teksavesetup();
 	setvmode(ovmode); 
      endgametime();
@@ -781,29 +755,6 @@ processinput(short snum)
 
      if( cursectnum[snum] != ocursectnum[snum] ) {
           teknewsector(snum);
-     }
-
-     if (iglassenabled || cyberenabled || vfx1enabled) {
-          if (iglassenabled) {
-               vio_read(&yaw,&pitch,&roll);
-          }
-          else if (cyberenabled) {
-               ctm_read(&yaw,&pitch,&roll);
-          }
-          else if (vfx1enabled) {                                     // Les 09/28/95
-               vfx1_read(&yaw,&pitch,&roll,                           // Les 09/29/95
-                    &puckpitch,&puckroll,&puckbuttons);               // Les 09/29/95
-          }                                                           // Les 09/28/95
-          vrangle=(1024-(yaw>>4))&2047;
-          vrpitch=100+(pitch/82);
-          if (vrpitch < 0) {
-               vrpitch=0;
-          }
-          else if (vrpitch > 200) {
-               vrpitch=200;
-          }
-          ang[snum]=vrangle;
-          horiz[snum]=vrpitch;
      }
 
      // ang += angvel*constant, engine calculates angvel
@@ -1655,8 +1606,6 @@ adjustbiasthreshhold(short mousy)
 }
 
 //** Les START - 09/27/95
-#define   NUMSPACEBALLBUTTONS      6
-
 short moreoptionbits[]={
      -1,                           //  0 move forward
      -1,                           //  1 move backward
@@ -1833,48 +1782,10 @@ getinput()
           }
           oldjoyb=joyb;
      }
-     if (spaceballinitflag) {
-          if (SPW_IsInputEvent(0,&sbpacket)) {
-               angvel=min(max(angvel+(sbpacket.sData[5]>>3),-128),127);
-               angvel=max(min(angvel-(sbpacket.sData[4]>>3),127),-128);
-               svel=max(min(svel-(sbpacket.sData[0]>>3),127),-128);
-               vel=max(min(vel-(sbpacket.sData[2]>>3),127),-128);
-          }
-     }
 //** Les END   - 09/26/95
 
 //** Les START - 09/28/95
      moving=strafing=turning=0;
-     if (spaceballinitflag) {
-          for (i=0 ; i < NUMSPACEBALLBUTTONS ; i++) {
-               if (sbpacket.buttonState.current&(1<<i)) {
-                    if (moreoptions[i+14] == 0) {
-                         moving=1;
-                    }
-                    else if (moreoptions[i+14] == 1) {
-                         moving=-1;
-                    }
-                    else if (moreoptions[i+14] == 2) {
-                         turning=1;
-                    }
-                    else if (moreoptions[i+14] == 3) {
-                         turning=-1;
-                    }
-                    else if (moreoptions[i+14] == 5) {
-                         strafing=2;
-                    }
-                    else if (moreoptions[i+14] == 12) {
-                         strafing=-1;
-                    }
-                    else if (moreoptions[i+14] == 13) {
-                         strafing=1;
-                    }
-                    else if (moreoptionbits[moreoptions[i+14]] >= 0) {
-                         locbits|=(1<<moreoptionbits[moreoptions[i+14]]);
-                    }
-               }
-          }
-     }
      if (moreoptions[0] != 0) {
           for (i=0 ; i < 3 ; i++) {
                if (bstatus&(1<<i)) {
@@ -1917,28 +1828,6 @@ getinput()
           }
      }
 //** Les END   - 09/28/95
-
-//** Les START - 09/29/95
-     if (vfx1enabled) {
-          for (i=0 ; i < 3 ; i++) {
-               if ((puckbuttons&(1<<i)) != 0) {
-                    locbits|=(1<<puckbutton[i]);
-               }
-          }
-          if (puckpitch < -1024) {
-               vel=-max(puckpitch>>6,-128);
-          }
-          else if (puckpitch > 1024) {
-               vel=-min(puckpitch>>6,127);
-          }
-          if (puckroll < -1024) {
-               svel=-max(puckroll>>5,-128);
-          }
-          else if (puckroll > 1024) {
-               svel=-min(puckroll>>5,127);
-          }
-     }
-//** Les END   - 09/29/95
 
 	// keyboard survey - use to be keytimerstuff() called from keyhandler
     if( keystatus[keys[5]] == 0 && strafing == 0 ) {    // Les 09/28/95
@@ -2021,25 +1910,6 @@ getinput()
     locvel=min(max(locvel-mousy,-128),127);
 //    locbits = (locselectedgun<<13); moved up to joystick section
 
-//** Les START - 09/26/95
-     if (spaceballinitflag) {
-          if (sbpacket.sData[3] > 400) {
-               locbits|=(1<<2);                             // Look up
-          }
-          else if (sbpacket.sData[3] < -400) {
-               locbits|=(1<<3);                             // Look down
-          }
-          if (sbpacket.sData[1] > 400) {
-               locbits|=1;                                  // Jump
-          }
-          else if (sbpacket.sData[1] < -200) {
-               locbits|=(1<<1);                             // Crouch
-               if (sbpacket.sData[1] < -300) {
-                    locbits|=(1<<8);                        // Crouch lower
-               }
-          }
-    }
-//** Les END   - 09/26/95
 
     if( typemode == 0 ) {
          #ifdef MASTERSWITCHING 
@@ -2264,12 +2134,6 @@ playback()
 	}
 
 	musicoff();
-
-//** Les START - 09/26/95
-    if (spaceballinitflag) {
-        SPW_InputShutdown(0);
-    }
-//** Les END   - 09/26/95
 
     uninitmultiplayers();
 	uninittimer();

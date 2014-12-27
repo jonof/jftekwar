@@ -95,13 +95,11 @@ extern    char      biasthreshholdon;
 extern    short     biasthreshhold;
 extern    volatile int   LoopPending;
 extern    long      stun[];
-extern    int       cyberenabled;
 extern    short     cybyaw,cybpit,cybrol;
 extern    long      qsetmode;
 extern    char      jcalibration,
                     jstickenabled;
 extern    int       jctrx,jctry;
-extern    char      spaceballon;
 extern    char      bypasscdcheck;
 
 void      (__interrupt __far *oldgphandler)();
@@ -1458,12 +1456,6 @@ tekscreenfx(void)
      }
      framecnt=((framecnt+1)&(AVERAGEFRAMES-1));
     #endif
-    #if CYBERMAXTEKMSCDBG
-     if (cyberenabled) {
-          sprintf(tempbuf,"y=%d p=%d r=%d",cybyaw,cybpit,cybrol);
-          printext256(windowx1,windowy1+8,31,-1,tempbuf,1);
-     }
-    #endif
 
      if( (activemenu == 0) && (option[4] != 0) ) {
           netstats();
@@ -2397,10 +2389,6 @@ usage()
      printf("            nobriefs\n");
      printf("            netname [NAME]\n");   
      printf("            noenemies\n");
-     printf("            cyber 1|2|3|4\n");
-     printf("            iglass 1|2|3|4\n");
-     printf("            spaceball\n");
-     printf("            vfx1\n\n");
 }
 
 #define   MAXNAMESIZE    11
@@ -2437,10 +2425,6 @@ tekargv(short int argc,char **argv)
           }    
           if (strcmp(strupr(argv[p]),"NOVIDEOID") == 0) {            
                novideoid=1;
-               argmatch++;
-          }    
-          if (strcmp(strupr(argv[p]),"SPACEBALL") == 0) {            
-               spaceballon=1;
                argmatch++;
           }    
           if (strcmp(strupr(argv[p]),"NETNAME") == 0) {            
@@ -2484,52 +2468,6 @@ tekargv(short int argc,char **argv)
                argmatch++;
                nobriefflag=1;
           }                                                     
-          if (strcmp(strupr(argv[p]),"CYBER") == 0) {
-               argmatch++;
-               if (p+1 < argc) {
-                    if (strcmp(argv[p+1],"2") == 0) {
-                         ctm_init(2);
-                    }
-                    else if (strcmp(argv[p+1],"3") == 0) {
-                         ctm_init(3);
-                    }
-                    else if (strcmp(argv[p+1],"4") == 0) {
-                         ctm_init(4);
-                    }
-                    else {
-                         ctm_init(1);
-                    }
-               }
-               else {
-                    ctm_init(1);
-               }
-          }
-          if (strcmp(strupr(argv[p]),"IGLASS") == 0) {
-               argmatch++;
-               if (p+1 < argc) {
-                    if (strcmp(argv[p+1],"2") == 0) {
-                         vio_init(2);
-                    }
-                    else if (strcmp(argv[p+1],"3") == 0) {
-                         vio_init(3);
-                    }
-                    else if (strcmp(argv[p+1],"4") == 0) {
-                         vio_init(4);
-                    }
-                    else {
-                         vio_init(1);
-                    }
-               }
-               else {
-                    vio_init(1);
-               }
-          }
-//** Les START - 09/28/95
-          if (strcmp(strupr(argv[p]),"VFX1") == 0) {
-               argmatch++;
-               vfx1_init();
-          }
-//** Les END   - 09/28/95
           if (strcmp(strupr(argv[p]),"DEBUG") == 0) {
                argmatch++;
                dbgflag=1;
