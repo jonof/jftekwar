@@ -11,12 +11,12 @@
 #include "tekwar.h"
 
 void
-drawoverheadmap(long cposx, long cposy, long czoom, short cang)
+drawoverheadmap(int cposx, int cposy, int czoom, short cang)
 {
-	long i, j, k, l, x1, y1, x2, y2, x3, y3, x4, y4, ox, oy, xoff, yoff;
-	long dax, day, cosang, sinang, xspan, yspan, sprx, spry;
-	long xrepeat, yrepeat, z1, z2, startwall, endwall, tilenum, daang;
-	long xvect, yvect, xvect2, yvect2;
+	int i, j, k, l, x1, y1, x2, y2, x3, y3, x4, y4, ox, oy, xoff, yoff;
+	int dax, day, cosang, sinang, xspan, yspan, sprx, spry;
+	int xrepeat, yrepeat, z1, z2, startwall, endwall, tilenum, daang;
+	int xvect, yvect, xvect2, yvect2;
 	char col;
 	walltype *wal, *wal2;
 	spritetype *spr;
@@ -137,7 +137,7 @@ drawoverheadmap(long cposx, long cposy, long czoom, short cang)
 					case 16:
 						x1 = sprx; y1 = spry;
 						tilenum = spr->picnum;
-						xoff = (long)((signed char)((picanm[tilenum]>>8)&255))+((long)spr->xoffset);
+						xoff = (int)((signed char)((picanm[tilenum]>>8)&255))+((int)spr->xoffset);
 						if ((spr->cstat&4) > 0) xoff = -xoff;
 						k = spr->ang; l = spr->xrepeat;
 						dax = sintable[k&2047]*l; day = sintable[(k+1536)&2047]*l;
@@ -161,8 +161,8 @@ drawoverheadmap(long cposx, long cposy, long czoom, short cang)
 						if (dimensionmode[screenpeek] == 1)
 						{
 							tilenum = spr->picnum;
-							xoff = (long)((signed char)((picanm[tilenum]>>8)&255))+((long)spr->xoffset);
-							yoff = (long)((signed char)((picanm[tilenum]>>16)&255))+((long)spr->yoffset);
+							xoff = (int)((signed char)((picanm[tilenum]>>8)&255))+((int)spr->xoffset);
+							yoff = (int)((signed char)((picanm[tilenum]>>16)&255))+((int)spr->yoffset);
 							if ((spr->cstat&4) > 0) xoff = -xoff;
 							if ((spr->cstat&8) > 0) yoff = -yoff;
 

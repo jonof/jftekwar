@@ -15,9 +15,9 @@ struct    soundtype {
      int       offset;
      int       plevel;
      int       playing;
-     long      x,y;
-     long      cache_ptr;
-     long      cache_length;
+     int      x,y;
+     int      cache_ptr;
+     int      cache_length;
      char      cache_lock;
 };
 extern    struct    soundtype     *dsoundptr[MAXSOUNDS];
@@ -34,7 +34,7 @@ extern    char *mapnames[];
 #define   BOBBDELTA      128
 
 int       headbobon=1;
-long      headbob,bobstep=BOBBDELTA;
+int      headbob,bobstep=BOBBDELTA;
 
 #define   VEHICLEHEIGHT  -13312
 
@@ -93,15 +93,15 @@ long      headbob,bobstep=BOBBDELTA;
 char onelev[MAXPLAYERS];
 
 struct sectoreffect {
-     unsigned long sectorflags;
-     long animate;
+     unsigned int sectorflags;
+     int animate;
      int  hi,lo;
      int  delay,delayreset;
      int  ang;
      int  triggerable;
      int  warpto;
-     long warpx,warpy,warpz;
-     long sin,cos;
+     int warpx,warpy,warpz;
+     int sin,cos;
      short damage;
 };
 struct    sectoreffect   sectoreffect[MAXSECTORS];
@@ -131,12 +131,12 @@ struct doortype {
      int  sector;
      int  step;
      int  delay;
-     long goalz[4];
-     long points[4];
+     int goalz[4];
+     int points[4];
      int  walls[8];
-     long centx;
-     long centy;
-     long centz;
+     int centx;
+     int centy;
+     int centz;
      int  subtype;   // jeff added 9-20
 };
 struct    doortype  doortype[MAXDOORS];
@@ -164,20 +164,20 @@ struct sectorvehicle {
      short acceleration,accelto;
      short speed,speedto,movespeed;                              
      short angle,angleto;
-     long pivotx,pivoty;
+     int pivotx,pivoty;
      short numpoints;
      short point[MAXVEHICLEPOINTS];
-     long pointx[MAXVEHICLEPOINTS];
-     long pointy[MAXVEHICLEPOINTS];
+     int pointx[MAXVEHICLEPOINTS];
+     int pointy[MAXVEHICLEPOINTS];
      short track;
      short tracknum;
-     long trackx[MAXVEHICLETRACKS];
-     long tracky[MAXVEHICLETRACKS];
+     int trackx[MAXVEHICLETRACKS];
+     int tracky[MAXVEHICLETRACKS];
      char stop[MAXVEHICLETRACKS];                                
-     long distx,disty;
+     int distx,disty;
      short sector[MAXVEHICLESECTORS];                            
      short numsectors;                                           
-     long waittics,waitdelay;                                    
+     int waittics,waitdelay;                                    
      short stoptrack;
      short killw[4];
      int	soundindex;          
@@ -204,8 +204,8 @@ enum {
 #define   E_WAITDELAY    CLKIPS*4
 #define   E_DOOROPENPOS  15360
 struct elevatortype {
-     long hilevel;
-     long lolevel;
+     int hilevel;
+     int lolevel;
 };
 struct    elevatortype   elevator[MAXSECTORS];
 struct    elevatortype   *evptrlist[MAXSECTORS];
@@ -215,14 +215,14 @@ struct spriteelev {
      int  parts;
      int  sprnum[MAXPARTS];
      int  door[MAXELEVDOORS];
-     long doorpos;
-     long startz[MAXPARTS];
-     long floorz[MAXELEVFLOORS];
+     int doorpos;
+     int startz[MAXPARTS];
+     int floorz[MAXELEVFLOORS];
      int  curfloor;
      int  curdir;
      int  delay;
      int  floors;
-     long floorpos;
+     int floorpos;
      int  doors;
 };
 struct    spriteelev     spriteelev[MAXSPRITEELEVS];
@@ -247,7 +247,7 @@ int flags32[32]={
 #define   MAP_SFX_TURN_ON          3
 #define   MAP_SFX_TURN_OFF         4
 struct mapsndfxtype {
-     long      x,y;
+     int      x,y;
      short     sector;
      int       snum;
      int       loops;
@@ -258,13 +258,13 @@ struct    mapsndfxtype    mapsndfx[MAXMAPSOUNDFX];
 struct    mapsndfxtype    *mapsndfxptr[MAXMAPSOUNDFX];
 int       totalmapsndfx=0;
 
-long      ambupdateclock;
+int      ambupdateclock;
 
 struct animpic {
      short frames;
      short *pic;
      short tics;
-     long nextclock;
+     int nextclock;
 } animpic[MAXANIMPICS],*animpicptr[MAXANIMPICS];
 
 struct delayfunc {
@@ -275,7 +275,7 @@ struct delayfunc {
 
 extern    void      newmap(int);
 
-long      subwaystopdir[4] = { 1L, 1L, 1L, 1L };
+int      subwaystopdir[4] = { 1L, 1L, 1L, 1L };
 void      checktoggledmapsndfx(short dasect) ;
 int       numanimates;
 short     numdelayfuncs;
@@ -286,8 +286,8 @@ int       ambsubloop=-1;
 void
 operatesector(short dasector)
 {     //Door code
-	long i, j, k, s, nexti, good, cnt, datag;
-	long dax, day, daz, dax2, day2, daz2, centx, centy;
+	int i, j, k, s, nexti, good, cnt, datag;
+	int dax, day, daz, dax2, day2, daz2, centx, centy;
 	short startwall, endwall, wallfind[2];
 
 	datag = sector[dasector].lotag;
@@ -406,7 +406,7 @@ extern    int  subwaysound[4];
 void
 tagcode()
 {
-	long      i, nexti, j, k, l, s, dax, day, daz, dax2, day2, cnt, good;
+	int      i, nexti, j, k, l, s, dax, day, daz, dax2, day2, cnt, good;
 	short     startwall, endwall, dasector, p, oldang;
 
 	for(i=0;i<warpsectorcnt;i++)
@@ -746,9 +746,9 @@ void
 tekpreptags()
 {
      int       angle,hitag,i,j,k,lotag,n,s,w1,w2,w3,w4;
-     long      dax,day,endwall,startwall,x1,x2,y1,y2;
+     int      dax,day,endwall,startwall,x1,x2,y1,y2;
      short     killwcnt;
-     unsigned  long      effect;
+     unsigned  int      effect;
      spritetype *spr;
 
      totalmapsndfx=0;
@@ -1083,8 +1083,8 @@ tekpreptags()
                     }
                     if ((effect&flags32[WPANNING]) != 0) {
                          angle=septrlist[s]->ang=spr->ang;
-                         septrlist[s]->sin=(long)sintable[((angle+2048)&2047)];
-                         septrlist[s]->cos=(long)sintable[((angle+2560)&2047)];
+                         septrlist[s]->sin=(int)sintable[((angle+2048)&2047)];
+                         septrlist[s]->cos=(int)sintable[((angle+2560)&2047)];
                          startwall=sectptr[s]->wallptr;
                          endwall=startwall+sectptr[s]->wallnum-1;
                          for (j=startwall ; j <= endwall ; j++) {
@@ -1096,8 +1096,8 @@ tekpreptags()
                     if ((effect&flags32[FPANNING]) != 0 ||
                                         (effect&flags32[CPANNING]) != 0) {
                          angle=septrlist[s]->ang=spr->ang;
-                         septrlist[s]->sin=(long)sintable[((angle+2048)&2047)];
-                         septrlist[s]->cos=(long)sintable[((angle+2560)&2047)];
+                         septrlist[s]->sin=(int)sintable[((angle+2048)&2047)];
+                         septrlist[s]->cos=(int)sintable[((angle+2560)&2047)];
                     }
                     if ((effect&flags32[WARPSECTOR]) != 0) {
                          for( j=0; j<MAXSECTORS; j++ ) {
@@ -1239,10 +1239,10 @@ tekoperatesector(short dasector)
 }
 
 void
-warp(long *x, long *y, long *z, short *daang, short *dasector)
+warp(int *x, int *y, int *z, short *daang, short *dasector)
 {
 	short          startwall, endwall, s;
-	long           i, j, dax, day, ox, oy;
+	int           i, j, dax, day, ox, oy;
 
 	ox = *x; oy = *y;
 
@@ -1276,10 +1276,10 @@ warp(long *x, long *y, long *z, short *daang, short *dasector)
 }
 
 void
-tekwarp(long *x, long *y, long *z, short *dasector)
+tekwarp(int *x, int *y, int *z, short *dasector)
 {
 	short          startwall, endwall, s;
-	long           i, j, dax, day;
+	int           i, j, dax, day;
 
 	// find center of sector
 	startwall = sector[*dasector].wallptr;
@@ -1313,7 +1313,7 @@ warpsprite(short spritenum)
 void
 teknewsector(short p)
 {
-     long           i,n,nexti,s;
+     int           i,n,nexti,s;
      int            sound,sn;
      struct    sectoreffect   *septr;
 
@@ -1376,8 +1376,8 @@ void
 tektagcode(void)
 {
      int            floorz,hi,i,j,k,lo,oldang,p,r,s,tics;
-     long           dax,dax2,day,day2,endwall,startwall;
-     unsigned long  effect;
+     int           dax,dax2,day,day2,endwall,startwall;
+     unsigned int  effect;
      sectortype     *sect;
      struct    sectoreffect   *septr;
 
@@ -1573,8 +1573,8 @@ tektagcode(void)
      }
 }
 
-long
-stepdoor(long z,long z2,struct doortype *door,int newstate)
+int
+stepdoor(int z,int z2,struct doortype *door,int newstate)
 {
      if (z < z2) {
 	  z+=(door->step*TICSPERFRAME);
@@ -1665,7 +1665,7 @@ void
 movedoors(int d)
 {
      int            hitag,i,j,s,sx;
-     long           size,z;
+     int           size,z;
      struct    doortype       *door;
      spritetype     *spr;
      walltype       *wall;
@@ -2171,7 +2171,7 @@ void
 movesprelevs(int e)
 {
      int            i,j,n,tics;
-     long           goalz;
+     int           goalz;
      struct    spriteelev     *s;
      spritetype     *spr;
 
@@ -2351,9 +2351,9 @@ void
 movevehicles(int v)
 {
      short     a,angv,ato,angto,curang,i,n,p,rotang,s,sto,stoptrack,track;
-     long      distx,disty,px,py,x,y;
-     long      xvect,xvect2,yvect,yvect2;
-     long      lox,loy,hix,hiy;
+     int      distx,disty,px,py,x,y;
+     int      xvect,xvect2,yvect,yvect2;
+     int      lox,loy,hix,hiy;
      short     onveh[MAXPLAYERS];
      struct    sectorvehicle  *vptr;
 
@@ -2498,9 +2498,9 @@ movevehicles(int v)
 	     vptr->angle=vptr->angleto;
 	     curang=vptr->angle;
      }
-     xvect=(s*(long)TICSPERFRAME*(long)sintable[((curang+2560)&2047)])>>3;
+     xvect=(s*(int)TICSPERFRAME*(int)sintable[((curang+2560)&2047)])>>3;
      xvect2=xvect>>13;
-     yvect=(s*(long)TICSPERFRAME*(long)sintable[((curang+2048)&2047)])>>3;
+     yvect=(s*(int)TICSPERFRAME*(int)sintable[((curang+2048)&2047)])>>3;
      yvect2=yvect>>13;
      distx-=labs(xvect2);
      if( distx < 0L ) {
@@ -2735,9 +2735,9 @@ checkmapsndfx(short p)
 {
 
 	int       i,j,s;
-	long		dist,px,py;
+	int		dist,px,py;
      char      insubway;
-     unsigned  long      effect;
+     unsigned  int      effect;
      struct    sectoreffect   *septr;
 
      s=cursectnum[p];
@@ -2919,8 +2919,8 @@ void
 tekswitchtrigger(short snum)
 {
      int       i,j;
-	long      nexti;
-	long      dax,day;
+	int      nexti;
+	int      dax,day;
 
      j=sprite[neartagsprite].picnum;
 
