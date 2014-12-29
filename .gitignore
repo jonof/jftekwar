@@ -3,6 +3,8 @@
 *.a
 *.res
 *.exe
+*.art
+*.dat
 *.map
 *.log
 *.grp

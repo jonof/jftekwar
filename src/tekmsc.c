@@ -116,7 +116,7 @@ int  lastselopt[16]={
 int      framecnt,frameval[AVERAGEFRAMES];
 char      blink=0xFF;
 int      menuspincnt=0L;
-char      activemenu=0;
+int      activemenu=0;
 char      requesttoquit;
 char      palette1[256][3],palette2[256][3];
 char      dofadein=0;
@@ -160,14 +160,18 @@ short     winner=-1;
 char      rvonemotime;
 char      wponemotime;
 char      hconemotime;
-unsigned  lastsec;
-unsigned  lastscore;
+int       lastsec;
+int       lastscore;
 char      lasttimetoggle;
 char      lastscoretoggle;
 char      lastinvtoggle;
 int       lastwx2;
 int      lastinvr,lastinvb,lastinvacc;
 int       fortieth;
+int       seconds=0;
+int       minutes=0;
+int       hours=0;
+int       messageon=0;
 int       difficulty;
 int       currentmapno=0;
 int      warpretang,warpretsect;
@@ -186,10 +190,10 @@ int       killedsonny=0;
 
 
 void
-fadeout(int start, int end, int red, int green, int blue, int steps)
+fadeout(int UNUSED(start), int UNUSED(end), int UNUSED(red), int UNUSED(green), int UNUSED(blue), int UNUSED(steps))
 {
-	int		i,j,orig,delta;
-	char      *origptr,*newptr;
+//	int		i,j,orig,delta;
+//	char      *origptr,*newptr;
 
      finishpaletteshifts();
 /*
@@ -228,14 +232,14 @@ clearkeys(void)
 }
 
 void
-fadein(int start, int end, int steps)
+fadein(int UNUSED(start), int UNUSED(end), int UNUSED(steps))
 {
-	int  i,j,delta;
+/*	int  i,j,delta;
 
      if( steps == 0 ) {
           return;
      }
-/*
+
 	asmwaitvrt(1);
 	getpalette(&palette1[0][0]);
 	memcpy(&palette2[0][0],&palette1[0][0],sizeof(palette1));
@@ -341,34 +345,19 @@ startwhiteflash(int bonus)
 void
 woundflash()
 {
-     if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
-          asmoverflash(70);
-     }
-     else {
-          startredflash(4);
-     }
+     startredflash(4);
 }
 
 void
 criticalflash()
 {
-     if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
-          asmoverflash(82);
-     }
-     else {
-          startredflash(32);
-     }
+     startredflash(32);
 }
 
 void
 bonusflash()
 {
-     if( (option[4] != 0) || toggles[TOGGLE_OVERSCAN] ) {
-          asmoverflash(125);
-     }
-     else {
-          startwhiteflash(8);
-     }
+     startwhiteflash(8);
 }
 
 void
@@ -410,19 +399,19 @@ updatepaletteshifts(void)
 
 
 	if( red ) {
-		asmwaitvrt(1);
-		asmsetpalette(redshifts[red-1]);
+		//asmsetpalette(redshifts[red-1]);
+        debugprintf("updatepaletteshifts redshifts[%d]\n", red-1);
 		palshifted = 1;
 	}
 	else if( white ) {
-		asmwaitvrt(1);
-		asmsetpalette(whiteshifts[white-1]);
+		//asmsetpalette(whiteshifts[white-1]);
+        debugprintf("updatepaletteshifts whiteshifts[%d]\n", white-1);
 		palshifted = 1;
 	}
 	else if( palshifted ) {
-		asmwaitvrt(1);
- 		asmsetpalette(&palette[0]);     // back to normal
-          setbrightness(brightness);
+ 		//asmsetpalette(&palette[0]);     // back to normal
+        debugprintf("updatepaletteshifts reset\n");
+//          setbrightness(brightness);
 		palshifted = 0;
 	}
 
@@ -464,8 +453,8 @@ finishpaletteshifts(void)
 {
 	if( palshifted == 1 ) {
 		palshifted = 0;
-		asmwaitvrt(1);
-		asmsetpalette(&palette[0]);
+		//asmsetpalette(&palette[0]);
+        debugprintf("finishpaletteshifts\n");
 	}
 
  return;
@@ -518,7 +507,7 @@ tektitlescreen()
 void
 tekfirstpass()
 {
-     setbrightness(brightness);
+    setbrightness(brightness, palette, 0);
 }
 
 void
@@ -537,13 +526,12 @@ tekgamestarted(void)
 int
 tekprivatekeys(void)
 {
-     int  i,j;
-
      if( activemenu != 0 ) {
           return(0);
      }
 
      // alt hot keys - non mappable
+     /*
      if( (keystatus[56] != 0) && (keystatus[25] != 0) ) {
           keystatus[56]=0;
           keystatus[25]=0;
@@ -569,6 +557,7 @@ tekprivatekeys(void)
           keystatus[48]=0;
           cd_retardtrack();
      }
+     */
      if( (keystatus[56] != 0) && (keystatus[16] != 0) ) {
           keystatus[56]=0;
           keystatus[16]=0;
@@ -778,7 +767,7 @@ showtime()
   	          sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
 	          printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
           }
-          lastsec=0L;
+          lastsec=0;
      }
      else {
           if( toggles[TOGGLE_TIME] == 0 ) {
@@ -787,7 +776,7 @@ showtime()
                                          0,xdim-80,ydim-12,xdim-1,ydim-1,0);
                }
                lasttimetoggle=toggles[TOGGLE_TIME];
-               lastsec=0L;
+               lastsec=0;
           }
           else {
                if( lastsec != seconds ) {
@@ -817,7 +806,7 @@ showscore()
                }
 	          printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
           }
-          lastscore=0L;
+          lastscore=0;
      }
      else {
           if( toggles[TOGGLE_SCORE] == 0 ) {
@@ -826,7 +815,7 @@ showscore()
                                          0,xdim-160,ydim-12,xdim-1,ydim-1,0);
                }
                lastscoretoggle=toggles[TOGGLE_SCORE];
-               lastscore=0L;
+               lastscore=0;
           }
           else {
                if( (score[screenpeek]==0) || (lastscore != score[screenpeek]) ) {
@@ -961,9 +950,6 @@ skipsyms:
 }
 
 #define   NETWINSCORE    1200
-
-extern
-FILE *dbgfp;
 
 void
 nextnetlevel()
@@ -1121,7 +1107,7 @@ tekscreenfx(void)
      static short hcpic,rvpic,wppic;                            
 
      updatepaletteshifts();
-     updatesounds();
+     updatesounds(screenpeek);
 
     //#define COMMITTEE
     #ifdef  COMMITTEE
@@ -1343,8 +1329,8 @@ tekscreenfx(void)
      }
 
      if( biasthreshholdon ) {
-          sprintf(tempbuf,"SET BIAS THRESHHOLD %3d", biasthreshhold);
-          printext((xdim>>1)-96,windowy2-10,tempbuf,ALPHABET2,255);
+          sprintf((char *)tempbuf,"SET BIAS THRESHHOLD %3d", biasthreshhold);
+          printext((xdim>>1)-96,windowy2-10,(char *)tempbuf,ALPHABET2,255);
      }
      else if( (activemenu == 0) && messageon ) {
           if( messagex > windowx1 )
@@ -1430,7 +1416,6 @@ newgame(char *mapname)
      ready2send=1;
 }
 
-#define   TOTALMAPS      32
 char *mapnames[TOTALMAPS] = { 
      "subway0.map",    // 0
      "subway1.map",    // 1
@@ -1668,7 +1653,7 @@ newmap(int mapno)
      angvel=0;
 
      currentmapno=mapno;
-     showmessage(strupr(mapnames[mapno]));
+     showmessage(Bstrupr(mapnames[mapno]));
 
      musicfade();
      if( mapno <= 3 ) {
@@ -1686,14 +1671,14 @@ getloadsavenames(void)
      int  fil,i;
 
      for (i=0 ; i < MAXLOADSAVEOPTS ; i++) {
-          sprintf(tempbuf,"savegam%d.tek",i+1);
-          if (access(tempbuf,F_OK) == 0) {
-               fil=open(tempbuf,O_BINARY|O_RDONLY,S_IREAD);
+          sprintf((char *)tempbuf,"savegam%d.tek",i+1);
+          if (access((char *)tempbuf,F_OK) == 0) {
+               fil=open((char *)tempbuf,O_BINARY|O_RDONLY,S_IREAD);
                read(fil,&loadsavenames[i],MAXLOADSAVESIZE);
                close(fil);
           }
           else {
-               strncpy(&loadsavenames[i],"-EMPTY-",MAXLOADSAVESIZE);
+               strncpy(loadsavenames[i],"-EMPTY-",MAXLOADSAVESIZE);
           }
      }
 }
@@ -1705,10 +1690,10 @@ mprintf(short x,short y,char prop,char shade,char palnum,char *stg,...)
      va_list vargs;
 
      va_start(vargs,stg);
-     vsprintf(tempbuf,stg,vargs);
+     vsprintf((char *)tempbuf,stg,vargs);
      va_end(vargs);
-     strupr(tempbuf);
-     n=strlen(tempbuf);
+     Bstrupr((char *)tempbuf);
+     n=strlen((char *)tempbuf);
      if (x == -1) {
           if (prop) {
                pic=MFONT_A;
@@ -1984,7 +1969,7 @@ domenu(void)
 void
 domenuinput(void)
 {
-     char c,keystate;                                            
+     int c,keystate;
      int  tries;                                                 
      struct menu *mptr;
 
@@ -2224,13 +2209,12 @@ domenuinput(void)
 void
 rearview(int snum)
 {
-	int      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
-	short     cang, tang;
+	int      cposx, cposy, cposz, choriz, czoom;
+	short     cang;
      short     plrang,plrhoriz;
-     short     xstrt,ystrt;
      int       oldwx1,oldwx2,oldwy1,oldwy2;
 
-     if( (toggles[TOGGLE_REARVIEW] == 0) ) {
+     if( toggles[TOGGLE_REARVIEW] == 0 ) {
           return;
      }                            
 
@@ -2255,7 +2239,7 @@ rearview(int snum)
 
      drawrooms(cposx,cposy,cposz,cang,choriz,cursectnum[snum]);
      rearviewdraw=1;
-     analyzesprites(posx[snum],posy[snum],0);
+     analyzesprites(posx[snum],posy[snum]);
      rearviewdraw=0;
      drawmasks();
 
@@ -2278,7 +2262,7 @@ usage()
 void
 tekargv(int argc, char const * const argv[])
 {
-     int       p,sl;
+     int       p;
      char      argmatch=0;
 
 	if( (argc >= 2) ) {
@@ -2298,64 +2282,64 @@ tekargv(int argc, char const * const argv[])
      goreflag=1;
 
      for( p=1 ; p < argc ; p++ ) {                               
-          if (strcmp(strupr(argv[p]),"PRACTICE") == 0) {            
+          if (strcasecmp(argv[p],"PRACTICE") == 0) {
                generalplay=1;
                argmatch++;
           }    
-          if (strcmp(strupr(argv[p]),"NOVIDEOID") == 0) {            
+          if (strcasecmp(argv[p],"NOVIDEOID") == 0) {
                novideoid=1;
                argmatch++;
           }    
-          if (strcmp(strupr(argv[p]),"NETNAME") == 0) {            
+          if (strcasecmp(argv[p],"NETNAME") == 0) {
                bypasscdcheck=1;
                if( (p+1) < argc ) {
                     memset(localname,0,sizeof(localname));
-                    memcpy(localname,strupr(argv[p+1]),10);
-                    localname[10]=0;
+                    strncpy(localname,argv[p+1],sizeof(localname)-1);
+                    Bstrupr(localname);
                }
                argmatch++;
           }    
-          if (strcmp(strupr(argv[p]),"NOGORE") == 0) {            
+          if (strcasecmp(argv[p],"NOGORE") == 0) {
                argmatch++;
                goreflag=0;                                      
           }    
-          if (strcmp(strupr(argv[p]),"NOENEMIES") == 0) {            
+          if (strcasecmp(argv[p],"NOENEMIES") == 0) {
                argmatch++;
                noenemiesflag=1;                                      
           }                                                     
-          if (strcmp(strupr(argv[p]),"NOGUARD") == 0) {            
+          if (strcasecmp(argv[p],"NOGUARD") == 0) {
                argmatch++;
                noguardflag=1;                                      
           }                                                     
-          if (strcmp(strupr(argv[p]),"NOSTALK") == 0) {            
+          if (strcasecmp(argv[p],"NOSTALK") == 0) {
                argmatch++;
                nostalkflag=1;                                      
           }                                                     
-          if (strcmp(strupr(argv[p]),"NOCHASE") == 0) {            
+          if (strcasecmp(argv[p],"NOCHASE") == 0) {
                argmatch++;
                nochaseflag=1;                                      
           }                                                     
-          if (strcmp(strupr(argv[p]),"NOSTROLL") == 0) {            
+          if (strcasecmp(argv[p],"NOSTROLL") == 0) {
                argmatch++;
                nostrollflag=1;                                      
           }         
-          if (strcmp(strupr(argv[p]),"DIGILOOPS") == 0) {            
+          if (strcasecmp(argv[p],"DIGILOOPS") == 0) {
                argmatch++;
                digiloopflag=1;                                      
           }                                                     
-          if (strcmp(strupr(argv[p]),"NOBRIEFS") == 0) {            
+          if (strcasecmp(argv[p],"NOBRIEFS") == 0) {
                argmatch++;
                nobriefflag=1;
           }                                                     
-          if (strcmp(strupr(argv[p]),"DEBUG") == 0) {
+          if (strcasecmp(argv[p],"DEBUG") == 0) {
                argmatch++;
                dbgflag=1;
           }
-          if (strcmp(strupr(argv[p]),"COOP") == 0) {
+          if (strcasecmp(argv[p],"COOP") == 0) {
                argmatch++;
                coopmode=1;
           }
-          if (strcmp(strupr(argv[p]),"SWITCHLEVELS") == 0) {
+          if (strcasecmp(argv[p],"SWITCHLEVELS") == 0) {
                argmatch++;
                switchlevelsflag=1;
           }
@@ -2436,10 +2420,7 @@ teksavemoreoptions(int fil)
 void
 tekendscreen()
 {
-     int       i,j,k,l;
-     int      clocknow;
-
-     if( demowon ) 
+     if( demowon )
          return;
 
      memset(keystatus, 0, sizeof(keystatus));
@@ -2518,12 +2499,12 @@ choosemission()
           }
      }
 
-     musicfade();          
+     musicfade();
      stopallsounds();
-     if( cdplaying > 0 ) {
+     /*if( cdplaying > 0 ) {
           cd_stop();
           cdstopped=1;
-     }
+     }*/
 
      if( debrief ) {
           debriefing();
@@ -2796,34 +2777,34 @@ nextmissionright:
      switch( mission ) {
      case 2:
           smkplayseq("ROSSI1");
-          strcpy(&boardfilename,"subway1.map");
+          strcpy(boardfilename,"subway1.map");
           break;
      case 1:
           smkplayseq("DIMARCO1");
-          strcpy(&boardfilename,"subway0.map");
+          strcpy(boardfilename,"subway0.map");
           break;
      case 5:
           smkplayseq("CONNOR1");
-          strcpy(&boardfilename,"subway2.map");
+          strcpy(boardfilename,"subway2.map");
           break;
      case 4:
           smkplayseq("SONNY1");
-          strcpy(&boardfilename,"subway2.map");
+          strcpy(boardfilename,"subway2.map");
           break;
      case 6:
           smkplayseq("JANUS1");
-          strcpy(&boardfilename,"subway3.map");
+          strcpy(boardfilename,"subway3.map");
           break;
      case 3:
           smkplayseq("LOWELL1");
-          strcpy(&boardfilename,"subway1.map");
+          strcpy(boardfilename,"subway1.map");
           break;
      case 0:
           smkplayseq("DOLLAR1");
-          strcpy(&boardfilename,"subway0.map");
+          strcpy(boardfilename,"subway0.map");
           break;
      case 8:
-          strcpy(&boardfilename,"load.map");
+          strcpy(boardfilename,"load.map");
           break;
      }
 
@@ -2839,7 +2820,6 @@ donewgame:
      memcpy(palette1, palette, 768);
      memset(palette, 0, 768);
      clearview(0);
-     qsetmode=201L;
      setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
      clearview(0);
      switch( mission ) {
@@ -2883,9 +2863,9 @@ donewgame:
      else {
           menusong(1);
      }
-     if( cdstopped ) {
+     /*if( cdstopped ) {
           cd_play();
-     }
+     }*/
 
      // if matrix, reset time
      if( mission == 7 ) {
@@ -2977,7 +2957,7 @@ teknetmenu()
 void 
 copyrightscreen()
 {
-     clearview();
+     clearview(0);
      smkopenmenu("smkgm.smk");
      smkmenuframe(81);
      smkshowmenu();
@@ -3002,7 +2982,7 @@ choosemap()
      int       lastmap,map,set;
      int      clock,helpclock,stall;
 
-     musicfade();          
+     musicfade();
 
      fadeout(0,255,0,0,0,25);
 
@@ -3225,7 +3205,6 @@ choosingmap:
      memcpy(palette1, palette, 768);
      memset(palette, 0, 768);
      clearview(0);
-     qsetmode=201L;
      setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 
      if( set == 0 ) {

@@ -53,7 +53,7 @@ prepareboard(char *daboardfilename)
 	locselectedgun=1;
 	locselectedgun2=1;
 
-	if (loadoldboard(daboardfilename,1,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
+	if (loadoldboard(daboardfilename,0,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
 	{
 		musicoff();
 		uninitmultiplayers();
@@ -729,8 +729,8 @@ int  coopmode,
 void
 teknetpickmap(void)
 {
-     short i,map=0;
-     int lastclock=0L,rotangle=0L,zoom=0L;
+//     short i,map=0;
+//     int lastclock=0L,rotangle=0L,zoom=0L;
 
      noenemiesflag=1;
      if (coopmode) {
@@ -814,7 +814,7 @@ tekloadsetup()
 		close(fil);
 	}
     if (initengine()) {
-        crash("error initialising engine");
+        crash("error initialising engine: %s", engineerrstr);
     }
 }
 

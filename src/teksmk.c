@@ -264,3 +264,27 @@ smkplayseq(char *name)
 {
     debugprintf("smkplayseq(\"%s\")\n", name);
 }
+
+void
+smkopenmenu(char *name)
+{
+    debugprintf("smkopenmenu(\"%s\")\n", name);
+}
+
+void
+smkmenuframe(int fn)
+{
+    debugprintf("smkmenuframe(%d)\n", fn);
+}
+
+void
+smkshowmenu()
+{
+    debugprintf("smkshowmenu()\n");
+}
+
+void
+smkclosemenu()
+{
+    debugprintf("smkclosemenu()\n");
+}

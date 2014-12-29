@@ -1909,6 +1909,8 @@ readhmicfg()
 
 #endif
 
+int	     digiloopflag=0;
+
 void
 initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c)
 {
@@ -1926,6 +1928,14 @@ musicoff(void)
 {
 }
 
+int
+playsound(int sn, int sndx,int sndy, int loop, short type)
+{
+    sn = sndx = sndy = loop = 0;
+    type = 0;
+    return -1;
+}
+
 void
 updatevehiclesnds(int i, int sndx, int sndy)
 {
@@ -1936,4 +1946,44 @@ void
 stopsound(int i)
 {
     i = 0;
+}
+
+void
+songmastervolume(int vol)
+{
+    vol = 0;
+}
+
+void
+soundmastervolume(int vol)
+{
+    vol = 0;
+}
+
+void
+updatesounds(int    snum)
+{
+    snum = 0;
+}
+
+void
+stopallsounds()
+{
+}
+
+void
+musicfade()
+{
+}
+
+void
+menusong(int insubway)
+{
+    insubway = 0;
+}
+
+void
+startmusic(int level)
+{
+    level = 0;
 }

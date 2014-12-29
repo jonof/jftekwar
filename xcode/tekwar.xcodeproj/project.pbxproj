@@ -28,6 +28,7 @@
 		ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF51A49C3DB007D0D43 /* tektag.c */; };
 		ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF61A49C3DB007D0D43 /* tektxt.c */; };
 		ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF71A49C3DB007D0D43 /* tekver.c */; };
+		ABD03E161A5181020012B9D1 /* StartupWinController.game.m in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E151A5181020012B9D1 /* StartupWinController.game.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,7 @@
 		ABC75BF61A49C3DB007D0D43 /* tektxt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tektxt.c; sourceTree = "<group>"; };
 		ABC75BF71A49C3DB007D0D43 /* tekver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekver.c; sourceTree = "<group>"; };
 		ABC75BF91A49C3DB007D0D43 /* tekwar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tekwar.h; sourceTree = "<group>"; };
+		ABD03E151A5181020012B9D1 /* StartupWinController.game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupWinController.game.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 		ABC75BE41A49C3DB007D0D43 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				ABD03E151A5181020012B9D1 /* StartupWinController.game.m */,
 				AB3AE6C11A4D423600CE4329 /* b5compat.c */,
 				ABC75BE61A49C3DB007D0D43 /* names.h */,
 				AB3AE6D01A4E561600CE4329 /* tekcdr.c */,
@@ -337,6 +340,7 @@
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
 				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,
 				ABC75C061A49C3DB007D0D43 /* tekspr.c in Sources */,
+				ABD03E161A5181020012B9D1 /* StartupWinController.game.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

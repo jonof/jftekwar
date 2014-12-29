@@ -45,7 +45,6 @@ extern    unsigned char keys[NUMKEYS];
 extern    unsigned char moreoptions[MAXMOREOPTIONS];
 extern    char toggles[MAXTOGGLES];
 extern    int  gamestuff[MAXGAMESTUFF];
-extern    int  krand_intercept(char *);
 
 extern char frame2draw[MAXPLAYERS];
 extern int frameskipcnt[MAXPLAYERS];
@@ -219,14 +218,10 @@ struct    spriteextension {
 
 // use this function whenever you need to verify your 
 // extension index
-extern    int       validext(int ext);
-extern    int       validplayer(int snum);
-extern    short     jsinsertsprite(short sect, short stat);
-extern    short     jsdeletesprite(short spritenum);
-extern    volatile  int   seconds;
-extern    volatile  int   minutes;
-extern    volatile  int   hours;
-extern    volatile  int   messageon;
+extern    int       seconds;
+extern    int       minutes;
+extern    int       hours;
+extern    int       messageon;
 extern    unsigned  criticalerror;
 extern    char      messagebuf[MSGBUFSIZE];
 extern    char      tektempbuf[TEKTEMPBUFSIZE];
@@ -270,11 +265,6 @@ extern    int      flags32[];
 #define   TOGGLE_HEALTH       8
 #define   TOGGLE_OVERSCAN     9
 #define   TOGGLE_INVENTORY    10
-
-extern    void crash(char *, ...);
-extern    void getpicinfo(short);
-extern    void showmessage(char *, ...);
-extern    int  playsound(int,int,int,int,short);
 
 #define   GUN1FLAG            1
 #define   GUN2FLAG            2
@@ -591,7 +581,17 @@ void tekhealstun(short snum);
 
 // tekgame.c
 
+#define   MAXNAMESIZE    11
+
+extern int       dbgflag;
+extern int       dbgcolumn;
+extern FILE      *dbgfp;
+
+extern short     biasthreshhold;
+extern char      biasthreshholdon;
 extern int      headbob;
+extern char      localname[MAXNAMESIZE];
+extern char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
 void checkmasterslaveswitch();
 void doanimations();
@@ -618,6 +618,12 @@ int tekgundamage(int gun,int x,int y,int z,int hitsprite);
 void tekgunload(int fil);
 void tekgunsave(int fil);
 int tekhasweapon(int gun,short snum);
+int validplayer(int snum);
+
+// tekldsv.c
+
+int loadgame(int loadno);
+int savegame(int saveno);
 
 // tekmap.c
 
@@ -627,8 +633,9 @@ void drawoverheadmap(int cposx, int cposy, int czoom, short cang);
 
 #define   MAXLOADSAVEOPTS     5
 #define   MAXLOADSAVESIZE     12
+#define   TOTALMAPS      32
 
-extern char      activemenu;
+extern int       activemenu;
 extern int       autocenter[MAXPLAYERS];
 extern char      debrief;
 extern int       difficulty;
@@ -636,32 +643,45 @@ extern char      dofadein;
 extern char      gameover;
 extern char      generalplay;
 extern char      loadsavenames[MAXLOADSAVEOPTS][MAXLOADSAVESIZE];
+extern char      *mapnames[TOTALMAPS];
 extern int       mission;
 extern int       mousesensitivity;
+extern int       nochaseflag;
 extern int       noenemiesflag;
+extern int       noguardflag;
+extern int       nostalkflag;
+extern int       nostrollflag;
 extern char      rearviewdraw;
 extern char      singlemapmode;
 
 int accessiblemap(int mn);
 void bonusflash();
+int choosemap();
 int choosemission();
 void copyrightscreen();
 void criticalflash();
+void debriefing();
 void depositsymbol(int snum);
+void domenu(void);
 void domenuinput(void);
 void fadein(int start, int end, int steps);
 void fadeout(int start, int end, int red, int green, int blue, int steps);
 void finishpaletteshifts(void);
-int initmenu(void);
+void holyoff();
+void holyon();
+void initmenu(void);
 void initmoreoptions();
 int initpaletteshifts(void);
 void missionaccomplished(int  sn);
 int missionfailed();
 void newgame(char *mapname);
+void newmap(int mapno);
 void nextnetlevel();
+void rearview(int snum);
 void redrawbackfx(void);
 void teksavemissioninfo(int fil);
 void setup3dscreen();
+void showmessage(char *fmt,...);
 void tekargv(int argc,char const * const argv[]);
 void tekgamestarted(void);
 void tekloadmissioninfo(int fil);
@@ -674,6 +694,7 @@ void woundflash();
 
 // tekprep.c
 
+extern int  coopmode;
 extern int      startx,starty,startz;
 extern short starta,starts;
 extern int      switchlevelsflag;
@@ -693,20 +714,37 @@ void tekview(int *x1,int *y1, int *x2,int *y2);
 
 // teksmk.c
 
+void smkclosemenu();
+void smkmenuframe(int fn);
+void smkopenmenu(char *name);
 void smkplayseq(char *name);
+void smkshowmenu();
 
 // teksnd.c
 
+extern int	     digiloopflag;
+
 void initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c);
+void menusong(int insubway);
+void musicfade();
 void musicoff(void);
+int playsound(int sn, int sndx,int sndy, int loop, short type);
+void songmastervolume(int vol);
+void soundmastervolume(int vol);
+void startmusic(int level);
+void stopallsounds();
 void stopsound(int i);
 void uninitsb(void);
+void updatesounds(int snum);
 void updatevehiclesnds(int i, int sndx, int sndy);
 
 // tekspr.c
 
 void analyzesprites(int dax, int day);
 void checktouchsprite(short snum, short sectnum);
+short floatmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+short flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
+short kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
 short movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
 void playerdropitems(int snum);
 
@@ -714,33 +752,45 @@ void playerdropitems(int snum);
 
 extern spritetype     pickup;
 
+void ambushyell(short sn, short ext);
 void androidexplosion(int i);
 int attachvirus(short i, int pic);
 void blastmark(int i);
 void bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz);
 void bombexplosion(int i);
 int damagesprite(int hitsprite, int points);
+void dosectorflash();
 void forceexplosion(int i);
+void genexplosion1(int i);
+void genexplosion2(int i);
+void givewarning(short i, short ext);
 int initsprites();
 int initspriteXTs();
 int isahologram(int i);
 int isanandroid(int i);
+short jsdeletesprite(short spritenum);
+short jsinsertsprite(short sect, short stat);
+void newstatus(short sn, int  seq);
 int pickupsprite(short sn);
 void playergunshot(int snum);
 int playerhit(int hitsprite, int *pnum);
 int playervirus(short pnum, int pic);
+void sectorflash(short s);
 void sectortriggersprites(short snum);
 int spewblood(int sprnum, int hitz, short daang);
 void statuslistcode();
 void tekstatload(int fh);
 void tekstatsave(int fh);
 void toss(short snum);
+int validext(int ext);
 
 // tektag.c
 
+extern int       headbobon;
 extern char onelev[MAXPLAYERS];
 
 void checkmapsndfx(short p);
+int krand_intercept(char *stg);
 void movedoors(int d);
 void movefloordoor(int d);
 void movesprelevs(int e);
@@ -764,4 +814,8 @@ int testneighborsectors(short sect1, short sect2);
 void warp(int *x, int *y, int *z, short *daang, short *dasector);
 void warpsprite(short spritenum);
 
+// tektxt.c
 
+extern char      bypasscdcheck;
+
+void crash(char *s,...);

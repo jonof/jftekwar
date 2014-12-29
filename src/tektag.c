@@ -11,24 +11,6 @@
 
 #include "tekwar.h"
 
-struct    soundtype {
-     int       handle;
-     int       offset;
-     int       plevel;
-     int       playing;
-     int      x,y;
-     int      cache_ptr;
-     int      cache_length;
-     char      cache_lock;
-};
-extern    struct    soundtype     *dsoundptr[MAXSOUNDS];
-extern    char      soundmode;
-extern    int       goreflag;
-extern    char      activemenu;
-
-//jsa new stuff for vehicle sound switching
-extern    char *mapnames[];
-
 #define   AMBUPDATEDIST  4000L
 
 #define   BOBBMAX        512
@@ -273,8 +255,6 @@ struct delayfunc {
      int  tics;
      short parm;
 } delayfunc[MAXDELAYFUNCTIONS],*delayfuncptr[MAXDELAYFUNCTIONS];
-
-extern    void      newmap(int);
 
 int      subwaystopdir[4] = { 1L, 1L, 1L, 1L };
 void      checktoggledmapsndfx(short dasect) ;
@@ -1238,7 +1218,7 @@ tekoperatesector(short dasector)
 }
 
 void
-warp(int *x, int *y, int *z, short *daang, short *dasector)
+warp(int *x, int *y, int *z, short * UNUSED(daang), short *dasector)
 {
 	short          startwall, endwall, s;
 	int           i, j, dax, day, ox, oy;
@@ -1368,8 +1348,6 @@ teknewsector(short p)
      sectortriggersprites(p);
 }
 
-
-extern    int       mission;
 
 void
 tektagcode(void)
@@ -2977,11 +2955,6 @@ tekswitchtrigger(short snum)
 
 
 }
-
-extern
-int  dbgflag,dbgcolumn;
-extern
-FILE *dbgfp;
 
 int
 krand_intercept(char *stg)

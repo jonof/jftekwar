@@ -284,7 +284,6 @@ debugout(short p)
 }
 
 
-#define   MAXNAMESIZE    11
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
@@ -406,6 +405,7 @@ missionselection:
     #endif           
      screenpeek=myconnectindex;
 	while( !gameover ) {
+        handleevents();
 		while( movefifoplc != movefifoend ) {
                domovethings();
           }
