@@ -48,7 +48,7 @@ unsigned char option[NUMOPTIONS] = {
       1,       // 3  MOUSE ON/OFF
       0,       // 4  MULTIPLAYER COUNT
       0,       // 5  MULTIPLYER SETTING
-      0,       // 6  VIDEO RES CHOICE
+      2,       // 6  VIDEO RES CHOICE
       0        // 7  SOUND FREQ
 };
 unsigned char keys[NUMKEYS] = {

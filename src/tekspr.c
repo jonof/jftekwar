@@ -126,7 +126,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
 		changespritesect(spritenum,dasectnum);
      }
 
-     if( (sectptr[dasectnum]->lotag == 4) && (spr->extra != -1) ) {
+     if( dasectnum >= 0 && (sectptr[dasectnum]->lotag == 4) && (spr->extra != -1) ) {
           switch( spr->statnum ) {
           case FLOATING:
                break;
