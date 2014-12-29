@@ -7,15 +7,10 @@
 #include "build.h"
 #include "names.h"
 #include "pragmas.h"
+#include "mmulti.h"
+#include "baselayer.h"
 
 #include "tekwar.h"
-
-#define   MAXLOADSAVEOPTS     5
-#define   MAXLOADSAVESIZE     12
-
-#define   PEL_WRITE_ADR		0x3c8
-#define   PEL_READ_ADR		0x3c7
-#define   PEL_DATA			0x3c9
 
 #define   NUMWHITESHIFTS      3
 #define   WHITESTEPS          20
@@ -37,51 +32,6 @@
 #define   AVERAGEFRAMES       16
 #define   MFONTYSTEP          12
 #define   MAXSUBOPTIONS       6
-
-//jsa new 9/14
-extern    void menusong(int);
-extern    void cd_play(void);
-extern    void cd_resumeplay(void);
-extern    void cd_stopplay(void);
-extern    void cd_advancetrack(void);
-extern    void cd_retardtrack(void);
-extern    void updatesounds(void);
-extern    void smkshowmenu(void);
-extern    void asmwaitvrt(int parm1);
-extern    void asmsetpalette(char *pal);
-extern    void asmoverscan(int parm1);
-extern    void asmoverflash(int parm1);
-
-#define   MAXNAMESIZE    11
-#define   NETNAMES
-extern    char      netnames[MAXPLAYERS][MAXNAMESIZE];
-extern    int       fireseq[];
-extern    int       fireseq[];
-extern    char      palette[];       
-extern    char      paletteloaded;   
-extern    int       digiloopflag;
-extern    int       ovmode;
-extern    char      syncstate;
-extern    int       goreflag;
-extern    int      vel,svel,angvel;
-extern    int       headbobon;
-extern    char      biasthreshholdon;  
-extern    short     biasthreshhold;
-extern    volatile int   LoopPending;
-extern    int      stun[];
-extern    short     cybyaw,cybpit,cybrol;
-extern    int      qsetmode;
-extern    char      jcalibration,
-                    jstickenabled;
-extern    int       jctrx,jctry;
-extern    char      bypasscdcheck;
-
-void      (__interrupt __far *oldgphandler)();
-void      domenuinput(void);                                          
-int       choosemap(void);
-
-extern
-int       dbgflag;
 
 char      headbobstr[13]={"HEAD BOB ON"};
 struct menu {
@@ -113,7 +63,7 @@ struct menu {
       //{-1,3,1,0,2,"SELECT MISSION",&menu[3][2],5,1},
       {-1,4,1,0,2,"MOUSE SENSITIVITY",&menu[3][2],9,1},
       {-1,5,1,0,2,"SOUND/MUSIC VOLUME",&menu[3][3],8,1},
-      {-1,6,1,0,2,&headbobstr,NULL,0,1},
+      {-1,6,1,0,2,&headbobstr[0],NULL,0,1},
       {-1,3,1,0,2,NULL,NULL,0,1},
       {-1,0,1,0,2,NULL,NULL,0,1}},
      {{-1,5,1,0,3,"ABORT MISSION Y/N?",NULL,0,1},        // 4 QUIT TO DOS
@@ -170,8 +120,8 @@ char      activemenu=0;
 char      requesttoquit;
 char      palette1[256][3],palette2[256][3];
 char      dofadein=0;
-char      whiteshifts[NUMREDSHIFTS][768];
-char      redshifts[NUMREDSHIFTS][768];
+unsigned char whiteshifts[NUMREDSHIFTS][768];
+unsigned char redshifts[NUMREDSHIFTS][768];
 int       redcount,whitecount;
 char      palshifted;
 char      depresscount;
@@ -235,56 +185,6 @@ int       allsymsdeposited=0;
 int       killedsonny=0;
 
 
-
-void __interrupt __far
-newgphandler(void)
-{
-     setvmode(ovmode);
-     _chain_intr(oldgphandler);
-}
-
-void
-installgphandler(void)
-{
-     //oldgphandler=_dos_getvect(0x0D);
-     //_dos_setvect(0x0D,newgphandler);
-}
-
-void
-clearpal(void)
-{
-     short     i;
-
-     outp(PEL_WRITE_ADR,0);
-	for(i=0;i<768;i++)
-	     outp(PEL_DATA,0x00);
-
- return;
-}
-
-void
-getpalette(char *pal)
-{
-	int	i;
-
-	outp(PEL_READ_ADR,0);
-	for( i=0; i<768; i++)
-		*pal++ = inp(PEL_DATA);
-}
-
-void
-fillpalette(int red, int green, int blue)
-{
-	int	i;
-
-	outp(PEL_WRITE_ADR,0);
-	for( i=0; i<256; i++ ) {
-		outp(PEL_DATA,red);
-		outp(PEL_DATA,green);
-		outp(PEL_DATA,blue);
-	}
-}
-
 void
 fadeout(int start, int end, int red, int green, int blue, int steps)
 {
@@ -292,7 +192,7 @@ fadeout(int start, int end, int red, int green, int blue, int steps)
 	char      *origptr,*newptr;
 
      finishpaletteshifts();
-
+/*
      asmwaitvrt(1);
 	getpalette(&palette1[0][0]);
 	memcpy(palette2,palette1,768);
@@ -315,7 +215,7 @@ fadeout(int start, int end, int red, int green, int blue, int steps)
 		asmwaitvrt(1);
 		asmsetpalette(&palette2[0][0]);
 	}
-
+*/
  return;
 }
 
@@ -335,7 +235,7 @@ fadein(int start, int end, int steps)
      if( steps == 0 ) {
           return;
      }
-
+/*
 	asmwaitvrt(1);
 	getpalette(&palette1[0][0]);
 	memcpy(&palette2[0][0],&palette1[0][0],sizeof(palette1));
@@ -357,7 +257,7 @@ fadein(int start, int end, int steps)
      // final color
 	asmwaitvrt(1);
 	asmsetpalette(palette);
-
+*/
      dofadein=0;
      clearkeys();
 }
@@ -365,7 +265,7 @@ fadein(int start, int end, int steps)
 void
 fog()
 {
-     char      *temp;
+     unsigned char      *temp;
 
      temp=palookup[0];
      palookup[0]=palookup[255];
@@ -375,11 +275,11 @@ fog()
 int
 initpaletteshifts(void)
 {
-	char      *workptr,*baseptr;
+	unsigned char *workptr,*baseptr;
 	int       i,j,delta;
 
 	for( i=1; i<=NUMREDSHIFTS; i++ ) {
-		workptr=( char *)&redshifts[i-1][0];
+		workptr=&redshifts[i-1][0];
 		baseptr=&palette[0];
 		for( j=0; j<=255; j++) {
 			delta=64-*baseptr;
@@ -392,7 +292,7 @@ initpaletteshifts(void)
 	}
 
 	for( i=1; i<=NUMWHITESHIFTS; i++ ) {
-		workptr=( char *)&whiteshifts[i-1][0];
+		workptr=&whiteshifts[i-1][0];
 		baseptr=&palette[0];
 		for( j=0; j<=255; j++ ) {
 			delta = 64-*baseptr;
@@ -534,7 +434,7 @@ setup3dscreen()
 {
 	int      i, dax, day, dax2, day2;
 
-	setgamemode();
+	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 	if( screensize > xdim ) {
 		dax = 0; day = 0;
 		dax2 = xdim-1; day2 = ydim-1;
@@ -596,7 +496,7 @@ tektitlescreen()
      int  i,j,k,l;
      char *ptr;
 
-	setgamemode();
+	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 	setview(0L,0L,xdim-1,ydim-1);
 	loadtile(TITLESCRPIC);
 	loadtile(BACKGROUND);
@@ -875,7 +775,7 @@ showtime()
 
      if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_TIME] ) {
-  	          sprintf(&tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
+  	          sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
 	          printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
           }
           lastsec=0L;
@@ -893,7 +793,7 @@ showtime()
                if( lastsec != seconds ) {
                     permanentwritesprite(xdim-80,ydim-12,TIMERESTORE,
                                          0,xdim-80,ydim-12,xdim-1,ydim-1,0);
-  	               sprintf(&tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
+  	               sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
 	               printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
                     lastsec=seconds;
                }
@@ -910,10 +810,10 @@ showscore()
      if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_SCORE] ) {
                if( score[screenpeek] == 1 ) {
-  	               sprintf(&tektempbuf,"%08d", 0);
+  	               sprintf(tektempbuf,"%08d", 0);
                }
                else {
-  	               sprintf(&tektempbuf,"%08d", score[screenpeek]);
+  	               sprintf(tektempbuf,"%08d", score[screenpeek]);
                }
 	          printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
           }
@@ -933,10 +833,10 @@ showscore()
                     permanentwritesprite(xdim-160,ydim-12,SCORERESTORE,
                                          0,xdim-160,ydim-12,xdim-1,ydim-1,0);
                     if( score[screenpeek] == 1 ) {
-  	                    sprintf(&tektempbuf,"%08d", 0);
+  	                    sprintf(tektempbuf,"%08d", 0);
                     }
                     else {
-  	                    sprintf(&tektempbuf,"%08d", score[screenpeek]);
+  	                    sprintf(tektempbuf,"%08d", score[screenpeek]);
                     }
 	               printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
                     lastscore=score[screenpeek];
@@ -1047,7 +947,7 @@ skipsyms:
           return;
      }
 
-     if( (ti == 0) ) {
+     if( ti == 0 ) {
           if( lastinvtoggle == 1 ) {
                lastinvtoggle=0;
                if( windowx2 < (xdim-4) ) {
@@ -1335,9 +1235,9 @@ tekscreenfx(void)
     #define  SCOREANDTIMEONWPDEVICE
     #ifdef   SCOREANDTIMEONWPDEVICE
      if( (wppic == WPDEVICEON) && (activemenu == 0) ) {
-          sprintf(&tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
+          sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
           printext(xdim-74,8,tektempbuf,ALPHABET,255);
-          sprintf(&tektempbuf,"%08d", score[screenpeek]);
+          sprintf(tektempbuf,"%08d", score[screenpeek]);
           printext(xdim-74,18,tektempbuf,ALPHABET,255);
      }
     #endif
@@ -1453,13 +1353,13 @@ tekscreenfx(void)
      if( (activemenu == 0) && (toggles[TOGGLE_HEALTH] == 0) && (hcpos == -tilesizx[HCDEVICE]) && (screensize > 140) ) {
           if (!(biasthreshholdon)) {
                if( health[screenpeek] < 0 ) {
-                    sprintf(&tektempbuf,"%4d", 0);
+                    sprintf(tektempbuf,"%4d", 0);
                }
                else if( health[screenpeek] > MAXHEALTH ) {
-                    sprintf(&tektempbuf,"%4d", 1000);
+                    sprintf(tektempbuf,"%4d", 1000);
                }
                else {
-                    sprintf(&tektempbuf,"%4d", health[screenpeek]);
+                    sprintf(tektempbuf,"%4d", health[screenpeek]);
                }
                printext(windowx1+6,windowy2-10,tektempbuf,ALPHABET2,255);
           }
@@ -2321,6 +2221,7 @@ domenuinput(void)
      }
 }
 
+void
 rearview(int snum)
 {
 	int      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
@@ -2374,21 +2275,15 @@ usage()
      printf("            noenemies\n");
 }
 
-#define   MAXNAMESIZE    11
-extern    char      localname[MAXNAMESIZE];
-extern
-int  coopmode,
-     switchlevelsflag;
-
 void
-tekargv(int argc, char const * const argv[]);
+tekargv(int argc, char const * const argv[])
 {
      int       p,sl;
      char      argmatch=0;
 
 	if( (argc >= 2) ) {
 		if( strchr(argv[1],'.') != 0 ) {
-     		strcpy(&boardfilename,argv[1]);
+     		strcpy(boardfilename,argv[1]);
                if( (strcmp(boardfilename,"matrix.map") == 0) || (strcmp(boardfilename,"MATRIX.MAP") == 0) ) {
                     mission=7;
                }
@@ -2397,7 +2292,7 @@ tekargv(int argc, char const * const argv[]);
           }
 	}
 	else {
-		strcpy(&boardfilename,"subway0.map");
+		strcpy(boardfilename,"subway0.map");
      }
 
      goreflag=1;
@@ -2509,19 +2404,10 @@ initmoreoptions()
      mousesensitivity=moreoptions[11];
      headbobon=moreoptions[12];
 
-     jctrx=gamestuff[0];
-     jctry=gamestuff[1];
      screensize=gamestuff[2];
      brightness=gamestuff[3];
      biasthreshhold=gamestuff[4];
 
-     if ((jctrx == -1) || (jctry == -1)) {
-          if (moreoptions[3] != 0) {
-               jcalibration=1;
-               jstickenabled=0;
-          }
-     }
-     
      if( option[4] != 0 ) {
           difficulty=2;
      }
@@ -2536,8 +2422,8 @@ teksavemoreoptions(int fil)
      moreoptions[11]=mousesensitivity;
      moreoptions[12]=headbobon;
 
-     gamestuff[0]=jctrx;
-     gamestuff[1]=jctry;
+     gamestuff[0]=-1;
+     gamestuff[1]=-1;
      gamestuff[2]=( int)screensize;
      gamestuff[3]=brightness;
      gamestuff[4]=biasthreshhold;
@@ -2608,8 +2494,6 @@ tekendscreen()
      }
 }
 
-extern    short     cdplaying;
-extern    int       currenttrack;
 char      debrief=0;
 
 int
@@ -2956,7 +2840,7 @@ donewgame:
      memset(palette, 0, 768);
      clearview(0);
      qsetmode=201L;
-     setgamemode();
+     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
      clearview(0);
      switch( mission ) {
      case 0:
@@ -3342,7 +3226,7 @@ choosingmap:
      memset(palette, 0, 768);
      clearview(0);
      qsetmode=201L;
-     setgamemode();
+     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 
      if( set == 0 ) {
           switch( map ) {

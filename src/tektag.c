@@ -7,6 +7,7 @@
 #include "build.h"
 #include "names.h"
 #include "pragmas.h"
+#include "mmulti.h"
 
 #include "tekwar.h"
 
@@ -286,8 +287,8 @@ int       ambsubloop=-1;
 void
 operatesector(short dasector)
 {     //Door code
-	int i, j, k, s, nexti, good, cnt, datag;
-	int dax, day, daz, dax2, day2, daz2, centx, centy;
+	int i, j, datag;
+	int dax2, day2, centx, centy;
 	short startwall, endwall, wallfind[2];
 
 	datag = sector[dasector].lotag;
@@ -401,12 +402,10 @@ operatesector(short dasector)
 }
 
 
-extern    int  subwaysound[4];
-
 void
 tagcode()
 {
-	int      i, nexti, j, k, l, s, dax, day, daz, dax2, day2, cnt, good;
+	int      i, j, k, l, s, dax, day, cnt, good;
 	short     startwall, endwall, dasector, p, oldang;
 
 	for(i=0;i<warpsectorcnt;i++)
@@ -745,7 +744,7 @@ testneighborsectors(short sect1, short sect2)
 void
 tekpreptags()
 {
-     int       angle,hitag,i,j,k,lotag,n,s,w1,w2,w3,w4;
+     int       angle,i,j,k,n,s,w1,w2,w3,w4;
      int      dax,day,endwall,startwall,x1,x2,y1,y2;
      short     killwcnt;
      unsigned  int      effect;
@@ -1197,8 +1196,8 @@ tekpreptags()
 void
 tekoperatesector(short dasector)
 {
-     short          endwall,s,startwall;
-     int            centx,centy,datag,i,j;
+     short          s;
+     int            datag,i;
 
      s=dasector;
      datag=sectptr[s]->lotag;
@@ -1279,7 +1278,7 @@ void
 tekwarp(int *x, int *y, int *z, short *dasector)
 {
 	short          startwall, endwall, s;
-	int           i, j, dax, day;
+	int           i, dax, day;
 
 	// find center of sector
 	startwall = sector[*dasector].wallptr;
@@ -1314,7 +1313,7 @@ void
 teknewsector(short p)
 {
      int           i,n,nexti,s;
-     int            sound,sn;
+     int           sn;
      struct    sectoreffect   *septr;
 
      s=cursectnum[p];
@@ -1424,7 +1423,7 @@ tektagcode(void)
 	     	          if( sprptr[j]->owner < MAXSPRITES ) {
 	     		          dax2=dax>>10;
 	     		          day2=day>>10;
-	     		          movesprite(j,dax2,day2,0,4<<8,4<<8,0,TICSPERFRAME);
+	     		          movesprite(j,dax2,day2,0,4<<8,4<<8,0);
 	     	          }
 	     	          j=k;
 	               }
@@ -2251,7 +2250,7 @@ movesprelevs(int e)
 void
 movefloordoor(int d)
 {
-     int  i,j,s,tics;
+     int  j,s,tics;
      struct floordoor *dptr;
 
      tics=TICSPERFRAME<<2;
@@ -2362,7 +2361,7 @@ movevehicles(int v)
      if( vptr->soundindex == -1 ) {
                                         
           for( i=0; i<32; i++) {        //find mapno using names array
-               if( !(strcmp(strupr(boardfilename),strupr(mapnames[i])) ) )
+               if( !(strcasecmp(boardfilename,mapnames[i]) ) )
                     break;
           }
           switch( v ) {
@@ -2531,7 +2530,7 @@ movevehicles(int v)
           switch( v ) {
           //jsa vehicles
 	     case 0:
-               if( !(strcmp(strupr(boardfilename),"CITY1.MAP")) || !(strcmp(strupr(boardfilename),"WARE2.MAP")))
+               if( !(strcasecmp(boardfilename,"CITY1.MAP")) || !(strcasecmp(boardfilename,"WARE2.MAP")))
 	  	          playsound(S_TRUCKSTOP,vptr->pivotx,vptr->pivoty,0,ST_AMBUPDATE);		
                break;
           default:
@@ -2621,7 +2620,6 @@ void                          // kick off function after specified tics elapse
 teksetdelayfunc(void (*delayfunc)(short),int tics,short parm)
 {
      int  i,n;
-     struct delayfunc *dfptr;
 
      if (delayfunc == NULL) {
 	  return;
@@ -2734,9 +2732,8 @@ void
 checkmapsndfx(short p)
 {
 
-	int       i,j,s;
-	int		dist,px,py;
-     char      insubway;
+	int       i,s;
+	int		dist;
      unsigned  int      effect;
      struct    sectoreffect   *septr;
 
@@ -2765,7 +2762,7 @@ checkmapsndfx(short p)
 		}
 	}
 
-	if( !strncmp("SUBWAY",strupr(boardfilename),6) ) {
+	if( !strncasecmp("SUBWAY",boardfilename,6) ) {
 		if( ambsubloop == -1 ) {
    		     ambsubloop=playsound(S_SUBSTATIONLOOP, 0, 0, -1, ST_IMMEDIATE);
           }
@@ -2995,7 +2992,7 @@ krand_intercept(char *stg)
                dbgcolumn=0;
           }
           else {
-               fprintf(dbgfp,"%s(%-9ld) ",stg,randomseed);
+               fprintf(dbgfp,"%s(%-9d) ",stg,randomseed);
                dbgcolumn+=20;
           }
      }

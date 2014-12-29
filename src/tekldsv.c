@@ -6,15 +6,9 @@
 
 #include "build.h"
 #include "names.h"
+#include "mmulti.h"
 
 #include "tekwar.h"
-
-
-extern    void teksavemissioninfo(int fil);
-extern    void tekloadmissioninfo(int fil);
-
-#define   MAXLOADSAVESIZE     12
-extern char loadsavenames[][MAXLOADSAVESIZE];
 
 
 #ifdef COMPRESSION
@@ -79,8 +73,8 @@ loadgame(int loadno)
      int       rv;
     intptr_t tmpanimates[MAXANIMATES];
 
-     sprintf(tempbuf,"savegam%d.tek",loadno);
-     if( (fil=open(tempbuf,O_BINARY|O_RDWR,S_IREAD)) == -1 ) {
+     sprintf((char *)tempbuf,"savegam%d.tek",loadno);
+     if( (fil=open((char *)tempbuf,O_BINARY|O_RDWR,S_IREAD)) == -1 ) {
           return(-1);
      }
 
@@ -297,9 +291,9 @@ savegame(int saveno)
      int       rv;
     intptr_t tmpanimates[MAXANIMATES];
 
-     sprintf(tempbuf,"savegam%d.tek",saveno);
+     sprintf((char *)tempbuf,"savegam%d.tek",saveno);
    
-	if( (fil = open(tempbuf,O_BINARY|O_TRUNC|O_CREAT|O_WRONLY,S_IWRITE)) == -1 ) {
+	if( (fil = open((char *)tempbuf,O_BINARY|O_TRUNC|O_CREAT|O_WRONLY,S_IWRITE)) == -1 ) {
 		return(-1);
      }
 

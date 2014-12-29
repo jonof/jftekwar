@@ -3,44 +3,13 @@
 #include "pragmas.h"
 #include "cache1d.h"
 #include "baselayer.h"
+#include "mmulti.h"
 
 #include "tekwar.h"
 
 #define   SECT_LOTAG_CLIMB                    5060
 
 #ifdef    TEKWAR
-extern    void copyrightscreen(void);
-extern    void depositsymbol(int snum);
-extern    void showmessage(char *fmt,...);
-extern    void netstartspot(int *x, int *y, short *sectnum);
-extern    int  placerandompic(int);
-extern    void domenuinput(void);
-extern    void toss(short);
-extern    int pickupclock;
-extern    spritetype   pickup;
-extern    void startgametime(void);
-extern    void endgametime(void);
-extern    int  choosemission(void);
-extern    int  missionfailed(void);
-extern    void cduninit(void);
-extern    char debrief;
-extern    void jstick(void);
-extern    void clearpal(void);
-extern    int  autocenter[];
-extern    char tektempbuf[];
-extern    int startx,starty,startz,starta,starts;
-extern    char onelev[];
-extern    int headbob;
-extern    char gameover;
-extern    char outofsync;
-extern    char dofadein;
-extern    char activemenu;
-extern    int  ovmode;  
-extern    int  mousesensitivity;
-extern    char puckbuttons;
-extern    short puckpitch,puckroll,puckbutton[];
-extern    int  difficulty;
-extern    int  mission;
 FILE      *dbgfp;
 int       dbgfilen;
 char      dbgfname[16];
@@ -51,33 +20,24 @@ short     biasthreshhold=72;
 char      biasthreshholdon=0;  
 short     lastmousy;
 char      keyedhorizon;
-char      joycenteringon=0;
-int       joyxcenter,joyycenter;
 //** Les START - 09/26/95
-char      jcalibration=0,joycenteringon,
-          jstickenabled=0;
-int       jctrx=0,joyxcenter,
-          jctry=0,joyycenter;
+char      jstickenabled=0;
 int       jlowx,jlowy,
           jhighx,jhighy;
 char      oldjoyb;
 //** Les  END  - 09/26/95
 short     yaw,pitch,roll,vrangle,vrpitch;
-int       joyx,joyy;
 
 #endif
 
 int vel, svel, angvel;
 int vel2, svel2, angvel2;
 
-extern volatile int recsnddone, recsndoffs;
 int recording = -2;
 
 int vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
                                {1280,1024},{1600,1200}};
 #ifdef    TEKWAR
-#define   NUMOPTIONS          8
-#define   NUMKEYS             32
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
@@ -182,10 +142,6 @@ char revolvedoorstat[MAXPLAYERS];
 short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
 int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
 
-	//ENGINE CONTROLLED MULTIPLAYER VARIABLES:
-extern short numplayers, myconnectindex;
-extern short connecthead, connectpoint2[MAXPLAYERS];   //Player linked list variables (indeces, not connection numbers)
-
 	//Local multiplayer variables
 int locselectedgun;
 signed char locvel, olocvel;
@@ -220,8 +176,6 @@ short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/27/95
 short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/27/95
 short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
-	//MULTI.OBJ sync state variables
-extern char syncstate;
 	//GAME.C sync state variables
 short syncstat = 0;
 int syncvalplc, othersyncvalplc;
@@ -230,7 +184,6 @@ int syncvalcnt, othersyncvalcnt;
 short syncval[MOVEFIFOSIZ], othersyncval[MOVEFIFOSIZ];
 
 extern int crctable[256];
-#define updatecrc16(dacrc,dadat) dacrc = (((dacrc<<8)&65535)^crctable[((((unsigned short)dacrc)>>8)&65535)^dadat])
 char playerreadyflag[MAXPLAYERS];
 
 	//Game recording variables
@@ -241,15 +194,14 @@ short recsyncangvel[16384][2];                    // Les 09/27/95
 short recsyncbits[16384][2];
 
 	//Miscellaneous variables
-char tempbuf[max(576,MAXXDIM)], boardfilename[80];
+unsigned char tempbuf[max(576,MAXXDIM)];
+char boardfilename[80];
 short screenpeek = 0, oldmousebstatus = 0, brightness = 0;
 short screensize, screensizeflag = 0;
 short neartagsector, neartagwall, neartagsprite;
 int lockclock, neartagdist, neartaghitdist;
 int masterslavetexttime;
-extern int pageoffset, ydim16, chainnumpages;
 int globhiz, globloz, globhihit, globlohit;
-extern int stereofps, stereowidth, stereopixelwidth;
 
 	//Board animation variables
 short rotatespritelist[16], rotatespritecnt;
@@ -277,7 +229,8 @@ short slimesoundcnt[MAXPLAYERS];
 	//Variables that let you type messages to other player
 char getmessage[162], getmessageleng;
 int getmessagetimeoff;
-char typemessage[162], typemessageleng = 0, typemode = 0;
+char typemessage[162];
+int typemessageleng = 0, typemode = 0;
 char scantoasc[128] =
 {
 	0,0,'1','2','3','4','5','6','7','8','9','0','-','=',0,0,
@@ -304,7 +257,6 @@ char scantoascwithshift[128] =
 	//These variables are for animating x, y, or z-coordinates of sectors,
 	//walls, or sprites (They are NOT to be used for changing the [].picnum's)
 	//See the setanimation(), and getanimategoal() functions for more details.
-#define MAXANIMATES 512
 int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
 int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt = 0;
 
@@ -333,19 +285,14 @@ debugout(short p)
 
 
 #define   MAXNAMESIZE    11
-#define   NETNAMES
-#define   lm(_str_) printf(" %s...\n", _str_);
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
 int
 app_main(int argc, char const * const argv[])
 {
-	int      i, j, k, l, fil, waitplayers, x1, y1, x2, y2;
-     short     other, tempbufleng;
-	char      *ptr;
-
-     startgametime();
+	int      i, waitplayers;
+     int     other;
 
      initgroupfile("stuff.dat");
      tekargv(argc, argv);
@@ -354,7 +301,7 @@ app_main(int argc, char const * const argv[])
      lm("inittimer");
 	inittimer(CLKIPS);
      lm("tekinitmultiplayers");
-     tekinitmultiplayers();
+     tekinitmultiplayers(argc, argv);
      lm("initsb");
 	initsb(option[1],option[2],0,0,0,0,0);
      lm("loadpics");
@@ -388,10 +335,10 @@ app_main(int argc, char const * const argv[])
 		while( numplayers < waitplayers ) {
                clearview(0);
                overwritesprite((xdim>>1)-160,0,408,0,0,0);
-		     sprintf(tempbuf,"  MULTIPLAYER MODE  ");
-		     printext((xdim>>1)-80,(ydim>>1)-24,tempbuf,ALPHABET2,0);
-		     sprintf(tempbuf,"%2d OF %2d PLAYERS IN",numplayers,waitplayers);
-		     printext((xdim>>1)-80,ydim>>1,tempbuf,ALPHABET2,0);
+		     sprintf((char *)tempbuf,"  MULTIPLAYER MODE  ");
+		     printext((xdim>>1)-80,(ydim>>1)-24,(char *)tempbuf,ALPHABET2,0);
+		     sprintf((char *)tempbuf,"%2d OF %2d PLAYERS IN",numplayers,waitplayers);
+		     printext((xdim>>1)-80,ydim>>1,(char *)tempbuf,ALPHABET2,0);
                nextpage();
 			if( getpacket(&other,tempbuf) > 0 ) {
 			     if( tempbuf[0] == 255 ) {
@@ -484,30 +431,20 @@ gameends:
 	uninitgroupfile();
 
      teksavesetup();
-	setvmode(ovmode); 
-     endgametime();
 
      if (dbgflag) {
           fclose(dbgfp);
      }
-    #ifdef SHOWFRAMERATE
-     if( option[4] == 0 ) {
-	     showengineinfo();    
-     }
-    #endif
 
 	exit(0);
 }
 
-void crash(char *,...);
-
 void
 processinput(short snum)
 {
-	int      oldposx, oldposy, nexti;
-	int      i,j,k, doubvel, xvect, yvect, goalz;
-	int      dax, day, dax2, day2, odax, oday, odax2, oday2;
-	short     startwall, endwall;
+	int      nexti;
+	int      i,j, doubvel, xvect, yvect, goalz;
+	int      dax, day;
 	char      *ptr;
 
      // move player snum
@@ -953,11 +890,10 @@ processinput(short snum)
 void
 drawscreen(short snum, int dasmoothratio)
 {
-	int      i, j, k, charsperline, tempint, dx, dy, top, bot;
-	int      x1, y1, x2, y2, ox1, oy1, ox2, oy2, dist, maxdist;
-	int      cposx, cposy, cposz, choriz, czoom, tposx, tposy, thoriz;
-	short     cang, tang;
-	char      ch, *ptr, *ptr2, *ptr3, *ptr4;
+	int      i, j, charsperline, tempint;
+	int      x1, y1, x2, y2, ox1, oy1, ox2, oy2;
+	int      cposx, cposy, cposz, choriz, czoom;
+	short     cang;
 
 	smoothratio = max(min(dasmoothratio,65536),0);
 
@@ -974,55 +910,8 @@ drawscreen(short snum, int dasmoothratio)
 
 	if( dimensionmode[snum] != 2 ) {
 		if( (numplayers > 1) && (option[4] == 0) ) {
-			// do not draw other views constantly if they're staying still
-			// it's a shame this trick will only work in screen-buffer mode
-			// at least screen-buffer mode covers all the HI hi-res modes
-			if( vidoption == 1 ) {
-				for( i=connecthead; i>=0; i=connectpoint2[i] ) {
-                         frame2draw[i] = 0;
-                    }
-				frame2draw[snum] = 1;
-				// 2-1,3-1,4-2
-				// 5-2,6-2,7-2,8-3,9-3,10-3,11-3,12-4,13-4,14-4,15-4,16-5
-				x1 = posx[snum]; y1 = posy[snum];
-				for( j=(numplayers>>2)+1; j>0; j-- ) {
-					maxdist = 0x80000000;
-					for( i=connecthead; i>=0; i=connectpoint2[i] ) {
-						if( frame2draw[i] == 0 ) {
-							x2 = posx[i]-x1; y2 = posy[i]-y1;
-							dist = mulscale(x2,x2,12) + mulscale(y2,y2,12);
-							if( dist < 64 ) {
-                                        dist = 16384;
-                                   }
-							else if( dist > 16384 ) {
-                                        dist = 64;
-                                   }
-							else {
-                                        dist = 1048576 / dist;
-                                   }
-							dist *= frameskipcnt[i];
-							// increase frame rate if screen is moving
-							if( (posx[i] != oposx[i]) || (posy[i] != oposy[i]) ||
-							    (posz[i] != oposz[i]) || (ang[i] != oang[i])   ||
-							    (horiz[i] != ohoriz[i]) ) {
-                                       dist += dist;
-                                   }
-							if( dist > maxdist ) {
-                                        maxdist = dist, k = i;
-                                   }
-						}
-                         }
-					for( i=connecthead; i>=0; i=connectpoint2[i] ) {
-						frameskipcnt[i] += (frameskipcnt[i]>>3)+1;
-                         }
-					frameskipcnt[k] = 0;
-					frame2draw[k] = 1;
-				}
-			}
-			else {
-				for( i=connecthead; i>=0; i=connectpoint2[i] ) {
-                         frame2draw[i] = 1;
-                    }
+            for( i=connecthead; i>=0; i=connectpoint2[i] ) {
+                frame2draw[i] = 1;
 			}
                redrawbackfx();    
 			for( i=connecthead,j=0; i>=0; i=connectpoint2[i],j++ ) {
@@ -1174,7 +1063,7 @@ drawscreen(short snum, int dasmoothratio)
 			else {
 				tempbuf[charsperline] = 0;
                }
-			printext256(0L,((i/charsperline)<<3)+(200-32-8)-(((getmessageleng-1)/charsperline)<<3),151,-1,tempbuf,0);
+			printext256(0L,((i/charsperline)<<3)+(200-32-8)-(((getmessageleng-1)/charsperline)<<3),151,-1,(char *)tempbuf,0);
 		}
 		if( totalclock > getmessagetimeoff ) {
 			getmessageleng = 0;
@@ -1183,7 +1072,7 @@ drawscreen(short snum, int dasmoothratio)
 
      // you are looking thru an opponent plaeyer's eyes
 	if( (numplayers >= 2) && (screenpeek != myconnectindex) ) {
-		strcpy(tempbuf,"Other");
+		strcpy((char *)tempbuf,"Other");
 	}
 
     #ifdef OUTOFSYNCMESSAGE
@@ -1195,7 +1084,7 @@ drawscreen(short snum, int dasmoothratio)
      }
     #endif
 
-     tekscreenfx(snum);
+     tekscreenfx();
 
     #ifdef  NETWORKDIAGNOSTICS 
      if( (option[4] > 0) ) {
@@ -1328,9 +1217,7 @@ void
 domovethings()
 {
 	short          i, j, startwall, endwall;
-	spritetype     *spr;
 	walltype       *wal;
-	point3d        *ospr;
 
 	for( i=connecthead; i>=0; i=connectpoint2[i] ) {
         if (dbgflag) {
@@ -1451,11 +1338,9 @@ short moreoptionbits[]={
 void
 getinput()
 {
-	char      ch, keystate, *ptr;
-	int      i, j, k;
-	short     mousx, mousy, bstatus;
-     short     jx,jy;    
-     int      angdelta,cybangle,pitdelta;
+    int      ch, keystate;
+	int      i, j;
+	int     mousx, mousy, bstatus;
      short     moving,strafing,turning;
 
      if( activemenu != 0 ) {              
@@ -1508,28 +1393,20 @@ getinput()
           }
      }
 //** Les START - 09/26/95
-     if (moreoptions[3] != 0 && jstickenabled == 0 && jcalibration == 0) {
-          jcalibration=1;
-     }
      locbits=(locselectedgun<<13);                          // Les 09/28/95 moved from below
      if (jstickenabled) {
-          jstick();
 //          showmessage("X: %05d Y: %05d B:%04X",joyx,joyy,joyb);
-          if (keystatus[0x57] != 0) {   // recalibrate joystick (F11)
-               jstickenabled=0;
-               jcalibration=1;
+          if (joyaxis[0] < jlowx) {
+               angvel=max(min(angvel-joyaxis[0],127),-128);
           }
-          if (joyx < jlowx) {
-               angvel=max(min(angvel-(jctrx-joyx),127),-128);
+          else if (joyaxis[0] > jhighx) {
+               angvel=min(max(angvel+joyaxis[0],-128),127);
           }
-          else if (joyx > jhighx) {
-               angvel=min(max(angvel+(joyx-jctrx),-128),127);
+          if (joyaxis[1] < jlowy) {
+               vel=min(max(vel+joyaxis[1],-128),127);
           }
-          if (joyy < jlowy) {
-               vel=min(max(vel+(jctry-joyy),-128),127);
-          }
-          else if (joyy > jhighy) {
-               vel=max(min(vel-(joyy-jctry),127),-128);
+          else if (joyaxis[1] > jhighy) {
+               vel=max(min(vel-joyaxis[1],127),-128);
           }
           for (i=0 ; i < 4 ; i++) {
                if ((joyb&(0x10<<i)) == 0) {
@@ -1558,37 +1435,6 @@ getinput()
                          locbits|=(1<<moreoptionbits[moreoptions[i+4]]);
                     }
                }
-          }
-          oldjoyb=joyb;
-     }
-     else if (jcalibration) {
-          jstick();
-          switch (jcalibration) {
-          case 1:
-               showmessage("center stick press button");
-               if (((joyb&0xF0) != 0xF0) && ((oldjoyb&0xF0) == 0xF0)) {
-                    jctrx=joyx;
-                    jctry=joyy;
-                    jcalibration++;
-               }
-               break;
-          case 2:
-               showmessage("top left press button");
-               if (((joyb&0xF0) != 0xF0) && ((oldjoyb&0xF0) == 0xF0)) {
-                    jlowx=jctrx-((jctrx-joyx)/4);
-                    jlowy=jctry-((jctry-joyy)/4);
-                    jcalibration++;
-               }
-               break;
-          case 3:
-               showmessage("lower right press button");
-               if (((joyb&0xF0) != 0xF0) && ((oldjoyb&0xF0) == 0xF0)) {
-                    jhighx=jctrx+((joyx-jctrx)/4);
-                    jhighy=jctry+((joyy-jctry)/4);
-                    jcalibration=0;
-                    jstickenabled=1;
-               }
-               break;
           }
           oldjoyb=joyb;
      }
@@ -1763,7 +1609,7 @@ getinput()
      // trap print scrn key
 	if( keystatus[0xb7] > 0 ) {
 		keystatus[0xb7] = 0;
-		printscreeninterrupt();
+		//printscreeninterrupt();
 	}
 
      // F9 brightness
@@ -1771,7 +1617,7 @@ getinput()
 		keystatus[67] = 0;
 		brightness++;
 		if( brightness > 8 ) brightness = 0;
-		setbrightness(brightness);
+		setbrightness(brightness,palette,0);
 	}
 
     #ifdef OOGIE
@@ -1787,18 +1633,6 @@ getinput()
           }
      }
     #endif
-/*                                                          // Les 09/26/95
-     // F11 joystick centering on
-	if( keystatus[0x57] > 0 ) {
-		keystatus[0x57] = 0;
-          if( biasthreshholdon == 0 ) {
-               if( joycenteringon )
-                    joycenteringon=0;
-               else
-                    joycenteringon=1;
-          }
-	}
-*/                                                          // Les 09/26/95
 
 	if( typemode == 0 ) {
          #ifdef PARALLAX_SETTING_ACTIVE
@@ -1952,7 +1786,6 @@ playback()
 	uninitsb();
 	uninitgroupfile();
      cduninit();
-	setvmode(ovmode);
 	exit(0);
 }
 
@@ -2063,7 +1896,7 @@ checkmasterslaveswitch()
 void
 faketimerhandler()
 {
-	short other, tempbufleng;
+	short other;
 	int i, j, k, l;
 
 	if (totalclock < ototalclock+TICSPERFRAME) return;
@@ -2123,8 +1956,8 @@ faketimerhandler()
 #if 0
 				while (syncvalplc != syncvalend)
 				{
-					tempbuf[j] = (char)(syncval[syncvalplc]&255);
-					tempbuf[j+1] = (char)((syncval[syncvalplc]>>8)&255);
+					tempbuf[j] = (unsigned char)(syncval[syncvalplc]&255);
+					tempbuf[j+1] = (unsigned char)((syncval[syncvalplc]>>8)&255);
 					j += 2;
 					syncvalplc = ((syncvalplc+1)&(MOVEFIFOSIZ-1));
 				}
@@ -2208,7 +2041,7 @@ void
 getpackets()
 {
 	int i, j, k, l;
-	short other, tempbufleng;
+	int other, tempbufleng;
 
 	if (option[4] == 0) return;
 

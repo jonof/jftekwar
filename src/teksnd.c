@@ -1910,6 +1910,30 @@ readhmicfg()
 #endif
 
 void
-initsb(char option1,char option2,long digihz,char option7a,char option7b,int val,char option7c)
+initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c)
 {
+    option1 = option2 = option7a = option7b = option7c = 0;
+    digihz = val = 0;
+}
+
+void
+uninitsb(void)
+{
+}
+
+void
+musicoff(void)
+{
+}
+
+void
+updatevehiclesnds(int i, int sndx, int sndy)
+{
+    i = sndx = sndy = 0;
+}
+
+void
+stopsound(int i)
+{
+    i = 0;
 }

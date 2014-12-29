@@ -11,10 +11,6 @@
 
 #define   MAXSTUNPOINTS       1000
 
-extern    char      winner;
-extern    int       difficulty;
-extern    int       goreflag;
-
 int      stun[MAXPLAYERS],stuntics[MAXPLAYERS];                     
 int      fallz[MAXPLAYERS];                                         
 

@@ -8,26 +8,9 @@
 #include "build.h"
 #include "names.h"
 #include "pragmas.h"
+#include "mmulti.h"
 
 #include "tekwar.h"
-
-#define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
-		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
-		xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
-{                                                                          \
-	spritetype *spr2;                                                     \
-	spr2 = &sprite[newspriteindex2];                                      \
-	spr2->x = x2; spr2->y = y2; spr2->z = z2;                             \
-	spr2->cstat = cstat2; spr2->shade = shade2;                           \
-	spr2->pal = pal2; spr2->clipdist = clipdist2;                         \
-	spr2->xrepeat = xrepeat2; spr2->yrepeat = yrepeat2;                   \
-	spr2->xoffset = xoffset2; spr2->yoffset = yoffset2;                   \
-	spr2->picnum = picnum2; spr2->ang = ang2;                             \
-	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
-	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
-	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
-}                                                                          \
 
 #define   NUMWEAPONS               8
                                    
@@ -42,22 +25,6 @@
 
 #define   DRAWWEAPSPEED       4
 
-extern    int       playervirus(short pnum, int pic);
-extern    int       isahologram(int i);
-extern    int       isanandroid(int i);
-extern    int       playerhit(int hitsprite, int *pnum);
-extern    int       spewblood(int snum, int hitz, short daang);
-extern    void      bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz);
-extern    void      bombexplosion(int i);   
-extern    void      missionaccomplished(int);
-extern    void      forceexplosion(int i);
-extern    int       difficulty;
-extern    int      flags32[];                                                  
-extern    int      ydim;
-extern    int      fallz[],stun[];
-extern    int       mission;
-extern    char      generalplay;
-extern    char      singlemapmode;
 int       goreflag;
 int       fireseq[MAXPLAYERS];
 int       oneshot[MAXPLAYERS];
@@ -139,7 +106,7 @@ tekgunrep(int gun)                // is "gun" an automatic weapon?
 }
 
 int
-tekgundamage(int gun,int x,int y,int z,int hitsprite)
+tekgundamage(int gun,int UNUSED(x),int UNUSED(y),int UNUSED(z),int UNUSED(hitsprite))
 {
      int       damage;
 
@@ -346,8 +313,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
      short bloodhitsect,bloodhitwall,bloodhitsprite;
      int  bloodhitx,bloodhity,bloodhitz;
      int  cx,cy,i,j,daz2,hitx,hity,hitz,xydist,zdist;
-     int  rn;
-     int   rv,pnum,ext;
+     int   rv,pnum;
 
      if( health[snum] <= 0 ) {     
           return;                  
@@ -574,10 +540,6 @@ tekanimweap(int gun,short p)
      int  ammo,firekey,fseq,seq,tics;
      int usegun;
      struct guntype *gunptr;
-
-     short pic;               // gun frame when carrying weapon
-     short firepic;           // 1st gun frame when firing weapon
-     short endfirepic;        // last gun frame when firing weapon
 
      if (gun < 0 || gun >= NUMWEAPONS) {
           crash("gun589: Invalid gun number (%d,p=%d)",gun,p);
@@ -826,10 +788,9 @@ tekexplodebody(int i)
 void
 gunstatuslistcode(void)
 {
-     short     hitobject,movestat,p,hitsprite,ext;
+     short     hitobject,hitsprite,ext;
      int      i,nexti,dax,day,daz,j;
      int       pnum,rv;
-     char      killed=0;
 
      i=headspritestat[FORCEPROJECTILESTAT];   //moving force ball
      while (i >= 0) {
@@ -1147,8 +1108,7 @@ int       matgunpic;
 void
 tekdrawgun(int gun,short p)
 {
-     int  pic,x,i,j,apic;
-     int usegun;
+     int  pic,x,apic;
 
      if (fireseq[p] == 0) {
           pic=guntype[gun].pic;
@@ -1170,7 +1130,7 @@ tekdrawgun(int gun,short p)
      }
      x=160L;
 
-     if( (pic == 3981) ) {
+     if( pic == 3981 ) {
           if( syncsvel[p] < 0 ) {
                overwritesprite(x,100L,3990,sectptr[cursectnum[p]]->floorshade,1|2,0);
                return;
@@ -1222,8 +1182,6 @@ tekdrawgun(int gun,short p)
      }
      overwritesprite(x+gunbobx[gunbob],100L+gunboby[gunbob],pic,sectptr[cursectnum[p]]->floorshade,1|2,0);
 }
-
-extern    char notininventory;
 
 int
 tekhasweapon(int gun,short snum)

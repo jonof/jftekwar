@@ -14,37 +14,6 @@
 #define   FLOATING       322  
 #define   PINBALL        403     
 
-#define   AI_NULL        0x00
-#define   AI_FRIEND      0x01
-#define   AI_FOE         0x02
-#define   AI_JUSTSHOTAT  0x04
-#define   AI_CRITICAL    0x08
-#define   AI_WASDRAWN    0x10
-
-extern    int       difficulty;
-extern    char      rearviewdraw;
-extern    int       flags32[],weapons[];
-extern    void      placerandompic(int picnum);
-
-#define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
-		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
-		xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
-{                                                                          \
-	spritetype *spr2;                                                     \
-	spr2 = &sprite[newspriteindex2];                                      \
-	spr2->x = x2; spr2->y = y2; spr2->z = z2;                             \
-	spr2->cstat = cstat2; spr2->shade = shade2;                           \
-	spr2->pal = pal2; spr2->clipdist = clipdist2;                         \
-	spr2->xrepeat = xrepeat2; spr2->yrepeat = yrepeat2;                   \
-	spr2->xoffset = xoffset2; spr2->yoffset = yoffset2;                   \
-	spr2->picnum = picnum2; spr2->ang = ang2;                             \
-	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
-	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
-	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
-}
-
-
 
 short
 kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
@@ -93,7 +62,7 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 }
 
 short
-floatmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
+floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
 {
 	int daz, zoffs;
 	short retval, dasectnum;
@@ -201,7 +170,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
 }
 
 short
-flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
+flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
 {
 	int           daz;
 	short          retval, dasectnum, tempshort;
@@ -695,9 +664,6 @@ checktouchsprite(short snum, short sectnum)
 		i = nexti;
      }
 }
-
-extern
-int  switchlevelsflag;
 
 void
 operatesprite(short dasprite)

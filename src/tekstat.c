@@ -7,27 +7,10 @@
 #include  "build.h"
 #include  "names.h"
 #include  "pragmas.h"
+#include  "mmulti.h"
 
 #include  "tekwar.h"
 
-
-#define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
-		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
-		xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
-{                                                                          \
-	spritetype *spr2;                                                     \
-	spr2 = &sprite[newspriteindex2];                                      \
-	spr2->x = x2; spr2->y = y2; spr2->z = z2;                             \
-	spr2->cstat = cstat2; spr2->shade = shade2;                           \
-	spr2->pal = pal2; spr2->clipdist = clipdist2;                         \
-	spr2->xrepeat = xrepeat2; spr2->yrepeat = yrepeat2;                   \
-	spr2->xoffset = xoffset2; spr2->yoffset = yoffset2;                   \
-	spr2->picnum = picnum2; spr2->ang = ang2;                             \
-	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
-	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
-	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
-}                                                                          \
 
 //#define   NEWSTAT_DEBUG
 //#define   NETDEBUG
@@ -111,20 +94,6 @@ FILE      *dbgfp2;
 #define   MOVEBODYPARTSSTAT   900
 
 #define   ENEMYCRITICALCONDITION   25
-
-#define   AI_NULL             0x0000
-#define   AI_FRIEND           0x0001
-#define   AI_FOE              0x0002
-#define   AI_JUSTSHOTAT       0x0004
-#define   AI_CRITICAL         0x0008
-#define   AI_WASDRAWN         0x0010
-#define   AI_WASATTACKED      0x0020
-#define   AI_GAVEWARNING      0x0040
-#define   AI_ENCROACHMENT     0x0080
-#define   AI_DIDFLEESCREAM    0x0100
-#define   AI_DIDAMBUSHYELL    0x0200
-#define   AI_DIDHIDEPLEA      0x0400
-#define   AI_TIMETODODGE      0x0800
 
 #define   FX_NULL             0x0000
 #define   FX_HASREDCARD       0x0001
@@ -476,7 +445,7 @@ initsprites()
 int
 initspriteXTs()
 {
-     int       fh,i,nr,xn,ext;
+     int       fh,i,nr,ext;
 
      memset(&pickup, 0, sizeof(pickup));
      pickup.extra=-1;
@@ -638,7 +607,6 @@ noext:
 int
 isvisible(short i, short target)
 {
-     int      angtotarg;
 
      if( !validplayer(target) ) {
           crash("isvisible: bad targetnum");
@@ -738,7 +706,7 @@ spritedeflect(int sn, short angin)
      case INACTIVE:
      case AMBUSH:
           angout=(angin+1024)&2047;
-          switch( RMOD2("STAT697 ") ) {
+          switch( (int)RMOD2("STAT697 ") ) {
           case 0:
                angout=leftof[angout];
                break;
@@ -1126,7 +1094,7 @@ bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hi
 }
 
 int
-spewblood(int sprnum, int hitz, short daang)
+spewblood(int sprnum, int hitz, short UNUSED(daang))
 {
      int       j,ext=sprptr[sprnum]->extra;
 
@@ -1286,7 +1254,6 @@ deathdropitem(short sprnum)
 {
      short       j,ext;
      int         pic;
-     int        dax,day;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sprnum) ) {
@@ -1487,7 +1454,7 @@ fleescream(short sn, short ext)
 }
 
 void
-rubitinsound(int p, int sn) 
+rubitinsound(int UNUSED(p), int sn)
 {
      int       ext=sprptr[sn]->extra;
 
@@ -1839,7 +1806,7 @@ newstatus(short sn, int  seq)
 int
 damagesprite(int hitsprite, int points)
 {
-     short     ext,j;
+     short     ext;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(hitsprite) ) {
@@ -2170,7 +2137,7 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
               short dasectnum,char guntype)
 {
      short     hitsect,hitwall,hitsprite,daang2;
-     int      cx,cy,i,j,daz2,hitx,hity,hitz,discrim;
+     int       j,daz2,hitx,hity,hitz,discrim;
      int       ext,target,pnum;
 
     #ifdef PLRSPRDEBUG
@@ -2530,15 +2497,14 @@ void
 statuslistcode()
 {
 	short     p, target, hitobject, daang, osectnum, movestat, hitsprite,ext;
-	int      i, nexti, j, nextj, k, l, dax, day, daz, dist, ox, oy, mindist;
+	int      i, nexti, dax, day, daz, dist, mindist;
      int      prevx,prevy,prevz;
-     int      lastpinballx,lastpinbally;
-     short     prevsect=0,prevang;
+     short     prevsect=0;
      int       seecan;
      int      targx,targy,targz;
      short     targang,targsect,host,tempshort;
      int       pnum;
-     int      px,py,pz,deltapy,zoffs,goalz;
+     int      px,py,pz,deltapy,zoffs;
      spritetype     *spr;
 
      dosectorflash();
@@ -4487,7 +4453,7 @@ blastmark(int i)
 void
 forceexplosion(int i)
 {
-	int      j,k, daang, dax, day, dist;
+	int      j,k;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {

@@ -420,7 +420,6 @@
 				INFOPLIST_FILE = "JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
-				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -435,7 +434,6 @@
 				INFOPLIST_FILE = "JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
-				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

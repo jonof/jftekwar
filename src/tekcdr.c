@@ -547,3 +547,14 @@ cd_resetdisc(void)
 }
 
 #endif
+
+int
+cdpreinit(void)
+{
+    return 0;
+}
+
+void
+cduninit(void)
+{
+}

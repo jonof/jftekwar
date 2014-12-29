@@ -20,7 +20,8 @@
 #define TEKTEMPBUFSIZE  256
 
 #define GAMECVARSGLOBAL
-#ifdef  GAMECVARSGLOBAL
+#define NETNAMES
+
 typedef struct
 {
 	int x, y, z;
@@ -34,7 +35,6 @@ extern int recording;
 
 extern int vesares[7][2];
 
-#ifdef    TEKWAR
 #define   NUMOPTIONS          8
 #define   NUMKEYS             32
 #define   MAXMOREOPTIONS      21
@@ -46,7 +46,6 @@ extern    unsigned char moreoptions[MAXMOREOPTIONS];
 extern    char toggles[MAXTOGGLES];
 extern    int  gamestuff[MAXGAMESTUFF];
 extern    int  krand_intercept(char *);
-#endif
 
 extern char frame2draw[MAXPLAYERS];
 extern int frameskipcnt[MAXPLAYERS];
@@ -64,10 +63,6 @@ extern char dimensionmode[MAXPLAYERS];
 extern char revolvedoorstat[MAXPLAYERS];
 extern short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
 extern int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
-
-	//ENGINE CONTROLLED MULTIPLAYER VARIABLES:
-extern short numplayers, myconnectindex;
-extern short connecthead, connectpoint2[MAXPLAYERS];   //Player linked list variables (indeces, not connection numbers)
 
 	//Local multiplayer variables
 extern int locselectedgun;
@@ -103,8 +98,6 @@ extern short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/30/95
 extern short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/30/95
 extern short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
-	//MULTI.OBJ sync state variables
-extern char syncstate;
 	//GAME.C sync state variables
 extern short syncstat;
 extern int syncvalplc, othersyncvalplc;
@@ -124,7 +117,8 @@ extern short recsyncangvel[16384][2];                    // Les 09/30/95
 extern short recsyncbits[16384][2];
 
 	//Miscellaneous variables
-extern char tempbuf[], boardfilename[80];
+extern unsigned char tempbuf[];
+extern char boardfilename[80];
 extern short screenpeek, oldmousebstatus, brightness;
 extern short screensize, screensizeflag;
 extern short neartagsector, neartagwall, neartagsprite;
@@ -160,7 +154,8 @@ extern short slimesoundcnt[MAXPLAYERS];
 	//Variables that let you type messages to other player
 extern char getmessage[162], getmessageleng;
 extern int getmessagetimeoff;
-extern char typemessage[162], typemessageleng, typemode;
+extern char typemessage[162];
+extern int typemessageleng, typemode;
 extern char scantoasc[128];
 extern char scantoascwithshift[128];
 
@@ -170,7 +165,6 @@ extern char scantoascwithshift[128];
 #define MAXANIMATES 512
 extern int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
 extern int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt;
-#endif
 
 
 #define   FT_FULLSCREEN   0
@@ -534,44 +528,168 @@ extern    int  playsound(int,int,int,int,short);
 #define   S_DIM_TEKRULES            	206
 #define   S_HOLOGRAMDIE                 207
 
+
+#define   AI_NULL             0x0000
+#define   AI_FRIEND           0x0001
+#define   AI_FOE              0x0002
+#define   AI_JUSTSHOTAT       0x0004
+#define   AI_CRITICAL         0x0008
+#define   AI_WASDRAWN         0x0010
+#define   AI_WASATTACKED      0x0020
+#define   AI_GAVEWARNING      0x0040
+#define   AI_ENCROACHMENT     0x0080
+#define   AI_DIDFLEESCREAM    0x0100
+#define   AI_DIDAMBUSHYELL    0x0200
+#define   AI_DIDHIDEPLEA      0x0400
+#define   AI_TIMETODODGE      0x0800
+
+
+#define   lm(_str_) printf(" %s...\n", _str_);
+
+#define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
+          clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
+          xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
+{                                                                          \
+     spritetype *spr2;                                                     \
+     spr2 = &sprite[newspriteindex2];                                      \
+     spr2->x = x2; spr2->y = y2; spr2->z = z2;                             \
+     spr2->cstat = cstat2; spr2->shade = shade2;                           \
+     spr2->pal = pal2; spr2->clipdist = clipdist2;                         \
+     spr2->xrepeat = xrepeat2; spr2->yrepeat = yrepeat2;                   \
+     spr2->xoffset = xoffset2; spr2->yoffset = yoffset2;                   \
+     spr2->picnum = picnum2; spr2->ang = ang2;                             \
+     spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
+     spr2->owner = owner2;                                                 \
+     spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
+     copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
+}                                                                          \
+
+
 // b5compat.c
 
 void overwritesprite(int thex, int they, short tilenum, signed char shade,
                      char orientation, unsigned char dapalnum);
 void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
+void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,
+        int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
+void printext(int x, int y, char buffer[42], short tilenum, char invisiblecol);
+void precache();
+void resettiming();
+
+// tekcdr.c
+
+int cdpreinit(void);
+void cduninit(void);
 
 // tekchng.c
 
 int changehealth(short snum, short deltahealth);
 void changescore(short snum, short deltascore);
+void tekchangefallz(short snum,int loz,int hiz);
+void tekhealstun(short snum);
 
 // tekgame.c
 
+extern int      headbob;
+
+void checkmasterslaveswitch();
+void doanimations();
 void domovethings();
+void drawscreen(short snum, int dasmoothratio);
+void getpackets();
+void playback();
+int setanimation(int *animptr, int thegoal, int thevel, int theacc);
 
 // tekgun.c
 
+extern short dieframe[MAXPLAYERS];
+extern int       goreflag;
+
+void gunstatuslistcode(void);
+void killscore(short hs, short snum, char guntype);
+void playerpainsound(int p);
+void restockammo(int snum);
+void tekanimweap(int gun,short p);
+void tekdrawgun(int gun,short p);
 int tekexplodebody(int i);
+void tekfiregun(int gun,short p);
+int tekgundamage(int gun,int x,int y,int z,int hitsprite);
 void tekgunload(int fil);
 void tekgunsave(int fil);
+int tekhasweapon(int gun,short snum);
+
+// tekmap.c
+
+void drawoverheadmap(int cposx, int cposy, int czoom, short cang);
 
 // tekmsc.c
 
+#define   MAXLOADSAVEOPTS     5
+#define   MAXLOADSAVESIZE     12
+
+extern char      activemenu;
+extern int       autocenter[MAXPLAYERS];
+extern char      debrief;
+extern int       difficulty;
+extern char      dofadein;
+extern char      gameover;
+extern char      generalplay;
+extern char      loadsavenames[MAXLOADSAVEOPTS][MAXLOADSAVESIZE];
+extern int       mission;
+extern int       mousesensitivity;
+extern int       noenemiesflag;
+extern char      rearviewdraw;
+extern char      singlemapmode;
+
+int accessiblemap(int mn);
 void bonusflash();
+int choosemission();
+void copyrightscreen();
 void criticalflash();
+void depositsymbol(int snum);
+void domenuinput(void);
+void fadein(int start, int end, int steps);
+void fadeout(int start, int end, int red, int green, int blue, int steps);
+void finishpaletteshifts(void);
+int initmenu(void);
+void initmoreoptions();
+int initpaletteshifts(void);
+void missionaccomplished(int  sn);
+int missionfailed();
 void newgame(char *mapname);
 void nextnetlevel();
-void tekargv(int argc,char **argv);
+void redrawbackfx(void);
+void teksavemissioninfo(int fil);
+void setup3dscreen();
+void tekargv(int argc,char const * const argv[]);
 void tekgamestarted(void);
+void tekloadmissioninfo(int fil);
+void tekloadmoreoptions(int fil);
+int tekprivatekeys(void);
+void teksavemoreoptions(int fil);
+int tekscreenfx(void);
+void tektime(void);
 void woundflash();
 
 // tekprep.c
 
+extern int      startx,starty,startz;
+extern short starta,starts;
+extern int      switchlevelsflag;
+extern int       subwaysound[4];
+
 void initplayersprite(short snum);
-void tekinitmultiplayers();
+void netstartspot(int *x, int *y,short *sectnum);
+void placerandompic(int picnum);
+void prepareboard(char *daboardfilename);
+void tekinitmultiplayers(int argc, char const * const argv[]);
 void tekloadsetup();
+void teknetpickmap(void);
 int tekpreinit(void);
+void tekrestoreplayer(short snum);
+void teksavesetup(void);
+void tekview(int *x1,int *y1, int *x2,int *y2);
 
 // teksmk.c
 
@@ -579,25 +697,71 @@ void smkplayseq(char *name);
 
 // teksnd.c
 
-void initsb(char option1,char option2,long digihz,char option7a,char option7b,int val,char option7c);
+void initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c);
+void musicoff(void);
+void stopsound(int i);
+void uninitsb(void);
+void updatevehiclesnds(int i, int sndx, int sndy);
 
 // tekspr.c
 
+void analyzesprites(int dax, int day);
 void checktouchsprite(short snum, short sectnum);
 short movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype);
 void playerdropitems(int snum);
 
 // tekstat.c
 
+extern spritetype     pickup;
+
+void androidexplosion(int i);
+int attachvirus(short i, int pic);
+void blastmark(int i);
+void bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hity, int hitz);
+void bombexplosion(int i);
 int damagesprite(int hitsprite, int points);
+void forceexplosion(int i);
+int initsprites();
+int initspriteXTs();
+int isahologram(int i);
+int isanandroid(int i);
 int pickupsprite(short sn);
+void playergunshot(int snum);
+int playerhit(int hitsprite, int *pnum);
+int playervirus(short pnum, int pic);
+void sectortriggersprites(short snum);
+int spewblood(int sprnum, int hitz, short daang);
+void statuslistcode();
 void tekstatload(int fh);
 void tekstatsave(int fh);
+void toss(short snum);
 
 // tektag.c
 
+extern char onelev[MAXPLAYERS];
+
+void checkmapsndfx(short p);
+void movedoors(int d);
+void movefloordoor(int d);
+void movesprelevs(int e);
+void movevehicles(int v);
+void operatesector(short dasector);
+void operatesprite(short dasprite);
 void setanimpic(short *pic,short tics,short frames);
+void tagcode();
+void tekdoanimpic(void);
+void tekdodelayfuncs(void);
+void tekheadbob(void);
+void teknewsector(short p);
+void tekoperatesector(short dasector);
+void tekpreptags();
 void teksetdelayfunc(void (*delayfunc)(short),int tics,short parm);
+void tekswitchtrigger(short snum);
+void tektagcode(void);
 void tektagload(int fil);
 void tektagsave(int fil);
+int testneighborsectors(short sect1, short sect2);
+void warp(int *x, int *y, int *z, short *daang, short *dasector);
+void warpsprite(short spritenum);
+
 

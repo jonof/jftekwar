@@ -7,46 +7,18 @@
 #include "build.h"
 #include "names.h"
 #include "pragmas.h"
+#include "mmulti.h"
+#include "baselayer.h"
 
 #include "tekwar.h"
-
-#define fillsprite(newspriteindex2,x2,y2,z2,cstat2,shade2,pal2,            \
-		clipdist2,xrepeat2,yrepeat2,xoffset2,yoffset2,picnum2,ang2,      \
-		xvel2,yvel2,zvel2,owner2,sectnum2,statnum2,lotag2,hitag2,extra2) \
-{                                                                          \
-	spritetype *spr2;                                                     \
-	spr2 = &sprite[newspriteindex2];                                      \
-	spr2->x = x2; spr2->y = y2; spr2->z = z2;                             \
-	spr2->cstat = cstat2; spr2->shade = shade2;                           \
-	spr2->pal = pal2; spr2->clipdist = clipdist2;                         \
-	spr2->xrepeat = xrepeat2; spr2->yrepeat = yrepeat2;                   \
-	spr2->xoffset = xoffset2; spr2->yoffset = yoffset2;                   \
-	spr2->picnum = picnum2; spr2->ang = ang2;                             \
-	spr2->xvel = xvel2; spr2->yvel = yvel2; spr2->zvel = zvel2;           \
-	spr2->owner = owner2;                                                 \
-	spr2->lotag = lotag2; spr2->hitag = hitag2; spr2->extra = -1;         \
-	copybuf(&spr2->x,&osprite[newspriteindex2].x,3);                      \
-}
-
-#define   lm(_str_) printf(" %s...\n", _str_);
-
-extern    void      cdpreinit(void);
-extern    int       ovmode;
-extern    char      moreoptions[];
-extern    char      toggles[];
-extern    int       difficulty,soundv, musicv,mousesensitivity,headbobon;
-extern    char      activemenu;
-extern    char      generalplay;
-extern    char      singlemapmode;
-
-void      placerandompic(int picnum);
 
 sectortype          *sectptr[MAXSECTORS];
 spritetype          *sprptr[MAXSPRITES];
 walltype            *wallptr[MAXWALLS];
 struct    spriteextension     spriteXT[MAXSPRITES];
 struct    spriteextension     *sprXTptr[MAXSPRITES];
-int      startx,starty,startz,starta,starts;
+int      startx,starty,startz;
+short starta,starts;
 
 #define   MAXSTARTSPOTS  16
 int       startspotcnt;
@@ -56,7 +28,6 @@ struct    startspottype {
 };
 struct    startspottype       startspot[MAXSTARTSPOTS];
 
-extern    int  accessiblemap(int);
 int       firsttimethru=1;
 
 int       subwaysound[4];
@@ -66,7 +37,6 @@ prepareboard(char *daboardfilename)
 {
 	short     startwall, endwall, dasector;
 	int      i, j, k, s, dax, day, daz, dax2, day2;
-     int       rdonly;
      int       l;
 
      initsprites();   
@@ -83,25 +53,16 @@ prepareboard(char *daboardfilename)
 	locselectedgun=1;
 	locselectedgun2=1;
 
-     // for when revision control has map files attrib +r set
-     rdonly=( access(daboardfilename, W_OK) != 0 );
-     if( rdonly ) {
-          chmod(daboardfilename, S_IRWXU|S_IRWXG|S_IRWXO);
-     }
-	if (loadboard(daboardfilename,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
+	if (loadoldboard(daboardfilename,1,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
 	{
 		musicoff();
 		uninitmultiplayers();
 		uninittimer();
 		uninitengine();
 		uninitsb();
-		setvmode(ovmode);        //Set back to text mode
 		printf("Board not found\n");
 		exit(0);
 	}
-     if( rdonly ) {
-          chmod(daboardfilename, S_IROTH);
-     }
 
      startx=posx[0];
      starty=posy[0];
@@ -609,9 +570,6 @@ placerandompic(int picnum)
 	}
 }
 
-extern
-short dieframe[];
-
 void
 tekrestoreplayer(short snum)
 {
@@ -755,89 +713,11 @@ tekpreinit(void)
      return 0;
 }
 
-#define   NUMSETOPTS          2
-
-short     comp;
-int      bps;
-
-char *setopts[]={
-	 "COM PORT:",
-	 "BAUD RATE:"
-};
-
 void
-mdmreadsettings(void)
+tekinitmultiplayers(int argc, char const * const argv[])
 {
-	 short i,n;
-	 int l;
-	 char buf[80],*ptr;
-	 FILE *fp;
-
-	 fp=fopen("modem.dat","r");
-	 if (fp == NULL) {
-		  return;
-	 }
-	 while (fgets(buf,80,fp) != NULL) {
-		  for (i=0 ; i < NUMSETOPTS ; i++) {
-			   if ((ptr=strstr(buf,setopts[i])) != NULL) {
-					ptr+=strlen(setopts[i]);
-					switch (i) {
-					case 0:   // com port
-						 sscanf(ptr,"%d",&n);
-						 if (n < 1 || n > 4) {
-							  break;
-						 }
-						 comp=n;
-						 break;
-					case 1:   // baud rate
-						 sscanf(ptr,"%ld",&l);
-						 if (l < 2400L || l > 115200L) {
-							  break;
-						 }
-						 bps=l;
-						 break;
-					}
-			   }
-		  }
-	 }
-	 fclose(fp);
+	 initmultiplayers(argc, argv);
 }
-
-void
-tekinitmultiplayers()
-{
-     char      opt5=0;
-
-     if( (option[4] > 0) && (option[4] < 5) ) {
-          mdmreadsettings();
-          switch( bps ) {
-          case 2400:  opt5=0x00; break;
-          case 4800:  opt5=0x01; break;
-          case 14400: opt5=0x03; break;
-          case 19200: opt5=0x04; break;
-          case 28800: opt5=0x05; break;
-          default:    opt5=0x02; break;
-          }
-          if( (comp == 1) || (comp == 3) ) {
-               opt5|=0x20;
-          }
-          else {
-               opt5|=0x10;
-          }
-	     initmultiplayers(comp,opt5);
-     }
-     else {
-	     initmultiplayers(option[4],option[5]);
-     }
-}
-
-extern
-char palette[],
-     palette1[256][3],
-     palette2[256][3];
-
-extern
-int  noenemiesflag;
 
 short mappic[]={
      1608,1609,1610,1611,1612,1613,1614
@@ -859,10 +739,10 @@ teknetpickmap(void)
      if (switchlevelsflag) {
           strcpy(boardfilename,"NET1.MAP");
      }
-     setgamemode();
+     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
      initpaletteshifts();
-     memcpy(palette1, palette, 768);
-     memset(palette, 0, 768);
+//     memcpy(palette1, palette, 768);
+/*     memset(palette, 0, 768);
      clearview(0);
      if (switchlevelsflag) {
           goto skippick;
@@ -901,8 +781,8 @@ teknetpickmap(void)
           clearview(0);
           rotatesprite(xdim<<15,ydim<<15,zoom,rotangle,mappic[map],0,0,0, 0, 0, xdim-1, ydim-1);
           overwritesprite((xdim>>1)-160,0,408,0,0,0);
-          sprintf(tempbuf,"MULTIPLAYER MAP %d",map+1);
-          printext((xdim>>1)-(strlen(tempbuf)<<2),ydim-16,tempbuf,ALPHABET2,255);
+          sprintf((char *)tempbuf,"MULTIPLAYER MAP %d",map+1);
+          printext((xdim>>1)-(strlen(tempbuf)<<2),ydim-16,(char *)tempbuf,ALPHABET2,255);
           nextpage();
      } while (keystatus[0x1C] == 0 && keystatus[0x9C] == 0 && keystatus[0x01] == 0);
      if (keystatus[0x1C] || keystatus[0x9C]) {
@@ -913,11 +793,11 @@ teknetpickmap(void)
           keystatus[0x01]=0;
           crash("Multiplayer game aborted!");
      }
-skippick:
+skippick:*/
      prepareboard(boardfilename);
      precache();
      clearview(0);
-     memcpy(palette, palette1, 768);
+//     memcpy(palette, palette1, 768);
      fadein(0,255,16);
 }
 
@@ -933,15 +813,9 @@ tekloadsetup()
           tekloadmoreoptions(fil);
 		close(fil);
 	}
-	switch( option[0] ) {
-		case 0: initengine(0,chainxres[option[6]&15],chainyres[option[6]>>4]); break;
-		case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
-		case 2: initengine(2,320L,200L); break;
-		case 3: initengine(3,320L,200L); break;
-		case 4: initengine(4,320L,200L); break;
-		case 5: initengine(5,320L,200L); break;
-		case 6: initengine(6,320L,200L); break;
-	}
+    if (initengine()) {
+        crash("error initialising engine");
+    }
 }
 
 void
