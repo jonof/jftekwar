@@ -558,7 +558,7 @@ extern    int      flags32[];
 // b5compat.c
 
 void overwritesprite(int thex, int they, short tilenum, signed char shade,
-                     char orientation, unsigned char dapalnum);
+                     char stat, unsigned char dapalnum);
 void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
 void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,

@@ -706,7 +706,7 @@ tekpreinit(void)
      initmenu();
      initmoreoptions();
      if( screensize == 0 ) {
-          screensize=xdim+8;
+          screensize=MAXXDIM;
      }
      activemenu=0;
 

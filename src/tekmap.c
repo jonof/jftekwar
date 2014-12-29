@@ -17,7 +17,7 @@ drawoverheadmap(int cposx, int cposy, int czoom, short cang)
 	int dax, day, cosang, sinang, xspan, yspan, sprx, spry;
 	int xrepeat, yrepeat, z1, z2, startwall, endwall, tilenum, daang;
 	int xvect, yvect, xvect2, yvect2;
-	char col;
+	unsigned char col;
 	walltype *wal, *wal2;
 	spritetype *spr;
 

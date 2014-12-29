@@ -118,7 +118,6 @@ char      blink=0xFF;
 int      menuspincnt=0L;
 int      activemenu=0;
 char      requesttoquit;
-char      palette1[256][3],palette2[256][3];
 char      dofadein=0;
 unsigned char whiteshifts[NUMREDSHIFTS][768];
 unsigned char redshifts[NUMREDSHIFTS][768];
@@ -423,7 +422,7 @@ setup3dscreen()
 {
 	int      i, dax, day, dax2, day2;
 
-	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
+	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 32);
 	if( screensize > xdim ) {
 		dax = 0; day = 0;
 		dax2 = xdim-1; day2 = ydim-1;
@@ -2817,8 +2816,8 @@ donewgame:
 
      fadeout(0,255,0,0,0,50);
 
-     memcpy(palette1, palette, 768);
-     memset(palette, 0, 768);
+     //memcpy(palette1, palette, 768);
+     //memset(palette, 0, 768);
      clearview(0);
      setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
      clearview(0);
@@ -2851,7 +2850,7 @@ donewgame:
           break;
      }
      clearview(0);
-     memcpy(palette, palette1, 768);
+     //memcpy(palette, palette1, 768);
      dofadein=32;
      initpaletteshifts();
 
@@ -2941,8 +2940,8 @@ teknetmenu()
 {
      initpaletteshifts();
 
-     memcpy(palette1, palette, 768);
-     memset(palette, 0, 768);
+     //memcpy(palette1, palette, 768);
+     //memset(palette, 0, 768);
 
      clearview(0);
      strcpy(boardfilename,"NET1.MAP");
@@ -2950,7 +2949,7 @@ teknetmenu()
      precache();
 
      clearview(0);
-     memcpy(palette, palette1, 768);
+     //memcpy(palette, palette1, 768);
      fadein(0,255,16);
 }
 
@@ -3202,8 +3201,8 @@ choosingmap:
 
      fadeout(0,255,0,0,0,50);
 
-     memcpy(palette1, palette, 768);
-     memset(palette, 0, 768);
+     //memcpy(palette1, palette, 768);
+     //memset(palette, 0, 768);
      clearview(0);
      setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 
@@ -3237,7 +3236,7 @@ choosingmap:
      }
 
      clearview(0);
-     memcpy(palette, palette1, 768);
+     //memcpy(palette, palette1, 768);
      dofadein=32;
      initpaletteshifts();
 
