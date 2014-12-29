@@ -1409,7 +1409,7 @@ tektagcode(void)
 	     	          if( cursectnum[p] == s ) {
 	     		          if( posz[p] >= (sect->floorz-(42<<8)) ) {
 	     		               clipmove(&posx[p],&posy[p],&posz[p],
-	     			                   &cursectnum[p],dax<<4,day<<4,128L,4<<8,4<<8,0);
+	     			                   &cursectnum[p],dax<<4,day<<4,128L,4<<8,4<<8,CLIPMASK0);
 	     		               setsprite(playersprite[p],posx[p],posy[p],posz[p]+(42<<8));
 	     		               revolvedoorstat[p]=1;
 	     		          }

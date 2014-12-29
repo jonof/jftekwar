@@ -750,6 +750,10 @@ void playerdropitems(int snum);
 
 // tekstat.c
 
+#define   NORMALCLIP          0
+#define   PROJECTILECLIP      1
+#define   CLIFFCLIP           2
+
 extern spritetype     pickup;
 
 void ambushyell(short sn, short ext);

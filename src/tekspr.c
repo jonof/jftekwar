@@ -20,6 +20,7 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 {
 	int daz, zoffs;
 	short retval, dasectnum, tempshort;
+    unsigned int dcliptype;
 	spritetype *spr;
 
     #ifdef PLRSPRDEBUG
@@ -27,6 +28,12 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
           crash("messing w plrsprite at 17");
      }
     #endif
+    
+    switch (cliptype) {
+        case NORMALCLIP: dcliptype = CLIPMASK0; break;
+        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+    }
 
 	spr = &sprite[spritenum];
 
@@ -38,7 +45,7 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
 	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -48,7 +55,7 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 	tempshort = spr->cstat; spr->cstat &= ~1;
 	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((int)spr->clipdist)<<2,cliptype);
+				 ((int)spr->clipdist)<<2,dcliptype);
 	spr->cstat = tempshort;
 
 	daz = spr->z+zoffs + dz;
@@ -66,6 +73,7 @@ floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, i
 {
 	int daz, zoffs;
 	short retval, dasectnum;
+    unsigned int dcliptype;
 	spritetype *spr;
 
     #ifdef PLRSPRDEBUG
@@ -73,6 +81,12 @@ floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, i
           crash("messing w plrsprite at 18");
      }
     #endif
+    
+    switch (cliptype) {
+        case NORMALCLIP: dcliptype = CLIPMASK0; break;
+        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+    }
 
 	spr = &sprite[spritenum];
 
@@ -84,7 +98,7 @@ floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, i
 	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
 	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -100,6 +114,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
      int           px,py,pz;
 	short          retval,dasectnum,tempshort;
      short          failedsectnum;
+    unsigned int dcliptype;
 	spritetype     *spr;
 
     #ifdef PLRSPRDEBUG
@@ -107,6 +122,12 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
           crash("messing w plrsprite at 19");
      }
     #endif
+    
+    switch (cliptype) {
+        case NORMALCLIP: dcliptype = CLIPMASK0; break;
+        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+    }
 
 	spr = &sprite[spritenum];
 
@@ -121,7 +142,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
      pz=spr->z;
 	daz = spr->z+zoffs; 
 	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 	if( (dasectnum != spr->sectnum) && (dasectnum >= 0) ) {
 		changespritesect(spritenum,dasectnum);
      }
@@ -140,7 +161,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
 	tempshort = spr->cstat; spr->cstat &= ~1;
 	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((int)spr->clipdist)<<2,cliptype);
+				 ((int)spr->clipdist)<<2,dcliptype);
 	spr->cstat = tempshort;
 	daz = spr->z+zoffs + dz;
 	if( (daz <= globhiz) || (daz > globloz) ) {
@@ -174,6 +195,7 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
 {
 	int           daz;
 	short          retval, dasectnum, tempshort;
+    unsigned int dcliptype;
 	spritetype *spr;
 
     #ifdef PLRSPRDEBUG
@@ -181,12 +203,18 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
           crash("messing w plrsprite at 20");
      }
     #endif
+    
+    switch (cliptype) {
+        case NORMALCLIP: dcliptype = CLIPMASK0; break;
+        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+    }
 
 	spr = &sprite[spritenum];
 
 	dasectnum = spr->sectnum; 
 	retval = clipmove(&spr->x,&spr->y,&spr->z,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,cliptype);
+							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
 	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
 		changespritesect(spritenum,dasectnum);
@@ -195,7 +223,7 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
 	     tempshort = spr->cstat; spr->cstat &= ~1;
 	     getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 	     			 &globhiz,&globhihit,&globloz,&globlohit,
-	     			 ((int)spr->clipdist)<<2,cliptype);
+	     			 ((int)spr->clipdist)<<2,dcliptype);
 	     spr->cstat = tempshort;
           daz=(globloz+globhiz);
           spr->z=(daz>>1);

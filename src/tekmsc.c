@@ -1642,7 +1642,7 @@ newmap(int mapno)
      	cursectnum[p]=sprite[sn].sectnum;
 
           //updatesector(posx[p],posy[p],cursectnum[p]);
-		//pushmove(&posx[p],&posy[p],&posz[p],&cursectnum[p],128L,4<<8,4<<8,0);
+		//pushmove(&posx[p],&posy[p],&posz[p],&cursectnum[p],128L,4<<8,4<<8,CLIPMASK0);
           break;
      default:
           break;

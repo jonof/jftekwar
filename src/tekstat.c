@@ -107,10 +107,6 @@ FILE      *dbgfp2;
 
 #define   NO_PIC              0    
 
-#define   NORMALCLIP          0
-#define   PROJECTILECLIP      1
-#define   CLIFFCLIP           2
-
 #define   MINATTACKDIST  8192L
 #define   CHASEATTDIST   8192L
 #define   GUARDATTDIST   6144L
@@ -2457,7 +2453,7 @@ statuslistcode()
                     spr->cstat&=~1;
                	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
      				     &globhiz,&globhihit,&globloz,&globlohit,
-     				     ((int)spr->clipdist)<<2,1);
+     				     ((int)spr->clipdist)<<2,CLIPMASK1);
                	spr->cstat=tempshort;
                     if( spr->z != globloz ) {
                          spr->hitag=0;
@@ -2494,7 +2490,7 @@ statuslistcode()
           spr->cstat&=~1;
          	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 			     &globhiz,&globhihit,&globloz,&globlohit,
-     	          ((int)spr->clipdist)<<2,1);
+     	          ((int)spr->clipdist)<<2,CLIPMASK1);
          	spr->cstat=tempshort;
           if( spr->z >= globloz ) {
                spr->z=globloz;

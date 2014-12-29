@@ -475,7 +475,7 @@ processinput(short snum)
 			xvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+2048)&2047])>>3);
 			yvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+1536)&2047])>>3);
 		}
-		clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],xvect,yvect,128L,4<<8,4<<8,0);
+		clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],xvect,yvect,128L,4<<8,4<<8,CLIPMASK0);
 		frameinterpolate = 1;
 		revolvedoorstat[snum] = 1;
           if( option[4] == 0 ) {
@@ -488,7 +488,7 @@ processinput(short snum)
 	}
 
 	// push player away from walls if clipmove doesn't work
-	if( pushmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],128L,4<<8,4<<8,0) < 0 ) {
+	if( pushmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],128L,4<<8,4<<8,CLIPMASK0) < 0 ) {
 	     changehealth(snum,-1000);  // if this fails then instant death
           changescore(snum,-5);
      }
@@ -505,7 +505,7 @@ processinput(short snum)
 	// NOT just a point.  This prevents you from falling off cliffs
 	// when you step only slightly over the cliff.
 	sprite[playersprite[snum]].cstat ^= 1;
-	getzrange(posx[snum],posy[snum],posz[snum],cursectnum[snum],&globhiz,&globhihit,&globloz,&globlohit,128L,0);
+	getzrange(posx[snum],posy[snum],posz[snum],cursectnum[snum],&globhiz,&globhihit,&globloz,&globlohit,128L,CLIPMASK0);
 	sprite[playersprite[snum]].cstat ^= 1;
 
      if( cursectnum[snum] != ocursectnum[snum] ) {
@@ -612,7 +612,7 @@ processinput(short snum)
 		if( (globlohit&0xc000) != 49152 ) {
 			goalz = globloz-(8<<8);
 			if( posz[snum] >= goalz-(2<<8) ) {
-				clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],-TICSPERFRAME<<14,-TICSPERFRAME<<14,128L,4<<8,4<<8,0);
+				clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],-TICSPERFRAME<<14,-TICSPERFRAME<<14,128L,4<<8,4<<8,CLIPMASK0);
 				frameinterpolate = 0;
 				if( slimesoundcnt[snum] >= 0 ) {
 					slimesoundcnt[snum] -= TICSPERFRAME;
@@ -674,6 +674,7 @@ processinput(short snum)
 	     	}
 	     }
           // player is on a groudraw area
+         /*fowlerj: groudraw became slopes
 	     if( (sector[cursectnum[snum]].floorstat&2) > 0 ) {
 	     	if( waloff[sector[cursectnum[snum]].floorheinum] == 0 ) {
                     loadtile(sector[cursectnum[snum]].floorheinum);
@@ -681,6 +682,7 @@ processinput(short snum)
 	     	ptr = (char *)(waloff[sector[cursectnum[snum]].floorheinum]+(((posx[snum]>>4)&63)<<6)+((posy[snum]>>4)&63));
 	     	goalz -= ((*ptr)<<8);
 	     }
+         */
           // gravity, plus check for if on an elevator 
 	     if( posz[snum] < goalz ) {
     	     	hvel[snum] += (TICSPERFRAME<<5)+1;
