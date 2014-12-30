@@ -6,7 +6,7 @@ void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
                  dapalnum,8+16,cx1,cy1,cx2,cy2);
 }
 
-void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,
+void permanentwritespritetile(int UNUSED(thex), int UNUSED(they), short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum) {
     int x, y, xsiz, ysiz, tx1, ty1, tx2, ty2;
     
@@ -28,7 +28,7 @@ void overwritesprite(int thex, int they, short tilenum, signed char shade,
                  windowx1,windowy1,windowx2,windowy2);
 }
 
-void printext(int x, int y, char buffer[42], short tilenum, char invisiblecol)
+void printext(int x, int y, char *buffer, short tilenum, char UNUSED(invisiblecol))
 {
     int i;
     unsigned char ch;

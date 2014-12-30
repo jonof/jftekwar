@@ -189,13 +189,13 @@ extern int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt;
 #define   MAPXT        1
 
 struct    picattribtype  {
-     char      numframes;
-     char      animtype;
+     unsigned  char      numframes;
+     unsigned  char      animtype;
      signed    char      ycenteroffset,xcenteroffset;
-     char      animspeed;
+     unsigned  char      animspeed;
 };
 struct    spriteextension {
-     char      class;
+     unsigned  char      class;
      signed    char      hitpoints;
      unsigned  short     target;
      unsigned  short     fxmask;  
@@ -211,8 +211,8 @@ struct    spriteextension {
      unsigned  short     squatpic;
      unsigned  short     morphpic;
      unsigned  short     specialpic;
-     char      lock;
-     char      weapon;
+     unsigned  char      lock;
+     unsigned  char      weapon;
      short     ext2;
      };
 
@@ -563,7 +563,7 @@ void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
 void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
-void printext(int x, int y, char buffer[42], short tilenum, char invisiblecol);
+void printext(int x, int y, char *buffer, short tilenum, char invisiblecol);
 void precache();
 void resettiming();
 

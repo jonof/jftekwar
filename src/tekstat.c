@@ -143,12 +143,26 @@ short  rightof[17] = {  128,  256,  384,  512,
                        1152, 1280, 1408, 1536,
                        1664, 1792, 1920,    0,  128 };
 
-struct    XTsavetype {
+#ifdef __GNUC__
+#define TPACK __attribute__ ((packed))
+#else
+#define TPACK
+#endif
+
+#ifdef _MSC_VER
+#pragma pack(1)
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(push,1);
+#endif
+
+struct TPACK    XTsavetype {
      short     XTnum;
      struct    spriteextension      sprXT;
 };
 struct XTsavetype XTsave;
-struct    XTtrailertype {
+struct TPACK    XTtrailertype {
      int      numXTs;          
      int      start;
      char      mapname[13];
@@ -157,10 +171,20 @@ struct    XTtrailertype {
 struct    XTtrailertype  XTtrailer;
 #define   TRAILERID      "**MAP_EXTS**"
 
+#ifdef _MSC_VER
+#pragma pack()
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(pop)
+#endif
+
+#undef TPACK
+
 struct    sectflashtype {
      short     sectnum;
      int       step;
-     char      ovis;
+     unsigned char      ovis;
 };
 struct    sectflashtype  sectflash;
 

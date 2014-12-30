@@ -1387,8 +1387,8 @@ tektagcode(void)
 	               dax=(tics*septr->cos)>>15;
 	               day=(tics*septr->sin)>>13;
 	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->xpanning+=(char)dax;
-	     	          wallptr[j]->ypanning-=(char)day;
+	     	          wallptr[j]->xpanning+=(unsigned char)dax;
+	     	          wallptr[j]->ypanning-=(unsigned char)day;
 	               }
 	          }
 	          if( (effect&flags32[FPANNING]) != 0 ) {
@@ -1417,15 +1417,15 @@ tektagcode(void)
 	               }
 	               dax>>=12;
 	               day>>=12;
-	               sect->floorxpanning-=(char)dax;
-	               sect->floorypanning+=(char)day;
+	               sect->floorxpanning-=(unsigned char)dax;
+	               sect->floorypanning+=(unsigned char)day;
 	          }
 	          if( (effect&flags32[CPANNING]) != 0 ) {
 	               tics=TICSPERFRAME;
 	               dax=(tics*septr->cos)>>12;
 	               day=(tics*septr->sin)>>12;
-	               sect->ceilingxpanning-=(char)dax;
-	               sect->ceilingypanning+=(char)day;
+	               sect->ceilingxpanning-=(unsigned char)dax;
+	               sect->ceilingypanning+=(unsigned char)day;
 	          }
 	          if( (septr->delay-=TICSPERFRAME) > 0 ) {
 	               continue;
