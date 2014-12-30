@@ -1755,57 +1755,24 @@ mprintf(short x,short y,char prop,char shade,char palnum,char *stg,...)
 void
 showmenu(void)
 {
-     if (xdim < 640) {
-          if (xdim != 320 || ydim != 200) {
-               setview(0L,0L,xdim-1,ydim-1);
-               overwritesprite(0L,0L,MENUSTATION,0,2,0);
-               overwritesprite(0L,0L,MENUGLASS,0,6,0);
-               setview(windowx1,windowy1,windowx2,windowy2);
-          }
-          else {
-               overwritesprite(0L,0L,MENUSTATION,0,0,0);
-               overwritesprite(0L,0L,MENUGLASS,0,4,0);
-          }
-     }
-     else {
-          if (xdim > 640) {
-               setview(0L,0L,xdim-1,ydim-1);
-               overwritesprite(0L,0L,MENUPANEL4801,0,2,0);
-               overwritesprite(0L,ydim>>1,MENUPANEL4802,0,2,0);
-               setview(windowx1,windowy1,windowx2,windowy2);
-          }
-          else {
-               overwritesprite(0L,0L,MENUPANEL4801,0,0,0);
-               overwritesprite(0L,ydim>>1,MENUPANEL4802,0,0,0);
-          }
-     }
+    if (xdim < 640) {
+        rotatesprite(160<<16,100<<16, 65536, 0, MENUSTATION, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,100<<16, 65536, 0, MENUGLASS, 0, 0, 1+2+8, 0, 0, xdim-1, ydim-1);
+    } else {
+        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[MENUPANEL4801]), 0, MENUPANEL4801, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[MENUPANEL4802]), 0, MENUPANEL4802, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+    }
 }
 
 void
 showhelpscreen(void)
 {
-     if (xdim < 640) {
-          if (xdim != 320 || ydim != 200) {
-               setview(0L,0L,xdim-1,ydim-1);
-               overwritesprite(0L,0L,HELPSCREENPIC,0,2,0);
-               setview(windowx1,windowy1,windowx2,windowy2);
-          }
-          else {
-               overwritesprite(0L,0L,HELPSCREENPIC,0,0,0);
-          }
-     }
-     else {
-          if (xdim > 640) {
-               setview(0L,0L,xdim-1,ydim-1);
-               overwritesprite(0L,0L,HELPSCREEN4801,0,2,0);
-               overwritesprite(0L,ydim>>1,HELPSCREEN4802,0,2,0);
-               setview(windowx1,windowy1,windowx2,windowy2);
-          }
-          else {
-               overwritesprite(0L,0L,HELPSCREEN4801,0,0,0);
-               overwritesprite(0L,240L,HELPSCREEN4802,0,0,0);
-          }
-     }
+    if (xdim < 640) {
+        rotatesprite(160<<16,160<<16, 65536, 0, HELPSCREENPIC, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+    } else {
+        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[HELPSCREEN4801]), 0, HELPSCREEN4801, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[HELPSCREEN4802]), 0, HELPSCREEN4802, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+    }
 }
 
 void
@@ -1970,9 +1937,20 @@ domenuinput(void)
 {
      int c,keystate;
      int  tries;                                                 
-     struct menu *mptr;
+     struct menu *mptr = 0;
 
      if (activemenu == 255) {
+          return;
+     }
+     if (activemenu == HELPSCREEN) {
+          if (keystatus[1]) {
+               keystatus[1]=0;
+               playsound( S_BEEP ,0,0,0,ST_IMMEDIATE);
+               if (menudirect) {
+                    activemenu=255;
+                    menudirect=0;
+               }
+          }
           return;
      }
      if (loctypemode) {
