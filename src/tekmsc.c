@@ -422,7 +422,6 @@ setup3dscreen()
 {
 	int      i, dax, day, dax2, day2;
 
-	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 32);
 	if( screensize > xdim ) {
 		dax = 0; day = 0;
 		dax2 = xdim-1; day2 = ydim-1;
@@ -2592,7 +2591,6 @@ choosingmission:
      if( symbols[6] ) {
           smkmenuframe(47);
      }
-     smkshowmenu();
      lastmission=mission;
 
      helpclock=totalclock;
@@ -2608,6 +2606,8 @@ choosingmission:
           if( (totalclock - helpclock) > 1024 ) {
                keystatus[35]=1;
           }
+         smkshowmenu();
+         handleevents();
      };
 
      if( (keystatus[203] != 0) &&(!onlymission8) ) {         // LF
@@ -2653,10 +2653,11 @@ nextmissionright:
               (symbols[4] == 0) && (symbols[5] == 0) && (symbols[6] == 0) ) {
                playsound(S_BOOP,0,0,0,ST_IMMEDIATE);
                smkmenuframe(53);
-               smkshowmenu();
                clock=totalclock;
-               while( (totalclock-clock) < 128 ) 
-                    ;
+               while( (totalclock-clock) < 128 ) {
+                    smkshowmenu();
+                    handleevents();
+               }
                smkmenuframe(1);
                smkshowmenu();
           }
@@ -2682,12 +2683,13 @@ nextmissionright:
      if( keystatus[31] != 0 ) {
           playsound(S_KEYCARDBLIP,0,0,0,ST_IMMEDIATE);
           smkmenuframe(49);
-          smkshowmenu();
-          writestats();
           keystatus[31]=0;
           while( (keystatus[1]  == 0) &&
                  (keystatus[28] == 0) &&  
                  (keystatus[57] == 0) ) {
+              smkshowmenu();
+              writestats();
+              handleevents();
           }
           smkmenuframe(1);
           smkshowmenu();
@@ -2700,11 +2702,12 @@ nextmissionright:
      if( keystatus[1] != 0 ) {
           playsound(S_PICKUP_BONUS,0,0,0,ST_IMMEDIATE);
           smkmenuframe(51);
-          smkshowmenu();
           keystatus[1]=0;
           while( (keystatus[1]  == 0) &&
                  (keystatus[21] == 0) &&  
                  (keystatus[49] == 0) ) {
+              smkshowmenu();
+              handleevents();
           }
           if( (keystatus[49] == 1) || (keystatus[1] == 1) ) {
                keystatus[49]=0;
@@ -2722,7 +2725,6 @@ nextmissionright:
           playsound(S_PICKUP_BONUS,0,0,0,ST_IMMEDIATE);
           keystatus[35]=0;
           smkmenuframe(55);
-          smkshowmenu();
           keystatus[1]=0;
           helpclock=totalclock;
           while( (keystatus[1]  == 0) &&
@@ -2731,6 +2733,8 @@ nextmissionright:
                  if( (totalclock-helpclock) > 2048 ) {
                     keystatus[1]=1;
                  }
+              smkshowmenu();
+              handleevents();
           }
           keystatus[28]=0;
           keystatus[57]=0;
@@ -2816,10 +2820,8 @@ donewgame:
 
      fadeout(0,255,0,0,0,50);
 
-     //memcpy(palette1, palette, 768);
-     //memset(palette, 0, 768);
      clearview(0);
-     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
+     setbrightness(brightness, palette, 0);
      clearview(0);
      switch( mission ) {
      case 0:
@@ -2959,7 +2961,6 @@ copyrightscreen()
      clearview(0);
      smkopenmenu("smkgm.smk");
      smkmenuframe(81);
-     smkshowmenu();
      fadein(0,255,10);
      while( (keystatus[1]   == 0) &&
             (keystatus[28]  == 0) &&    
@@ -2971,6 +2972,8 @@ copyrightscreen()
             (keystatus[31]  == 0) && 
             (keystatus[35]  == 0) && 
             (keystatus[208] == 0)  ) {
+         smkshowmenu();
+         handleevents();
      };
      smkclosemenu();
 }
@@ -3201,10 +3204,7 @@ choosingmap:
 
      fadeout(0,255,0,0,0,50);
 
-     //memcpy(palette1, palette, 768);
-     //memset(palette, 0, 768);
      clearview(0);
-     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
 
      if( set == 0 ) {
           switch( map ) {
@@ -3236,7 +3236,6 @@ choosingmap:
      }
 
      clearview(0);
-     //memcpy(palette, palette1, 768);
      dofadein=32;
      initpaletteshifts();
 

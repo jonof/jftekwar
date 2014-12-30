@@ -321,6 +321,8 @@ app_main(int argc, char const * const argv[])
           dbgcolumn=0;
      }
 
+    setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 32);
+
 	if( option[4] > 0 ) {
         lm("multiplayer init");
         teknetpickmap();
@@ -674,7 +676,7 @@ processinput(short snum)
 	     	}
 	     }
           // player is on a groudraw area
-         /*fowlerj: groudraw became slopes
+         /*jonof: groudraw became slopes
 	     if( (sector[cursectnum[snum]].floorstat&2) > 0 ) {
 	     	if( waloff[sector[cursectnum[snum]].floorheinum] == 0 ) {
                     loadtile(sector[cursectnum[snum]].floorheinum);

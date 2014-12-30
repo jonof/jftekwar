@@ -29,6 +29,9 @@
 		ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF61A49C3DB007D0D43 /* tektxt.c */; };
 		ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF71A49C3DB007D0D43 /* tekver.c */; };
 		ABD03E161A5181020012B9D1 /* StartupWinController.game.m in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E151A5181020012B9D1 /* StartupWinController.game.m */; };
+		ABD03E311A5230830012B9D1 /* smacker.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E301A5230830012B9D1 /* smacker.c */; };
+		ABD03E371A5230CD0012B9D1 /* smk_bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */; };
+		ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +84,13 @@
 			remoteGlobalIDString = AB735F480A29A2DC003261DC;
 			remoteInfo = engine;
 		};
+		ABD03E2D1A522B970012B9D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ABD03E211A5189E00012B9D1;
+			remoteInfo = transpal;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +120,13 @@
 		ABC75BF71A49C3DB007D0D43 /* tekver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekver.c; sourceTree = "<group>"; };
 		ABC75BF91A49C3DB007D0D43 /* tekwar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tekwar.h; sourceTree = "<group>"; };
 		ABD03E151A5181020012B9D1 /* StartupWinController.game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupWinController.game.m; sourceTree = "<group>"; };
+		ABD03E2F1A5230340012B9D1 /* smacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smacker.h; sourceTree = "<group>"; };
+		ABD03E301A5230830012B9D1 /* smacker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smacker.c; sourceTree = "<group>"; };
+		ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk_bitstream.c; sourceTree = "<group>"; };
+		ABD03E331A5230CD0012B9D1 /* smk_bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_bitstream.h; sourceTree = "<group>"; };
+		ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk_hufftree.c; sourceTree = "<group>"; };
+		ABD03E351A5230CD0012B9D1 /* smk_hufftree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_hufftree.h; sourceTree = "<group>"; };
+		ABD03E361A5230CD0012B9D1 /* smk_malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_malloc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +170,7 @@
 				ABC75BCF1A49BFB1007D0D43 /* arttool */,
 				ABC75BD11A49BFB1007D0D43 /* kextract */,
 				ABC75BD31A49BFB1007D0D43 /* kgroup */,
+				ABD03E2E1A522B970012B9D1 /* transpal */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,6 +178,7 @@
 		ABC75BD41A49C16E007D0D43 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				ABD03E2B1A522B970012B9D1 /* libsmacker */,
 				ABC75BE41A49C3DB007D0D43 /* src */,
 				ABC75BD51A49C19A007D0D43 /* game.osxmain.nib */,
 				ABC75BD61A49C19A007D0D43 /* startwin.game.nib */,
@@ -202,6 +221,21 @@
 			);
 			name = src;
 			path = ../src;
+			sourceTree = "<group>";
+		};
+		ABD03E2B1A522B970012B9D1 /* libsmacker */ = {
+			isa = PBXGroup;
+			children = (
+				ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */,
+				ABD03E331A5230CD0012B9D1 /* smk_bitstream.h */,
+				ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */,
+				ABD03E351A5230CD0012B9D1 /* smk_hufftree.h */,
+				ABD03E361A5230CD0012B9D1 /* smk_malloc.h */,
+				ABD03E301A5230830012B9D1 /* smacker.c */,
+				ABD03E2F1A5230340012B9D1 /* smacker.h */,
+			);
+			name = libsmacker;
+			path = ../libsmacker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +339,13 @@
 			remoteRef = ABC75BD21A49BFB1007D0D43 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		ABD03E2E1A522B970012B9D1 /* transpal */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = transpal;
+			remoteRef = ABD03E2D1A522B970012B9D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -329,17 +370,20 @@
 				ABC75C071A49C3DB007D0D43 /* tekstat.c in Sources */,
 				ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */,
 				AB3AE6C21A4D423600CE4329 /* b5compat.c in Sources */,
+				ABD03E371A5230CD0012B9D1 /* smk_bitstream.c in Sources */,
 				ABC75C011A49C3DB007D0D43 /* tekmap.c in Sources */,
 				ABC75BFF1A49C3DB007D0D43 /* tekgun.c in Sources */,
 				AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */,
 				ABC75C001A49C3DB007D0D43 /* tekldsv.c in Sources */,
 				ABC75C031A49C3DB007D0D43 /* tekprep.c in Sources */,
+				ABD03E311A5230830012B9D1 /* smacker.c in Sources */,
 				ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */,
 				AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */,
 				ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */,
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
 				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,
 				ABC75C061A49C3DB007D0D43 /* tekspr.c in Sources */,
+				ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */,
 				ABD03E161A5181020012B9D1 /* StartupWinController.game.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

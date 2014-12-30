@@ -6,6 +6,7 @@
 *.art
 *.dat
 *.map
+*.smk
 *.log
 *.grp
 *.cfg
