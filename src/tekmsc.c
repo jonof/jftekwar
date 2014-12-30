@@ -1651,7 +1651,8 @@ newmap(int mapno)
      angvel=0;
 
      currentmapno=mapno;
-     showmessage(Bstrupr(mapnames[mapno]));
+     strcpy(tektempbuf, mapnames[mapno]);
+     showmessage(Bstrupr(tektempbuf));
 
      musicfade();
      if( mapno <= 3 ) {
