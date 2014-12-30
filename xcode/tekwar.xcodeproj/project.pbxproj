@@ -32,6 +32,15 @@
 		ABD03E311A5230830012B9D1 /* smacker.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E301A5230830012B9D1 /* smacker.c */; };
 		ABD03E371A5230CD0012B9D1 /* smk_bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */; };
 		ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */; };
+		ABD03E761A52745C0012B9D1 /* build.osxmain.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABD03E741A52745C0012B9D1 /* build.osxmain.nib */; };
+		ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABD03E751A52745C0012B9D1 /* startwin.editor.nib */; };
+		ABD03E781A52747F0012B9D1 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL.framework */; };
+		ABD03E791A52747F0012B9D1 /* SDL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ABD03E7B1A5274870012B9D1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
+		ABD03E7C1A5274910012B9D1 /* libeditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCB1A49BFB1007D0D43 /* libeditor.a */; };
+		ABD03E7D1A5274910012B9D1 /* libeditorsupp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCD1A49BFB1007D0D43 /* libeditorsupp.a */; };
+		ABD03E7E1A5274910012B9D1 /* libengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BC91A49BFB1007D0D43 /* libengine.a */; };
+		ABD03E811A5275670012B9D1 /* bstub.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E801A5275670012B9D1 /* bstub.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,7 +100,42 @@
 			remoteGlobalIDString = ABD03E211A5189E00012B9D1;
 			remoteInfo = transpal;
 		};
+		ABD03E6C1A5273AE0012B9D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AB735F480A29A2DC003261DC;
+			remoteInfo = engine;
+		};
+		ABD03E6E1A5273AE0012B9D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AB735FCB0A29A916003261DC;
+			remoteInfo = editor;
+		};
+		ABD03E701A5273AE0012B9D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AB3FE44A0C04336F00D5DBDC;
+			remoteInfo = editorsupp;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		ABD03E7A1A52747F0012B9D1 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				ABD03E791A52747F0012B9D1 /* SDL.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AB3AE6C11A4D423600CE4329 /* b5compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = b5compat.c; sourceTree = "<group>"; };
@@ -127,6 +171,11 @@
 		ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk_hufftree.c; sourceTree = "<group>"; };
 		ABD03E351A5230CD0012B9D1 /* smk_hufftree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_hufftree.h; sourceTree = "<group>"; };
 		ABD03E361A5230CD0012B9D1 /* smk_malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_malloc.h; sourceTree = "<group>"; };
+		ABD03E481A52720F0012B9D1 /* Build Editor for JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Build Editor for JFTekWar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ABD03E6A1A5272920012B9D1 /* Build Editor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Build Editor-Info.plist"; sourceTree = "<group>"; };
+		ABD03E741A52745C0012B9D1 /* build.osxmain.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = build.osxmain.nib; sourceTree = "<group>"; };
+		ABD03E751A52745C0012B9D1 /* startwin.editor.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = startwin.editor.nib; sourceTree = "<group>"; };
+		ABD03E801A5275670012B9D1 /* bstub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bstub.c; path = ../src/bstub.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +189,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ABD03E451A52720F0012B9D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABD03E7E1A5274910012B9D1 /* libengine.a in Frameworks */,
+				ABD03E7C1A5274910012B9D1 /* libeditor.a in Frameworks */,
+				ABD03E7D1A5274910012B9D1 /* libeditorsupp.a in Frameworks */,
+				ABD03E7B1A5274870012B9D1 /* AppKit.framework in Frameworks */,
+				ABD03E781A52747F0012B9D1 /* SDL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -148,6 +209,7 @@
 			children = (
 				ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */,
 				ABC75BD41A49C16E007D0D43 /* Game */,
+				ABD03E681A52726F0012B9D1 /* Editor */,
 				ABC75B9E1A49BCC3007D0D43 /* Products */,
 				ABC75BDE1A49C311007D0D43 /* Linked Frameworks */,
 			);
@@ -157,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */,
+				ABD03E481A52720F0012B9D1 /* Build Editor for JFTekWar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -238,6 +301,25 @@
 			path = ../libsmacker;
 			sourceTree = "<group>";
 		};
+		ABD03E681A52726F0012B9D1 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				ABD03E691A5272890012B9D1 /* src */,
+				ABD03E741A52745C0012B9D1 /* build.osxmain.nib */,
+				ABD03E751A52745C0012B9D1 /* startwin.editor.nib */,
+				ABD03E6A1A5272920012B9D1 /* Build Editor-Info.plist */,
+			);
+			name = Editor;
+			sourceTree = "<group>";
+		};
+		ABD03E691A5272890012B9D1 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				ABD03E801A5275670012B9D1 /* bstub.c */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -259,6 +341,27 @@
 			productReference = ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */;
 			productType = "com.apple.product-type.application";
 		};
+		ABD03E471A52720F0012B9D1 /* Build Editor for JFTekWar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABD03E621A5272100012B9D1 /* Build configuration list for PBXNativeTarget "Build Editor for JFTekWar" */;
+			buildPhases = (
+				ABD03E461A52720F0012B9D1 /* Resources */,
+				ABD03E441A52720F0012B9D1 /* Sources */,
+				ABD03E451A52720F0012B9D1 /* Frameworks */,
+				ABD03E7A1A52747F0012B9D1 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ABD03E6D1A5273AE0012B9D1 /* PBXTargetDependency */,
+				ABD03E6F1A5273AE0012B9D1 /* PBXTargetDependency */,
+				ABD03E711A5273AE0012B9D1 /* PBXTargetDependency */,
+			);
+			name = "Build Editor for JFTekWar";
+			productName = editor;
+			productReference = ABD03E481A52720F0012B9D1 /* Build Editor for JFTekWar.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -268,6 +371,9 @@
 				LastUpgradeCheck = 0610;
 				TargetAttributes = {
 					ABC75B9C1A49BCC3007D0D43 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					ABD03E471A52720F0012B9D1 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
@@ -292,6 +398,7 @@
 			projectRoot = "";
 			targets = (
 				ABC75B9C1A49BCC3007D0D43 /* JFTekWar */,
+				ABD03E471A52720F0012B9D1 /* Build Editor for JFTekWar */,
 			);
 		};
 /* End PBXProject section */
@@ -358,6 +465,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ABD03E461A52720F0012B9D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */,
+				ABD03E761A52745C0012B9D1 /* build.osxmain.nib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -388,6 +504,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ABD03E441A52720F0012B9D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ABD03E811A5275670012B9D1 /* bstub.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -395,6 +519,21 @@
 			isa = PBXTargetDependency;
 			name = engine;
 			targetProxy = ABC75BE21A49C3AB007D0D43 /* PBXContainerItemProxy */;
+		};
+		ABD03E6D1A5273AE0012B9D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = engine;
+			targetProxy = ABD03E6C1A5273AE0012B9D1 /* PBXContainerItemProxy */;
+		};
+		ABD03E6F1A5273AE0012B9D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = editor;
+			targetProxy = ABD03E6E1A5273AE0012B9D1 /* PBXContainerItemProxy */;
+		};
+		ABD03E711A5273AE0012B9D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = editorsupp;
+			targetProxy = ABD03E701A5273AE0012B9D1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -461,11 +600,9 @@
 		ABC75BB81A49BCC3007D0D43 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Frameworks",
-				);
-				INFOPLIST_FILE = "JFTekWar-Info.plist";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -475,12 +612,34 @@
 		ABC75BB91A49BCC3007D0D43 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(USER_LIBRARY_DIR)/Frameworks",
-				);
-				INFOPLIST_FILE = "JFTekWar-Info.plist";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		ABD03E631A5272100012B9D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		ABD03E641A5272100012B9D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
+				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
 				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -503,6 +662,15 @@
 			buildConfigurations = (
 				ABC75BB81A49BCC3007D0D43 /* Debug */,
 				ABC75BB91A49BCC3007D0D43 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ABD03E621A5272100012B9D1 /* Build configuration list for PBXNativeTarget "Build Editor for JFTekWar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABD03E631A5272100012B9D1 /* Debug */,
+				ABD03E641A5272100012B9D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

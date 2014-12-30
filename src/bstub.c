@@ -1,37 +1,16 @@
-#include <fcntl.h>
-#include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
 #include "build.h"
 
 #define TEKWAR 1
 
 #define AVERAGEFRAMES 16
 
-extern    volatile  char keystatus[256];
-
-static char tempbuf[256];
-extern long qsetmode;
-extern short searchsector, searchwall, searchstat;
-extern long zmode, kensplayerheight;
-extern short defaultspritecstat;
-
-extern short temppicnum, tempcstat, templotag, temphitag, tempextra;
-extern char tempshade, temppal, tempxrepeat, tempyrepeat;
-extern char somethingintab;
-
 static long frameval[AVERAGEFRAMES], framecnt = 0;
 
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
-long chainxres[4] = {256,320,360,400};
-long chainyres[11] = {200,240,256,270,300,350,360,400,480,512,540};
-long vesares[7][2] = {320,200,640,400,640,480,800,600,1024,768,
-									  1280,1024,1600,1200};
+long vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
+									  {1280,1024},{1600,1200}};
 char option[NUMOPTIONS] = {0,0,0,0,0,0,98,0};
 char keys[NUMKEYS] =
 {
@@ -42,13 +21,6 @@ char keys[NUMKEYS] =
 
 
 #ifdef TEKWAR
-#include "stdio.h"
-#include "stdlib.h"
-#include  "sys\stat.h"
-#include  "sys\types.h"
-#include  "fcntl.h"
-#include  "io.h"
-
 #define   PULSELIGHT     0
 #define   FLICKERLIGHT   1
 #define   DELAYEFFECT    2
@@ -107,12 +79,7 @@ char keys[NUMKEYS] =
 #define   PTS_TEKBOSS              100
 #define   PTS_TEKLORD              200
 
-extern   long posx,posy,posz;
-extern   short ang,cursectnum;
-extern   short ceilingheinum,floorheinum;
-extern   char names[MAXTILES][17];
-
-static   char tempbuf[256];  
+static   char tempbuf[256];
 static   int  numsprite[2000];
 static   char lo[32];
 static   char hi[32];
@@ -120,7 +87,7 @@ static   const char *levelname;
 static   short curwall=0,wallpicnum=0,curwallnum=0;
 static   short cursprite=0,curspritenum=0;
 static   char wallsprite=0;
-static   helpon=0;
+static   char helpon=0;
 static   char once=0;
 
 struct    picattribtype  {
@@ -186,74 +153,8 @@ char spriteextmodified=0;
 long      tickdelay;
 #endif
 
-#pragma aux wrchar  =         \
-     "or  eax,0x00000900",    \
-     "mov ebx,0x0000007F",    \    
-     "mov ecx,0x00000001",    \
-     "int 0x10",              \
-     parm [eax]               \
-
-#pragma aux terminate =       \
-     "or  eax, 0x00004C00",   \
-     "int 0x21",              \
-     parm [eax]               \
-
-#pragma aux scrldn =          \
-     "mov eax,0x00000701",    \
-     "mov ebx,0x00007700",    \
-     "mov ecx,0x00000000",    \
-     "mov edx,0x00000F4F",    \
-     "int 0x10"               \
-
-#pragma aux home =            \
-     "mov eax,0x00000200",    \
-     "mov ebx,0x00000000",    \
-     "add edx,0x00000019",    \
-     "int 0x10",              \
-     parm [edx]               \
-
-#pragma aux ontherange =      \
-     "mov eax,0x00000200",    \
-     "mov ebx,0x00000000",    \
-     "mov edx,0x00000300",    \
-     "int 0x10"               \
-
-#pragma aux clrscr =          \
-     "mov eax,0x00000003",    \
-     "int 0x10"               \
-
-
-void
-speaker(int freq)
-{
-     int            i;
-     unsigned char  p;
-     union {
-          int            divisor;
-          unsigned char  c[2];
-     } count;
-
-     count.divisor=1193280/freq;
-     outp(67,182);
-     outp(66,count.c[0]);
-     outp(66,count.c[1]);
-     p=inp(97);
-     outp(97,p|3);
-
-     for( i=0; i<640000; i++ ) 
-          ;
-
-     outp(97, p);
-}
-
 #ifdef TEKWAR
 // overrides of engine insert/delete sprite
-insertsprite(short sectnum, short statnum)
-{
-     insertspritestat(statnum);
-     return(insertspritesect(sectnum));
-}
-
 deletesprite(short spritenum)
 {
 	if( (sprite[spritenum].extra!=-1) ) {
@@ -281,7 +182,7 @@ PrintStatusStr(char *string,char *s,char x,char y,char color)
 void
 SpriteName(short spritenum, char *lo2)
 {
-     sprintf(lo2,names[sprite[spritenum].picnum]);
+     strcpy(lo2,names[sprite[spritenum].picnum]);
 }
 
 void
@@ -290,7 +191,6 @@ JS_MatchCstats()
      char      what[50];
      int       i,ans;
 
-     putch(0x07);
      sprintf(what, "1=YES,MATCH SPR CSTATS. 0 TO CANCEL. ");
      ans=getnumber16(what, 0, 2L);
 
@@ -441,7 +341,6 @@ JS_ClearAllExts(void)
      char      what[50];
      int       i,ans;
 
-     putch(0x07);
      sprintf(what, "1=YES,DELETE ALL EXTS, 0 TO CANCEL. ");
      ans=getnumber16(what, 0, 2L);
 
@@ -476,7 +375,6 @@ JS_ClearAllSprites(void)
      char      what[50];
      int       i,ans;
 
-     putch(0x07);
      sprintf(what, "1=YES,DELETE ALL SPRITES, 0 TO CANCEL. ");
      ans=getnumber16(what, 0, 2L);
 
@@ -517,8 +415,6 @@ JS_LoadSpriteExts(const char *mapname)
      long      totr;
      struct    stat      st1,st2;
      char      buf[40],rdbuf[512];
-
-     nopen=flushall();
 
      ssize=sizeof(struct spriteextension);
 
