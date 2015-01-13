@@ -7,6 +7,7 @@
 #include  "build.h"
 #include  "names.h"
 #include  "pragmas.h"
+#include  "cache1d.h"
 #include  "mmulti.h"
 
 #include  "tekwar.h"
@@ -402,15 +403,15 @@ initspriteXTs()
           memset(&spriteXT[i], 0, sizeof(struct spriteextension));
      }
 
-     fh=open(boardfilename, O_BINARY | O_RDONLY, S_IREAD | S_IWRITE);
+     fh=kopen4load(boardfilename, 0);
      if( fh == -1 ) {
           return 0;
      }
 
      // read in XTtrailer 
-     lseek(fh, -(sizeof(struct XTtrailertype)), SEEK_END);
+     klseek(fh, -((int)sizeof(struct XTtrailertype)), SEEK_END);
      memset(&XTtrailer, 0, sizeof(struct XTtrailertype));
-     read(fh, &XTtrailer, sizeof(struct XTtrailertype));
+     kread(fh, &XTtrailer, sizeof(struct XTtrailertype));
 
      // if no previous extension info then continue
      if( strcmp(XTtrailer.ID, TRAILERID) != 0 ) {
@@ -418,9 +419,9 @@ initspriteXTs()
      }
 
      // load and intialize spriteXT array members
-     lseek(fh, XTtrailer.start, SEEK_SET);
+     klseek(fh, XTtrailer.start, SEEK_SET);
      for( i=0; i<XTtrailer.numXTs; i++ ) {
-          nr=read(fh, &XTsave, sizeof(struct XTsavetype));
+          nr=kread(fh, &XTsave, sizeof(struct XTsavetype));
           if( nr != sizeof(struct XTsavetype) )
                break;
           spriteXT[XTsave.XTnum]=XTsave.sprXT;  // struct assign
@@ -428,7 +429,7 @@ initspriteXTs()
 
 noext:
 
-     close(fh);
+     kclose(fh);
 
      switch( difficulty ) {
      case 0:
@@ -1125,7 +1126,7 @@ playervirus(short pnum, int pic)
      sprptr[j]->cstat=0x0000;
      sprptr[j]->shade=-28;
      sprptr[j]->picnum=pic;
-     sprptr[j]->lotag=(krand_intercept("STAT1172")&512+128);
+     sprptr[j]->lotag=(krand_intercept("STAT1172")&512)+128;
      sprptr[j]->hitag=0;
      sprptr[j]->owner=pnum;  // host
 
@@ -1173,7 +1174,7 @@ attachvirus(short i, int pic)
      sprptr[j]->cstat=0x0000;
      sprptr[j]->shade=-28;
      sprptr[j]->picnum=pic;
-     sprptr[j]->lotag=(krand_intercept("STAT1216")&512+128);
+     sprptr[j]->lotag=(krand_intercept("STAT1216")&512)+128;
      sprptr[j]->hitag=0;
      sprptr[j]->owner=i;  // host
 

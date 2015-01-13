@@ -559,7 +559,7 @@ tekanimweap(int gun,short p)
                     sprptr[playersprite[p]]->picnum=JAKEATTACKPIC;
                     firepicdelay[p]=16;
                }
-               else if (firepicdelay > 0) {
+               else if (firepicdelay[p] > 0) {
                     firepicdelay[p]--;
                     if (firepicdelay[p] <= 0) {
                          firepicdelay[p]=0;

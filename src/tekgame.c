@@ -6,6 +6,7 @@
 #include "mmulti.h"
 
 #include "tekwar.h"
+#include "tekver.c"
 
 #define   SECT_LOTAG_CLIMB                    5060
 
@@ -293,6 +294,9 @@ app_main(int argc, char const * const argv[])
 	int      i, waitplayers;
      int     other;
 
+     sprintf(tektempbuf, TITLE, VERS);
+     initputs(tektempbuf);
+
      initgroupfile("stuff.dat");
      tekargv(argc, argv);
      lm("tekloadsetup");
@@ -300,7 +304,7 @@ app_main(int argc, char const * const argv[])
      lm("inittimer");
 	inittimer(CLKIPS);
      lm("tekinitmultiplayers");
-     tekinitmultiplayers(argc, argv);
+     tekinitmultiplayers(0, NULL);
      lm("initsb");
 	initsb(option[1],option[2],0,0,0,0,0);
      lm("loadpics");

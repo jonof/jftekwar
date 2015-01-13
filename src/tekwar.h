@@ -194,7 +194,22 @@ struct    picattribtype  {
      signed    char      ycenteroffset,xcenteroffset;
      unsigned  char      animspeed;
 };
-struct    spriteextension {
+
+#ifdef __GNUC__
+#define TPACK __attribute__ ((packed))
+#else
+#define TPACK
+#endif
+
+#ifdef _MSC_VER
+#pragma pack(1)
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(push,1);
+#endif
+
+struct TPACK spriteextension {
      unsigned  char      class;
      signed    char      hitpoints;
      unsigned  short     target;
@@ -215,6 +230,16 @@ struct    spriteextension {
      unsigned  char      weapon;
      short     ext2;
      };
+
+#ifdef _MSC_VER
+#pragma pack()
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(pop)
+#endif
+
+#undef TPACK
 
 // use this function whenever you need to verify your 
 // extension index

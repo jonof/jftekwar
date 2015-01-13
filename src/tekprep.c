@@ -665,31 +665,31 @@ int
 tekpreinit(void)
 {
      int  i,j,k,l;
-     FILE *fp;
+     int fh;
 
      cdpreinit();
 
-     if( (fp=fopen("lookup.dat","rb")) != NULL ) {  
-          l=getc(fp);
+     if( (fh=kopen4load("lookup.dat",0)) >= 0 ) {
+          l=kgetc(fh);
           for (j=0 ; j < l ; j++) {
-               k=getc(fp);
+               k=kgetc(fh);
                for (i=0 ; i < 256 ; i++) {
-                    tempbuf[i]=getc(fp);
+                    tempbuf[i]=kgetc(fh);
                }
                makepalookup(k,tempbuf,0,0,0,1);
           }
-          fclose(fp);
+          kclose(fh);
      }
-     if( (option[4] != 0) && ((fp=fopen("nlookup.dat","rb")) != NULL) ) {  
-          l=getc(fp);
+     if( (option[4] != 0) && ((fh=kopen4load("nlookup.dat",0)) >= 0) ) {  
+          l=kgetc(fh);
           for (j=0 ; j < l ; j++) {
-               k=getc(fp);
+               k=kgetc(fh);
                for (i=0 ; i < 256 ; i++) {
-                    tempbuf[i]=getc(fp);
+                    tempbuf[i]=kgetc(fh);
                }
                makepalookup(k+15,tempbuf,0,0,0,1);
           }
-          fclose(fp);
+          kclose(fh);
      }
 
      makepalookup(255,tempbuf,60,60,60,1);
@@ -835,7 +835,7 @@ teksavesetup(void)
 }
 
 void
-tekview(int *x1,int *y1, int *x2,int *y2)
+tekview(int * UNUSED(x1),int *y1, int * UNUSED(x2),int *y2)
 {
      if( screensize <= xdim ) {
           *y1+=16;
