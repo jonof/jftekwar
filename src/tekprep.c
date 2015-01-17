@@ -739,7 +739,7 @@ teknetpickmap(void)
      if (switchlevelsflag) {
           strcpy(boardfilename,"NET1.MAP");
      }
-     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
+     setgamemode(fullscreen, xdimgame, ydimgame, bppgame);
      initpaletteshifts();
 //     memcpy(palette1, palette, 768);
 /*     memset(palette, 0, 768);
@@ -804,6 +804,7 @@ skippick:*/
 void
 tekloadsetup()
 {
+	/*
 	int  fil;
      
 	if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
@@ -813,14 +814,18 @@ tekloadsetup()
           tekloadmoreoptions(fil);
 		close(fil);
 	}
+	*/
     if (initengine()) {
         crash("error initialising engine: %s", engineerrstr);
     }
+
+    loadsetup("tekwar.ini");
 }
 
 void
 teksavesetup(void)
 {
+     /*
      int  fil;
 
      if ((fil=open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1) {
@@ -832,6 +837,8 @@ teksavesetup(void)
           teksavemoreoptions(fil);
           close(fil);
      }
+     */
+     writesetup("tekwar.ini");
 }
 
 void

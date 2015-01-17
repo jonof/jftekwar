@@ -56,16 +56,17 @@ else
   debug=-ggdb -O0 -Werror
 endif
 
-CC=gcc
-CXX=g++
+CC?=gcc
+CXX?=g++
+NASM?=nasm
+WINDRES?=windres
 OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-unused \
 	-fno-pic -fno-strict-aliasing -DNO_GCC_BUILTINS \
 	-I$(INC) -I$(EINC) -I$(LIBSMACKERSRC)
 OURCXXFLAGS=-fno-exceptions -fno-rtti
-LIBS=-lm -ldl
+LIBS=-lm
 GAMELIBS=
 NASMFLAGS=-s #-g
-EXESUFFIX=
 
 LIBSMACKEROBJ= \
 	$(LIBSMACKERSRC)/smacker.$o \
@@ -74,6 +75,7 @@ LIBSMACKEROBJ= \
 
 GAMEOBJS= \
 	$(SRC)/b5compat.$o \
+	$(SRC)/config.$o \
 	$(SRC)/tekcdr.$o \
 	$(SRC)/tekchng.$o \
 	$(SRC)/tekgame.$o \
@@ -162,7 +164,7 @@ $(ELIB)/$(EDITORLIB): editorlib
 
 # RULES
 $(SRC)/%.$o: $(SRC)/%.nasm
-	nasm $(NASMFLAGS) $< -o $@
+	$(NASM) $(NASMFLAGS) $< -o $@
 
 $(SRC)/%.$o: $(SRC)/%.c
 	$(CC) $(CFLAGS) $(OURCFLAGS) -c $< -o $@
@@ -171,8 +173,8 @@ $(SRC)/%.$o: $(SRC)/%.cpp
 $(LIBSMACKERSRC)/%.$o: $(LIBSMACKERSRC)/%.c
 	$(CC) $(CFLAGS) $(OURCFLAGS) -c $< -o $@
 
-$(SRC)/%.$o: $(SRC)/misc/%.rc
-	windres -i $< -o $@ --include-dir=$(EINC) --include-dir=$(SRC)
+$(SRC)/%.$o: $(RSRC)/%.rc
+	$(WINDRES) -i $< -o $@ --include-dir=$(EINC) --include-dir=$(SRC)
 
 $(SRC)/%.$o: $(SRC)/util/%.c
 	$(CC) $(CFLAGS) $(OURCFLAGS) -c $< -o $@

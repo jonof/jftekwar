@@ -1,6 +1,7 @@
 build_h=$(EINC)/build.h $(EINC)/compat.h
 
 $(SRC)/b5compat.$o: $(SRC)/b5compat.c $(build_h)
+$(SRC)/config.$o: $(SRC)/config.c $(EINC)/compat.h $(EINC)/build.h $(EINC)/osd.h $(EINC)/baselayer.h $(INC)/tekwar.h
 $(SRC)/tekcdr.$o: $(SRC)/tekcdr.c
 $(SRC)/tekchng.$o: $(SRC)/tekchng.c $(build_h) $(INC)/names.h $(INC)/tekwar.h
 $(SRC)/tekgame.$o: $(SRC)/tekgame.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(EINC)/cache1d.h $(EINC)/baselayer.h $(EINC)/mmulti.h $(INC)/tekwar.h $(SRC)/tekver.c
@@ -16,3 +17,6 @@ $(SRC)/tekstat.$o: $(SRC)/tekstat.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h 
 $(SRC)/tektag.$o: $(SRC)/tektag.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(EINC)/mmulti.h $(INC)/tekwar.h
 $(SRC)/tektxt.$o: $(SRC)/tektxt.c $(build_h) $(EINC)/baselayer.h $(EINC)/cache1d.h $(EINC)/mmulti.h $(INC)/tekwar.h
 $(SRC)/tekver.$o: $(SRC)/tekver.c
+
+$(SRC)/gameres.$o: $(RSRC)/gameres.rc $(INC)/startwin.game.h
+$(SRC)/startwin.game.$o: $(SRC)/startwin.game.c $(EINC)/build.h $(EINC)/winlayer.h $(EINC)/compat.h

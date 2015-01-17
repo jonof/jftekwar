@@ -33,13 +33,13 @@ extern int vel2, svel2, angvel2;
 extern volatile int recsnddone, recsndoffs;
 extern int recording;
 
-extern int vesares[7][2];
 
 #define   NUMOPTIONS          8
 #define   NUMKEYS             32
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
+extern    int fullscreen, xdimgame, ydimgame, bppgame;
 extern    unsigned char option[NUMOPTIONS];
 extern    unsigned char keys[NUMKEYS];
 extern    unsigned char moreoptions[MAXMOREOPTIONS];
@@ -591,6 +591,10 @@ void permanentwritespritetile(int thex, int they, short tilenum, signed char sha
 void printext(int x, int y, char *buffer, short tilenum, char invisiblecol);
 void precache();
 void resettiming();
+
+// config.c
+int loadsetup(const char *fn);
+int writesetup(const char *fn);
 
 // tekcdr.c
 

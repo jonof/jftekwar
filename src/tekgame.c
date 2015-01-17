@@ -36,9 +36,9 @@ int vel2, svel2, angvel2;
 
 int recording = -2;
 
-int vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
-                               {1280,1024},{1600,1200}};
 #ifdef    TEKWAR
+int xdimgame = 640, ydimgame = 480, bppgame = 8;
+
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
@@ -296,6 +296,7 @@ app_main(int argc, char const * const argv[])
 
      sprintf(tektempbuf, TITLE, VERS);
      initputs(tektempbuf);
+     wm_setapptitle(tektempbuf);
 
      initgroupfile("stuff.dat");
      tekargv(argc, argv);
@@ -325,7 +326,7 @@ app_main(int argc, char const * const argv[])
           dbgcolumn=0;
      }
 
-    setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 32);
+     setgamemode(fullscreen, xdimgame, ydimgame, bppgame);
 
 	if( option[4] > 0 ) {
         lm("multiplayer init");
