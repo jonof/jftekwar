@@ -196,7 +196,11 @@ struct    picattribtype  {
 };
 
 #ifdef __GNUC__
-#define TPACK __attribute__ ((packed))
+#  if __GNUC__ == 4 && __GNUC_MINOR__ >= 7
+#    define TPACK __attribute__ ((packed, gcc_struct))
+#  else
+#    define TPACK __attribute__ ((packed))
+#  endif
 #else
 #define TPACK
 #endif

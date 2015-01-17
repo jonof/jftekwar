@@ -9,7 +9,7 @@ $(SRC)/tekgun.$o: $(SRC)/tekgun.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(
 $(SRC)/tekldsv.$o: $(SRC)/tekldsv.c $(build_h) $(INC)/names.h $(EINC)/mmulti.h $(INC)/tekwar.h
 $(SRC)/tekmap.$o: $(SRC)/tekmap.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(INC)/tekwar.h
 $(SRC)/tekmsc.$o: $(SRC)/tekmsc.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(EINC)/baselayer.h $(EINC)/mmulti.h $(INC)/tekwar.h
-$(SRC)/tekprep.$o: $(SRC)/tekprep.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(EINC)/baselayer.h $(EINC)/mmulti.h $(INC)/tekwar.h
+$(SRC)/tekprep.$o: $(SRC)/tekprep.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(EINC)/baselayer.h $(EINC)/mmulti.h $(EINC)/cache1d.h $(INC)/tekwar.h
 $(SRC)/teksmk.$o: $(SRC)/teksmk.c $(build_h) $(EINC)/compat.h $(EINC)/baselayer.h $(EINC)/pragmas.h $(INC)/tekwar.h
 $(SRC)/teksnd.$o: $(SRC)/teksnd.c $(EINC)/compat.h
 $(SRC)/tekspr.$o: $(SRC)/tekspr.c $(build_h) $(INC)/names.h $(EINC)/pragmas.h $(INC)/tekwar.h

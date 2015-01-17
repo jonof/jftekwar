@@ -2586,7 +2586,9 @@ choosingmission:
                keystatus[35]=1;
           }
          smkshowmenu();
-         handleevents();
+         if (handleevents() && quitevent) {
+             return 0;
+         }
      };
 
      if( (keystatus[203] != 0) &&(!onlymission8) ) {         // LF
@@ -2668,7 +2670,9 @@ nextmissionright:
                  (keystatus[57] == 0) ) {
               smkshowmenu();
               writestats();
-              handleevents();
+              if (handleevents() && quitevent) {
+                  return 0;
+              }
           }
           smkmenuframe(1);
           smkshowmenu();
@@ -2686,7 +2690,9 @@ nextmissionright:
                  (keystatus[21] == 0) &&  
                  (keystatus[49] == 0) ) {
               smkshowmenu();
-              handleevents();
+              if (handleevents() && quitevent) {
+                  return 0;
+              }
           }
           if( (keystatus[49] == 1) || (keystatus[1] == 1) ) {
                keystatus[49]=0;
@@ -2713,7 +2719,9 @@ nextmissionright:
                     keystatus[1]=1;
                  }
               smkshowmenu();
-              handleevents();
+              if (handleevents() && quitevent) {
+                  return 0;
+              }
           }
           keystatus[28]=0;
           keystatus[57]=0;
@@ -2952,7 +2960,9 @@ copyrightscreen()
             (keystatus[35]  == 0) && 
             (keystatus[208] == 0)  ) {
          smkshowmenu();
-         handleevents();
+         if (handleevents() && quitevent) {
+             break;
+         }
      };
      smkclosemenu();
 }

@@ -314,6 +314,8 @@ app_main(int argc, char const * const argv[])
      tekpreinit();
      lm("tekgamestarted");
      tekgamestarted();
+     lm("initinput");
+     initinput();
      lm("initmouse");
 	if( option[3] != 0 ) initmouse();
 
@@ -434,6 +436,7 @@ gameends:
 	uninitsb();
      cduninit();
 	uninittimer();
+  uninitinput();
 	uninitengine();
 	uninitgroupfile();
 
@@ -1791,6 +1794,7 @@ playback()
 
     uninitmultiplayers();
 	uninittimer();
+  uninitinput();
 	uninitengine();
 	uninitsb();
 	uninitgroupfile();

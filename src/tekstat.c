@@ -145,7 +145,11 @@ short  rightof[17] = {  128,  256,  384,  512,
                        1664, 1792, 1920,    0,  128 };
 
 #ifdef __GNUC__
-#define TPACK __attribute__ ((packed))
+#  if __GNUC__ == 4 && __GNUC_MINOR__ >= 7
+#    define TPACK __attribute__ ((packed, gcc_struct))
+#  else
+#    define TPACK __attribute__ ((packed))
+#  endif
 #else
 #define TPACK
 #endif

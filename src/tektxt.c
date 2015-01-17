@@ -32,6 +32,7 @@ crash(char *s,...)
     uninitsb();
     cduninit();
     uninittimer();
+    uninitinput();
     uninitengine();
     uninitgroupfile();
     teksavesetup();

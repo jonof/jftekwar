@@ -8,6 +8,7 @@
 #include "names.h"
 #include "pragmas.h"
 #include "mmulti.h"
+#include "cache1d.h"
 #include "baselayer.h"
 
 #include "tekwar.h"
@@ -58,6 +59,7 @@ prepareboard(char *daboardfilename)
 		musicoff();
 		uninitmultiplayers();
 		uninittimer();
+        uninitinput();
 		uninitengine();
 		uninitsb();
 		printf("Board not found\n");
