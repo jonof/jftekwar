@@ -36,35 +36,35 @@ int       subwaysound[4];
 void
 prepareboard(char *daboardfilename)
 {
-	short     startwall, endwall, dasector;
-	int      i, j, k, s, dax, day, daz, dax2, day2;
+     short     startwall, endwall, dasector;
+     int      i, j, k, s, dax, day, daz, dax2, day2;
      int       l;
 
      initsprites();   
 
      if( firsttimethru ) {
-	     getmessageleng = 0;
-	     typemessageleng = 0;
-     	randomseed = 17L;
+          getmessageleng = 0;
+          typemessageleng = 0;
+          randomseed = 17L;
      }
 
-	// clear (do)animation's list
-	animatecnt = 0;
-	typemode = 0;
-	locselectedgun=1;
-	locselectedgun2=1;
+     // clear (do)animation's list
+     animatecnt = 0;
+     typemode = 0;
+     locselectedgun=1;
+     locselectedgun2=1;
 
-	if (loadoldboard(daboardfilename,0,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
-	{
-		musicoff();
-		uninitmultiplayers();
-		uninittimer();
+     if (loadoldboard(daboardfilename,0,&posx[0],&posy[0],&posz[0],&ang[0],&cursectnum[0]) == -1)
+     {
+          musicoff();
+          uninitmultiplayers();
+          uninittimer();
         uninitinput();
-		uninitengine();
-		uninitsb();
-		printf("Board not found\n");
-		exit(0);
-	}
+          uninitengine();
+          uninitsb();
+          printf("Board not found\n");
+          exit(0);
+     }
 
      startx=posx[0];
      starty=posy[0];
@@ -72,76 +72,76 @@ prepareboard(char *daboardfilename)
      starta=ang[0];
      starts=cursectnum[0];
 
-	for(i=0;i<MAXPLAYERS;i++)
-	{
-		posx[i] = posx[0];
-		posy[i] = posy[0];
-		posz[i] = posz[0];
-		ang[i] = ang[0];
-		cursectnum[i] = cursectnum[0];
-		ocursectnum[i] = cursectnum[0];
-		horiz[i] = 100;
-		lastchaingun[i] = 0;
-		health[i] = 100;
+     for(i=0;i<MAXPLAYERS;i++)
+     {
+          posx[i] = posx[0];
+          posy[i] = posy[0];
+          posz[i] = posz[0];
+          ang[i] = ang[0];
+          cursectnum[i] = cursectnum[0];
+          ocursectnum[i] = cursectnum[0];
+          horiz[i] = 100;
+          lastchaingun[i] = 0;
+          health[i] = 100;
          #ifdef RESETSCORE
-		score[i] = 0L;
+          score[i] = 0L;
          #endif
-		dimensionmode[i] = 3;
-		numbombs[i] = -1;
-		zoom[i] = 768L;
-		deaths[i] = 0L;
-		playersprite[i] = -1;
-		saywatchit[i] = -1;
-		oposx[i] = posx[0];
-		oposy[i] = posy[0];
-		oposz[i] = posz[0];
-		ohoriz[i] = horiz[0];
-		ozoom[i] = zoom[0];
-		oang[i] = ang[0];
-	}
-
-	setup3dscreen();
-
-     if( firsttimethru ) {
-     	olocvel = 0; olocvel2 = 0;
-     	olocsvel = 0; olocsvel2 = 0;
-     	olocangvel = 0; olocangvel2 = 0;
-     	olocbits = 0; olocbits2 = 0;
-     	for(i=0;i<MAXPLAYERS;i++) {
-     		fsyncvel[i] = syncvel[i] = osyncvel[i] = 0;
-     		fsyncsvel[i] = syncsvel[i] = osyncsvel[i] = 0;
-     		fsyncangvel[i] = syncangvel[i] = osyncangvel[i] = 0;
-     		fsyncbits[i] = syncbits[i] = osyncbits[i] = 0;
-     	}
+          dimensionmode[i] = 3;
+          numbombs[i] = -1;
+          zoom[i] = 768L;
+          deaths[i] = 0L;
+          playersprite[i] = -1;
+          saywatchit[i] = -1;
+          oposx[i] = posx[0];
+          oposy[i] = posy[0];
+          oposz[i] = posz[0];
+          ohoriz[i] = horiz[0];
+          ozoom[i] = zoom[0];
+          oang[i] = ang[0];
      }
 
-	for(i=0;i<MAXPLAYERS;i++)
-	{
-		waterfountainwall[i] = -1;
-		waterfountaincnt[i] = 0;
-	}
-	slimesoundcnt[i] = 0;
-	warpsectorcnt = 0;      //Make a list of warping sectors
-	xpanningsectorcnt = 0;  //Make a list of wall x-panning sectors
-	floorpanningcnt = 0;    //Make a list of slime sectors
-	dragsectorcnt = 0;      //Make a list of moving platforms
-	swingcnt = 0;           //Make a list of swinging doors
-	revolvecnt = 0;         //Make a list of revolving doors
-	subwaytrackcnt = 0;     //Make a list of subways
+     setup3dscreen();
+
+     if( firsttimethru ) {
+          olocvel = 0; olocvel2 = 0;
+          olocsvel = 0; olocsvel2 = 0;
+          olocangvel = 0; olocangvel2 = 0;
+          olocbits = 0; olocbits2 = 0;
+          for(i=0;i<MAXPLAYERS;i++) {
+               fsyncvel[i] = syncvel[i] = osyncvel[i] = 0;
+               fsyncsvel[i] = syncsvel[i] = osyncsvel[i] = 0;
+               fsyncangvel[i] = syncangvel[i] = osyncangvel[i] = 0;
+               fsyncbits[i] = syncbits[i] = osyncbits[i] = 0;
+          }
+     }
+
+     for(i=0;i<MAXPLAYERS;i++)
+     {
+          waterfountainwall[i] = -1;
+          waterfountaincnt[i] = 0;
+     }
+     slimesoundcnt[i] = 0;
+     warpsectorcnt = 0;      //Make a list of warping sectors
+     xpanningsectorcnt = 0;  //Make a list of wall x-panning sectors
+     floorpanningcnt = 0;    //Make a list of slime sectors
+     dragsectorcnt = 0;      //Make a list of moving platforms
+     swingcnt = 0;           //Make a list of swinging doors
+     revolvecnt = 0;         //Make a list of revolving doors
+     subwaytrackcnt = 0;     //Make a list of subways
 
      // intitialize subwaysound[]s
      for( i=0; i<4; i++ ) {
           subwaysound[i]=-1;
      }
 
-	// scan sector tags
-	for(i=0;i<numsectors;i++)
-	{
-		switch(sector[i].lotag)
-		{
-			case 4:
-				floorpanninglist[floorpanningcnt++] = i;
-				break;
+     // scan sector tags
+     for(i=0;i<numsectors;i++)
+     {
+          switch(sector[i].lotag)
+          {
+               case 4:
+                    floorpanninglist[floorpanningcnt++] = i;
+                    break;
                case 5060:
                     if( option[4] != 0 ) {
                          sector[i].lotag=0;
@@ -152,159 +152,159 @@ prepareboard(char *daboardfilename)
                          sector[i].lotag=0;
                     }
                     break;
-			case 10:
+               case 10:
                     if( (generalplay == 0) && (option[4] == 0) && (warpsectorcnt < 64) ) {
-	                    warpsectorlist[warpsectorcnt++] = i;
+                         warpsectorlist[warpsectorcnt++] = i;
                     }
-				break;
-			case 11:
-				xpanningsectorlist[xpanningsectorcnt++] = i;
-				break;
-			case 12:
-				dasector = i;
-				dax = 0x7fffffff;
-				day = 0x7fffffff;
-				dax2 = 0x80000000;
-				day2 = 0x80000000;
-				startwall = sector[i].wallptr;
-				endwall = startwall+sector[i].wallnum-1;
-				for(j=startwall;j<=endwall;j++)
-				{
-					if (wall[j].x < dax) dax = wall[j].x;
-					if (wall[j].y < day) day = wall[j].y;
-					if (wall[j].x > dax2) dax2 = wall[j].x;
-					if (wall[j].y > day2) day2 = wall[j].y;
-					if (wall[j].lotag == 3) k = j;
-				}
-				if (wall[k].x == dax) dragxdir[dragsectorcnt] = -16;
-				if (wall[k].y == day) dragydir[dragsectorcnt] = -16;
-				if (wall[k].x == dax2) dragxdir[dragsectorcnt] = 16;
-				if (wall[k].y == day2) dragydir[dragsectorcnt] = 16;
+                    break;
+               case 11:
+                    xpanningsectorlist[xpanningsectorcnt++] = i;
+                    break;
+               case 12:
+                    dasector = i;
+                    dax = 0x7fffffff;
+                    day = 0x7fffffff;
+                    dax2 = 0x80000000;
+                    day2 = 0x80000000;
+                    startwall = sector[i].wallptr;
+                    endwall = startwall+sector[i].wallnum-1;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         if (wall[j].x < dax) dax = wall[j].x;
+                         if (wall[j].y < day) day = wall[j].y;
+                         if (wall[j].x > dax2) dax2 = wall[j].x;
+                         if (wall[j].y > day2) day2 = wall[j].y;
+                         if (wall[j].lotag == 3) k = j;
+                    }
+                    if (wall[k].x == dax) dragxdir[dragsectorcnt] = -16;
+                    if (wall[k].y == day) dragydir[dragsectorcnt] = -16;
+                    if (wall[k].x == dax2) dragxdir[dragsectorcnt] = 16;
+                    if (wall[k].y == day2) dragydir[dragsectorcnt] = 16;
 
-				dasector = wall[startwall].nextsector;
-				dragx1[dragsectorcnt] = 0x7fffffff;
-				dragy1[dragsectorcnt] = 0x7fffffff;
-				dragx2[dragsectorcnt] = 0x80000000;
-				dragy2[dragsectorcnt] = 0x80000000;
-				startwall = sector[dasector].wallptr;
-				endwall = startwall+sector[dasector].wallnum-1;
-				for(j=startwall;j<=endwall;j++)
-				{
-					if (wall[j].x < dragx1[dragsectorcnt]) dragx1[dragsectorcnt] = wall[j].x;
-					if (wall[j].y < dragy1[dragsectorcnt]) dragy1[dragsectorcnt] = wall[j].y;
-					if (wall[j].x > dragx2[dragsectorcnt]) dragx2[dragsectorcnt] = wall[j].x;
-					if (wall[j].y > dragy2[dragsectorcnt]) dragy2[dragsectorcnt] = wall[j].y;
-				}
+                    dasector = wall[startwall].nextsector;
+                    dragx1[dragsectorcnt] = 0x7fffffff;
+                    dragy1[dragsectorcnt] = 0x7fffffff;
+                    dragx2[dragsectorcnt] = 0x80000000;
+                    dragy2[dragsectorcnt] = 0x80000000;
+                    startwall = sector[dasector].wallptr;
+                    endwall = startwall+sector[dasector].wallnum-1;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         if (wall[j].x < dragx1[dragsectorcnt]) dragx1[dragsectorcnt] = wall[j].x;
+                         if (wall[j].y < dragy1[dragsectorcnt]) dragy1[dragsectorcnt] = wall[j].y;
+                         if (wall[j].x > dragx2[dragsectorcnt]) dragx2[dragsectorcnt] = wall[j].x;
+                         if (wall[j].y > dragy2[dragsectorcnt]) dragy2[dragsectorcnt] = wall[j].y;
+                    }
 
-				dragx1[dragsectorcnt] += (wall[sector[i].wallptr].x-dax);
-				dragy1[dragsectorcnt] += (wall[sector[i].wallptr].y-day);
-				dragx2[dragsectorcnt] -= (dax2-wall[sector[i].wallptr].x);
-				dragy2[dragsectorcnt] -= (day2-wall[sector[i].wallptr].y);
+                    dragx1[dragsectorcnt] += (wall[sector[i].wallptr].x-dax);
+                    dragy1[dragsectorcnt] += (wall[sector[i].wallptr].y-day);
+                    dragx2[dragsectorcnt] -= (dax2-wall[sector[i].wallptr].x);
+                    dragy2[dragsectorcnt] -= (day2-wall[sector[i].wallptr].y);
 
-				dragfloorz[dragsectorcnt] = sector[i].floorz;
+                    dragfloorz[dragsectorcnt] = sector[i].floorz;
 
-				dragsectorlist[dragsectorcnt++] = i;
-				break;
-			case 13:
-				startwall = sector[i].wallptr;
-				endwall = startwall+sector[i].wallnum-1;
-				for(j=startwall;j<=endwall;j++)
-				{
-					if (wall[j].lotag == 4)
-					{
-						k = wall[wall[wall[wall[j].point2].point2].point2].point2;
-						if ((wall[j].x == wall[k].x) && (wall[j].y == wall[k].y))
-						{     //Door opens counterclockwise
-							swingwall[swingcnt][0] = j;
-							swingwall[swingcnt][1] = wall[j].point2;
-							swingwall[swingcnt][2] = wall[wall[j].point2].point2;
-							swingwall[swingcnt][3] = wall[wall[wall[j].point2].point2].point2;
-							swingangopen[swingcnt] = 1536;
-							swingangclosed[swingcnt] = 0;
-							swingangopendir[swingcnt] = -1;
-						}
-						else
-						{     //Door opens clockwise
-							swingwall[swingcnt][0] = wall[j].point2;
-							swingwall[swingcnt][1] = j;
-							swingwall[swingcnt][2] = lastwall(j);
-							swingwall[swingcnt][3] = lastwall(swingwall[swingcnt][2]);
-							swingwall[swingcnt][4] = lastwall(swingwall[swingcnt][3]);
-							swingangopen[swingcnt] = 512;
-							swingangclosed[swingcnt] = 0;
-							swingangopendir[swingcnt] = 1;
-						}
-						for(k=0;k<4;k++)
-						{
-							swingx[swingcnt][k] = wall[swingwall[swingcnt][k]].x;
-							swingy[swingcnt][k] = wall[swingwall[swingcnt][k]].y;
-						}
+                    dragsectorlist[dragsectorcnt++] = i;
+                    break;
+               case 13:
+                    startwall = sector[i].wallptr;
+                    endwall = startwall+sector[i].wallnum-1;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         if (wall[j].lotag == 4)
+                         {
+                              k = wall[wall[wall[wall[j].point2].point2].point2].point2;
+                              if ((wall[j].x == wall[k].x) && (wall[j].y == wall[k].y))
+                              {     //Door opens counterclockwise
+                                   swingwall[swingcnt][0] = j;
+                                   swingwall[swingcnt][1] = wall[j].point2;
+                                   swingwall[swingcnt][2] = wall[wall[j].point2].point2;
+                                   swingwall[swingcnt][3] = wall[wall[wall[j].point2].point2].point2;
+                                   swingangopen[swingcnt] = 1536;
+                                   swingangclosed[swingcnt] = 0;
+                                   swingangopendir[swingcnt] = -1;
+                              }
+                              else
+                              {     //Door opens clockwise
+                                   swingwall[swingcnt][0] = wall[j].point2;
+                                   swingwall[swingcnt][1] = j;
+                                   swingwall[swingcnt][2] = lastwall(j);
+                                   swingwall[swingcnt][3] = lastwall(swingwall[swingcnt][2]);
+                                   swingwall[swingcnt][4] = lastwall(swingwall[swingcnt][3]);
+                                   swingangopen[swingcnt] = 512;
+                                   swingangclosed[swingcnt] = 0;
+                                   swingangopendir[swingcnt] = 1;
+                              }
+                              for(k=0;k<4;k++)
+                              {
+                                   swingx[swingcnt][k] = wall[swingwall[swingcnt][k]].x;
+                                   swingy[swingcnt][k] = wall[swingwall[swingcnt][k]].y;
+                              }
 
-						swingsector[swingcnt] = i;
-						swingang[swingcnt] = swingangclosed[swingcnt];
-						swinganginc[swingcnt] = 0;
-						swingcnt++;
-					}
-				}
-				break;
-			case 14:
-				startwall = sector[i].wallptr;
-				endwall = startwall+sector[i].wallnum-1;
-				dax = 0L;
-				day = 0L;
-				for(j=startwall;j<=endwall;j++)
-				{
-					dax += wall[j].x;
-					day += wall[j].y;
-				}
-				revolvepivotx[revolvecnt] = dax / (endwall-startwall+1);
-				revolvepivoty[revolvecnt] = day / (endwall-startwall+1);
+                              swingsector[swingcnt] = i;
+                              swingang[swingcnt] = swingangclosed[swingcnt];
+                              swinganginc[swingcnt] = 0;
+                              swingcnt++;
+                         }
+                    }
+                    break;
+               case 14:
+                    startwall = sector[i].wallptr;
+                    endwall = startwall+sector[i].wallnum-1;
+                    dax = 0L;
+                    day = 0L;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         dax += wall[j].x;
+                         day += wall[j].y;
+                    }
+                    revolvepivotx[revolvecnt] = dax / (endwall-startwall+1);
+                    revolvepivoty[revolvecnt] = day / (endwall-startwall+1);
 
-				k = 0;
-				for(j=startwall;j<=endwall;j++)
-				{
-					revolvex[revolvecnt][k] = wall[j].x;
-					revolvey[revolvecnt][k] = wall[j].y;
-					k++;
-				}
-				revolvesector[revolvecnt] = i;
-				revolveang[revolvecnt] = 0;
+                    k = 0;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         revolvex[revolvecnt][k] = wall[j].x;
+                         revolvey[revolvecnt][k] = wall[j].y;
+                         k++;
+                    }
+                    revolvesector[revolvecnt] = i;
+                    revolveang[revolvecnt] = 0;
 
 
-				revolvecnt++;
-				break;
-			case 15:
-				subwaytracksector[subwaytrackcnt][0] = i;
-				subwaystopcnt[subwaytrackcnt] = 0;
-				dax = 0x7fffffff;
-				day = 0x7fffffff;
-				dax2 = 0x80000000;
-				day2 = 0x80000000;
-				startwall = sector[i].wallptr;
-				endwall = startwall+sector[i].wallnum-1;
-				for(j=startwall;j<=endwall;j++)
-				{
-					if (wall[j].x < dax) dax = wall[j].x;
-					if (wall[j].y < day) day = wall[j].y;
-					if (wall[j].x > dax2) dax2 = wall[j].x;
-					if (wall[j].y > day2) day2 = wall[j].y;
-				}
-				for(j=startwall;j<=endwall;j++)
-				{
-					if (wall[j].lotag == 5)
-					{
-          			     if( (wall[j].x > dax) && (wall[j].y > day) && (wall[j].x < dax2) && (wall[j].y < day2) ) {
-						     subwayx[subwaytrackcnt] = wall[j].x;
-						}
-						else {
-						     subwaystop[subwaytrackcnt][subwaystopcnt[subwaytrackcnt]] = wall[j].x;
+                    revolvecnt++;
+                    break;
+               case 15:
+                    subwaytracksector[subwaytrackcnt][0] = i;
+                    subwaystopcnt[subwaytrackcnt] = 0;
+                    dax = 0x7fffffff;
+                    day = 0x7fffffff;
+                    dax2 = 0x80000000;
+                    day2 = 0x80000000;
+                    startwall = sector[i].wallptr;
+                    endwall = startwall+sector[i].wallnum-1;
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         if (wall[j].x < dax) dax = wall[j].x;
+                         if (wall[j].y < day) day = wall[j].y;
+                         if (wall[j].x > dax2) dax2 = wall[j].x;
+                         if (wall[j].y > day2) day2 = wall[j].y;
+                    }
+                    for(j=startwall;j<=endwall;j++)
+                    {
+                         if (wall[j].lotag == 5)
+                         {
+                              if( (wall[j].x > dax) && (wall[j].y > day) && (wall[j].x < dax2) && (wall[j].y < day2) ) {
+                                   subwayx[subwaytrackcnt] = wall[j].x;
+                              }
+                              else {
+                                   subwaystop[subwaytrackcnt][subwaystopcnt[subwaytrackcnt]] = wall[j].x;
                                    if( accessiblemap(wall[j].hitag) == 0 ) {
-						          subwaystop[subwaytrackcnt][subwaystopcnt[subwaytrackcnt]]=0;
+                                        subwaystop[subwaytrackcnt][subwaystopcnt[subwaytrackcnt]]=0;
                                    }
-						     subwaystopcnt[subwaytrackcnt]++;
-						}
-					}
-				}
+                                   subwaystopcnt[subwaytrackcnt]++;
+                              }
+                         }
+                    }
                     // de-sparse stoplist but keep increasing x order
                     for( j=0; j<subwaystopcnt[subwaytrackcnt]; j++ ) {
                          if( subwaystop[subwaytrackcnt][j] == 0 ) {
@@ -320,70 +320,70 @@ prepareboard(char *daboardfilename)
                     // recount stopcnt
                     subwaystopcnt[subwaytrackcnt]=0;
                     while( subwaystop[subwaytrackcnt][subwaystopcnt[subwaytrackcnt]] != 0 ) {
-				     subwaystopcnt[subwaytrackcnt]++;
+                         subwaystopcnt[subwaytrackcnt]++;
                     }
 
-				for(j=1;j<subwaystopcnt[subwaytrackcnt];j++)
-					for(k=0;k<j;k++)
-						if (subwaystop[subwaytrackcnt][j] < subwaystop[subwaytrackcnt][k])
-						{
-							s = subwaystop[subwaytrackcnt][j];
-							subwaystop[subwaytrackcnt][j] = subwaystop[subwaytrackcnt][k];
-							subwaystop[subwaytrackcnt][k] = s;
-						}
+                    for(j=1;j<subwaystopcnt[subwaytrackcnt];j++)
+                         for(k=0;k<j;k++)
+                              if (subwaystop[subwaytrackcnt][j] < subwaystop[subwaytrackcnt][k])
+                              {
+                                   s = subwaystop[subwaytrackcnt][j];
+                                   subwaystop[subwaytrackcnt][j] = subwaystop[subwaytrackcnt][k];
+                                   subwaystop[subwaytrackcnt][k] = s;
+                              }
 
-				subwaygoalstop[subwaytrackcnt] = 0;
-				for(j=0;j<subwaystopcnt[subwaytrackcnt];j++)
-					if (labs(subwaystop[subwaytrackcnt][j]-subwayx[subwaytrackcnt]) < labs(subwaystop[subwaytrackcnt][subwaygoalstop[subwaytrackcnt]]-subwayx[subwaytrackcnt]))
-						subwaygoalstop[subwaytrackcnt] = j;
+                    subwaygoalstop[subwaytrackcnt] = 0;
+                    for(j=0;j<subwaystopcnt[subwaytrackcnt];j++)
+                         if (labs(subwaystop[subwaytrackcnt][j]-subwayx[subwaytrackcnt]) < labs(subwaystop[subwaytrackcnt][subwaygoalstop[subwaytrackcnt]]-subwayx[subwaytrackcnt]))
+                              subwaygoalstop[subwaytrackcnt] = j;
 
-				subwaytrackx1[subwaytrackcnt] = dax;
-				subwaytracky1[subwaytrackcnt] = day;
-				subwaytrackx2[subwaytrackcnt] = dax2;
-				subwaytracky2[subwaytrackcnt] = day2;
+                    subwaytrackx1[subwaytrackcnt] = dax;
+                    subwaytracky1[subwaytrackcnt] = day;
+                    subwaytrackx2[subwaytrackcnt] = dax2;
+                    subwaytracky2[subwaytrackcnt] = day2;
 
-				subwaynumsectors[subwaytrackcnt] = 1;
-				for(j=0;j<numsectors;j++)
-					if (j != i)
-					{
-						startwall = sector[j].wallptr;
-						if (wall[startwall].x > subwaytrackx1[subwaytrackcnt])
-							if (wall[startwall].y > subwaytracky1[subwaytrackcnt])
-								if (wall[startwall].x < subwaytrackx2[subwaytrackcnt])
-									if (wall[startwall].y < subwaytracky2[subwaytrackcnt])
-									{
-										if (sector[j].lotag == 16)
-											sector[j].lotag = 17;   //Make special subway door
+                    subwaynumsectors[subwaytrackcnt] = 1;
+                    for(j=0;j<numsectors;j++)
+                         if (j != i)
+                         {
+                              startwall = sector[j].wallptr;
+                              if (wall[startwall].x > subwaytrackx1[subwaytrackcnt])
+                                   if (wall[startwall].y > subwaytracky1[subwaytrackcnt])
+                                        if (wall[startwall].x < subwaytrackx2[subwaytrackcnt])
+                                             if (wall[startwall].y < subwaytracky2[subwaytrackcnt])
+                                             {
+                                                  if (sector[j].lotag == 16)
+                                                       sector[j].lotag = 17;   //Make special subway door
 
-										if (sector[j].floorz != sector[i].floorz)
-										{
-											sector[j].ceilingstat |= 64;
-											sector[j].floorstat |= 64;
-										}
-										subwaytracksector[subwaytrackcnt][subwaynumsectors[subwaytrackcnt]] = j;
-										subwaynumsectors[subwaytrackcnt]++;
-									}
-					}
+                                                  if (sector[j].floorz != sector[i].floorz)
+                                                  {
+                                                       sector[j].ceilingstat |= 64;
+                                                       sector[j].floorstat |= 64;
+                                                  }
+                                                  subwaytracksector[subwaytrackcnt][subwaynumsectors[subwaytrackcnt]] = j;
+                                                  subwaynumsectors[subwaytrackcnt]++;
+                                             }
+                         }
 
-				subwayvel[subwaytrackcnt] = 32;  // orig 64
-				subwaypausetime[subwaytrackcnt] = 720;
-				subwaytrackcnt++;
-				break;
-		}
-	}
+                    subwayvel[subwaytrackcnt] = 32;  // orig 64
+                    subwaypausetime[subwaytrackcnt] = 720;
+                    subwaytrackcnt++;
+                    break;
+          }
+     }
 
-	// scan wall tags
-	ypanningwallcnt = 0;
-	for(i=0;i<numwalls;i++)
-	{
-		if (wall[i].lotag == 1) ypanningwalllist[ypanningwallcnt++] = i;
-	}
+     // scan wall tags
+     ypanningwallcnt = 0;
+     for(i=0;i<numwalls;i++)
+     {
+          if (wall[i].lotag == 1) ypanningwalllist[ypanningwallcnt++] = i;
+     }
 
-	// scan sprite tags&picnum's
-	rotatespritecnt = 0;
+     // scan sprite tags&picnum's
+     rotatespritecnt = 0;
      startspotcnt=0;
-	for(i=0;i<MAXSPRITES;i++)
-	{
+     for(i=0;i<MAXSPRITES;i++)
+     {
           if( sprite[i].picnum == STARTPOS ) {
                if( startspotcnt < MAXSTARTSPOTS ) {
                     startspot[startspotcnt].x=sprite[i].x;
@@ -402,24 +402,24 @@ prepareboard(char *daboardfilename)
                     jsdeletesprite(i);
                }
           }
-	}
+     }
      if( (startspotcnt == 0) && (option[4] != 0) ) {
           crash("no net startspots");
      }
 
-	for(i=0;i<(MAXSECTORS>>3);i++) show2dsector[i] = 0xff;
-	for(i=0;i<(MAXWALLS>>3);i++) show2dwall[i] = 0xff;
+     for(i=0;i<(MAXSECTORS>>3);i++) show2dsector[i] = 0xff;
+     for(i=0;i<(MAXWALLS>>3);i++) show2dwall[i] = 0xff;
      automapping = 0;  
      // tags that make wall/sector not show up on 2D map
      for( i=0; i < MAXSECTORS; i++ ) {
           if( sector[i].lotag == 9901 ) {
                show2dsector[i>>3] &= ~(1<<(i&7));
-		     startwall = sector[i].wallptr;
-			endwall = startwall+sector[i].wallnum-1;
-			for( j=startwall; j<=endwall; j++) {
+               startwall = sector[i].wallptr;
+               endwall = startwall+sector[i].wallnum-1;
+               for( j=startwall; j<=endwall; j++) {
                     show2dwall[j>>3] &= ~(1<<(j&7));
                     show2dwall[(wall[j].nextwall)>>3] &= ~(1<<((wall[j].nextwall)&7));
-			}
+               }
           }
      }
      for( i=0; i < MAXWALLS; i++ ) {
@@ -429,10 +429,10 @@ prepareboard(char *daboardfilename)
      }
 
      if( firsttimethru ) {
-	     lockclock = 0;
-	     ototalclock = 0;
-	     gotlastpacketclock = 0;
-	     masterslavetexttime = 0;
+          lockclock = 0;
+          ototalclock = 0;
+          gotlastpacketclock = 0;
+          masterslavetexttime = 0;
      }
 
      if( option[4] != 0 ) {
@@ -455,50 +455,50 @@ prepareboard(char *daboardfilename)
 void
 findrandomspot(int *x, int *y, short *sectnum)
 {
-	short startwall, endwall, s;
-	int dax, day, minx, maxx, miny, maxy, cnt, k;
+     short startwall, endwall, s;
+     int dax, day, minx, maxx, miny, maxy, cnt, k;
 
-	cnt = 256;
-	while (cnt > 0)
-	{
-		do
-		{
+     cnt = 256;
+     while (cnt > 0)
+     {
+          do
+          {
             k = mulscale(krand_intercept("PREP 521"),numsectors,16);
-		} while ((sector[k].ceilingz >= sector[k].floorz) || (sector[k].lotag != 0) || ((sector[k].floorstat&2) != 0));
+          } while ((sector[k].ceilingz >= sector[k].floorz) || (sector[k].lotag != 0) || ((sector[k].floorstat&2) != 0));
 
-		startwall = sector[k].wallptr;
-		endwall = startwall+sector[k].wallnum-1;
-		if (endwall > startwall)
-		{
-			dax = 0L;
-			day = 0L;
-			minx = 0x7fffffff; maxx = 0x80000000;
-			miny = 0x7fffffff; maxy = 0x80000000;
+          startwall = sector[k].wallptr;
+          endwall = startwall+sector[k].wallnum-1;
+          if (endwall > startwall)
+          {
+               dax = 0L;
+               day = 0L;
+               minx = 0x7fffffff; maxx = 0x80000000;
+               miny = 0x7fffffff; maxy = 0x80000000;
 
-			for(s=startwall;s<=endwall;s++)
-			{
-				dax += wall[s].x;
-				day += wall[s].y;
-				if (wall[s].x < minx) minx = wall[s].x;
-				if (wall[s].x > maxx) maxx = wall[s].x;
-				if (wall[s].y < miny) miny = wall[s].y;
-				if (wall[s].y > maxy) maxy = wall[s].y;
-			}
-			if ((maxx-minx > 256) && (maxy-miny > 256))
-			{
-				dax /= (endwall-startwall+1);
-				day /= (endwall-startwall+1);
-				if (inside(dax,day,k) == 1)
-				{
-					*x = dax;
-					*y = day;
-					*sectnum = k;
-					return;
-				}
-			}
-		}
-		cnt--;
-	}
+               for(s=startwall;s<=endwall;s++)
+               {
+                    dax += wall[s].x;
+                    day += wall[s].y;
+                    if (wall[s].x < minx) minx = wall[s].x;
+                    if (wall[s].x > maxx) maxx = wall[s].x;
+                    if (wall[s].y < miny) miny = wall[s].y;
+                    if (wall[s].y > maxy) maxy = wall[s].y;
+               }
+               if ((maxx-minx > 256) && (maxy-miny > 256))
+               {
+                    dax /= (endwall-startwall+1);
+                    day /= (endwall-startwall+1);
+                    if (inside(dax,day,k) == 1)
+                    {
+                         *x = dax;
+                         *y = day;
+                         *sectnum = k;
+                         return;
+                    }
+               }
+          }
+          cnt--;
+     }
 }
 
 void
@@ -518,45 +518,45 @@ netstartspot(int *x, int *y,short *sectnum)
 void
 placerandompic(int picnum)
 {
-	short     startwall, endwall, s;
-	int      dax, day, minx, maxx, miny, maxy, cnt, k;
+     short     startwall, endwall, s;
+     int      dax, day, minx, maxx, miny, maxy, cnt, k;
      int       j;
 
-	cnt = 256;
-	while (cnt > 0)
-	{
-		do
-		{
+     cnt = 256;
+     while (cnt > 0)
+     {
+          do
+          {
             k = mulscale(krand_intercept("PREP 585"),numsectors,16);
-		} while ((sector[k].ceilingz >= sector[k].floorz) || (sector[k].lotag != 0) || ((sector[k].floorstat&2) != 0));
+          } while ((sector[k].ceilingz >= sector[k].floorz) || (sector[k].lotag != 0) || ((sector[k].floorstat&2) != 0));
 
-		startwall = sector[k].wallptr;
-		endwall = startwall+sector[k].wallnum-1;
-		if (endwall > startwall)
-		{
-			dax = 0L;
-			day = 0L;
-			minx = 0x7fffffff; maxx = 0x80000000;
-			miny = 0x7fffffff; maxy = 0x80000000;
+          startwall = sector[k].wallptr;
+          endwall = startwall+sector[k].wallnum-1;
+          if (endwall > startwall)
+          {
+               dax = 0L;
+               day = 0L;
+               minx = 0x7fffffff; maxx = 0x80000000;
+               miny = 0x7fffffff; maxy = 0x80000000;
 
-			for(s=startwall;s<=endwall;s++)
-			{
-				dax += wall[s].x;
-				day += wall[s].y;
-				if (wall[s].x < minx) minx = wall[s].x;
-				if (wall[s].x > maxx) maxx = wall[s].x;
-				if (wall[s].y < miny) miny = wall[s].y;
-				if (wall[s].y > maxy) maxy = wall[s].y;
-			}
-			if ((maxx-minx > 256) && (maxy-miny > 256))
-			{
-				dax /= (endwall-startwall+1);
-				day /= (endwall-startwall+1);
-				if (inside(dax,day,k) == 1)
-				{
+               for(s=startwall;s<=endwall;s++)
+               {
+                    dax += wall[s].x;
+                    day += wall[s].y;
+                    if (wall[s].x < minx) minx = wall[s].x;
+                    if (wall[s].x > maxx) maxx = wall[s].x;
+                    if (wall[s].y < miny) miny = wall[s].y;
+                    if (wall[s].y > maxy) maxy = wall[s].y;
+               }
+               if ((maxx-minx > 256) && (maxy-miny > 256))
+               {
+                    dax /= (endwall-startwall+1);
+                    day /= (endwall-startwall+1);
+                    if (inside(dax,day,k) == 1)
+                    {
                          j=jsinsertsprite(k,0);
                          if( j != -1 ) { 
-	                         fillsprite(j,dax,day,sector[k].floorz,0,-8,0,
+                              fillsprite(j,dax,day,sector[k].floorz,0,-8,0,
                                          12,16,16,0,0,0,0,
                                          0,0,0,0,k,0,0,0,-1);
                               sprite[j].z-=((tilesizy[sprite[j].picnum]*sprite[j].yrepeat)<<1);
@@ -564,22 +564,22 @@ placerandompic(int picnum)
                               }
                               sprite[j].picnum=picnum;
                          }
-					return;
-				}
-			}
-		}
-		cnt--;
-	}
+                         return;
+                    }
+               }
+          }
+          cnt--;
+     }
 }
 
 void
 tekrestoreplayer(short snum)
 {
-	setsprite(playersprite[snum],posx[snum],posy[snum],posz[snum]+(KENSPLAYERHEIGHT<<8));
-	sprite[playersprite[snum]].ang = ang[snum];
-	sprite[playersprite[snum]].xrepeat = 24;
-	sprite[playersprite[snum]].yrepeat = 24;
-	horiz[snum] = 100;
+     setsprite(playersprite[snum],posx[snum],posy[snum],posz[snum]+(KENSPLAYERHEIGHT<<8));
+     sprite[playersprite[snum]].ang = ang[snum];
+     sprite[playersprite[snum]].xrepeat = 24;
+     sprite[playersprite[snum]].yrepeat = 24;
+     horiz[snum] = 100;
      health[snum]=MAXHEALTH;
      fireseq[snum]=0;
      restockammo(snum);
@@ -603,9 +603,9 @@ tekrestoreplayer(short snum)
 void
 initplayersprite(short snum)
 {
-	int      i;
+     int      i;
 
-	if (playersprite[snum] >= 0) return;
+     if (playersprite[snum] >= 0) return;
 
      i=jsinsertsprite(cursectnum[snum], 8);
      if( i == -1 ) {
@@ -718,7 +718,7 @@ tekpreinit(void)
 void
 tekinitmultiplayers(int argc, char const * const argv[])
 {
-	 initmultiplayers(argc, argv);
+      initmultiplayers(argc, argv);
 }
 
 short mappic[]={
@@ -806,17 +806,17 @@ skippick:*/
 void
 tekloadsetup()
 {
-	/*
-	int  fil;
+     /*
+     int  fil;
      
-	if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
-	{
-		read(fil,&option[0],NUMOPTIONS);
-		read(fil,&keys[0],NUMKEYS);
+     if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
+     {
+          read(fil,&option[0],NUMOPTIONS);
+          read(fil,&keys[0],NUMKEYS);
           tekloadmoreoptions(fil);
-		close(fil);
-	}
-	*/
+          close(fil);
+     }
+     */
     if (initengine()) {
         crash("error initialising engine: %s", engineerrstr);
     }

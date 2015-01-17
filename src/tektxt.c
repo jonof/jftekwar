@@ -24,22 +24,22 @@ char      bypasscdcheck=0;
 void
 crash(char *s,...)
 {
-    va_list argptr;
-    
-    musicoff();
-    sendlogoff();
-    uninitmultiplayers();
-    uninitsb();
-    cduninit();
-    uninittimer();
-    uninitinput();
-    uninitengine();
-    uninitgroupfile();
-    teksavesetup();
-    
-    va_start(argptr,s);
-    vprintf(s,argptr);
-    va_end(argptr);
-    printf("\n");
-    exit(0);
+     va_list argptr;
+     
+     musicoff();
+     sendlogoff();
+     uninitmultiplayers();
+     uninitsb();
+     cduninit();
+     uninittimer();
+     uninitinput();
+     uninitengine();
+     uninitgroupfile();
+     teksavesetup();
+     
+     va_start(argptr,s);
+     vprintf(s,argptr);
+     va_end(argptr);
+     printf("\n");
+     exit(0);
 }

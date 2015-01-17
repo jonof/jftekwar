@@ -17,7 +17,7 @@
 #define   BOBBDELTA      128
 
 int       headbobon=1;
-int      headbob,bobstep=BOBBDELTA;
+int       headbob,bobstep=BOBBDELTA;
 
 #define   VEHICLEHEIGHT  -13312
 
@@ -163,7 +163,7 @@ struct sectorvehicle {
      int waittics,waitdelay;                                    
      short stoptrack;
      short killw[4];
-     int	soundindex;          
+     int  soundindex;          
 };
 struct    sectorvehicle  sectorvehicle[MAXSECTORVEHICLES];
 struct    sectorvehicle  *sectvehptr[MAXSECTORVEHICLES];
@@ -267,11 +267,11 @@ int       ambsubloop=-1;
 void
 operatesector(short dasector)
 {     //Door code
-	int i, j, datag;
-	int dax2, day2, centx, centy;
-	short startwall, endwall, wallfind[2];
+     int i, j, datag;
+     int dax2, day2, centx, centy;
+     short startwall, endwall, wallfind[2];
 
-	datag = sector[dasector].lotag;
+     datag = sector[dasector].lotag;
 
      // lights out / on
      if( datag == 33 ) {
@@ -284,99 +284,99 @@ operatesector(short dasector)
           return;
      }
 
-	startwall = sector[dasector].wallptr;
-	endwall = startwall + sector[dasector].wallnum - 1;
-	centx = 0L, centy = 0L;
-	for(i=startwall;i<=endwall;i++)
-	{
-		centx += wall[i].x;
-		centy += wall[i].y;
-	}
-	centx /= (endwall-startwall+1);
-	centy /= (endwall-startwall+1);
+     startwall = sector[dasector].wallptr;
+     endwall = startwall + sector[dasector].wallnum - 1;
+     centx = 0L, centy = 0L;
+     for(i=startwall;i<=endwall;i++)
+     {
+          centx += wall[i].x;
+          centy += wall[i].y;
+     }
+     centx /= (endwall-startwall+1);
+     centy /= (endwall-startwall+1);
 
      // kens swinging door
-	if( datag == 13 ) {  
-		for( i=0; i<swingcnt; i++ ) {
-			if( swingsector[i] == dasector ) {
-				if( swinganginc[i] == 0 ) {
-					if( swingang[i] == swingangclosed[i] ) {
-						swinganginc[i] = swingangopendir[i];
-					}
-					else {
-						swinganginc[i] = -swingangopendir[i];
+     if( datag == 13 ) {  
+          for( i=0; i<swingcnt; i++ ) {
+               if( swingsector[i] == dasector ) {
+                    if( swinganginc[i] == 0 ) {
+                         if( swingang[i] == swingangclosed[i] ) {
+                              swinganginc[i] = swingangopendir[i];
                          }
-				}
-				else {
-					swinganginc[i] = -swinganginc[i];
+                         else {
+                              swinganginc[i] = -swingangopendir[i];
+                         }
                     }
-			}
-		}
-	}
+                    else {
+                         swinganginc[i] = -swinganginc[i];
+                    }
+               }
+          }
+     }
 
      // kens true sideways double-sliding door
-	if( datag == 16 ) {
-	     // get 2 closest line segments to center (dax, day)
-		wallfind[0] = -1;
-		wallfind[1] = -1;
-		for( i=startwall;i<=endwall;i++ )
-			if (wall[i].lotag == 6)
-			{
-				if (wallfind[0] == -1)
-					wallfind[0] = i;
-				else
-					wallfind[1] = i;
-			}
+     if( datag == 16 ) {
+          // get 2 closest line segments to center (dax, day)
+          wallfind[0] = -1;
+          wallfind[1] = -1;
+          for( i=startwall;i<=endwall;i++ )
+               if (wall[i].lotag == 6)
+               {
+                    if (wallfind[0] == -1)
+                         wallfind[0] = i;
+                    else
+                         wallfind[1] = i;
+               }
 
-		for(j=0;j<2;j++)
-		{
-			if ((((wall[wallfind[j]].x+wall[wall[wallfind[j]].point2].x)>>1) == centx) && (((wall[wallfind[j]].y+wall[wall[wallfind[j]].point2].y)>>1) == centy))
-			{     //door was closed
-					//find what direction door should open
-				i = wallfind[j]-1; if (i < startwall) i = endwall;
-				dax2 = wall[i].x-wall[wallfind[j]].x;
-				day2 = wall[i].y-wall[wallfind[j]].y;
-				if (dax2 != 0)
-				{
-					dax2 = wall[wall[wall[wall[wallfind[j]].point2].point2].point2].x;
-					dax2 -= wall[wall[wall[wallfind[j]].point2].point2].x;
-					setanimation(&wall[wallfind[j]].x,wall[wallfind[j]].x+dax2,4L,0L);
-					setanimation(&wall[i].x,wall[i].x+dax2,4L,0L);
-					setanimation(&wall[wall[wallfind[j]].point2].x,wall[wall[wallfind[j]].point2].x+dax2,4L,0L);
-					setanimation(&wall[wall[wall[wallfind[j]].point2].point2].x,wall[wall[wall[wallfind[j]].point2].point2].x+dax2,4L,0L);
-				}
-				else if (day2 != 0)
-				{
-					day2 = wall[wall[wall[wall[wallfind[j]].point2].point2].point2].y;
-					day2 -= wall[wall[wall[wallfind[j]].point2].point2].y;
-					setanimation(&wall[wallfind[j]].y,wall[wallfind[j]].y+day2,4L,0L);
-					setanimation(&wall[i].y,wall[i].y+day2,4L,0L);
-					setanimation(&wall[wall[wallfind[j]].point2].y,wall[wall[wallfind[j]].point2].y+day2,4L,0L);
-					setanimation(&wall[wall[wall[wallfind[j]].point2].point2].y,wall[wall[wall[wallfind[j]].point2].point2].y+day2,4L,0L);
-				}
-			}
-			else
-			{    //door was not closed
-				i = wallfind[j]-1; if (i < startwall) i = endwall;
-				dax2 = wall[i].x-wall[wallfind[j]].x;
-				day2 = wall[i].y-wall[wallfind[j]].y;
-				if (dax2 != 0)
-				{
-					setanimation(&wall[wallfind[j]].x,centx,4L,0L);
-					setanimation(&wall[i].x,centx+dax2,4L,0L);
-					setanimation(&wall[wall[wallfind[j]].point2].x,centx,4L,0L);
-					setanimation(&wall[wall[wall[wallfind[j]].point2].point2].x,centx+dax2,4L,0L);
-				}
-				else if (day2 != 0)
-				{
-					setanimation(&wall[wallfind[j]].y,centy,4L,0L);
-					setanimation(&wall[i].y,centy+day2,4L,0L);
-					setanimation(&wall[wall[wallfind[j]].point2].y,centy,4L,0L);
-					setanimation(&wall[wall[wall[wallfind[j]].point2].point2].y,centy+day2,4L,0L);
-				}
-			}
-		}
-	}
+          for(j=0;j<2;j++)
+          {
+               if ((((wall[wallfind[j]].x+wall[wall[wallfind[j]].point2].x)>>1) == centx) && (((wall[wallfind[j]].y+wall[wall[wallfind[j]].point2].y)>>1) == centy))
+               {     //door was closed
+                         //find what direction door should open
+                    i = wallfind[j]-1; if (i < startwall) i = endwall;
+                    dax2 = wall[i].x-wall[wallfind[j]].x;
+                    day2 = wall[i].y-wall[wallfind[j]].y;
+                    if (dax2 != 0)
+                    {
+                         dax2 = wall[wall[wall[wall[wallfind[j]].point2].point2].point2].x;
+                         dax2 -= wall[wall[wall[wallfind[j]].point2].point2].x;
+                         setanimation(&wall[wallfind[j]].x,wall[wallfind[j]].x+dax2,4L,0L);
+                         setanimation(&wall[i].x,wall[i].x+dax2,4L,0L);
+                         setanimation(&wall[wall[wallfind[j]].point2].x,wall[wall[wallfind[j]].point2].x+dax2,4L,0L);
+                         setanimation(&wall[wall[wall[wallfind[j]].point2].point2].x,wall[wall[wall[wallfind[j]].point2].point2].x+dax2,4L,0L);
+                    }
+                    else if (day2 != 0)
+                    {
+                         day2 = wall[wall[wall[wall[wallfind[j]].point2].point2].point2].y;
+                         day2 -= wall[wall[wall[wallfind[j]].point2].point2].y;
+                         setanimation(&wall[wallfind[j]].y,wall[wallfind[j]].y+day2,4L,0L);
+                         setanimation(&wall[i].y,wall[i].y+day2,4L,0L);
+                         setanimation(&wall[wall[wallfind[j]].point2].y,wall[wall[wallfind[j]].point2].y+day2,4L,0L);
+                         setanimation(&wall[wall[wall[wallfind[j]].point2].point2].y,wall[wall[wall[wallfind[j]].point2].point2].y+day2,4L,0L);
+                    }
+               }
+               else
+               {    //door was not closed
+                    i = wallfind[j]-1; if (i < startwall) i = endwall;
+                    dax2 = wall[i].x-wall[wallfind[j]].x;
+                    day2 = wall[i].y-wall[wallfind[j]].y;
+                    if (dax2 != 0)
+                    {
+                         setanimation(&wall[wallfind[j]].x,centx,4L,0L);
+                         setanimation(&wall[i].x,centx+dax2,4L,0L);
+                         setanimation(&wall[wall[wallfind[j]].point2].x,centx,4L,0L);
+                         setanimation(&wall[wall[wall[wallfind[j]].point2].point2].x,centx+dax2,4L,0L);
+                    }
+                    else if (day2 != 0)
+                    {
+                         setanimation(&wall[wallfind[j]].y,centy,4L,0L);
+                         setanimation(&wall[i].y,centy+day2,4L,0L);
+                         setanimation(&wall[wall[wallfind[j]].point2].y,centy,4L,0L);
+                         setanimation(&wall[wall[wall[wallfind[j]].point2].point2].y,centy+day2,4L,0L);
+                    }
+               }
+          }
+     }
 
      tekoperatesector(dasector);
 }
@@ -385,301 +385,301 @@ operatesector(short dasector)
 void
 tagcode()
 {
-	int      i, j, k, l, s, dax, day, cnt, good;
-	short     startwall, endwall, dasector, p, oldang;
+     int      i, j, k, l, s, dax, day, cnt, good;
+     short     startwall, endwall, dasector, p, oldang;
 
-	for(i=0;i<warpsectorcnt;i++)
-	{
-		dasector = warpsectorlist[i];
-		j = ((lockclock&127)>>2);
-		if (j >= 16) j = 31-j;
-		{
-			sector[dasector].ceilingshade = j;
-			sector[dasector].floorshade = j;
-			startwall = sector[dasector].wallptr;
-			endwall = startwall+sector[dasector].wallnum-1;
-			for(s=startwall;s<=endwall;s++)
-				wall[s].shade = j;
-		}
-	}
-
-	for(p=connecthead;p>=0;p=connectpoint2[p])
-		if (sector[cursectnum[p]].lotag == 10)  //warp sector
-		{
-			if (cursectnum[p] != ocursectnum[p])
-			{
-				warpsprite(playersprite[p]);
-				posx[p] = sprite[playersprite[p]].x;
-				posy[p] = sprite[playersprite[p]].y;
-				posz[p] = sprite[playersprite[p]].z;
-				ang[p] = sprite[playersprite[p]].ang;
-				cursectnum[p] = sprite[playersprite[p]].sectnum;
-				sprite[playersprite[p]].z += (KENSPLAYERHEIGHT<<8);
-			}
-		}
-
-
-	for( i=0; i<xpanningsectorcnt; i++ ) {
-		dasector = xpanningsectorlist[i];
-		startwall = sector[dasector].wallptr;
-		endwall = startwall+sector[dasector].wallnum-1;
-		for( s=startwall; s<=endwall; s++ ) {
-			wall[s].xpanning = ((lockclock>>2)&255);
+     for(i=0;i<warpsectorcnt;i++)
+     {
+          dasector = warpsectorlist[i];
+          j = ((lockclock&127)>>2);
+          if (j >= 16) j = 31-j;
+          {
+               sector[dasector].ceilingshade = j;
+               sector[dasector].floorshade = j;
+               startwall = sector[dasector].wallptr;
+               endwall = startwall+sector[dasector].wallnum-1;
+               for(s=startwall;s<=endwall;s++)
+                    wall[s].shade = j;
           }
-	}
-
-	for( i=0; i<ypanningwallcnt; i++ ) {
-		wall[ypanningwalllist[i]].ypanning = ~(lockclock&255);
      }
 
-	for( i=0; i<rotatespritecnt; i++ ) {
-		sprite[rotatespritelist[i]].ang += (TICSPERFRAME<<2);
-		sprite[rotatespritelist[i]].ang &= 2047;
-	}
+     for(p=connecthead;p>=0;p=connectpoint2[p])
+          if (sector[cursectnum[p]].lotag == 10)  //warp sector
+          {
+               if (cursectnum[p] != ocursectnum[p])
+               {
+                    warpsprite(playersprite[p]);
+                    posx[p] = sprite[playersprite[p]].x;
+                    posy[p] = sprite[playersprite[p]].y;
+                    posz[p] = sprite[playersprite[p]].z;
+                    ang[p] = sprite[playersprite[p]].ang;
+                    cursectnum[p] = sprite[playersprite[p]].sectnum;
+                    sprite[playersprite[p]].z += (KENSPLAYERHEIGHT<<8);
+               }
+          }
+
+
+     for( i=0; i<xpanningsectorcnt; i++ ) {
+          dasector = xpanningsectorlist[i];
+          startwall = sector[dasector].wallptr;
+          endwall = startwall+sector[dasector].wallnum-1;
+          for( s=startwall; s<=endwall; s++ ) {
+               wall[s].xpanning = ((lockclock>>2)&255);
+          }
+     }
+
+     for( i=0; i<ypanningwallcnt; i++ ) {
+          wall[ypanningwalllist[i]].ypanning = ~(lockclock&255);
+     }
+
+     for( i=0; i<rotatespritecnt; i++ ) {
+          sprite[rotatespritelist[i]].ang += (TICSPERFRAME<<2);
+          sprite[rotatespritelist[i]].ang &= 2047;
+     }
 
      // kens slime floor
-	for( i=0; i<floorpanningcnt; i++ ) {
-		sector[floorpanninglist[i]].floorxpanning = ((lockclock>>2)&255);
-		sector[floorpanninglist[i]].floorypanning = ((lockclock>>2)&255);
-	}
+     for( i=0; i<floorpanningcnt; i++ ) {
+          sector[floorpanninglist[i]].floorxpanning = ((lockclock>>2)&255);
+          sector[floorpanninglist[i]].floorypanning = ((lockclock>>2)&255);
+     }
 
-	for( i=0; i<dragsectorcnt; i++ ) {
-		dasector = dragsectorlist[i];
-		startwall = sector[dasector].wallptr;
-		endwall = startwall+sector[dasector].wallnum-1;
-		if (wall[startwall].x+dragxdir[i] < dragx1[i]) dragxdir[i] = 16;
-		if (wall[startwall].y+dragydir[i] < dragy1[i]) dragydir[i] = 16;
-		if (wall[startwall].x+dragxdir[i] > dragx2[i]) dragxdir[i] = -16;
-		if (wall[startwall].y+dragydir[i] > dragy2[i]) dragydir[i] = -16;
-		for( j=startwall; j<=endwall; j++) {
-			dragpoint(j,wall[j].x+dragxdir[i],wall[j].y+dragydir[i]);
+     for( i=0; i<dragsectorcnt; i++ ) {
+          dasector = dragsectorlist[i];
+          startwall = sector[dasector].wallptr;
+          endwall = startwall+sector[dasector].wallnum-1;
+          if (wall[startwall].x+dragxdir[i] < dragx1[i]) dragxdir[i] = 16;
+          if (wall[startwall].y+dragydir[i] < dragy1[i]) dragydir[i] = 16;
+          if (wall[startwall].x+dragxdir[i] > dragx2[i]) dragxdir[i] = -16;
+          if (wall[startwall].y+dragydir[i] > dragy2[i]) dragydir[i] = -16;
+          for( j=startwall; j<=endwall; j++) {
+               dragpoint(j,wall[j].x+dragxdir[i],wall[j].y+dragydir[i]);
           }
-		j = sector[dasector].floorz;
-		sector[dasector].floorz = dragfloorz[i]+(sintable[(lockclock<<4)&2047]>>3);
-		for( p=connecthead; p>=0; p=connectpoint2[p] ) {
-			if( cursectnum[p] == dasector ) {
-				posx[p] += dragxdir[i];
-				posy[p] += dragydir[i];
-				posz[p] += (sector[dasector].floorz-j);
-				setsprite(playersprite[p],posx[p],posy[p],posz[p]+(KENSPLAYERHEIGHT<<8));
-				sprite[playersprite[p]].ang = ang[p];
-				frameinterpolate = 0;
-			}
+          j = sector[dasector].floorz;
+          sector[dasector].floorz = dragfloorz[i]+(sintable[(lockclock<<4)&2047]>>3);
+          for( p=connecthead; p>=0; p=connectpoint2[p] ) {
+               if( cursectnum[p] == dasector ) {
+                    posx[p] += dragxdir[i];
+                    posy[p] += dragydir[i];
+                    posz[p] += (sector[dasector].floorz-j);
+                    setsprite(playersprite[p],posx[p],posy[p],posz[p]+(KENSPLAYERHEIGHT<<8));
+                    sprite[playersprite[p]].ang = ang[p];
+                    frameinterpolate = 0;
+               }
           }
-	}
+     }
 
-	for(i=0;i<swingcnt;i++)
-	{
-		if (swinganginc[i] != 0)
-		{
-			oldang = swingang[i];
-			for(j=0;j<(TICSPERFRAME<<2);j++)
-			{
-				swingang[i] = ((swingang[i]+2048+swinganginc[i])&2047);
-				if (swingang[i] == swingangclosed[i])
-				{
-                         if( j == ((TICSPERFRAME<<2)-1) ) {
-                              playsound(S_JUMP,swingx[i][0],swingy[i][0],0,ST_UPDATE);
-                         }
-					swinganginc[i] = 0;
-				}
-				if (swingang[i] == swingangopen[i]) { 
+     for(i=0;i<swingcnt;i++)
+     {
+          if (swinganginc[i] != 0)
+          {
+               oldang = swingang[i];
+               for(j=0;j<(TICSPERFRAME<<2);j++)
+               {
+                    swingang[i] = ((swingang[i]+2048+swinganginc[i])&2047);
+                    if (swingang[i] == swingangclosed[i])
+                    {
                          if( j == ((TICSPERFRAME<<2)-1) ) {
                               playsound(S_JUMP,swingx[i][0],swingy[i][0],0,ST_UPDATE);
                          }
                          swinganginc[i] = 0;
                     }
-			}
-			for(k=1;k<=3;k++)
-				rotatepoint(swingx[i][0],swingy[i][0],swingx[i][k],swingy[i][k],swingang[i],&wall[swingwall[i][k]].x,&wall[swingwall[i][k]].y);
+                    if (swingang[i] == swingangopen[i]) { 
+                         if( j == ((TICSPERFRAME<<2)-1) ) {
+                              playsound(S_JUMP,swingx[i][0],swingy[i][0],0,ST_UPDATE);
+                         }
+                         swinganginc[i] = 0;
+                    }
+               }
+               for(k=1;k<=3;k++)
+                    rotatepoint(swingx[i][0],swingy[i][0],swingx[i][k],swingy[i][k],swingang[i],&wall[swingwall[i][k]].x,&wall[swingwall[i][k]].y);
 
-			if (swinganginc[i] != 0)
-			{
-				for(p=connecthead;p>=0;p=connectpoint2[p])
-					if ((cursectnum[p] == swingsector[i]) || (testneighborsectors(cursectnum[p],swingsector[i]) == 1))
-					{
-						cnt = 256;
-						do
-						{
-							good = 1;
+               if (swinganginc[i] != 0)
+               {
+                    for(p=connecthead;p>=0;p=connectpoint2[p])
+                         if ((cursectnum[p] == swingsector[i]) || (testneighborsectors(cursectnum[p],swingsector[i]) == 1))
+                         {
+                              cnt = 256;
+                              do
+                              {
+                                   good = 1;
 
-								//swingangopendir is -1 if forwards, 1 is backwards
-							l = (swingangopendir[i] > 0);
-							for(k=l+3;k>=l;k--)
-								if (clipinsidebox(posx[p],posy[p],swingwall[i][k],128L) != 0)
-								{
-									good = 0;
-									break;
-								}
+                                        //swingangopendir is -1 if forwards, 1 is backwards
+                                   l = (swingangopendir[i] > 0);
+                                   for(k=l+3;k>=l;k--)
+                                        if (clipinsidebox(posx[p],posy[p],swingwall[i][k],128L) != 0)
+                                        {
+                                             good = 0;
+                                             break;
+                                        }
 
-							if (good == 0)
-							{
-								if (cnt == 256)
-								{
-									swinganginc[i] = -swinganginc[i];
-									swingang[i] = oldang;
-								}
-								else
-								{
-									swingang[i] = ((swingang[i]+2048-swinganginc[i])&2047);
-								}
-								for(k=1;k<=3;k++)
-									rotatepoint(swingx[i][0],swingy[i][0],swingx[i][k],swingy[i][k],swingang[i],&wall[swingwall[i][k]].x,&wall[swingwall[i][k]].y);
-								if (swingang[i] == swingangclosed[i])
-								{
-									swinganginc[i] = 0;
-									break;
-								}
-								if (swingang[i] == swingangopen[i])
-								{
-									swinganginc[i] = 0;
-									break;
-								}
-								cnt--;
-							}
-						} while ((good == 0) && (cnt > 0));
-					}
-			}
+                                   if (good == 0)
+                                   {
+                                        if (cnt == 256)
+                                        {
+                                             swinganginc[i] = -swinganginc[i];
+                                             swingang[i] = oldang;
+                                        }
+                                        else
+                                        {
+                                             swingang[i] = ((swingang[i]+2048-swinganginc[i])&2047);
+                                        }
+                                        for(k=1;k<=3;k++)
+                                             rotatepoint(swingx[i][0],swingy[i][0],swingx[i][k],swingy[i][k],swingang[i],&wall[swingwall[i][k]].x,&wall[swingwall[i][k]].y);
+                                        if (swingang[i] == swingangclosed[i])
+                                        {
+                                             swinganginc[i] = 0;
+                                             break;
+                                        }
+                                        if (swingang[i] == swingangopen[i])
+                                        {
+                                             swinganginc[i] = 0;
+                                             break;
+                                        }
+                                        cnt--;
+                                   }
+                              } while ((good == 0) && (cnt > 0));
+                         }
+               }
 
-		}
-	}
+          }
+     }
 
-	for(i=0;i<revolvecnt;i++)
-	{
-		startwall = sector[revolvesector[i]].wallptr;
-		endwall = startwall + sector[revolvesector[i]].wallnum - 1;
+     for(i=0;i<revolvecnt;i++)
+     {
+          startwall = sector[revolvesector[i]].wallptr;
+          endwall = startwall + sector[revolvesector[i]].wallnum - 1;
 
-		revolveang[i] = ((revolveang[i]+2048-(TICSPERFRAME<<2))&2047);
-		for(k=startwall;k<=endwall;k++)
-		{
-			rotatepoint(revolvepivotx[i],revolvepivoty[i],revolvex[i][k-startwall],revolvey[i][k-startwall],revolveang[i],&dax,&day);
-			dragpoint(k,dax,day);
-		}
-	}
+          revolveang[i] = ((revolveang[i]+2048-(TICSPERFRAME<<2))&2047);
+          for(k=startwall;k<=endwall;k++)
+          {
+               rotatepoint(revolvepivotx[i],revolvepivoty[i],revolvex[i][k-startwall],revolvey[i][k-startwall],revolveang[i],&dax,&day);
+               dragpoint(k,dax,day);
+          }
+     }
 
-	for(i=0;i<subwaytrackcnt;i++)
-	{
+     for(i=0;i<subwaytrackcnt;i++)
+     {
           if( subwaysound[i] == -1 ) {
                subwaysound[i]=playsound(S_SUBWAYLOOP,subwayx[i],subwaytracky1[i],-1,ST_VEHUPDATE);
           }
           else {
-	          updatevehiclesnds(subwaysound[i],subwayx[i],subwaytracky1[i]);
+               updatevehiclesnds(subwaysound[i],subwayx[i],subwaytracky1[i]);
           }
 
-		dasector = subwaytracksector[i][0];
-		startwall = sector[dasector].wallptr;
-		endwall = startwall+sector[dasector].wallnum-1;
-		for(k=startwall;k<=endwall;k++)
-		{
-			if (wall[k].x > subwaytrackx1[i])
-				if (wall[k].y > subwaytracky1[i])
-					if (wall[k].x < subwaytrackx2[i])
-						if (wall[k].y < subwaytracky2[i])
-							wall[k].x += (subwayvel[i]&0xfffffffc);
-		}
+          dasector = subwaytracksector[i][0];
+          startwall = sector[dasector].wallptr;
+          endwall = startwall+sector[dasector].wallnum-1;
+          for(k=startwall;k<=endwall;k++)
+          {
+               if (wall[k].x > subwaytrackx1[i])
+                    if (wall[k].y > subwaytracky1[i])
+                         if (wall[k].x < subwaytrackx2[i])
+                              if (wall[k].y < subwaytracky2[i])
+                                   wall[k].x += (subwayvel[i]&0xfffffffc);
+          }
 
-		for(j=1;j<subwaynumsectors[i];j++)
-		{
-			dasector = subwaytracksector[i][j];
+          for(j=1;j<subwaynumsectors[i];j++)
+          {
+               dasector = subwaytracksector[i][j];
 
-			startwall = sector[dasector].wallptr;
-			endwall = startwall+sector[dasector].wallnum-1;
-			for(k=startwall;k<=endwall;k++)
-				wall[k].x += (subwayvel[i]&0xfffffffc);
+               startwall = sector[dasector].wallptr;
+               endwall = startwall+sector[dasector].wallnum-1;
+               for(k=startwall;k<=endwall;k++)
+                    wall[k].x += (subwayvel[i]&0xfffffffc);
 
-			s = headspritesect[dasector];
-			while (s != -1)
-			{
-				k = nextspritesect[s];
-				sprite[s].x += (subwayvel[i]&0xfffffffc);
-				s = k;
-			}
-		}
+               s = headspritesect[dasector];
+               while (s != -1)
+               {
+                    k = nextspritesect[s];
+                    sprite[s].x += (subwayvel[i]&0xfffffffc);
+                    s = k;
+               }
+          }
 
-		for(p=connecthead;p>=0;p=connectpoint2[p])
-			if (cursectnum[p] != subwaytracksector[i][0])
-				if (sector[cursectnum[p]].floorz != sector[subwaytracksector[i][0]].floorz)
-					if (posx[p] > subwaytrackx1[i])
-						if (posy[p] > subwaytracky1[i])
-							if (posx[p] < subwaytrackx2[i])
-								if (posy[p] < subwaytracky2[i])
-								{
-									posx[p] += (subwayvel[i]&0xfffffffc);
+          for(p=connecthead;p>=0;p=connectpoint2[p])
+               if (cursectnum[p] != subwaytracksector[i][0])
+                    if (sector[cursectnum[p]].floorz != sector[subwaytracksector[i][0]].floorz)
+                         if (posx[p] > subwaytrackx1[i])
+                              if (posy[p] > subwaytracky1[i])
+                                   if (posx[p] < subwaytrackx2[i])
+                                        if (posy[p] < subwaytracky2[i])
+                                        {
+                                             posx[p] += (subwayvel[i]&0xfffffffc);
 
-										//Update sprite representation of player
-									setsprite(playersprite[p],posx[p],posy[p],posz[p]+(KENSPLAYERHEIGHT<<8));
-									sprite[playersprite[p]].ang = ang[p];
-									frameinterpolate = 0;
-								}
+                                                  //Update sprite representation of player
+                                             setsprite(playersprite[p],posx[p],posy[p],posz[p]+(KENSPLAYERHEIGHT<<8));
+                                             sprite[playersprite[p]].ang = ang[p];
+                                             frameinterpolate = 0;
+                                        }
 
-		subwayx[i] += (subwayvel[i]&0xfffffffc);
+          subwayx[i] += (subwayvel[i]&0xfffffffc);
 
-		k = subwaystop[i][subwaygoalstop[i]] - subwayx[i];
-		if( k > 0 ) { 
-			if( k > 2048 ) {
+          k = subwaystop[i][subwaygoalstop[i]] - subwayx[i];
+          if( k > 0 ) { 
+               if( k > 2048 ) {
                     if( subwayvel[i] == 12 ) {
                          playsound(S_SUBWAYSTART,subwayx[0],subwaytracky1[0],0,ST_UNIQUE | ST_NOUPDATE);
                     }
-				if (subwayvel[i] < 128) subwayvel[i]++;
-			}
-			else {
+                    if (subwayvel[i] < 128) subwayvel[i]++;
+               }
+               else {
                     if( subwayvel[i] == 32 ) {
                          playsound(S_SUBWAYSTOP,subwayx[0],subwaytracky1[0],0,ST_UNIQUE | ST_NOUPDATE);
                     }
-				subwayvel[i] = (k>>4)+1;
+                    subwayvel[i] = (k>>4)+1;
                }
-		}
-		else if( k < 0 ) {
-			if( k < -2048 ) {
+          }
+          else if( k < 0 ) {
+               if( k < -2048 ) {
                     if( subwayvel[i] == -12 ) {
                          playsound(S_SUBWAYSTART,subwayx[0],subwaytracky1[0],0,ST_UNIQUE | ST_NOUPDATE);
                     }
-				if (subwayvel[i] > -128) subwayvel[i]--;
-			}
-			else {
+                    if (subwayvel[i] > -128) subwayvel[i]--;
+               }
+               else {
                     if( subwayvel[i] == -32) {
                          playsound(S_SUBWAYSTOP,subwayx[0],subwaytracky1[0],0,ST_UNIQUE | ST_NOUPDATE);
                     }
-				subwayvel[i] = ((k>>4)-1);
+                    subwayvel[i] = ((k>>4)-1);
                }
-		}
+          }
 
-		if (((subwayvel[i]>>2) == 0) && (labs(k) < 2048))
-		{
-			if (subwaypausetime[i] == 720)
-			{
-				for(j=1;j<subwaynumsectors[i];j++)   //Open all subway doors
-				{
-					dasector = subwaytracksector[i][j];
-					if (sector[dasector].lotag == 17)
-					{
-						sector[dasector].lotag = 16;
+          if (((subwayvel[i]>>2) == 0) && (labs(k) < 2048))
+          {
+               if (subwaypausetime[i] == 720)
+               {
+                    for(j=1;j<subwaynumsectors[i];j++)   //Open all subway doors
+                    {
+                         dasector = subwaytracksector[i][j];
+                         if (sector[dasector].lotag == 17)
+                         {
+                              sector[dasector].lotag = 16;
                               playsound(S_BIGSWINGCL,subwayx[i],subwaytracky1[i],0,ST_NOUPDATE | ST_UNIQUE);
-						operatesector(dasector);
-						sector[dasector].lotag = 17;
-					}
-				}
-			}
-			if ((subwaypausetime[i] >= 120) && (subwaypausetime[i]-TICSPERFRAME < 120))
-			{
-				for(j=1;j<subwaynumsectors[i];j++)   //Close all subway doors
-				{
-					dasector = subwaytracksector[i][j];
-					if (sector[dasector].lotag == 17)
-					{
-						sector[dasector].lotag = 16;
+                              operatesector(dasector);
+                              sector[dasector].lotag = 17;
+                         }
+                    }
+               }
+               if ((subwaypausetime[i] >= 120) && (subwaypausetime[i]-TICSPERFRAME < 120))
+               {
+                    for(j=1;j<subwaynumsectors[i];j++)   //Close all subway doors
+                    {
+                         dasector = subwaytracksector[i][j];
+                         if (sector[dasector].lotag == 17)
+                         {
+                              sector[dasector].lotag = 16;
                               playsound(S_BIGSWINGCL,subwayx[i],subwaytracky1[i],0,ST_NOUPDATE | ST_UNIQUE);
-						operatesector(dasector);
-						sector[dasector].lotag = 17;
-					}
-				}
-			}
+                              operatesector(dasector);
+                              sector[dasector].lotag = 17;
+                         }
+                    }
+               }
 
-			subwaypausetime[i] -= TICSPERFRAME;
-			if (subwaypausetime[i] < 0)
-			{
-				subwaypausetime[i] = 720;
-				if( subwaygoalstop[i] == (subwaystopcnt[i]-1) ) {
+               subwaypausetime[i] -= TICSPERFRAME;
+               if (subwaypausetime[i] < 0)
+               {
+                    subwaypausetime[i] = 720;
+                    if( subwaygoalstop[i] == (subwaystopcnt[i]-1) ) {
                          subwaystopdir[i]=-1;
                          subwaygoalstop[i]=subwaystopcnt[i]-2;
                     }
@@ -690,9 +690,9 @@ tagcode()
                     else {
                          subwaygoalstop[i]+=subwaystopdir[i];
                     }
-			}
-		}
-	}
+               }
+          }
+     }
 
      tektagcode();
 }
@@ -700,25 +700,25 @@ tagcode()
 int
 testneighborsectors(short sect1, short sect2)
 {
-	short i, startwall, num1, num2;
+     short i, startwall, num1, num2;
 
-	num1 = sector[sect1].wallnum;
-	num2 = sector[sect2].wallnum;
+     num1 = sector[sect1].wallnum;
+     num2 = sector[sect2].wallnum;
 
      // traverse walls of sector with fewest walls (for speed)
-	if( num1 < num2 ) {
-		startwall = sector[sect1].wallptr;
-		for(i=num1-1;i>=0;i--)
-			if (wall[i+startwall].nextsector == sect2)
-				return(1);
-	}
-	else {
-		startwall = sector[sect2].wallptr;
-		for(i=num2-1;i>=0;i--)
-			if (wall[i+startwall].nextsector == sect1)
-				return(1);
-	}
-	return(0);
+     if( num1 < num2 ) {
+          startwall = sector[sect1].wallptr;
+          for(i=num1-1;i>=0;i--)
+               if (wall[i+startwall].nextsector == sect2)
+                    return(1);
+     }
+     else {
+          startwall = sector[sect2].wallptr;
+          for(i=num2-1;i>=0;i--)
+               if (wall[i+startwall].nextsector == sect1)
+                    return(1);
+     }
+     return(0);
 }
 
 void
@@ -971,7 +971,7 @@ tekpreptags()
                sectvehptr[k]->numpoints=n;
                n=sectvehptr[k]->numsectors++;    
                sectvehptr[k]->sector[n]=j;       
-			sectvehptr[k]->soundindex=-1;	
+               sectvehptr[k]->soundindex=-1; 
           }
      }
 
@@ -1193,100 +1193,100 @@ tekoperatesector(short dasector)
      case DOORSPLITVER:
      case PLATFORMDROPTAG:
           i=doorxref[s];
-	     if (i == -1) {
-	          crash("operatesector: invalid door reference for sector %d",s);
-	     }
-	     switch (doorptr[i]->state) {
-	     case D_NOTHING:
-	     case D_CLOSING:
-	     case D_CLOSEDOOR:
-	     case D_SHUTSOUND:
-	          doorptr[i]->state=D_OPENDOOR;
-	          break;
-	     default:
-	          if (datag != PLATFORMDROPTAG) {
-		          doorptr[i]->state=D_CLOSEDOOR;
-	          }
-	          break;
-	     }
-	     break;
+          if (i == -1) {
+               crash("operatesector: invalid door reference for sector %d",s);
+          }
+          switch (doorptr[i]->state) {
+          case D_NOTHING:
+          case D_CLOSING:
+          case D_CLOSEDOOR:
+          case D_SHUTSOUND:
+               doorptr[i]->state=D_OPENDOOR;
+               break;
+          default:
+               if (datag != PLATFORMDROPTAG) {
+                    doorptr[i]->state=D_CLOSEDOOR;
+               }
+               break;
+          }
+          break;
      case DOORFLOORTAG:
-	     floordoorptr[fdxref[s]]->state=DOOROPENING;
+          floordoorptr[fdxref[s]]->state=DOOROPENING;
           playsound(S_FLOOROPEN,0,0,0,ST_IMMEDIATE);
-	     break;
+          break;
      }
 }
 
 void
 warp(int *x, int *y, int *z, short * UNUSED(daang), short *dasector)
 {
-	short          startwall, endwall, s;
-	int           i, j, dax, day, ox, oy;
+     short          startwall, endwall, s;
+     int           i, j, dax, day, ox, oy;
 
-	ox = *x; oy = *y;
+     ox = *x; oy = *y;
 
-	for( i=0; i<warpsectorcnt; i++ ) {
-	     if( warpsectorlist[i] == *dasector ) {
-			j = sector[*dasector].hitag;
-			do {
-				i++;
-				if (i >= warpsectorcnt) i = 0;
-			} while( sector[warpsectorlist[i]].hitag != j );
-			*dasector = warpsectorlist[i];
-			break;
-		}
+     for( i=0; i<warpsectorcnt; i++ ) {
+          if( warpsectorlist[i] == *dasector ) {
+               j = sector[*dasector].hitag;
+               do {
+                    i++;
+                    if (i >= warpsectorcnt) i = 0;
+               } while( sector[warpsectorlist[i]].hitag != j );
+               *dasector = warpsectorlist[i];
+               break;
+          }
      }
 
-	// find center of sector
-	startwall = sector[*dasector].wallptr;
-	endwall = startwall+sector[*dasector].wallnum-1;
-	dax = 0L, day = 0L;
-	for( s=startwall; s<=endwall; s++ ) {
-		dax += wall[s].x, day += wall[s].y;
-		if( wall[s].nextsector >= 0 ) {
-		     i = s;
+     // find center of sector
+     startwall = sector[*dasector].wallptr;
+     endwall = startwall+sector[*dasector].wallnum-1;
+     dax = 0L, day = 0L;
+     for( s=startwall; s<=endwall; s++ ) {
+          dax += wall[s].x, day += wall[s].y;
+          if( wall[s].nextsector >= 0 ) {
+               i = s;
           }
-	}
-	*x = dax / (endwall-startwall+1);
-	*y = day / (endwall-startwall+1);
-	*z = sector[*dasector].floorz-(42<<8);  
+     }
+     *x = dax / (endwall-startwall+1);
+     *y = day / (endwall-startwall+1);
+     *z = sector[*dasector].floorz-(42<<8);  
 
-	updatesector(*x,*y,dasector);
+     updatesector(*x,*y,dasector);
 }
 
 void
 tekwarp(int *x, int *y, int *z, short *dasector)
 {
-	short          startwall, endwall, s;
-	int           i, dax, day;
+     short          startwall, endwall, s;
+     int           i, dax, day;
 
-	// find center of sector
-	startwall = sector[*dasector].wallptr;
-	endwall = startwall+sector[*dasector].wallnum-1;
-	dax = 0L, day = 0L;
-	for( s=startwall; s<=endwall; s++ ) {
-		dax += wall[s].x, day += wall[s].y;
-		if( wall[s].nextsector >= 0 ) {
-		     i = s;
+     // find center of sector
+     startwall = sector[*dasector].wallptr;
+     endwall = startwall+sector[*dasector].wallnum-1;
+     dax = 0L, day = 0L;
+     for( s=startwall; s<=endwall; s++ ) {
+          dax += wall[s].x, day += wall[s].y;
+          if( wall[s].nextsector >= 0 ) {
+               i = s;
           }
-	}
-	*x = dax / (endwall-startwall+1);
-	*y = day / (endwall-startwall+1);
-	*z = sector[*dasector].floorz-(42<<8);  
+     }
+     *x = dax / (endwall-startwall+1);
+     *y = day / (endwall-startwall+1);
+     *z = sector[*dasector].floorz-(42<<8);  
 
-	updatesector(*x,*y,dasector);
+     updatesector(*x,*y,dasector);
 }
 
 void
 warpsprite(short spritenum)
 {
-	short dasectnum;
+     short dasectnum;
 
-	dasectnum = sprite[spritenum].sectnum;
-	warp(&sprite[spritenum].x,&sprite[spritenum].y,&sprite[spritenum].z,
-		&sprite[spritenum].ang,&dasectnum);
-	copybuf(&sprite[spritenum].x,&osprite[spritenum].x,3);
-	changespritesect(spritenum,dasectnum);
+     dasectnum = sprite[spritenum].sectnum;
+     warp(&sprite[spritenum].x,&sprite[spritenum].y,&sprite[spritenum].z,
+          &sprite[spritenum].ang,&dasectnum);
+     copybuf(&sprite[spritenum].x,&osprite[spritenum].x,3);
+     changespritesect(spritenum,dasectnum);
 }
 
 void
@@ -1312,36 +1312,36 @@ teknewsector(short p)
      if( septr != NULL ) {
           if( septr->warpto >= 0 ) {
                sn=playersprite[p];
-	          tekwarp(&sprite[sn].x,&sprite[sn].y,&sprite[sn].z,( short *)&(septr->warpto));
-	          copybuf(&sprite[sn].x,&osprite[sn].x,3);
-	          changespritesect(sn,septr->warpto);
-			posx[p] = sprite[playersprite[p]].x;
-			posy[p] = sprite[playersprite[p]].y;
-			posz[p] = sprite[playersprite[p]].z;
-			ang[p] = sprite[playersprite[p]].ang;
-			cursectnum[p] = sprite[playersprite[p]].sectnum;
-			sprite[playersprite[p]].z += (KENSPLAYERHEIGHT<<8);
+               tekwarp(&sprite[sn].x,&sprite[sn].y,&sprite[sn].z,( short *)&(septr->warpto));
+               copybuf(&sprite[sn].x,&osprite[sn].x,3);
+               changespritesect(sn,septr->warpto);
+               posx[p] = sprite[playersprite[p]].x;
+               posy[p] = sprite[playersprite[p]].y;
+               posz[p] = sprite[playersprite[p]].z;
+               ang[p] = sprite[playersprite[p]].ang;
+               cursectnum[p] = sprite[playersprite[p]].sectnum;
+               sprite[playersprite[p]].z += (KENSPLAYERHEIGHT<<8);
           }
      }
  
      for( n=connecthead; n >= 0; n=connectpoint2[n] ) {
-	     if( (sectptr[cursectnum[n]]->lotag == 1) || (sectptr[cursectnum[n]]->lotag == 2) ) {
-	          for( i=0; i < numsectors; i++ ) {
-		          if( sectptr[i]->hitag == sectptr[cursectnum[n]]->hitag ) {
-			          if( (sectptr[i]->lotag != 1) && (sectptr[i]->lotag != 2) ) {
-			               operatesector(i);
-          			 }
-		         }
-	          }
-	          i=headspritestat[0];
-	          while( i != -1 ) {
-		          nexti=nextspritestat[i];
-		          if( sprptr[i]->hitag == sectptr[cursectnum[n]]->hitag ) {
-     			     operatesprite(i);
-		          }
-		     i=nexti;
-	          }
-	     }
+          if( (sectptr[cursectnum[n]]->lotag == 1) || (sectptr[cursectnum[n]]->lotag == 2) ) {
+               for( i=0; i < numsectors; i++ ) {
+                    if( sectptr[i]->hitag == sectptr[cursectnum[n]]->hitag ) {
+                         if( (sectptr[i]->lotag != 1) && (sectptr[i]->lotag != 2) ) {
+                              operatesector(i);
+                          }
+                   }
+               }
+               i=headspritestat[0];
+               while( i != -1 ) {
+                    nexti=nextspritestat[i];
+                    if( sprptr[i]->hitag == sectptr[cursectnum[n]]->hitag ) {
+                         operatesprite(i);
+                    }
+               i=nexti;
+               }
+          }
      }
 
      checkmapsndfx(p);
@@ -1359,184 +1359,184 @@ tektagcode(void)
      struct    sectoreffect   *septr;
 
      for( p=connecthead; p >= 0; p=connectpoint2[p] ) {    
-	     tekanimweap((syncbits[p]>>13)&15,p);
-	     tekhealstun(p);
+          tekanimweap((syncbits[p]>>13)&15,p);
+          tekhealstun(p);
      }   
 
      for( i=0; i < numdoors; i++ ) {
-	     movedoors(i);
+          movedoors(i);
      }
 
      if( option[4] == 0 ) {
           for( i=0; i < secnt; i++ ) {
-	          s=sexref[i];
+               s=sexref[i];
               if (s < 0 || s >= numsectors) {
                    crash("tag1402: Invalid sector effect index (%d,e=%d)",s,i);
               }
-	          sect=sectptr[s];
-	          septr=septrlist[s];
-	          if( septr->triggerable != 0 ) {
-	               continue;
-	          }
-	          effect=septr->sectorflags;
-	          if( (effect&flags32[WPANNING]) != 0 ) {
-	               oldang=septr->ang;
-	               tics=TICSPERFRAME;
-	               startwall=sect->wallptr;
-	               endwall=startwall+sect->wallnum-1;
-	               dax=(tics*septr->cos)>>15;
-	               day=(tics*septr->sin)>>13;
-	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->xpanning+=(unsigned char)dax;
-	     	          wallptr[j]->ypanning-=(unsigned char)day;
-	               }
-	          }
-	          if( (effect&flags32[FPANNING]) != 0 ) {
-	               tics=TICSPERFRAME;
-	               dax=(tics*septr->cos);
-	               day=(tics*septr->sin);
-	               j=headspritesect[s];
-	               while( j != -1 ) {
-	     	          k=nextspritesect[j];
-	     	          if( sprptr[j]->owner < MAXSPRITES ) {
-	     		          dax2=dax>>10;
-	     		          day2=day>>10;
-	     		          movesprite(j,dax2,day2,0,4<<8,4<<8,0);
-	     	          }
-	     	          j=k;
-	               }
-	               for( p=connecthead; p >= 0; p=connectpoint2[p] ) {
-	     	          if( cursectnum[p] == s ) {
-	     		          if( posz[p] >= (sect->floorz-(42<<8)) ) {
-	     		               clipmove(&posx[p],&posy[p],&posz[p],
-	     			                   &cursectnum[p],dax<<4,day<<4,128L,4<<8,4<<8,CLIPMASK0);
-	     		               setsprite(playersprite[p],posx[p],posy[p],posz[p]+(42<<8));
-	     		               revolvedoorstat[p]=1;
-	     		          }
-	     	          }
-	               }
-	               dax>>=12;
-	               day>>=12;
-	               sect->floorxpanning-=(unsigned char)dax;
-	               sect->floorypanning+=(unsigned char)day;
-	          }
-	          if( (effect&flags32[CPANNING]) != 0 ) {
-	               tics=TICSPERFRAME;
-	               dax=(tics*septr->cos)>>12;
-	               day=(tics*septr->sin)>>12;
-	               sect->ceilingxpanning-=(unsigned char)dax;
-	               sect->ceilingypanning+=(unsigned char)day;
-	          }
-	          if( (septr->delay-=TICSPERFRAME) > 0 ) {
-	               continue;
-	          }
+               sect=sectptr[s];
+               septr=septrlist[s];
+               if( septr->triggerable != 0 ) {
+                    continue;
+               }
+               effect=septr->sectorflags;
+               if( (effect&flags32[WPANNING]) != 0 ) {
+                    oldang=septr->ang;
+                    tics=TICSPERFRAME;
+                    startwall=sect->wallptr;
+                    endwall=startwall+sect->wallnum-1;
+                    dax=(tics*septr->cos)>>15;
+                    day=(tics*septr->sin)>>13;
+                    for( j=startwall; j <= endwall; j++ ) {
+                         wallptr[j]->xpanning+=(unsigned char)dax;
+                         wallptr[j]->ypanning-=(unsigned char)day;
+                    }
+               }
+               if( (effect&flags32[FPANNING]) != 0 ) {
+                    tics=TICSPERFRAME;
+                    dax=(tics*septr->cos);
+                    day=(tics*septr->sin);
+                    j=headspritesect[s];
+                    while( j != -1 ) {
+                         k=nextspritesect[j];
+                         if( sprptr[j]->owner < MAXSPRITES ) {
+                              dax2=dax>>10;
+                              day2=day>>10;
+                              movesprite(j,dax2,day2,0,4<<8,4<<8,0);
+                         }
+                         j=k;
+                    }
+                    for( p=connecthead; p >= 0; p=connectpoint2[p] ) {
+                         if( cursectnum[p] == s ) {
+                              if( posz[p] >= (sect->floorz-(42<<8)) ) {
+                                   clipmove(&posx[p],&posy[p],&posz[p],
+                                            &cursectnum[p],dax<<4,day<<4,128L,4<<8,4<<8,CLIPMASK0);
+                                   setsprite(playersprite[p],posx[p],posy[p],posz[p]+(42<<8));
+                                   revolvedoorstat[p]=1;
+                              }
+                         }
+                    }
+                    dax>>=12;
+                    day>>=12;
+                    sect->floorxpanning-=(unsigned char)dax;
+                    sect->floorypanning+=(unsigned char)day;
+               }
+               if( (effect&flags32[CPANNING]) != 0 ) {
+                    tics=TICSPERFRAME;
+                    dax=(tics*septr->cos)>>12;
+                    day=(tics*septr->sin)>>12;
+                    sect->ceilingxpanning-=(unsigned char)dax;
+                    sect->ceilingypanning+=(unsigned char)day;
+               }
+               if( (septr->delay-=TICSPERFRAME) > 0 ) {
+                    continue;
+               }
                // negative overflow here without this - jeffy
                if( septr->delay < 0 ) {
                     septr->delay=0;
                }
-	          septr->delay+=septr->delayreset;
-	          if( (effect&flags32[PULSELIGHT]) != 0 ) {
-	               sect->ceilingshade+=septr->animate;
-	               if( septr->hi > septr->lo ) {
-	     	          hi=septr->hi;
-	     	          lo=septr->lo;
-	               }
-	               else {
-	     	          hi=septr->lo;
-	     	          lo=septr->hi;
-	               }
-	               if( septr->animate < 0 ) {
-	     	          if( sect->ceilingshade <= lo ) {
-	     		          septr->animate=abs(septr->animate);
-	     	          }
-	               }
-	               else {
-	     	          if( sect->ceilingshade >= hi ) {
-	     		          septr->animate=-septr->animate;
-	     	          }
-	               }
-	               sect->floorshade=sect->ceilingshade;
-	               startwall=sect->wallptr;
-	               endwall=startwall+sect->wallnum-1;
-	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->shade=sect->ceilingshade;
-	               }
-	          }
-	          else if( (effect&flags32[FLICKERLIGHT]) != 0 ) {
-                   r=krand_intercept("TAG 1491");
-	               if( r < 16384 ) {
-	     	          sect->ceilingshade=septr->hi;
-	               }
-	               else if( r > 16384 ) {
-	     	          sect->ceilingshade=septr->lo;
-	               }
-	               sect->floorshade=sect->ceilingshade;
-	               startwall=sect->wallptr;
-	               endwall=startwall+sect->wallnum-1;
-	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->shade=sect->ceilingshade;
-	               }
-	          }
-	          else if( (effect&flags32[FLICKERDELAY]) != 0 ) {
-	               if( sect->ceilingshade == septr->lo ) {
-	     	          sect->ceilingshade=septr->hi;
-	               }
-	               else {
-	     	          sect->ceilingshade=septr->lo;
-	     	          septr->delay>>=2;
-	               }
-	               sect->floorshade=sect->ceilingshade;
-	               startwall=sect->wallptr;
-	               endwall=startwall+sect->wallnum-1;
-	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->shade=sect->ceilingshade;
-	               }
-	          }
-	          else if( (effect&flags32[BLINKDELAY]) != 0 ) {
-	               if( sect->ceilingshade == septr->lo ) {
-	     	          sect->ceilingshade=septr->hi;
-	               }
-	               else {
-	     	          sect->ceilingshade=septr->lo;
-	               }
-	               sect->floorshade=sect->ceilingshade;
-	               startwall=sect->wallptr;
-	               endwall=startwall+sect->wallnum-1;
-	               for( j=startwall; j <= endwall; j++ ) {
-	     	          wallptr[j]->shade=sect->ceilingshade;
-	               }
+               septr->delay+=septr->delayreset;
+               if( (effect&flags32[PULSELIGHT]) != 0 ) {
+                    sect->ceilingshade+=septr->animate;
+                    if( septr->hi > septr->lo ) {
+                         hi=septr->hi;
+                         lo=septr->lo;
+                    }
+                    else {
+                         hi=septr->lo;
+                         lo=septr->hi;
+                    }
+                    if( septr->animate < 0 ) {
+                         if( sect->ceilingshade <= lo ) {
+                              septr->animate=abs(septr->animate);
+                         }
+                    }
+                    else {
+                         if( sect->ceilingshade >= hi ) {
+                              septr->animate=-septr->animate;
+                         }
+                    }
+                    sect->floorshade=sect->ceilingshade;
+                    startwall=sect->wallptr;
+                    endwall=startwall+sect->wallnum-1;
+                    for( j=startwall; j <= endwall; j++ ) {
+                         wallptr[j]->shade=sect->ceilingshade;
+                    }
                }
-	          if( (effect&flags32[KILLSECTOR]) != 0 ) {
-	               floorz=sectptr[s]->floorz;
-	               for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
-	     	          if( cursectnum[p] == s ) {
+               else if( (effect&flags32[FLICKERLIGHT]) != 0 ) {
+                   r=krand_intercept("TAG 1491");
+                    if( r < 16384 ) {
+                         sect->ceilingshade=septr->hi;
+                    }
+                    else if( r > 16384 ) {
+                         sect->ceilingshade=septr->lo;
+                    }
+                    sect->floorshade=sect->ceilingshade;
+                    startwall=sect->wallptr;
+                    endwall=startwall+sect->wallnum-1;
+                    for( j=startwall; j <= endwall; j++ ) {
+                         wallptr[j]->shade=sect->ceilingshade;
+                    }
+               }
+               else if( (effect&flags32[FLICKERDELAY]) != 0 ) {
+                    if( sect->ceilingshade == septr->lo ) {
+                         sect->ceilingshade=septr->hi;
+                    }
+                    else {
+                         sect->ceilingshade=septr->lo;
+                         septr->delay>>=2;
+                    }
+                    sect->floorshade=sect->ceilingshade;
+                    startwall=sect->wallptr;
+                    endwall=startwall+sect->wallnum-1;
+                    for( j=startwall; j <= endwall; j++ ) {
+                         wallptr[j]->shade=sect->ceilingshade;
+                    }
+               }
+               else if( (effect&flags32[BLINKDELAY]) != 0 ) {
+                    if( sect->ceilingshade == septr->lo ) {
+                         sect->ceilingshade=septr->hi;
+                    }
+                    else {
+                         sect->ceilingshade=septr->lo;
+                    }
+                    sect->floorshade=sect->ceilingshade;
+                    startwall=sect->wallptr;
+                    endwall=startwall+sect->wallnum-1;
+                    for( j=startwall; j <= endwall; j++ ) {
+                         wallptr[j]->shade=sect->ceilingshade;
+                    }
+               }
+               if( (effect&flags32[KILLSECTOR]) != 0 ) {
+                    floorz=sectptr[s]->floorz;
+                    for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
+                         if( cursectnum[p] == s ) {
                               // matrix specific check here
-	     		          if( (klabs(posz[p] - floorz) < 10240) || (mission == 7) ) {
-	     		               if( (k=fdxref[s]) != -1 ) {
-	     			               if( floordoorptr[k]->state != DOORCLOSED ) {
-	     				               changehealth(p,-septr->damage);
-                                             changescore(p,-10);
-	     			               }
-	     		               }
-	     		               else {
-                                        if( septr->delay == septr->delayreset ) {
-	     			                    changehealth(p,-septr->damage);
+                              if( (klabs(posz[p] - floorz) < 10240) || (mission == 7) ) {
+                                   if( (k=fdxref[s]) != -1 ) {
+                                        if( floordoorptr[k]->state != DOORCLOSED ) {
+                                             changehealth(p,-septr->damage);
                                              changescore(p,-10);
                                         }
-	     		               }
-	     		          }
-	     	          }
-	               }
-	          }
+                                   }
+                                   else {
+                                        if( septr->delay == septr->delayreset ) {
+                                             changehealth(p,-septr->damage);
+                                             changescore(p,-10);
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
           }
      }
 
      if( option[4] == 0 ) {
           for( i=0; i < sprelevcnt; i++ ) {
-	          movesprelevs(i);
+               movesprelevs(i);
           }
           for( i=0; i < numfloordoors; i++ ) {
-	          movefloordoor(i);
+               movefloordoor(i);
           }
           for( i=0; i < numvehicles; i++ ) {
                movevehicles(i);
@@ -1554,20 +1554,20 @@ int
 stepdoor(int z,int z2,struct doortype *door,int newstate)
 {
      if (z < z2) {
-	  z+=(door->step*TICSPERFRAME);
-	  if (z >= z2) {
-	       door->delay=DOORDELAY;
-	       door->state=newstate;
-	       z=z2;
-	  }
+       z+=(door->step*TICSPERFRAME);
+       if (z >= z2) {
+            door->delay=DOORDELAY;
+            door->state=newstate;
+            z=z2;
+       }
      }
      else if (z > z2) {
-	  z-=(door->step*TICSPERFRAME);
-	  if (z <= z2) {
-	       door->delay=DOORDELAY;
-	       door->state=newstate;
-	       z=z2;
-	  }
+       z-=(door->step*TICSPERFRAME);
+       if (z <= z2) {
+            door->delay=DOORDELAY;
+            door->state=newstate;
+            z=z2;
+       }
      }
      return(z);
 }
@@ -1576,10 +1576,10 @@ void
 showwall2d(int w,int onoff)
 {
      if (onoff) {
-	  show2dwall[w>>3]|=(1<<(w&7));
+          show2dwall[w>>3]|=(1<<(w&7));
      }
      else {
-	  show2dwall[w>>3]&=~(1<<(w&7));
+          show2dwall[w>>3]&=~(1<<(w&7));
      }
 }
 
@@ -1591,16 +1591,16 @@ showsect2d(int s,int z)
      startwall=sectptr[s]->wallptr;
      endwall=startwall+sectptr[s]->wallnum-1;
      for (i=startwall ; i <= endwall ; i++) {
-	  if (wallptr[i]->nextwall != -1) {
-	       if (sectptr[wallptr[i]->nextsector]->floorz == z) {
-		    showwall2d(i,0);
-		    showwall2d(wallptr[i]->nextwall,0);
-	       }
-	       else {
-		    showwall2d(i,1);
-		    showwall2d(wallptr[i]->nextwall,1);
-	       }
-	  }
+          if (wallptr[i]->nextwall != -1) {
+               if (sectptr[wallptr[i]->nextsector]->floorz == z) {
+                    showwall2d(i,0);
+                    showwall2d(wallptr[i]->nextwall,0);
+               }
+               else {
+                    showwall2d(i,1);
+                    showwall2d(wallptr[i]->nextwall,1);
+               }
+          }
      }
 }
 
@@ -1612,10 +1612,10 @@ showsect2dtoggle(int s,int onoff)
      startwall=sectptr[s]->wallptr;
      endwall=startwall+sectptr[s]->wallnum-1;
      for (i=startwall ; i <= endwall ; i++) {
-	  if (wallptr[i]->nextwall != -1) {
-	       showwall2d(i,onoff);
-	       showwall2d(wallptr[i]->nextwall,onoff);
-	  }
+          if (wallptr[i]->nextwall != -1) {
+               showwall2d(i,onoff);
+               showwall2d(wallptr[i]->nextwall,onoff);
+          }
      }
 }
 
@@ -1654,7 +1654,7 @@ movedoors(int d)
      switch (door->state) {
 
      case D_NOTHING:
-	     break;
+          break;
 
      case D_WAITING:
           stayopen=0;
@@ -1672,317 +1672,317 @@ movedoors(int d)
                }
           }
           if( stayopen == 0 ) {
-	          door->delay-=TICSPERFRAME;
+               door->delay-=TICSPERFRAME;
           }
-	     if( door->delay <= 0 ) {
-	          door->delay=0;
-	          if( door->type < PLATFORMELEVTAG ) {
-		          for( i=connecthead ; i >= 0 ; i=connectpoint2[i] ) {
-			          if( cursectnum[i] == s ) {
-			               door->delay=DOORDELAY;
-			               break;
-			          }
-		          }
-	          }
-	          if( door->delay == 0 ) {
-		          door->state=D_CLOSEDOOR;
-	          }
-	     }
-	     break;
+          if( door->delay <= 0 ) {
+               door->delay=0;
+               if( door->type < PLATFORMELEVTAG ) {
+                    for( i=connecthead ; i >= 0 ; i=connectpoint2[i] ) {
+                         if( cursectnum[i] == s ) {
+                              door->delay=DOORDELAY;
+                              break;
+                         }
+                    }
+               }
+               if( door->delay == 0 ) {
+                    door->state=D_CLOSEDOOR;
+               }
+          }
+          break;
 
      case D_OPENDOOR:
-	     switch (door->type) {
-	     case DOORUPTAG:
-		     switch( door->subtype ) {
-			case DST_BAYDOOR:
-			     playsound(S_BAYDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
-				if( baydoorloop == -1 ) {
-				     baydoorloop=playsound(S_BAYDOORLOOP,door->centx,door->centy,20,ST_UNIQUE);
+          switch (door->type) {
+          case DOORUPTAG:
+               switch( door->subtype ) {
+               case DST_BAYDOOR:
+                    playsound(S_BAYDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
+                    if( baydoorloop == -1 ) {
+                         baydoorloop=playsound(S_BAYDOORLOOP,door->centx,door->centy,20,ST_UNIQUE);
                     }                   
-				break;
+                    break;
                case DST_HYDRAULICDOOR:
-			     playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
-			     playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
                     
                case DST_ELEVATORDOOR:
-			     playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                case DST_MATRIXDOOR1:
-			     playsound(S_MATRIX1,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX1,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                case DST_MATRIXDOOR2:
-			     playsound(S_MATRIX2,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX2,door->centx,door->centy,0,ST_UPDATE);
                     break;
                case DST_MATRIXDOOR3:
-			     playsound(S_MATRIX3,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX3,door->centx,door->centy,0,ST_UPDATE);
                     break;
                case DST_MATRIXDOOR4:
-			     playsound(S_MATRIX4,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX4,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                default:
                     if( mission == 7 ) {
-     			     playsound(S_MATRIXDOOR2,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_MATRIXDOOR2,door->centx,door->centy,0,ST_UPDATE);
                     }
                     else {
-			          playsound(S_UPDOWNDR2_OP,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_UPDOWNDR2_OP,door->centx,door->centy,0,ST_UPDATE);
                     }
-			     break;
-			}
-	          door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->floorz,-1,-1)]->ceilingz;
-	          break;
+                    break;
+               }
+               door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->floorz,-1,-1)]->ceilingz;
+               break;
           case DOORDOWNTAG:
-			playsound(S_BIGSWINGOP,door->centx,door->centy,0,ST_UPDATE);
+               playsound(S_BIGSWINGOP,door->centx,door->centy,0,ST_UPDATE);
                
-	          door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
+               door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
                
                break;
 
 
-	     case PLATFORMDROPTAG:
-	          door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
-	          break;
-	     case DOORSPLITHOR:
+          case PLATFORMDROPTAG:
+               door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
+               break;
+          case DOORSPLITHOR:
                if( mission == 7 ) {
-     			playsound(S_MATRIXDOOR1,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIXDOOR1,door->centx,door->centy,0,ST_UPDATE);
                }
                else {
-     			playsound(S_WH_7,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_WH_7,door->centx,door->centy,0,ST_UPDATE);
                }
-	          door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,-1,-1)]->ceilingz;
-	          door->goalz[2]=sectptr[nextsectorneighborz(s,sectptr[s]->floorz,1,1)]->floorz;
-	          break;
-	     case DOORSPLITVER:
-		     playsound(S_SIDEDOOR1,door->centx,door->centy,0,ST_UPDATE);
-	          door->goalz[0]=door->points[0];
-	          door->goalz[1]=door->points[1];
-	          door->goalz[2]=door->points[2];
-	          door->goalz[3]=door->points[3];
-	          break;
+               door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,-1,-1)]->ceilingz;
+               door->goalz[2]=sectptr[nextsectorneighborz(s,sectptr[s]->floorz,1,1)]->floorz;
+               break;
+          case DOORSPLITVER:
+               playsound(S_SIDEDOOR1,door->centx,door->centy,0,ST_UPDATE);
+               door->goalz[0]=door->points[0];
+               door->goalz[1]=door->points[1];
+               door->goalz[2]=door->points[2];
+               door->goalz[3]=door->points[3];
+               break;
           case BOXDELAYTAG:
-	     case PLATFORMDELAYTAG:
-	          playsound(S_PLATFORMSTART,door->centx,door->centy,0,ST_UPDATE);
-		     if( loopinsound == -1 ) {
-		          loopinsound=playsound(S_PLATFORMLOOP,door->centx,door->centy,20,ST_UNIQUE);
+          case PLATFORMDELAYTAG:
+               playsound(S_PLATFORMSTART,door->centx,door->centy,0,ST_UPDATE);
+               if( loopinsound == -1 ) {
+                    loopinsound=playsound(S_PLATFORMLOOP,door->centx,door->centy,20,ST_UNIQUE);
                }
-	          door->goalz[0]=evptrlist[s]->lolevel;
-	          break;
+               door->goalz[0]=evptrlist[s]->lolevel;
+               break;
           default:
                break;
-	     }
-	     door->state=D_OPENING;
-	     break;
+          }
+          door->state=D_OPENING;
+          break;
 
      case D_CLOSEDOOR:
-	     switch (door->type) {
-	     case DOORUPTAG:
-		     switch( door->subtype ) {
-			case DST_BAYDOOR:
-			     playsound(S_BAYDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
-				if( baydoorloop == -1 ) {
-				     baydoorloop = playsound(S_BAYDOORLOOP,door->centx,door->centy,20,ST_UNIQUE);
+          switch (door->type) {
+          case DOORUPTAG:
+               switch( door->subtype ) {
+               case DST_BAYDOOR:
+                    playsound(S_BAYDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
+                    if( baydoorloop == -1 ) {
+                         baydoorloop = playsound(S_BAYDOORLOOP,door->centx,door->centy,20,ST_UNIQUE);
                     }
-				break;
+                    break;
 
                case DST_HYDRAULICDOOR:
-			     playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
-			     playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
                     
                case DST_ELEVATORDOOR:
-			     playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                case DST_MATRIXDOOR1:
-			     playsound(S_MATRIX1,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX1,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                case DST_MATRIXDOOR2:
-			     playsound(S_MATRIX2,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX2,door->centx,door->centy,0,ST_UPDATE);
                     break;
                case DST_MATRIXDOOR3:
-			     playsound(S_MATRIX3,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX3,door->centx,door->centy,0,ST_UPDATE);
                     break;
                case DST_MATRIXDOOR4:
-			     playsound(S_MATRIX4,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIX4,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
-			default:
+               default:
                     if( mission == 7 ) {
-     	     		playsound(S_MATRIXDOOR2,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_MATRIXDOOR2,door->centx,door->centy,0,ST_UPDATE);
                     }
                     else {
-			          playsound(S_UPDOWNDR2_CL,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_UPDOWNDR2_CL,door->centx,door->centy,0,ST_UPDATE);
                     }
-				break;
-			}
-	          door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
-	          break;
-	     case DOORDOWNTAG:
-			playsound(S_BIGSWINGOP,door->centx,door->centy,0,ST_UPDATE);
-	          door->goalz[0]=sectptr[s]->ceilingz;
-	          break;
-	     case DOORSPLITHOR:
+                    break;
+               }
+               door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
+               break;
+          case DOORDOWNTAG:
+               playsound(S_BIGSWINGOP,door->centx,door->centy,0,ST_UPDATE);
+               door->goalz[0]=sectptr[s]->ceilingz;
+               break;
+          case DOORSPLITHOR:
                if( mission == 7 ) {
-     			playsound(S_MATRIXDOOR1,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_MATRIXDOOR1,door->centx,door->centy,0,ST_UPDATE);
                }
                else {
-			     playsound(S_WH_7,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_WH_7,door->centx,door->centy,0,ST_UPDATE);
                }
-	          door->goalz[0]=door->centz;
-	          door->goalz[2]=door->centz;
-	          break;
-	     case DOORSPLITVER:
-		     playsound(S_SIDEDOOR2,door->centx,door->centy,0,ST_UPDATE);
-	          if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
-		          door->goalz[0]=door->centy;
-		          door->goalz[2]=door->centy;
-	          }
-	          else {
-		          door->goalz[0]=door->centx;
-		          door->goalz[2]=door->centx;
-	          }
-	          door->goalz[1]=door->points[0];
-	          door->goalz[3]=door->points[2];
-	          break;
-	     case BOXELEVTAG:
-	     case PLATFORMELEVTAG:
-	          door->state=D_NOTHING;
-	          break;
-	     case BOXDELAYTAG:
-	     case PLATFORMDELAYTAG:
-		     playsound(S_PLATFORMSTART,door->centx,door->centy,0,ST_UPDATE);
-			if( loopinsound == -1 ) {
-			     loopinsound=playsound(S_PLATFORMLOOP,door->centx,door->centy,20,ST_UNIQUE);
+               door->goalz[0]=door->centz;
+               door->goalz[2]=door->centz;
+               break;
+          case DOORSPLITVER:
+               playsound(S_SIDEDOOR2,door->centx,door->centy,0,ST_UPDATE);
+               if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
+                    door->goalz[0]=door->centy;
+                    door->goalz[2]=door->centy;
                }
-	          door->goalz[0]=evptrlist[s]->hilevel;
-	          break;
+               else {
+                    door->goalz[0]=door->centx;
+                    door->goalz[2]=door->centx;
+               }
+               door->goalz[1]=door->points[0];
+               door->goalz[3]=door->points[2];
+               break;
+          case BOXELEVTAG:
+          case PLATFORMELEVTAG:
+               door->state=D_NOTHING;
+               break;
+          case BOXDELAYTAG:
+          case PLATFORMDELAYTAG:
+               playsound(S_PLATFORMSTART,door->centx,door->centy,0,ST_UPDATE);
+               if( loopinsound == -1 ) {
+                    loopinsound=playsound(S_PLATFORMLOOP,door->centx,door->centy,20,ST_UNIQUE);
+               }
+               door->goalz[0]=evptrlist[s]->hilevel;
+               break;
           default:
                break;
-	     }
-	     door->state=D_CLOSING;
-	     if( (hitag=sectptr[s]->hitag) > 0 ) {
-	          for( i=0 ; i < MAXSPRITES ; i++ ) {
-		          spr=sprptr[i];
-		          if( spr->hitag == hitag ) {
-		     	     switch (spr->picnum) {
-		     	     case SWITCH2ON:
-		     	          spr->picnum=SWITCH2OFF;
-		     	          break;
-		     	     case SWITCH3ON:
-		     	          spr->picnum=SWITCH3OFF;
-		     	          break;
-		     	     }
-		          }
-	          }
-	          for( i=0 ; i < numwalls ; i++ ) {
-		          wall=wallptr[i];
-		          if( wall->hitag == hitag ) {
-		     	     switch (wall->picnum) {
-		     	     case SWITCH2ON:
-		     	          wall->picnum=SWITCH2OFF;
-		     	          break;
-		     	     case SWITCH3ON:
-		     	          wall->picnum=SWITCH3OFF;
-		     	          break;
-		     	     }
-		          }
-	          }
-	     }
-	     break;
+          }
+          door->state=D_CLOSING;
+          if( (hitag=sectptr[s]->hitag) > 0 ) {
+               for( i=0 ; i < MAXSPRITES ; i++ ) {
+                    spr=sprptr[i];
+                    if( spr->hitag == hitag ) {
+                         switch (spr->picnum) {
+                         case SWITCH2ON:
+                              spr->picnum=SWITCH2OFF;
+                              break;
+                         case SWITCH3ON:
+                              spr->picnum=SWITCH3OFF;
+                              break;
+                         }
+                    }
+               }
+               for( i=0 ; i < numwalls ; i++ ) {
+                    wall=wallptr[i];
+                    if( wall->hitag == hitag ) {
+                         switch (wall->picnum) {
+                         case SWITCH2ON:
+                              wall->picnum=SWITCH2OFF;
+                              break;
+                         case SWITCH3ON:
+                              wall->picnum=SWITCH3OFF;
+                              break;
+                         }
+                    }
+               }
+          }
+          break;
 
      case D_OPENING:
           switch (door->type) {
-	     case DOORUPTAG:
-	     case DOORDOWNTAG:
-	     case PLATFORMDROPTAG:
-	          if( door->type == DOORUPTAG ) {
-		          z=sectptr[s]->ceilingz;
-	          }
-	          else {
-		          z=sectptr[s]->floorz;
-	          }
-	          z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
-	          if( door->type == DOORUPTAG ) {
-		          sectptr[s]->ceilingz=z;
-	          }
-	          else {
-		          sectptr[s]->floorz=z;
-	          }
-	          break;
-	     case DOORSPLITHOR:
-	          z=sectptr[s]->ceilingz;
-	          z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
-	          sectptr[s]->ceilingz=z;
-	          z=sectptr[s]->floorz;
-	          z=stepdoor(z,door->goalz[2],door,D_OPENSOUND);
-	          sectptr[s]->floorz=z;
-	          break;
-	     case DOORSPLITVER:
-	          if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
-		          for( i=0 ; i < 8 ; i++ ) {
-			          j=door->walls[i];
-			          z=wallptr[j]->y;
-			          z=stepdoor(z,door->goalz[i>>1],door,D_OPENSOUND);
-			          dragpoint(j,wallptr[j]->x,z);
-		          }
-	          }
-	          else {
-		          for( i=0 ; i < 8 ; i++ ) {
-			          j=door->walls[i];
-			          z=wallptr[j]->x;
-			          z=stepdoor(z,door->goalz[i>>1],door,D_OPENSOUND);
-			          dragpoint(j,z,wallptr[j]->y);
-		          }
-	          }
-	          break;
-	     case BOXELEVTAG:
-	     case PLATFORMELEVTAG:
-	     case BOXDELAYTAG:
-	     case PLATFORMDELAYTAG:
-	          size=sectptr[s]->ceilingz-sectptr[s]->floorz;
-	          z=sectptr[s]->floorz;
-	          z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
-	          sectptr[s]->floorz=z;
-	          if( door->type == BOXDELAYTAG || door->type == BOXELEVTAG ) {
-		          sectptr[s]->ceilingz=sectptr[s]->floorz+size;
-	          }
-	          break;
+          case DOORUPTAG:
+          case DOORDOWNTAG:
+          case PLATFORMDROPTAG:
+               if( door->type == DOORUPTAG ) {
+                    z=sectptr[s]->ceilingz;
+               }
+               else {
+                    z=sectptr[s]->floorz;
+               }
+               z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
+               if( door->type == DOORUPTAG ) {
+                    sectptr[s]->ceilingz=z;
+               }
+               else {
+                    sectptr[s]->floorz=z;
+               }
+               break;
+          case DOORSPLITHOR:
+               z=sectptr[s]->ceilingz;
+               z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
+               sectptr[s]->ceilingz=z;
+               z=sectptr[s]->floorz;
+               z=stepdoor(z,door->goalz[2],door,D_OPENSOUND);
+               sectptr[s]->floorz=z;
+               break;
+          case DOORSPLITVER:
+               if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
+                    for( i=0 ; i < 8 ; i++ ) {
+                         j=door->walls[i];
+                         z=wallptr[j]->y;
+                         z=stepdoor(z,door->goalz[i>>1],door,D_OPENSOUND);
+                         dragpoint(j,wallptr[j]->x,z);
+                    }
+               }
+               else {
+                    for( i=0 ; i < 8 ; i++ ) {
+                         j=door->walls[i];
+                         z=wallptr[j]->x;
+                         z=stepdoor(z,door->goalz[i>>1],door,D_OPENSOUND);
+                         dragpoint(j,z,wallptr[j]->y);
+                    }
+               }
+               break;
+          case BOXELEVTAG:
+          case PLATFORMELEVTAG:
+          case BOXDELAYTAG:
+          case PLATFORMDELAYTAG:
+               size=sectptr[s]->ceilingz-sectptr[s]->floorz;
+               z=sectptr[s]->floorz;
+               z=stepdoor(z,door->goalz[0],door,D_OPENSOUND);
+               sectptr[s]->floorz=z;
+               if( door->type == BOXDELAYTAG || door->type == BOXELEVTAG ) {
+                    sectptr[s]->ceilingz=sectptr[s]->floorz+size;
+               }
+               break;
           default:
                break;
-	     }
-	     break;
+          }
+          break;
 
      case D_CLOSING:
-	     switch (door->type) {
-	     case DOORUPTAG:
-	     case DOORDOWNTAG:
-	          if( door->type == DOORUPTAG ) {
-		          z=sectptr[s]->ceilingz;
-	          }
-	          else {
-		          z=sectptr[s]->floorz;
-	          }  
-	          z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
-	          if( door->type == DOORUPTAG ) {
-		          sectptr[s]->ceilingz=z;
-	          }
-	          else {
-		          sectptr[s]->floorz=z;
-	          }
-	          break;
-	     case DOORSPLITHOR:
-	          z=sectptr[s]->ceilingz;
-	          z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
-	          sectptr[s]->ceilingz=z;
-	          z=sectptr[s]->floorz;
-	          z=stepdoor(z,door->goalz[2],door,D_SHUTSOUND);
-	          sectptr[s]->floorz=z;
-	          break;
-	     case DOORSPLITVER:
+          switch (door->type) {
+          case DOORUPTAG:
+          case DOORDOWNTAG:
+               if( door->type == DOORUPTAG ) {
+                    z=sectptr[s]->ceilingz;
+               }
+               else {
+                    z=sectptr[s]->floorz;
+               }  
+               z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
+               if( door->type == DOORUPTAG ) {
+                    sectptr[s]->ceilingz=z;
+               }
+               else {
+                    sectptr[s]->floorz=z;
+               }
+               break;
+          case DOORSPLITHOR:
+               z=sectptr[s]->ceilingz;
+               z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
+               sectptr[s]->ceilingz=z;
+               z=sectptr[s]->floorz;
+               z=stepdoor(z,door->goalz[2],door,D_SHUTSOUND);
+               sectptr[s]->floorz=z;
+               break;
+          case DOORSPLITVER:
               i=headspritesect[s];
               if (i != -1) {
                    door->state=D_OPENDOOR;
@@ -1992,51 +1992,51 @@ movedoors(int d)
                        door->state=D_OPENDOOR;
                    }
               }
-	          if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
-		          for( i=0 ; i < 8 ; i++ ) {
-			          j=door->walls[i];
-			          z=wallptr[j]->y;
-			          z=stepdoor(z,door->goalz[i>>1],door,D_SHUTSOUND);
-			          dragpoint(j,wallptr[j]->x,z);
-		          }
-	          }
-	          else {
-		          for( i=0 ; i < 8 ; i++ ) {
-			          j=door->walls[i];
-			          z=wallptr[j]->x;
-			          z=stepdoor(z,door->goalz[i>>1],door,D_SHUTSOUND);
-			          dragpoint(j,z,wallptr[j]->y);
-		          }
-	          }
-	          break;
-	     case BOXDELAYTAG:
-	     case PLATFORMDELAYTAG:
-	          size=sectptr[s]->ceilingz-sectptr[s]->floorz;
-	          z=sectptr[s]->floorz;
-	          z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
-	          sectptr[s]->floorz=z;
-	          if( door->type == BOXDELAYTAG ) {
-		          sectptr[s]->ceilingz=sectptr[s]->floorz+size;
-	          }
-	          break;
+               if( wallptr[door->walls[0]]->x == wallptr[door->walls[3]]->x ) {
+                    for( i=0 ; i < 8 ; i++ ) {
+                         j=door->walls[i];
+                         z=wallptr[j]->y;
+                         z=stepdoor(z,door->goalz[i>>1],door,D_SHUTSOUND);
+                         dragpoint(j,wallptr[j]->x,z);
+                    }
+               }
+               else {
+                    for( i=0 ; i < 8 ; i++ ) {
+                         j=door->walls[i];
+                         z=wallptr[j]->x;
+                         z=stepdoor(z,door->goalz[i>>1],door,D_SHUTSOUND);
+                         dragpoint(j,z,wallptr[j]->y);
+                    }
+               }
+               break;
+          case BOXDELAYTAG:
+          case PLATFORMDELAYTAG:
+               size=sectptr[s]->ceilingz-sectptr[s]->floorz;
+               z=sectptr[s]->floorz;
+               z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
+               sectptr[s]->floorz=z;
+               if( door->type == BOXDELAYTAG ) {
+                    sectptr[s]->ceilingz=sectptr[s]->floorz+size;
+               }
+               break;
           default:
                break;
-	     }
-	     break;
+          }
+          break;
 
      case D_OPENSOUND:
-	     switch (door->type) {
-	     case DOORUPTAG:
-		     switch( door->subtype ) {
-			case DST_BAYDOOR:
-			     playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
-				if( baydoorloop>=0 ) {  
-				     stopsound(baydoorloop);
-					baydoorloop=-1;
-				}             
-			     break;
+          switch (door->type) {
+          case DOORUPTAG:
+               switch( door->subtype ) {
+               case DST_BAYDOOR:
+                    playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
+                    if( baydoorloop>=0 ) {  
+                         stopsound(baydoorloop);
+                         baydoorloop=-1;
+                    }             
+                    break;
                case DST_HYDRAULICDOOR:
-    			     playsound(S_AIRDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
 
@@ -2046,60 +2046,60 @@ movedoors(int d)
                case DST_MATRIXDOOR3:
                case DST_MATRIXDOOR4:
                     break;
-  			default:
+               default:
                     if( mission != 7 ) {
-     			     playsound(S_DOORKLUNK,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_DOORKLUNK,door->centx,door->centy,0,ST_UPDATE);
                     }
-				break;
+                    break;
                }
-	          door->state=D_WAITING;
-	          showsect2d(door->sector,door->goalz[0]);
-	          break;
+               door->state=D_WAITING;
+               showsect2d(door->sector,door->goalz[0]);
+               break;
 
           case DOORDOWNTAG:
                playsound(S_WH_6,door->centx,door->centy,0,ST_UPDATE);
-		     showsect2dtoggle(door->sector,0);
-	          door->state=D_WAITING;
-	          break;
+               showsect2dtoggle(door->sector,0);
+               door->state=D_WAITING;
+               break;
 
-	     case BOXELEVTAG:
-	     case PLATFORMELEVTAG:
-	     case PLATFORMDROPTAG:
-	          door->state=D_WAITING;
-	          showsect2d(door->sector,door->goalz[0]);
-	          break;
-	     case PLATFORMDELAYTAG:
-	     default:
-	          if( door->type == BOXDELAYTAG || door->type == PLATFORMDELAYTAG ) {
-			     playsound(S_PLATFORMSTOP,door->centx,door->centy,0,ST_UPDATE);
-				if( loopinsound >= 0 ) {  
-				     stopsound(loopinsound);
-					loopinsound=-1;
-				}             
-		          showsect2d(door->sector,door->goalz[0]);
-	          }
-	          else {
-		          showsect2dtoggle(door->sector,0);
-	          }
-	          door->state=D_WAITING;
-	          break;
-	     }
-	     break;
+          case BOXELEVTAG:
+          case PLATFORMELEVTAG:
+          case PLATFORMDROPTAG:
+               door->state=D_WAITING;
+               showsect2d(door->sector,door->goalz[0]);
+               break;
+          case PLATFORMDELAYTAG:
+          default:
+               if( door->type == BOXDELAYTAG || door->type == PLATFORMDELAYTAG ) {
+                    playsound(S_PLATFORMSTOP,door->centx,door->centy,0,ST_UPDATE);
+                    if( loopinsound >= 0 ) {  
+                         stopsound(loopinsound);
+                         loopinsound=-1;
+                    }             
+                    showsect2d(door->sector,door->goalz[0]);
+               }
+               else {
+                    showsect2dtoggle(door->sector,0);
+               }
+               door->state=D_WAITING;
+               break;
+          }
+          break;
 
      case D_SHUTSOUND:
-	     switch (door->type) {
-	     case DOORUPTAG:
-		     switch( door->subtype ) {
-			case DST_BAYDOOR:
-			     playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
-				if( baydoorloop>=0 ) {  
-				     stopsound(baydoorloop);
-					baydoorloop=-1;
-				}             
-			     break;
+          switch (door->type) {
+          case DOORUPTAG:
+               switch( door->subtype ) {
+               case DST_BAYDOOR:
+                    playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
+                    if( baydoorloop>=0 ) {  
+                         stopsound(baydoorloop);
+                         baydoorloop=-1;
+                    }             
+                    break;
 
                case DST_HYDRAULICDOOR:
-			     playsound(S_AIRDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
+                    playsound(S_AIRDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
                     break;
 
                case DST_ELEVATORDOOR:
@@ -2108,38 +2108,38 @@ movedoors(int d)
                case DST_MATRIXDOOR3:
                case DST_MATRIXDOOR4:
                     break;
-  			default:
+               default:
                     if( mission != 7 ) {
-     			     playsound(S_DOORKLUNK,door->centx,door->centy,0,ST_UPDATE);
+                         playsound(S_DOORKLUNK,door->centx,door->centy,0,ST_UPDATE);
                     }
-				break;
-			}
-	          door->state=D_NOTHING;
-	          showsect2d(door->sector,door->goalz[0]);
-	          break;
-
-          case DOORDOWNTAG:
-	          showsect2dtoggle(door->sector,1);
-			playsound(S_WH_6,door->centx,door->centy,0,ST_UPDATE);
+                    break;
+               }
+               door->state=D_NOTHING;
+               showsect2d(door->sector,door->goalz[0]);
                break;
 
-	     case BOXELEVTAG:
-	     case PLATFORMELEVTAG:
-	     case BOXDELAYTAG:
-	     case PLATFORMDELAYTAG:
-			playsound(S_PLATFORMSTOP,door->centx,door->centy,0,ST_UPDATE);
-			if( loopinsound>=0 ) {
-			     stopsound(loopinsound);
-				loopinsound=-1;
-			}
-	          showsect2d(door->sector,door->goalz[0]);
-	          break;
-	     default:
-	          showsect2dtoggle(door->sector,1);
-	          break;
-	     }
-	     door->state=D_NOTHING;
-	     break;
+          case DOORDOWNTAG:
+               showsect2dtoggle(door->sector,1);
+               playsound(S_WH_6,door->centx,door->centy,0,ST_UPDATE);
+               break;
+
+          case BOXELEVTAG:
+          case PLATFORMELEVTAG:
+          case BOXDELAYTAG:
+          case PLATFORMDELAYTAG:
+               playsound(S_PLATFORMSTOP,door->centx,door->centy,0,ST_UPDATE);
+               if( loopinsound>=0 ) {
+                    stopsound(loopinsound);
+                    loopinsound=-1;
+               }
+               showsect2d(door->sector,door->goalz[0]);
+               break;
+          default:
+               showsect2dtoggle(door->sector,1);
+               break;
+          }
+          door->state=D_NOTHING;
+          break;
      }
 
 }
@@ -2156,72 +2156,72 @@ movesprelevs(int e)
      tics=TICSPERFRAME<<6;
      switch (s->state) {
      case E_WAITING:
-	  s->delay-=TICSPERFRAME;
-	  if (s->delay <= 0) {
-	       s->state=E_CLOSINGDOOR;
-	  }
-	  return;
+          s->delay-=TICSPERFRAME;
+          if (s->delay <= 0) {
+               s->state=E_CLOSINGDOOR;
+          }
+          return;
      case E_CLOSINGDOOR:
-	  s->doorpos-=tics;
-	  if (s->doorpos <= 0) {
-	       s->doorpos=0;
-	       s->state=E_NEXTFLOOR;
-	  }
-	  break;
+          s->doorpos-=tics;
+          if (s->doorpos <= 0) {
+               s->doorpos=0;
+               s->state=E_NEXTFLOOR;
+          }
+          break;
      case E_OPENINGDOOR:
-	  s->doorpos+=tics;
-	  if (s->doorpos >= E_DOOROPENPOS) {
-	       s->doorpos=E_DOOROPENPOS;
-	       s->state=E_WAITING;
-	       s->delay=E_WAITDELAY;
-	  }
-	  break;
+          s->doorpos+=tics;
+          if (s->doorpos >= E_DOOROPENPOS) {
+               s->doorpos=E_DOOROPENPOS;
+               s->state=E_WAITING;
+               s->delay=E_WAITDELAY;
+          }
+       break;
      case E_MOVING:
-	  goalz=s->floorz[s->curfloor];
-	  if (s->curdir == E_GOINGUP) {
-	       s->floorpos-=tics;
-	       if (s->floorpos <= goalz) {
-		    s->floorpos+=labs(s->floorpos-goalz);
-		    s->state=E_OPENINGDOOR;
-	       }
-	  }
-	  else {
-	       s->floorpos+=tics;
-	       if (s->floorpos >= goalz) {
-		    s->floorpos-=labs(s->floorpos-goalz);
-		    s->state=E_OPENINGDOOR;
-	       }
-	  }
-	  break;
+          goalz=s->floorz[s->curfloor];
+          if (s->curdir == E_GOINGUP) {
+               s->floorpos-=tics;
+               if (s->floorpos <= goalz) {
+                    s->floorpos+=labs(s->floorpos-goalz);
+                    s->state=E_OPENINGDOOR;
+               }
+          }
+          else {
+               s->floorpos+=tics;
+               if (s->floorpos >= goalz) {
+                    s->floorpos-=labs(s->floorpos-goalz);
+                    s->state=E_OPENINGDOOR;
+               }
+          }
+          break;
      case E_NEXTFLOOR:
-	  if (s->curdir == E_GOINGUP) {
-	       s->curfloor++;
-	       if (s->curfloor > s->floors) {
-		    s->curfloor-=2;
-		    s->curdir=E_GOINGDOWN;
-				//playsound(S_COPSEE1,sprptr[s->sprnum[0]]->x,sprptr[s->sprnum[0]]->y,0,ST_UNIQUE);
-	       }
-	  }
-	  else if (s->curdir == E_GOINGDOWN) {
-	       s->curfloor--;
-	       if (s->curfloor < 0) {
-		    s->curfloor+=2;
-		    s->curdir=E_GOINGUP;
-				//playsound(S_COPSEE2,sprptr[s->sprnum[0]]->x,sprptr[s->sprnum[0]]->y,0,ST_UNIQUE);
-	       }
-	  }
-	  s->state=E_MOVING;
-	  break;
+          if (s->curdir == E_GOINGUP) {
+               s->curfloor++;
+               if (s->curfloor > s->floors) {
+                    s->curfloor-=2;
+                    s->curdir=E_GOINGDOWN;
+                    //playsound(S_COPSEE1,sprptr[s->sprnum[0]]->x,sprptr[s->sprnum[0]]->y,0,ST_UNIQUE);
+               }
+          }
+          else if (s->curdir == E_GOINGDOWN) {
+               s->curfloor--;
+               if (s->curfloor < 0) {
+                    s->curfloor+=2;
+                    s->curdir=E_GOINGUP;
+                    //playsound(S_COPSEE2,sprptr[s->sprnum[0]]->x,sprptr[s->sprnum[0]]->y,0,ST_UNIQUE);
+               }
+          }
+          s->state=E_MOVING;
+          break;
      }
      for (i=0 ; i < s->parts ; i++) {
-	  j=s->sprnum[i];
-	  spr=sprptr[j];
-	  spr->z=s->startz[i]+s->floorpos-s->floorz[0];
-	  for (n=0 ; n < s->doors ; n++) {
-	       if (j == s->door[n]) {
-		    spr->z-=s->doorpos;
-	       }
-	  }
+          j=s->sprnum[i];
+          spr=sprptr[j];
+          spr->z=s->startz[i]+s->floorpos-s->floorz[0];
+          for (n=0 ; n < s->doors ; n++) {
+               if (j == s->door[n]) {
+                    spr->z-=s->doorpos;
+               }
+          }
      }
 }
 
@@ -2235,82 +2235,82 @@ movefloordoor(int d)
      dptr=floordoorptr[d];
      switch (dptr->state) {
      case DOOROPENING:
-	  if (dptr->dist1 > 0) {
-	       s=tics;
-	       dptr->dist1-=s;
-	       if (dptr->dist1 < 0) {
-		    s+=dptr->dist1;
-		    dptr->dist1=0;
-	       }
-	       switch (dptr->dir) {
-	       case 0:
-		    j=dptr->wall1;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
-		    break;
-	       case 1:
-		    j=dptr->wall1;
-		    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
-		    break;
-	       case 2:
-		    j=dptr->wall1;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
-		    break;
-	       case 3:
-		    j=dptr->wall1;
-		    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
-		    break;
-	       }
-	  }
-	  if (dptr->dist2 > 0) {
-	       s=tics;
-	       dptr->dist2-=s;
-	       if (dptr->dist2 < 0) {
-		    s+=dptr->dist2;
-		    dptr->dist2=0;
-	       }
-	       switch (dptr->dir) {
-	       case 0:
-		    j=dptr->wall2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
-		    break;
-	       case 1:
-		    j=dptr->wall2;
-		    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
-		    break;
-	       case 2:
-		    j=dptr->wall2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
-		    break;
-	       case 3:
-		    j=dptr->wall2;
-		    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
-		    j=wallptr[j]->point2;
-		    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
-		    break;
-	       }
-	  }
-	  if (dptr->dist1 <= 0 && dptr->dist2 <= 0) {
-	       dptr->state=DOOROPENED;
-	  }
-	  break;
+          if (dptr->dist1 > 0) {
+               s=tics;
+               dptr->dist1-=s;
+               if (dptr->dist1 < 0) {
+                    s+=dptr->dist1;
+                    dptr->dist1=0;
+               }
+               switch (dptr->dir) {
+               case 0:
+                    j=dptr->wall1;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
+                    break;
+               case 1:
+                    j=dptr->wall1;
+                    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
+                    break;
+               case 2:
+                    j=dptr->wall1;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
+                    break;
+               case 3:
+                    j=dptr->wall1;
+                    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
+                    break;
+               }
+          }
+          if (dptr->dist2 > 0) {
+               s=tics;
+               dptr->dist2-=s;
+               if (dptr->dist2 < 0) {
+                    s+=dptr->dist2;
+                    dptr->dist2=0;
+               }
+               switch (dptr->dir) {
+               case 0:
+                    j=dptr->wall2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y+s);
+                    break;
+               case 1:
+                    j=dptr->wall2;
+                    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x-s,wallptr[j]->y);
+                    break;
+               case 2:
+                    j=dptr->wall2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x,wallptr[j]->y-s);
+                    break;
+               case 3:
+                    j=dptr->wall2;
+                    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
+                    j=wallptr[j]->point2;
+                    dragpoint(j,wallptr[j]->x+s,wallptr[j]->y);
+                    break;
+               }
+          }
+          if (dptr->dist1 <= 0 && dptr->dist2 <= 0) {
+               dptr->state=DOOROPENED;
+          }
+          break;
      case DOORCLOSING:
      case DOOROPENED:
      case DOORCLOSED:
-	  break;
+          break;
      }
 }
 
@@ -2343,31 +2343,31 @@ movevehicles(int v)
                     break;
           }
           switch( v ) {
-	     case 0:      
+          case 0:      
                switch( i ) {
                     case 4:   //level1.map
-		               vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
                          break;
                     case 8:   //city1.map
-     		          vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);        
                          break;
                     case 11:  //beach1.map
-     		          vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
                          break;
                     case 17:  //mid3.map
-     		          vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
                          break;
                     case 19:  //sewer2.map
-     		          vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
                          break;
                     case 20:   //inds1.map
-     		          vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
                          break;
                     case 25:  //ware1.map
-     		          vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
                          break;
                     case 26:   //ware2.map
-     		          vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);        
                          break;
                     default:
                          break;
@@ -2376,13 +2376,13 @@ movevehicles(int v)
           case 1:
                switch( i ) {
                     case 4:   //level1.map
-     		          vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
                          break;
                     case 11:   //beach1.map
-     		          vptr->soundindex=playsound(S_BOATLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_BOATLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);         
                          break;
                     case 26:   //ware2.map
-     		          vptr->soundindex=playsound(S_CARTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);		
+                         vptr->soundindex=playsound(S_CARTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);         
                          break;
                     default:
                          break;
@@ -2394,11 +2394,11 @@ movevehicles(int v)
      }
      
      if( vptr->waittics > 0 ) {
-	     vptr->waittics-=TICSPERFRAME;
+          vptr->waittics-=TICSPERFRAME;
           if( vptr->soundindex != -1 ) {
-	          updatevehiclesnds(vptr->soundindex, vptr->pivotx, vptr->pivoty);
+               updatevehiclesnds(vptr->soundindex, vptr->pivotx, vptr->pivoty);
           }
-	     return;
+          return;
      }
 
      px=vptr->pivotx;
@@ -2409,71 +2409,71 @@ movevehicles(int v)
      disty=vptr->disty;
      stoptrack=vptr->stoptrack;
      if( vptr->stop[track] && (x=distx+disty) > 0L && x < 8192L ) {
-	     vptr->accelto=2;
-	     vptr->speedto=32;
+          vptr->accelto=2;
+          vptr->speedto=32;
      }
      else if( vptr->accelto != 8 ) {
-	     vptr->accelto=8;
-	     vptr->speedto=vptr->movespeed;
+          vptr->accelto=8;
+          vptr->speedto=vptr->movespeed;
      }
      if( distx == 0L && disty == 0L ) {
-	     if( vptr->stop[stoptrack] ) {
-	          for( i=0 ; i < vptr->numsectors ; i++ ) {
-		          s=vptr->sector[i];
-		          if( sectptr[s]->lotag != 0 ) {
-			          operatesector(s);
-		          }
-	          }
-	          vptr->waittics=vptr->waitdelay;
-	          vptr->acceleration=0;
-	          vptr->speed=0;
+          if( vptr->stop[stoptrack] ) {
+               for( i=0 ; i < vptr->numsectors ; i++ ) {
+                    s=vptr->sector[i];
+                    if( sectptr[s]->lotag != 0 ) {
+                         operatesector(s);
+                    }
+               }
+               vptr->waittics=vptr->waitdelay;
+               vptr->acceleration=0;
+               vptr->speed=0;
 
-	     }
-	     distx=vptr->trackx[track]-px;
-	     disty=vptr->tracky[track]-py;
-	     vptr->angleto=getangle(distx,disty);
-	     vptr->accelto=8;
-	     vptr->distx=labs(distx);
-	     vptr->disty=labs(disty);
-	     distx=vptr->distx;
-	     disty=vptr->disty;
+          }
+          distx=vptr->trackx[track]-px;
+          disty=vptr->tracky[track]-py;
+          vptr->angleto=getangle(distx,disty);
+          vptr->accelto=8;
+          vptr->distx=labs(distx);
+          vptr->disty=labs(disty);
+          distx=vptr->distx;
+          disty=vptr->disty;
      }
      a=vptr->acceleration;
      ato=vptr->accelto;
      if( a < ato ) {
-	     a+=TICSPERFRAME;
-	     if( a > ato ) {
-	          a=ato;
-	     }
-	     vptr->acceleration=a;
+          a+=TICSPERFRAME;
+          if( a > ato ) {
+               a=ato;
+          }
+          vptr->acceleration=a;
      }
      else if( a > ato ) {
-	     a-=TICSPERFRAME;
-	     if( a < ato ) {
-	          a=ato;
-	     }
-	     vptr->acceleration=a;
+          a-=TICSPERFRAME;
+          if( a < ato ) {
+               a=ato;
+          }
+          vptr->acceleration=a;
      }
      s=vptr->speed;
      sto=vptr->speedto;
      if( s > sto ) {
-	     s-=a;
-	     if( s <= sto ) {
-	          s=sto;
-	     }
-	     vptr->speed=s;
+          s-=a;
+          if( s <= sto ) {
+               s=sto;
+          }
+          vptr->speed=s;
      }
      else if( s < sto ) {
-	     s+=a;
-	     if( s > sto ) {
-	          s=sto;
-	     }
-	     vptr->speed=s;
+          s+=a;
+          if( s > sto ) {
+               s=sto;
+          }
+          vptr->speed=s;
      }
      rotang=curang=vptr->angle;                                 
      if( curang != vptr->angleto ) {
-	     vptr->angle=vptr->angleto;
-	     curang=vptr->angle;
+          vptr->angle=vptr->angleto;
+          curang=vptr->angle;
      }
      xvect=(s*(int)TICSPERFRAME*(int)sintable[((curang+2560)&2047)])>>3;
      xvect2=xvect>>13;
@@ -2481,35 +2481,35 @@ movevehicles(int v)
      yvect2=yvect>>13;
      distx-=labs(xvect2);
      if( distx < 0L ) {
-	     if( xvect2 < 0L ) {
-	          xvect2-=distx;
-	     }
-	     else {
-	          xvect2+=distx;
-	     }
-	     distx=0L;
-	     vptr->angleto=getangle(vptr->trackx[track]-px,vptr->tracky[track]-py);
+          if( xvect2 < 0L ) {
+               xvect2-=distx;
+          }
+          else {
+               xvect2+=distx;
+          }
+          distx=0L;
+          vptr->angleto=getangle(vptr->trackx[track]-px,vptr->tracky[track]-py);
      }
      disty-=labs(yvect2);
      if( disty < 0L ) {
-	     if( yvect2 < 0L ) {
-	          yvect2-=disty;
-	     }
-	     else {
-	          yvect2+=disty;
-	     }
-	     disty=0L;
-	     vptr->angleto=getangle(vptr->trackx[track]-px,vptr->tracky[track]-py);
+          if( yvect2 < 0L ) {
+               yvect2-=disty;
+          }
+          else {
+               yvect2+=disty;
+          }
+          disty=0L;
+          vptr->angleto=getangle(vptr->trackx[track]-px,vptr->tracky[track]-py);
      }
      if( distx == 0L && disty == 0L ) {
-	     vptr->stoptrack=track;
-	     track=(track+1)%vptr->tracknum;
-	     vptr->track=track;
+          vptr->stoptrack=track;
+          track=(track+1)%vptr->tracknum;
+          vptr->track=track;
           switch( v ) {
           //jsa vehicles
-	     case 0:
+          case 0:
                if( !(strcasecmp(boardfilename,"CITY1.MAP")) || !(strcasecmp(boardfilename,"WARE2.MAP")))
-	  	          playsound(S_TRUCKSTOP,vptr->pivotx,vptr->pivoty,0,ST_AMBUPDATE);		
+                    playsound(S_TRUCKSTOP,vptr->pivotx,vptr->pivoty,0,ST_AMBUPDATE);      
                break;
           default:
                break;
@@ -2521,11 +2521,11 @@ movevehicles(int v)
      py+=yvect2;
      n=vptr->numpoints;
      for( i=0 ; i < n ; i++ ) {
-	     p=vptr->point[i];
-	     x=vptr->pointx[i];
-	     y=vptr->pointy[i];
-	     rotatepoint(px,py,px-x,py-y,curang,&x,&y);
-	     dragpoint(p,x,y);
+          p=vptr->point[i];
+          x=vptr->pointx[i];
+          y=vptr->pointy[i];
+          rotatepoint(px,py,px-x,py-y,curang,&x,&y);
+          dragpoint(p,x,y);
      }
      vptr->pivotx=px;
      vptr->pivoty=py;
@@ -2534,63 +2534,63 @@ movevehicles(int v)
      lox=loy=0x7FFFFFFF;
      hix=hiy=-(0x7FFFFFFF);
      for( i=0 ; i < 4 ; i++ ) {
-	     a=vptr->killw[i];
-	     if( wallptr[a]->x < lox ) {
-	          lox=wallptr[a]->x;
-	     }
-	     else if( wallptr[a]->x > hix ) {
-	          hix=wallptr[a]->x;
-	     }
-	     if( wallptr[a]->y < loy ) {
-	          loy=wallptr[a]->y;
-	     }
-	     else if (wallptr[a]->y > hiy) {
-	          hiy=wallptr[a]->y;
-	     }
+          a=vptr->killw[i];
+          if( wallptr[a]->x < lox ) {
+               lox=wallptr[a]->x;
+          }
+          else if( wallptr[a]->x > hix ) {
+               hix=wallptr[a]->x;
+          }
+          if( wallptr[a]->y < loy ) {
+               loy=wallptr[a]->y;
+          }
+          else if (wallptr[a]->y > hiy) {
+               hiy=wallptr[a]->y;
+          }
      }
      memset(onveh,0,sizeof(short)*MAXPLAYERS);
      for( i=0 ; i < n ; i++ ) {
-	     p=headspritesect[vptr->sector[i]];
-	     while (p >= 0) {
-	          s=nextspritesect[p];
-	          x=sprptr[p]->x;
-	          y=sprptr[p]->y;
-	          x+=xvect2;
-	          y+=yvect2;
-	          rotatepoint(px,py,x,y,rotang,&sprptr[p]->x,&sprptr[p]->y);
-	          sprptr[p]->ang+=rotang;
-	          p=s;
-	     }
-	     for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
-	          x=posx[p];
-	          y=posy[p];
-	          if( cursectnum[p] == vptr->sector[i] ) {
-		          x+=xvect2;
-		          y+=yvect2;
-		          rotatepoint(px,py,x,y,rotang,&posx[p],&posy[p]);
-		          ang[p]+=rotang;
-		          onveh[p]=1;
-	          }
-	     }
+          p=headspritesect[vptr->sector[i]];
+          while (p >= 0) {
+               s=nextspritesect[p];
+               x=sprptr[p]->x;
+               y=sprptr[p]->y;
+               x+=xvect2;
+               y+=yvect2;
+               rotatepoint(px,py,x,y,rotang,&sprptr[p]->x,&sprptr[p]->y);
+               sprptr[p]->ang+=rotang;
+               p=s;
+          }
+          for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
+               x=posx[p];
+               y=posy[p];
+               if( cursectnum[p] == vptr->sector[i] ) {
+                    x+=xvect2;
+                    y+=yvect2;
+                    rotatepoint(px,py,x,y,rotang,&posx[p],&posy[p]);
+                    ang[p]+=rotang;
+                    onveh[p]=1;
+               }
+          }
      }
      for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
-	     if( onveh[p] ) { 
-	          continue;
-	     }
-	     x=posx[p];
-	     y=posy[p];
-	     if( x > lox && x < hix && y > loy && y < hiy ) {
-	          if( (health[p] > 0) &&  (posz[p] > VEHICLEHEIGHT) ) {
-		          changehealth(p,-9999);
+          if( onveh[p] ) { 
+               continue;
+          }
+          x=posx[p];
+          y=posy[p];
+          if( x > lox && x < hix && y > loy && y < hiy ) {
+               if( (health[p] > 0) &&  (posz[p] > VEHICLEHEIGHT) ) {
+                    changehealth(p,-9999);
                     changescore(p,-100);
-		          if( goreflag ) {
-			          tekexplodebody(playersprite[p]);
-		          }
-	          }
-	     }
+                    if( goreflag ) {
+                         tekexplodebody(playersprite[p]);
+                    }
+               }
+          }
      }
      if( vptr->soundindex != -1 ) {
-	     updatevehiclesnds(vptr->soundindex, vptr->pivotx, vptr->pivoty);
+          updatevehiclesnds(vptr->soundindex, vptr->pivotx, vptr->pivoty);
      }
 }
 
@@ -2600,25 +2600,25 @@ teksetdelayfunc(void (*delayfunc)(short),int tics,short parm)
      int  i,n;
 
      if (delayfunc == NULL) {
-	  return;
+       return;
      }
      n=numdelayfuncs;
      for (i=0 ; i < n ; i++) {
-	  if (delayfuncptr[i]->func == delayfunc) {
-	       if (tics == 0) {
-		    memmove(delayfuncptr[i],delayfuncptr[numdelayfuncs-1],
-			 sizeof(struct delayfunc));
-		    memset(delayfuncptr[numdelayfuncs-1],0,
-			 sizeof(struct delayfunc));
-		    numdelayfuncs--;
-		    return;
-	       }
-	       else {
-		    delayfuncptr[i]->tics=tics;
-		    delayfuncptr[i]->parm=parm;
-		    return;
-	       }
-	  }
+       if (delayfuncptr[i]->func == delayfunc) {
+            if (tics == 0) {
+              memmove(delayfuncptr[i],delayfuncptr[numdelayfuncs-1],
+                sizeof(struct delayfunc));
+              memset(delayfuncptr[numdelayfuncs-1],0,
+                sizeof(struct delayfunc));
+              numdelayfuncs--;
+              return;
+            }
+            else {
+              delayfuncptr[i]->tics=tics;
+              delayfuncptr[i]->parm=parm;
+              return;
+            }
+       }
      }
      delayfuncptr[numdelayfuncs]->func=delayfunc;
      delayfuncptr[numdelayfuncs]->tics=tics;
@@ -2633,19 +2633,19 @@ tekdodelayfuncs(void)
 
      n=numdelayfuncs;
      for (i=0 ; i < n ; i++) {
-	  if (delayfuncptr[i]->func == NULL) {
-	       continue;
-	  }
-	  delayfuncptr[i]->tics-=TICSPERFRAME;
-	  if (delayfuncptr[i]->tics <= 0) {
-	       p=delayfuncptr[i]->parm;
-	       (*delayfuncptr[i]->func)(p);
-	       memmove(delayfuncptr[i],delayfuncptr[numdelayfuncs-1],
-		    sizeof(struct delayfunc));
-	       memset(delayfuncptr[numdelayfuncs-1],0,
-		    sizeof(struct delayfunc));
-	       numdelayfuncs--;
-	  }
+          if (delayfuncptr[i]->func == NULL) {
+               continue;
+          }
+          delayfuncptr[i]->tics-=TICSPERFRAME;
+          if (delayfuncptr[i]->tics <= 0) {
+               p=delayfuncptr[i]->parm;
+               (*delayfuncptr[i]->func)(p);
+               memmove(delayfuncptr[i],delayfuncptr[numdelayfuncs-1],
+                    sizeof(struct delayfunc));
+                    memset(delayfuncptr[numdelayfuncs-1],0,
+                    sizeof(struct delayfunc));
+               numdelayfuncs--;
+          }
      }
 }
 
@@ -2655,16 +2655,16 @@ setanimpic(short *pic,short tics,short frames)
      int  i;
 
      for (i=0 ; i < numanimates ; i++) {
-	  if (animpicptr[i]->pic == pic) {
-	       return;
-	  }
+          if (animpicptr[i]->pic == pic) {
+               return;
+          }
      }
      if (numanimates+1 < MAXANIMPICS) {
-	  animpicptr[numanimates]->pic=pic;
-	  animpicptr[numanimates]->tics=tics;
-	  animpicptr[numanimates]->frames=frames;
-	  animpicptr[numanimates]->nextclock=lockclock+tics;
-	  numanimates++;
+          animpicptr[numanimates]->pic=pic;
+          animpicptr[numanimates]->tics=tics;
+          animpicptr[numanimates]->frames=frames;
+          animpicptr[numanimates]->nextclock=lockclock+tics;
+          numanimates++;
      }
 }
 
@@ -2676,33 +2676,33 @@ tekdoanimpic(void)
 
      n=numanimates;
      for (i=0 ; i < n ; i++) {
-	  if (lockclock < animpicptr[i]->nextclock) {
-	       continue;
-	  }
-	  if (animpicptr[i]->frames > 0) {
-	       if (--animpicptr[i]->frames > 0) {
-		    pic=*animpicptr[i]->pic;
-		    pic++;
-		    *animpicptr[i]->pic=pic;
-		    animpicptr[i]->nextclock=lockclock+animpicptr[i]->tics;
-	       }
-	  }
-	  else if (animpicptr[i]->frames < 0) {
-	       if (++animpicptr[i]->frames < 0) {
-		    pic=*animpicptr[i]->pic;
-		    pic--;
-		    *animpicptr[i]->pic=pic;
-		    animpicptr[i]->nextclock=lockclock+animpicptr[i]->tics;
-	       }
-	  }
-	  else {
-	       numanimates--;
-	       if (numanimates > 0) {
-		    memmove(animpicptr[i],animpicptr[numanimates],
-			 sizeof(struct animpic));
-		    memset(animpicptr[numanimates],0,sizeof(struct animpic));
-	       }
-	  }
+          if (lockclock < animpicptr[i]->nextclock) {
+               continue;
+          }
+          if (animpicptr[i]->frames > 0) {
+               if (--animpicptr[i]->frames > 0) {
+                    pic=*animpicptr[i]->pic;
+                    pic++;
+                    *animpicptr[i]->pic=pic;
+                    animpicptr[i]->nextclock=lockclock+animpicptr[i]->tics;
+               }
+          }
+          else if (animpicptr[i]->frames < 0) {
+               if (++animpicptr[i]->frames < 0) {
+                    pic=*animpicptr[i]->pic;
+                    pic--;
+                    *animpicptr[i]->pic=pic;
+                    animpicptr[i]->nextclock=lockclock+animpicptr[i]->tics;
+               }
+          }
+          else {
+               numanimates--;
+               if (numanimates > 0) {
+                    memmove(animpicptr[i],animpicptr[numanimates],
+                         sizeof(struct animpic));
+                    memset(animpicptr[numanimates],0,sizeof(struct animpic));
+               }
+          }
      }
 }
 
@@ -2710,8 +2710,8 @@ void
 checkmapsndfx(short p)
 {
 
-	int       i,s;
-	int		dist;
+     int       i,s;
+     int       dist;
      unsigned  int      effect;
      struct    sectoreffect   *septr;
 
@@ -2719,17 +2719,17 @@ checkmapsndfx(short p)
      septr=septrlist[s];
 
      for( i=0; i<totalmapsndfx; i++ ) {
-		switch(mapsndfxptr[i]->type) {
-		case MAP_SFX_AMBIENT:
-   		     dist=labs(posx[p]-mapsndfxptr[i]->x)+labs(posy[p]-mapsndfxptr[i]->y);
-			if( (dist > AMBUPDATEDIST) && (mapsndfxptr[i]->id!=-1) ) {
-				stopsound(mapsndfxptr[i]->id);
-				mapsndfxptr[i]->id=-1;
-			}
-			else if( (dist < AMBUPDATEDIST) && (mapsndfxptr[i]->id==-1) )  {
-	     	   	mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops, ST_AMBUPDATE);
+          switch(mapsndfxptr[i]->type) {
+          case MAP_SFX_AMBIENT:
+               dist=labs(posx[p]-mapsndfxptr[i]->x)+labs(posy[p]-mapsndfxptr[i]->y);
+               if( (dist > AMBUPDATEDIST) && (mapsndfxptr[i]->id!=-1) ) {
+                    stopsound(mapsndfxptr[i]->id);
+                    mapsndfxptr[i]->id=-1;
                }
-		     break;
+               else if( (dist < AMBUPDATEDIST) && (mapsndfxptr[i]->id==-1) )  {
+                    mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops, ST_AMBUPDATE);
+               }
+               break;
           case MAP_SFX_SECTOR:
                if((cursectnum[p] != ocursectnum[p]) && (cursectnum[p] == mapsndfxptr[i]->sector) ) {
                    mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops, ST_UNIQUE);
@@ -2737,17 +2737,17 @@ checkmapsndfx(short p)
                break;
           default:
                break;
-		}
-	}
+          }
+     }
 
-	if( !strncasecmp("SUBWAY",boardfilename,6) ) {
-		if( ambsubloop == -1 ) {
-   		     ambsubloop=playsound(S_SUBSTATIONLOOP, 0, 0, -1, ST_IMMEDIATE);
+     if( !strncasecmp("SUBWAY",boardfilename,6) ) {
+          if( ambsubloop == -1 ) {
+               ambsubloop=playsound(S_SUBSTATIONLOOP, 0, 0, -1, ST_IMMEDIATE);
           }
      }
      else {
           if( ambsubloop != -1 ) {
-		     stopsound(ambsubloop);
+               stopsound(ambsubloop);
                ambsubloop=-1;
           }
      }
@@ -2759,7 +2759,7 @@ checkmapsndfx(short p)
                     if( mapsndfxptr[i]->type == MAP_SFX_TOGGLED ) {
                          if( sectptr[mapsndfxptr[i]->sector]->hitag == septr->hi ) {
                               if( mapsndfxptr[i]->id == -1 ) {
-              	      	          mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops,ST_UNIQUE | ST_IMMEDIATE);;
+                                   mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops,ST_UNIQUE | ST_IMMEDIATE);;
                               }
                          }
                     }
@@ -2771,7 +2771,7 @@ checkmapsndfx(short p)
                          if( sectptr[mapsndfxptr[i]->sector]->hitag == septr->hi ) {
                               if( mapsndfxptr[i]->id != -1 ) {
                                    stopsound(mapsndfxptr[i]->id);
-              	      	          mapsndfxptr[i]->id=-1;
+                                   mapsndfxptr[i]->id=-1;
                               }
                          }
                     }
@@ -2790,39 +2790,39 @@ tektagsave(int fil)
 
      rv=write(fil,&numanimates,sizeof(int));
      for (i=0 ; i < numanimates ; i++) {
-	     write(fil,&animpic[i],sizeof(struct animpic));
+          write(fil,&animpic[i],sizeof(struct animpic));
      }
      rv=write(fil,&numdelayfuncs,sizeof(short));
      for (i=0 ; i < numdelayfuncs ; i++) {
-	     write(fil,&delayfunc[i],sizeof(struct delayfunc));
+          write(fil,&delayfunc[i],sizeof(struct delayfunc));
      }
      rv=write(fil,onelev,MAXPLAYERS);
      rv=write(fil,&secnt,sizeof(int));
      for (i=0 ; i < secnt ; i++) {
-	     write(fil,&sectoreffect[i],sizeof(struct sectoreffect));
+          write(fil,&sectoreffect[i],sizeof(struct sectoreffect));
      }
      rv=write(fil,sexref,MAXSECTORS*sizeof(int));
      rv=write(fil,&numdoors,sizeof(int));
      for (i=0 ; i < numdoors ; i++) {
-	     write(fil,&doortype[i],sizeof(struct doortype));
+          write(fil,&doortype[i],sizeof(struct doortype));
      }
      write(fil,&numfloordoors,sizeof(int));
      for (i=0 ; i < numfloordoors ; i++) {
-	     write(fil,&floordoor[i],sizeof(struct floordoor));
+          write(fil,&floordoor[i],sizeof(struct floordoor));
      }
      write(fil,fdxref,MAXSECTORS*sizeof(int));
      write(fil,&numvehicles,sizeof(int));
      for (i=0 ; i < numvehicles ; i++) {
-	     write(fil,&sectorvehicle[i],sizeof(struct sectorvehicle));
+          write(fil,&sectorvehicle[i],sizeof(struct sectorvehicle));
      }
      write(fil,elevator,MAXSECTORS*sizeof(struct elevatortype));
      write(fil,&sprelevcnt,sizeof(int));
      for (i=0 ; i < sprelevcnt ; i++) {
-	     write(fil,&spriteelev[i],sizeof(struct spriteelev));
+          write(fil,&spriteelev[i],sizeof(struct spriteelev));
      }
      write(fil,&totalmapsndfx,sizeof(int));
      for (i=0 ; i < totalmapsndfx ; i++) {
-	     write(fil,&mapsndfx[i],sizeof(struct mapsndfxtype));
+          write(fil,&mapsndfx[i],sizeof(struct mapsndfxtype));
      }
 }
 
@@ -2833,30 +2833,30 @@ tektagload(int fil)
 
      rv=read(fil,&numanimates,sizeof(int));
      for (i=0 ; i < numanimates ; i++) {
-	     read(fil,&animpic[i],sizeof(struct animpic));
+          read(fil,&animpic[i],sizeof(struct animpic));
      }
      rv=read(fil,&numdelayfuncs,sizeof(short));
      for (i=0 ; i < numdelayfuncs ; i++) {
-	     read(fil,&delayfunc[i],sizeof(struct delayfunc));
+          read(fil,&delayfunc[i],sizeof(struct delayfunc));
      }
      rv=read(fil,onelev,MAXPLAYERS);
      rv=read(fil,&secnt,sizeof(int));
      for (i=0 ; i < secnt ; i++) {
-	     read(fil,&sectoreffect[i],sizeof(struct sectoreffect));
+          read(fil,&sectoreffect[i],sizeof(struct sectoreffect));
      }
      rv=read(fil,sexref,MAXSECTORS*sizeof(int));
      rv=read(fil,&numdoors,sizeof(int));
      for (i=0 ; i < numdoors ; i++) {
-	     read(fil,&doortype[i],sizeof(struct doortype));
+          read(fil,&doortype[i],sizeof(struct doortype));
      }
      read(fil,&numfloordoors,sizeof(int));
      for (i=0 ; i < numfloordoors ; i++) {
-	     read(fil,&floordoor[i],sizeof(struct floordoor));
+          read(fil,&floordoor[i],sizeof(struct floordoor));
      }
      read(fil,fdxref,MAXSECTORS*sizeof(int));
      read(fil,&numvehicles,sizeof(int));
      for (i=0 ; i < numvehicles ; i++) {
-	     read(fil,&sectorvehicle[i],sizeof(struct sectorvehicle));
+          read(fil,&sectorvehicle[i],sizeof(struct sectorvehicle));
      }
 
      // must reinvoke vehicle sounds since all sounds were stopped
@@ -2867,11 +2867,11 @@ tektagload(int fil)
      read(fil,elevator,MAXSECTORS*sizeof(struct elevatortype));
      read(fil,&sprelevcnt,sizeof(int));
      for (i=0 ; i < sprelevcnt ; i++) {
-	     read(fil,&spriteelev[i],sizeof(struct spriteelev));
+          read(fil,&spriteelev[i],sizeof(struct spriteelev));
      }
      read(fil,&totalmapsndfx,sizeof(int));
      for (i=0 ; i < totalmapsndfx ; i++) {
-	     read(fil,&mapsndfx[i],sizeof(struct mapsndfxtype));
+          read(fil,&mapsndfx[i],sizeof(struct mapsndfxtype));
           // did we leave with a TOGGLED sound playong ?
           if( (mapsndfx[i].type == MAP_SFX_TOGGLED) && (mapsndfx[i].id != -1) ) {
                mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops, ST_UNIQUE);
@@ -2883,10 +2883,10 @@ void
 tekheadbob(void)
 {
      if( headbobon && (activemenu == 0) ) {
-	     headbob+=bobstep;
-	     if( headbob < -BOBBMAX || headbob > BOBBMAX ) {
-	          bobstep=-bobstep;
-	     }
+          headbob+=bobstep;
+          if( headbob < -BOBBMAX || headbob > BOBBMAX ) {
+               bobstep=-bobstep;
+          }
      }
 }
 
@@ -2894,24 +2894,24 @@ void
 tekswitchtrigger(short snum)
 {
      int       i,j;
-	int      nexti;
-	int      dax,day;
+     int      nexti;
+     int      dax,day;
 
      j=sprite[neartagsprite].picnum;
 
-	switch( j ) {
+     switch( j ) {
      case SWITCH2OFF:
-	  if( invredcards[snum] == 0 ) {
-	       showmessage("PASSAGE REQUIRES RED KEYCARD");
-	       return;
-	  }
-	  break;
+          if( invredcards[snum] == 0 ) {
+               showmessage("PASSAGE REQUIRES RED KEYCARD");
+               return;
+          }
+          break;
      case SWITCH4OFF:
-	  if( invbluecards[snum] == 0 ) {
-	       showmessage("PASSAGE REQUIRES BLUE KEYCARD");
-	       return;
-	  }
-	  break;
+          if( invbluecards[snum] == 0 ) {
+               showmessage("PASSAGE REQUIRES BLUE KEYCARD");
+               return;
+          }
+          break;
      }
 
      switch( j ) {
@@ -2922,36 +2922,36 @@ tekswitchtrigger(short snum)
      case SWITCH4ON:
      case SWITCH4OFF:
           dax = sprite[neartagsprite].x;
-	     day = sprite[neartagsprite].y;
-	     playsound(S_KEYCARDBLIP, dax,day,0, ST_UPDATE);
+          day = sprite[neartagsprite].y;
+          playsound(S_KEYCARDBLIP, dax,day,0, ST_UPDATE);
           break;
      default:
           break;
      }
 
-	if (j == SWITCH2ON) sprite[neartagsprite].picnum = SWITCH2OFF;
-	if (j == SWITCH2OFF) sprite[neartagsprite].picnum = SWITCH2ON;
-	if (j == SWITCH3ON) sprite[neartagsprite].picnum = SWITCH3OFF;
-	if (j == SWITCH3OFF) sprite[neartagsprite].picnum = SWITCH3ON;
-	if (j == SWITCH4ON) sprite[neartagsprite].picnum = SWITCH4OFF;
-	if (j == SWITCH4OFF) sprite[neartagsprite].picnum = SWITCH4ON;
+     if (j == SWITCH2ON) sprite[neartagsprite].picnum = SWITCH2OFF;
+     if (j == SWITCH2OFF) sprite[neartagsprite].picnum = SWITCH2ON;
+     if (j == SWITCH3ON) sprite[neartagsprite].picnum = SWITCH3OFF;
+     if (j == SWITCH3OFF) sprite[neartagsprite].picnum = SWITCH3ON;
+     if (j == SWITCH4ON) sprite[neartagsprite].picnum = SWITCH4OFF;
+     if (j == SWITCH4OFF) sprite[neartagsprite].picnum = SWITCH4ON;
 
-	if (j == 3708) sprite[neartagsprite].picnum = 3709;
-	if (j == 3709) sprite[neartagsprite].picnum = 3708;
+     if (j == 3708) sprite[neartagsprite].picnum = 3709;
+     if (j == 3709) sprite[neartagsprite].picnum = 3708;
 
-	for(i=0;i<numsectors;i++)
-		if (sector[i].hitag == sprite[neartagsprite].hitag)
-			if (sector[i].lotag != 1)
-				operatesector(i);
+     for(i=0;i<numsectors;i++)
+          if (sector[i].hitag == sprite[neartagsprite].hitag)
+               if (sector[i].lotag != 1)
+                    operatesector(i);
 
-	i = headspritestat[0];
-	while (i != -1)
-	{
-		nexti = nextspritestat[i];
-		if (sprite[i].hitag == sprite[neartagsprite].hitag)
-			operatesprite(i);
-		i = nexti;
-	}
+     i = headspritestat[0];
+     while (i != -1)
+     {
+          nexti = nextspritestat[i];
+          if (sprite[i].hitag == sprite[neartagsprite].hitag)
+               operatesprite(i);
+          i = nexti;
+     }
 
 
 }

@@ -24,7 +24,7 @@
 
 typedef struct
 {
-	int x, y, z;
+     int x, y, z;
 } point3d;
 
 extern int vel, svel, angvel;
@@ -39,18 +39,18 @@ extern int recording;
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
-extern    int fullscreen, xdimgame, ydimgame, bppgame;
-extern    unsigned char option[NUMOPTIONS];
-extern    unsigned char keys[NUMKEYS];
-extern    unsigned char moreoptions[MAXMOREOPTIONS];
-extern    char toggles[MAXTOGGLES];
-extern    int  gamestuff[MAXGAMESTUFF];
+extern int fullscreen, xdimgame, ydimgame, bppgame;
+extern unsigned char option[NUMOPTIONS];
+extern unsigned char keys[NUMKEYS];
+extern unsigned char moreoptions[MAXMOREOPTIONS];
+extern char toggles[MAXTOGGLES];
+extern int  gamestuff[MAXGAMESTUFF];
 
 extern char frame2draw[MAXPLAYERS];
 extern int frameskipcnt[MAXPLAYERS];
 extern char gundmost[320];
 
-	//Shared player variables
+     //Shared player variables
 extern int posx[MAXPLAYERS], posy[MAXPLAYERS], posz[MAXPLAYERS];
 extern int horiz[MAXPLAYERS], zoom[MAXPLAYERS], hvel[MAXPLAYERS];
 extern short ang[MAXPLAYERS], cursectnum[MAXPLAYERS], ocursectnum[MAXPLAYERS];
@@ -63,14 +63,14 @@ extern char revolvedoorstat[MAXPLAYERS];
 extern short revolvedoorang[MAXPLAYERS], revolvedoorrotang[MAXPLAYERS];
 extern int revolvedoorx[MAXPLAYERS], revolvedoory[MAXPLAYERS];
 
-	//Local multiplayer variables
+     //Local multiplayer variables
 extern int locselectedgun;
 extern signed char locvel, olocvel;
 extern short locsvel, olocsvel;                          // Les 09/30/95
 extern short locangvel, olocangvel;                      // Les 09/30/95
 extern short locbits, olocbits;
 
-	//Local multiplayer variables for second player
+     //Local multiplayer variables for second player
 extern int locselectedgun2;
 extern signed char locvel2, olocvel2;
 extern short locsvel2, olocsvel2;                        // Les 09/30/95
@@ -97,7 +97,7 @@ extern short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/30/95
 extern short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/30/95
 extern short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
-	//GAME.C sync state variables
+     //GAME.C sync state variables
 extern short syncstat;
 extern int syncvalplc, othersyncvalplc;
 extern int syncvalend, othersyncvalend;
@@ -108,14 +108,14 @@ extern int crctable[256];
 #define updatecrc16(dacrc,dadat) dacrc = (((dacrc<<8)&65535)^crctable[((((unsigned short)dacrc)>>8)&65535)^dadat])
 extern char playerreadyflag[MAXPLAYERS];
 
-	//Game recording variables
+     //Game recording variables
 extern int reccnt, recstat;
 extern signed char recsyncvel[16384][2];
 extern short recsyncsvel[16384][2];                      // Les 09/30/95
 extern short recsyncangvel[16384][2];                    // Les 09/30/95
 extern short recsyncbits[16384][2];
 
-	//Miscellaneous variables
+     //Miscellaneous variables
 extern unsigned char tempbuf[];
 extern char boardfilename[80];
 extern short screenpeek, oldmousebstatus, brightness;
@@ -127,7 +127,7 @@ extern int pageoffset, ydim16, chainnumpages;
 extern int globhiz, globloz, globhihit, globlohit;
 extern int stereofps, stereowidth, stereopixelwidth;
 
-	//Board animation variables
+     //Board animation variables
 extern short rotatespritelist[16], rotatespritecnt;
 extern short warpsectorlist[64], warpsectorcnt;
 extern short xpanningsectorlist[16], xpanningsectorcnt;
@@ -150,7 +150,7 @@ extern int subwayx[4], subwaygoalstop[4], subwayvel[4], subwaypausetime[4];
 extern short waterfountainwall[MAXPLAYERS], waterfountaincnt[MAXPLAYERS];
 extern short slimesoundcnt[MAXPLAYERS];
 
-	//Variables that let you type messages to other player
+     //Variables that let you type messages to other player
 extern char getmessage[162], getmessageleng;
 extern int getmessagetimeoff;
 extern char typemessage[162];
@@ -158,9 +158,9 @@ extern int typemessageleng, typemode;
 extern char scantoasc[128];
 extern char scantoascwithshift[128];
 
-	//These variables are for animating x, y, or z-coordinates of sectors,
-	//walls, or sprites (They are NOT to be used for changing the [].picnum's)
-	//See the setanimation(), and getanimategoal() functions for more details.
+     //These variables are for animating x, y, or z-coordinates of sectors,
+     //walls, or sprites (They are NOT to be used for changing the [].picnum's)
+     //See the setanimation(), and getanimategoal() functions for more details.
 #define MAXANIMATES 512
 extern int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
 extern int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt;
@@ -314,15 +314,15 @@ extern    int      flags32[];
 #define   ST_DELAYED               0x0010
 #define   ST_VARPITCH              0x0020
 #define   ST_BACKWARDS             0x0040
-#define	ST_AMBUPDATE	          0x0060
-#define	ST_VEHUPDATE             0x0080
+#define   ST_AMBUPDATE             0x0060
+#define   ST_VEHUPDATE             0x0080
 #define   ST_TOGGLE                0x0100
 
 #define   MAXSOUNDS                     16
 #define   TOTALSOUNDS                   208
 
-#define   S_WATERFALL       	          0
-#define   S_ALARM        	          1
+#define   S_WATERFALL                   0
+#define   S_ALARM                       1
 
 #define   S_SEWERLOOP1                  2          //sewer sounds
 #define   S_SEWERLOOP2                  3 
@@ -378,52 +378,52 @@ extern    int      flags32[];
 #define   S_ALARM2                      46
 #define   S_ALARM3                      47
 
-#define	S_STATUS1                     48        //menus and status	     
-#define	S_STATUS2			          49	
-#define	S_HEALTHMONITOR	          50  	
-#define	S_REARMONITOR		          51
-#define	S_MENUSOUND1		          52
-#define	S_MENUSOUND2		          53 
-#define	S_BEEP			          54
-#define	S_BOOP			          55
+#define   S_STATUS1                     48        //menus and status       
+#define   S_STATUS2                     49   
+#define   S_HEALTHMONITOR               50   
+#define   S_REARMONITOR                 51
+#define   S_MENUSOUND1                  52
+#define   S_MENUSOUND2                  53 
+#define   S_BEEP                        54
+#define   S_BOOP                        55
 
-#define	S_MATRIXDOOR1		          56      //doors
-#define	S_MATRIXDOOR2		          57
-#define	S_MATRIXDOOR3		          58	
-#define	S_SIDEDOOR1		          59
-#define	S_SIDEDOOR2		          60
-#define	S_BIGSWINGOP		          61 
-#define	S_BIGSWINGCL		          62 
-#define	S_FLOOROPEN		          63
-#define	S_BAYDOOR_OPEN		          64  
-#define	S_BAYDOOR_CLOSE	          65
-#define	S_BAYDOORLOOP		          66
-#define	S_UPDOWNDR2_OP		          67
-#define	S_UPDOWNDR2_CL		          68	
-#define	S_DOORKLUNK	  	          69
+#define   S_MATRIXDOOR1                 56      //doors
+#define   S_MATRIXDOOR2                 57
+#define   S_MATRIXDOOR3                 58   
+#define   S_SIDEDOOR1                   59
+#define   S_SIDEDOOR2                   60
+#define   S_BIGSWINGOP                  61 
+#define   S_BIGSWINGCL                  62 
+#define   S_FLOOROPEN                   63
+#define   S_BAYDOOR_OPEN                64  
+#define   S_BAYDOOR_CLOSE               65
+#define   S_BAYDOORLOOP                 66
+#define   S_UPDOWNDR2_OP                67
+#define   S_UPDOWNDR2_CL                68   
+#define   S_DOORKLUNK                   69
 #define   S_AIRDOOR                     70
 #define   S_AIRDOOR_OPEN                71 
 #define   S_AIRDOOR_CLOSE               72 
 #define   S_ELEVATOR_DOOR               73
 
-#define	S_SUBSTATIONLOOP              74        //vehicles     
-#define	S_SUBWAYLOOP		          75
-#define	S_SUBWAYSTART		          76 
-#define	S_SUBWAYSTOP		          77
-#define	S_TRUCKLOOP		          78
-#define	S_TRUCKSTART		          79
-#define	S_TRUCKSTOP		          80 
+#define   S_SUBSTATIONLOOP              74        //vehicles     
+#define   S_SUBWAYLOOP                  75
+#define   S_SUBWAYSTART                 76 
+#define   S_SUBWAYSTOP                  77
+#define   S_TRUCKLOOP                   78
+#define   S_TRUCKSTART                  79
+#define   S_TRUCKSTOP                   80 
 #define   S_TRAMBUSLOOP                 81
 #define   S_BOATLOOP                    82
 #define   S_CARTLOOP                    83
 #define   S_FORKLIFTLOOP                84               
 
 
-#define	S_RIC1                        85        //guns 
-#define	S_RIC2			          86  
-#define	S_WEAPON1			          87  
-#define	S_WEAPON2			          88  
-#define	S_WEAPON3			          89
+#define   S_RIC1                        85        //guns 
+#define   S_RIC2                        86  
+#define   S_WEAPON1                     87  
+#define   S_WEAPON2                     88  
+#define   S_WEAPON3                     89
 
 #define   S_WEAPON4                     90
 #define   S_WEAPON5                     91
@@ -433,19 +433,19 @@ extern    int      flags32[];
 
 
 
-#define	S_ENEMYGUN1                   95		          
-#define	S_ENEMYGUN2		          96
-#define	S_ENEMYGUN3		          97
-#define	S_ENEMYGUN4		          98
-#define	S_WITCH			          99  
-#define	S_PLATFORMSTART	          100
-#define	S_PLATFORMSTOP		          101
-#define	S_PLATFORMLOOP		          102
-#define	S_FORCEFIELD1		          103
-#define	S_FORCEFIELD2		          104
-#define	S_AUTOGUN			          105
-#define	S_AUTOGUNEXPLODE	          106
-#define   S_BUSHIT       	          107
+#define   S_ENEMYGUN1                   95                  
+#define   S_ENEMYGUN2                   96
+#define   S_ENEMYGUN3                   97
+#define   S_ENEMYGUN4                   98
+#define   S_WITCH                       99  
+#define   S_PLATFORMSTART               100
+#define   S_PLATFORMSTOP                101
+#define   S_PLATFORMLOOP                102
+#define   S_FORCEFIELD1                 103
+#define   S_FORCEFIELD2                 104
+#define   S_AUTOGUN                     105
+#define   S_AUTOGUNEXPLODE              106
+#define   S_BUSHIT                      107
 #define   S_FORCEFIELDHUMLOOP           108
 #define   S_KEYCARDBLIP                 109 
 #define   S_PICKUP_BONUS                110
@@ -454,53 +454,53 @@ extern    int      flags32[];
 #define   S_GLASSBREAK2                 113                                
 #define   S_EXPLODE1                    114
 #define   S_EXPLODE2                    115
-#define	S_SMALLGLASS1				116
-#define	S_SMALLGLASS2				117
-#define	S_GORE1					118
-#define	S_GORE2					119
-#define	S_GORE3					120
+#define   S_SMALLGLASS1                 116
+#define   S_SMALLGLASS2                 117
+#define   S_GORE1                       118
+#define   S_GORE2                       119
+#define   S_GORE3                       120
 #define   S_FLUSH                       121
 #define   S_REVOLVEDOOR                 122
-#define	S_PAIN1			          123
-#define	S_PAIN2			          124
-#define	S_SCREAM1			          125
-#define	S_SCREAM2			          126
-#define	S_SCREAM3			          127
-#define   S_PLAYERDIE    	          128
-#define	S_MANDIE1			          129
-#define	S_MANDIE2  		          130
-#define	S_MANDIE3  		          131
-#define	S_MANDIE4  		          132
-#define	S_MANDIE5  		          133
-#define	S_MANDIE6  		          134
-#define	S_MANDIE7  		          135
-#define	S_MANDIE8  		          136
-#define	S_MANDIE9  		          137
-#define	S_MANDIE10 		          138
-#define	S_GIRLDIE1		          139
-#define	S_GIRLDIE2		          140
-#define	S_GIRLDIE3		          141
-#define	S_GIRLDIE4		          142
-#define	S_GIRLDIE5		          143
-#define	S_GIRLDIE6		          144
+#define   S_PAIN1                       123
+#define   S_PAIN2                       124
+#define   S_SCREAM1                     125
+#define   S_SCREAM2                     126
+#define   S_SCREAM3                     127
+#define   S_PLAYERDIE                   128
+#define   S_MANDIE1                     129
+#define   S_MANDIE2                     130
+#define   S_MANDIE3                     131
+#define   S_MANDIE4                     132
+#define   S_MANDIE5                     133
+#define   S_MANDIE6                     134
+#define   S_MANDIE7                     135
+#define   S_MANDIE8                     136
+#define   S_MANDIE9                     137
+#define   S_MANDIE10                    138
+#define   S_GIRLDIE1                    139
+#define   S_GIRLDIE2                    140
+#define   S_GIRLDIE3                    141
+#define   S_GIRLDIE4                    142
+#define   S_GIRLDIE5                    143
+#define   S_GIRLDIE6                    144
 #define   S_ANDROID_DIE                 145
 #define   S_MATRIX_ATTACK               146
 #define   S_MATRIX_ATTACK2              147
 #define   S_MATRIX_DIE1                 148
 #define   S_MATRIX_DIE2                 149
 #define   S_TRANSITION                  150
-#define   S_MALE_COMEONYOU          	151
-#define   S_MALE_TAKEYOUINSLEEP     	152
-#define   S_MALE_YOULOSER           	153
-#define   S_MALE_YOUPUNK            	154
-#define   S_MALE_YOUMORON           	155
-#define   S_MALE_LIKESHOOTINGDUX    	156
-#define   S_MALE_SCRAPEBOTBARREL    	157
-#define   S_MALE_DONTHURT            	158
-#define   S_MALE_DONTSHOOT            	159
-#define   S_MALE_PLEASEDONTSHOOT       	160 
-#define   S_MALE_DONTSHOOT2          	161
-#define   S_MALE_PLEASEDONTSHOOT2     	162
+#define   S_MALE_COMEONYOU              151
+#define   S_MALE_TAKEYOUINSLEEP         152
+#define   S_MALE_YOULOSER               153
+#define   S_MALE_YOUPUNK                154
+#define   S_MALE_YOUMORON               155
+#define   S_MALE_LIKESHOOTINGDUX        156
+#define   S_MALE_SCRAPEBOTBARREL        157
+#define   S_MALE_DONTHURT               158
+#define   S_MALE_DONTSHOOT              159
+#define   S_MALE_PLEASEDONTSHOOT        160 
+#define   S_MALE_DONTSHOOT2             161
+#define   S_MALE_PLEASEDONTSHOOT2       162
 #define   S_MALE_OHMYGOD                163
 #define   S_MALE_GETDOWNTAKECOVER       164 
 #define   S_MALE_HESGOTGUN              165
@@ -511,15 +511,15 @@ extern    int      flags32[];
 #define   S_MALE_ICANTBELIEVE           170
 #define   S_MALE_CALLTHEPOLICE          171
 #define   S_MALE_HELPCALLPOLICE         172
-#define   S_MALE_HEYBACKOFF         	173
-#define   S_MALE_HESGOTAGUN         	174 
-#define   S_FEM_RUNHEGOTGUN        	175
+#define   S_MALE_HEYBACKOFF             173
+#define   S_MALE_HESGOTAGUN             174 
+#define   S_FEM_RUNHEGOTGUN             175
 #define   S_FEM_RUN                     176
-#define   S_FEM_EVRYRUNHEGOTGUN        	177
+#define   S_FEM_EVRYRUNHEGOTGUN         177
 #define   S_FEM_CALLACOP                178      
 #define   S_FEM_OHNO                    179
 #define   S_FEM_MOVEHEKILLUS            180
-#define   S_FEM_HESGOTAGUN1   	     181
+#define   S_FEM_HESGOTAGUN1             181
 #define   S_FEM_EEKRUN                  182
 #define   S_FEM_PSYCHOGOTGUN            183
 #define   S_FEM_OHMYGOD                 184
@@ -532,19 +532,19 @@ extern    int      flags32[];
 #define   S_DIANE_DONTSHOOTP2           191
 #define   S_KATIE_DONTSHOOT             192
 #define   S_KATIE_PLEASEDONTSHOOT       193
-#define   S_MAR_THINKYOUTAKE  	     194
-#define   S_MAR_ISTHATALL     	     195
-#define   S_MAR_KISSYOURASS   	     196
-#define   S_GRD_WHATDOINGHERE 	     197
-#define   S_GRD_IDLEAVE       	     198
-#define   S_GRD_HANDSUP       	     199
-#define   S_GRD_HOLDIT       	     	200
-#define   S_GRD_DROPIT       	     	201
-#define   S_DIM_WANTSOMETHIS        	202
-#define   S_DIM_THINOUCANTAKEME     	203
-#define   S_DIM_LAUGHTER               	204
-#define   S_DIM_CANTSTOPTEKLORDS    	205
-#define   S_DIM_TEKRULES            	206
+#define   S_MAR_THINKYOUTAKE            194
+#define   S_MAR_ISTHATALL               195
+#define   S_MAR_KISSYOURASS             196
+#define   S_GRD_WHATDOINGHERE           197
+#define   S_GRD_IDLEAVE                 198
+#define   S_GRD_HANDSUP                 199
+#define   S_GRD_HOLDIT                  200
+#define   S_GRD_DROPIT                  201
+#define   S_DIM_WANTSOMETHIS            202
+#define   S_DIM_THINOUCANTAKEME         203
+#define   S_DIM_LAUGHTER                204
+#define   S_DIM_CANTSTOPTEKLORDS        205
+#define   S_DIM_TEKRULES                206
 #define   S_HOLOGRAMDIE                 207
 
 
@@ -755,7 +755,7 @@ void smkshowmenu();
 
 // teksnd.c
 
-extern int	     digiloopflag;
+extern int          digiloopflag;
 
 void initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c);
 void menusong(int insubway);

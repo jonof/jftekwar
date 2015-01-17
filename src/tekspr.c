@@ -18,10 +18,10 @@
 short
 kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	int daz, zoffs;
-	short retval, dasectnum, tempshort;
-    unsigned int dcliptype;
-	spritetype *spr;
+     int daz, zoffs;
+     short retval, dasectnum, tempshort;
+     unsigned int dcliptype;
+     spritetype *spr;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
@@ -29,52 +29,52 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
      }
     #endif
     
-    switch (cliptype) {
-        case NORMALCLIP: dcliptype = CLIPMASK0; break;
-        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
-        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
-    }
+     switch (cliptype) {
+          case NORMALCLIP: dcliptype = CLIPMASK0; break;
+          case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+          case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+     }
 
-	spr = &sprite[spritenum];
+     spr = &sprite[spritenum];
 
-	if ((spr->cstat&128) == 0)
-		zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
-	else
-		zoffs = 0;
+     if ((spr->cstat&128) == 0)
+          zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
+     else
+          zoffs = 0;
 
-	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
-	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
-	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
+     dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
+     daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
+     retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
+                                   ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
-	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
-		changespritesect(spritenum,dasectnum);
+     if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
+          changespritesect(spritenum,dasectnum);
 
-		//Set the blocking bit to 0 temporarly so getzrange doesn't pick up
-		//its own sprite
-	tempshort = spr->cstat; spr->cstat &= ~1;
-	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
-				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((int)spr->clipdist)<<2,dcliptype);
-	spr->cstat = tempshort;
+          //Set the blocking bit to 0 temporarly so getzrange doesn't pick up
+          //its own sprite
+     tempshort = spr->cstat; spr->cstat &= ~1;
+     getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
+                     &globhiz,&globhihit,&globloz,&globlohit,
+                     ((int)spr->clipdist)<<2,dcliptype);
+     spr->cstat = tempshort;
 
-	daz = spr->z+zoffs + dz;
-	if ((daz <= globhiz) || (daz > globloz))
-	{
-		if (retval != 0) return(retval);
-		return(16384+dasectnum);
-	}
-	spr->z = daz-zoffs;
-	return(retval);
+     daz = spr->z+zoffs + dz;
+     if ((daz <= globhiz) || (daz > globloz))
+     {
+          if (retval != 0) return(retval);
+          return(16384+dasectnum);
+     }
+     spr->z = daz-zoffs;
+     return(retval);
 }
 
 short
 floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
 {
-	int daz, zoffs;
-	short retval, dasectnum;
-    unsigned int dcliptype;
-	spritetype *spr;
+     int daz, zoffs;
+     short retval, dasectnum;
+     unsigned int dcliptype;
+     spritetype *spr;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
@@ -82,40 +82,40 @@ floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, i
      }
     #endif
     
-    switch (cliptype) {
-        case NORMALCLIP: dcliptype = CLIPMASK0; break;
-        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
-        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
-    }
+     switch (cliptype) {
+          case NORMALCLIP: dcliptype = CLIPMASK0; break;
+          case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+          case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+     }
 
-	spr = &sprite[spritenum];
+     spr = &sprite[spritenum];
 
-	if ((spr->cstat&128) == 0)
-		zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
-	else
-		zoffs = 0;
+     if ((spr->cstat&128) == 0)
+          zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
+     else
+          zoffs = 0;
 
-	dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
-	daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
-	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
+     dasectnum = spr->sectnum;  //Can't modify sprite sectors directly becuase of linked lists
+     daz = spr->z+zoffs;  //Must do this if not using the new centered centering (of course)
+     retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
+                                   ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
-	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
-		changespritesect(spritenum,dasectnum);
+     if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
+          changespritesect(spritenum,dasectnum);
 
-	return(retval);
+     return(retval);
 }
 
 short
 movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
-	int           daz,zoffs;
+     int           daz,zoffs;
      int           jumpz,deltaz;
      int           px,py,pz;
-	short          retval,dasectnum,tempshort;
+     short          retval,dasectnum,tempshort;
      short          failedsectnum;
-    unsigned int dcliptype;
-	spritetype     *spr;
+     unsigned int dcliptype;
+     spritetype     *spr;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
@@ -123,28 +123,28 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
      }
     #endif
     
-    switch (cliptype) {
-        case NORMALCLIP: dcliptype = CLIPMASK0; break;
-        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
-        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
-    }
+     switch (cliptype) {
+          case NORMALCLIP: dcliptype = CLIPMASK0; break;
+          case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+          case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+     }
 
-	spr = &sprite[spritenum];
+     spr = &sprite[spritenum];
 
-	if ((spr->cstat&128) == 0)
-		zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
-	else
-		zoffs = 0;
+     if ((spr->cstat&128) == 0)
+          zoffs = -((tilesizy[spr->picnum]*spr->yrepeat)<<1);
+     else
+          zoffs = 0;
 
-	dasectnum = spr->sectnum;
+     dasectnum = spr->sectnum;
      px=spr->x;
      py=spr->y;
      pz=spr->z;
-	daz = spr->z+zoffs; 
-	retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
-	if( (dasectnum != spr->sectnum) && (dasectnum >= 0) ) {
-		changespritesect(spritenum,dasectnum);
+     daz = spr->z+zoffs; 
+     retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
+                                   ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
+     if( (dasectnum != spr->sectnum) && (dasectnum >= 0) ) {
+          changespritesect(spritenum,dasectnum);
      }
 
      if( dasectnum >= 0 && (sectptr[dasectnum]->lotag == 4) && (spr->extra != -1) ) {
@@ -158,21 +158,21 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
           return(retval);
      }
 
-	tempshort = spr->cstat; spr->cstat &= ~1;
-	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
-				 &globhiz,&globhihit,&globloz,&globlohit,
-				 ((int)spr->clipdist)<<2,dcliptype);
-	spr->cstat = tempshort;
-	daz = spr->z+zoffs + dz;
-	if( (daz <= globhiz) || (daz > globloz) ) {
-		if( retval != 0 ) {
+     tempshort = spr->cstat; spr->cstat &= ~1;
+     getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
+                     &globhiz,&globhihit,&globloz,&globlohit,
+                     ((int)spr->clipdist)<<2,dcliptype);
+     spr->cstat = tempshort;
+     daz = spr->z+zoffs + dz;
+     if( (daz <= globhiz) || (daz > globloz) ) {
+          if( retval != 0 ) {
                return(retval);
           }
           else {
-		     return(16384+dasectnum);
+               return(16384+dasectnum);
           }
-	}
-	if( (globloz != pz) && (spr->extra >= 0) && (spr->extra < MAXSPRITES) ) {
+     }
+     if( (globloz != pz) && (spr->extra >= 0) && (spr->extra < MAXSPRITES) ) {
           spr->z=globloz;
           deltaz=labs(pz-globloz);
           jumpz=tilesizy[spr->picnum]+(spr->yrepeat-64);
@@ -184,19 +184,19 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
           }
      }
      else {
-	     spr->z = daz-zoffs;
+          spr->z = daz-zoffs;
      }
 
-	return(retval);
+     return(retval);
 }
 
 short
 flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
 {
-	int           daz;
-	short          retval, dasectnum, tempshort;
+     int           daz;
+     short          retval, dasectnum, tempshort;
     unsigned int dcliptype;
-	spritetype *spr;
+     spritetype *spr;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
@@ -204,43 +204,43 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
      }
     #endif
     
-    switch (cliptype) {
-        case NORMALCLIP: dcliptype = CLIPMASK0; break;
-        case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
-        case CLIFFCLIP: dcliptype = CLIPMASK0; break;
-    }
+     switch (cliptype) {
+          case NORMALCLIP: dcliptype = CLIPMASK0; break;
+          case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
+          case CLIFFCLIP: dcliptype = CLIPMASK0; break;
+     }
 
-	spr = &sprite[spritenum];
+     spr = &sprite[spritenum];
 
-	dasectnum = spr->sectnum; 
-	retval = clipmove(&spr->x,&spr->y,&spr->z,&dasectnum,dx,dy,
-							((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
+     dasectnum = spr->sectnum; 
+     retval = clipmove(&spr->x,&spr->y,&spr->z,&dasectnum,dx,dy,
+                                   ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
-	if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
-		changespritesect(spritenum,dasectnum);
+     if ((dasectnum != spr->sectnum) && (dasectnum >= 0))
+          changespritesect(spritenum,dasectnum);
 
      if( spr->statnum != PINBALL ) {
-	     tempshort = spr->cstat; spr->cstat &= ~1;
-	     getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
-	     			 &globhiz,&globhihit,&globloz,&globlohit,
-	     			 ((int)spr->clipdist)<<2,dcliptype);
-	     spr->cstat = tempshort;
+          tempshort = spr->cstat; spr->cstat &= ~1;
+          getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
+                          &globhiz,&globhihit,&globloz,&globlohit,
+                          ((int)spr->clipdist)<<2,dcliptype);
+          spr->cstat = tempshort;
           daz=(globloz+globhiz);
           spr->z=(daz>>1);
      }
  
-	return(retval);
+     return(retval);
 }
 
 void
 analyzesprites(int dax, int day)
 {
-	int           i, k;
+     int           i, k;
      int            ext;
-	point3d        *ospr;
-	spritetype     *tspr;
+     point3d        *ospr;
+     spritetype     *tspr;
 
-	for( i=0,tspr=&tsprite[0]; i<spritesortcnt; i++,tspr++ ) {
+     for( i=0,tspr=&tsprite[0]; i<spritesortcnt; i++,tspr++ ) {
 
           ext=tspr->extra;
           if( validext(ext) ) {
@@ -249,11 +249,11 @@ analyzesprites(int dax, int day)
                }
           }
 
-	     k = getangle(tspr->x-dax,tspr->y-day);
-		k = (((tspr->ang+3072+128-k)&2047)>>8)&7;
+          k = getangle(tspr->x-dax,tspr->y-day);
+          k = (((tspr->ang+3072+128-k)&2047)>>8)&7;
 
-		switch( tspr->picnum ) {
-		case DOOMGUY:
+          switch( tspr->picnum ) {
+          case DOOMGUY:
           case RUBWALKPIC:
           case FRGWALKPIC:
           case SAMWALKPIC:
@@ -279,25 +279,25 @@ analyzesprites(int dax, int day)
           case SSALWALKPIC:
           case SGOLWALKPIC:
           case SWATWALKPIC:
-			if( k <= 4 ) {
-			     tspr->picnum += (k<<2);
-   			     tspr->cstat &= ~4;   //clear x-flipping bit
-   			}
-   			else {
-   				tspr->picnum += ((8-k)<<2);
-   				tspr->cstat |= 4;    //set x-flipping bit
-   			}
-   			break;
+               if( k <= 4 ) {
+                    tspr->picnum += (k<<2);
+                    tspr->cstat &= ~4;   //clear x-flipping bit
+               }
+               else {
+                    tspr->picnum += ((8-k)<<2);
+                    tspr->cstat |= 4;    //set x-flipping bit
+               }
+               break;
           case AUTOGUN:
-		     if (k <= 4) {
-				tspr->picnum += k;    
-				tspr->cstat &= ~4; 
-			}
-			else {
-				tspr->picnum += (8-k); 
-				tspr->cstat |= 4;     
-			}
-			break;
+               if (k <= 4) {
+                    tspr->picnum += k;    
+                    tspr->cstat &= ~4; 
+               }
+               else {
+                    tspr->picnum += (8-k); 
+                    tspr->cstat |= 4;     
+               }
+               break;
           case JAKESTANDPIC:
           case RUBSTANDPIC:
           case FRGSTANDPIC:
@@ -332,7 +332,7 @@ analyzesprites(int dax, int day)
                     tspr->picnum += ((8-k));
                     tspr->cstat |= 4;
                }
-			break;
+               break;
           case RUBATAKPIC:
           case FRGATTACKPIC:
           case SAMATTACKPIC:
@@ -356,13 +356,13 @@ analyzesprites(int dax, int day)
           case SWATATTACKPIC:
                if( k <= 4 ) {           
                     tspr->picnum += (k<<1);
-				tspr->cstat &= ~4;   //clear x-flipping bit
+                    tspr->cstat &= ~4;   //clear x-flipping bit
                }
                else {
                     tspr->picnum += ((8-k)<<1);
                     tspr->cstat |= 4;
                }
-			break;
+               break;
           case JAKEPAINPIC:
           case RUBPAINPIC:
           case FRGPAINPIC:
@@ -393,13 +393,13 @@ analyzesprites(int dax, int day)
           case JAKEDEATHPIC+8:
                if( k <= 4 ) { 
                     tspr->picnum += (k);
-				tspr->cstat &= ~4;   //clear x-flipping bit
+                    tspr->cstat &= ~4;   //clear x-flipping bit
                }
                else {
                     tspr->picnum += ((8-k));
                     tspr->cstat |= 4;
                }
-			break;
+               break;
           // mirrorman
           case 1079:  
           case 1074:
@@ -409,9 +409,9 @@ analyzesprites(int dax, int day)
                }
                else {
                     tspr->picnum += ((8-k));
-				tspr->cstat &= ~4;   //clear x-flipping bit
+                    tspr->cstat &= ~4;   //clear x-flipping bit
                }
-			break;
+               break;
           case JAKEATTACKPIC:
           case JAKEATTACKPIC+1:
                if (k <= 4) {
@@ -425,42 +425,42 @@ analyzesprites(int dax, int day)
                break;
           default:
                break;
-		}
+          }
 
-		k=tspr->statnum;
-		if( (k >= 1) && (k <= 8) && (k != 2) ) {  //Interpolate moving sprite
-			ospr = &osprite[tspr->owner];
-			k = tspr->x-ospr->x; tspr->x = ospr->x;
-			if (k != 0) tspr->x += mulscale(k,smoothratio,16);
-			k = tspr->y-ospr->y; tspr->y = ospr->y;
-			if (k != 0) tspr->y += mulscale(k,smoothratio,16);
-			k = tspr->z-ospr->z; tspr->z = ospr->z;
-			if (k != 0) tspr->z += mulscale(k,smoothratio,16);
-		}
+          k=tspr->statnum;
+          if( (k >= 1) && (k <= 8) && (k != 2) ) {  //Interpolate moving sprite
+               ospr = &osprite[tspr->owner];
+               k = tspr->x-ospr->x; tspr->x = ospr->x;
+               if (k != 0) tspr->x += mulscale(k,smoothratio,16);
+               k = tspr->y-ospr->y; tspr->y = ospr->y;
+               if (k != 0) tspr->y += mulscale(k,smoothratio,16);
+               k = tspr->z-ospr->z; tspr->z = ospr->z;
+               if (k != 0) tspr->z += mulscale(k,smoothratio,16);
+          }
 
-	}
+     }
 }
 
 void
 checktouchsprite(short snum, short sectnum)
 {
-	int      i, nexti;
+     int      i, nexti;
      int       healthmax;
      char      dosound=0;
      char      str[30];
 
-	if( (sectnum < 0) || (sectnum >= numsectors) ) {
+     if( (sectnum < 0) || (sectnum >= numsectors) ) {
           return;
      }
 
      memset(str, 0, 30);
 
-	i = headspritesect[sectnum];
-	while (i != -1)
-	{
-		nexti = nextspritesect[i];
-		if ((labs(posx[snum]-sprite[i].x)+labs(posy[snum]-sprite[i].y) < 512) && (labs((posz[snum]>>8)-((sprite[i].z>>8)-(tilesizy[sprite[i].picnum]>>1))) <= 40))
-		{
+     i = headspritesect[sectnum];
+     while (i != -1)
+     {
+          nexti = nextspritesect[i];
+          if ((labs(posx[snum]-sprite[i].x)+labs(posy[snum]-sprite[i].y) < 512) && (labs((posz[snum]>>8)-((sprite[i].z>>8)-(tilesizy[sprite[i].picnum]>>1))) <= 40))
+          {
                // must jive with tekinitplayer settings
                switch( difficulty ) {
                case 3:
@@ -470,7 +470,7 @@ checktouchsprite(short snum, short sectnum)
                     healthmax=MAXHEALTH;
                     break;
                }
-			switch( sprite[i].picnum ) {
+               switch( sprite[i].picnum ) {
                case MEDICKIT2PIC:
                     if (health[snum] < healthmax) {
                          changehealth(snum,100);
@@ -681,22 +681,22 @@ checktouchsprite(short snum, short sectnum)
                     break;
                default:
                     break;
-			}
-		}
+               }
+          }
           if( dosound && (screenpeek == snum) ) {
                playsound(S_PICKUP_BONUS,0,0,0,ST_UNIQUE);
                showmessage(str);
           }
           dosound=0;
 
-		i = nexti;
+          i = nexti;
      }
 }
 
 void
 operatesprite(short dasprite)
 {
-	int           datag;
+     int           datag;
      spritetype     *spr;
      int            pu;
 
@@ -771,11 +771,11 @@ dropit(int x, int y, int z, short sect, int pic)
      j=jsinsertsprite(sect, DROPSIES);
      if( j != -1 ) {
           ang=dropangles[dropanglecnt];
-	     fillsprite(j,x,y,z,0,
+          fillsprite(j,x,y,z,0,
                      0,0,12,
                      16,16,0,0,pic,ang,
-		           sintable[(ang+2560)&2047]>>6,sintable[(ang+2048)&2047]>>6,
-		           30L,0,sect,DROPSIES,0,0,0);
+                     sintable[(ang+2560)&2047]>>6,sintable[(ang+2048)&2047]>>6,
+                     30L,0,sect,DROPSIES,0,0,0);
      }
      dropanglecnt++;
      if( dropanglecnt >= MAXDROPANGLES ) {

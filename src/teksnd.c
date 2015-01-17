@@ -46,7 +46,7 @@ DWORD    *LoopList;
 #define   MAXBASESONGLENGTH   44136
 #define   AVAILMODES          3
 #define   SONGSPERLEVEL       3 
-#define	NUMLEVELS		 7
+#define   NUMLEVELS       7
 
 int       totalsongsperlevel;
 char      basesongdata[MAXBASESONGLENGTH];
@@ -149,13 +149,13 @@ setupdigi()
           crash("setupdigi: digilist malloc failed");
      }
 
-	fhsounds=open("sounds",O_RDONLY|O_BINARY);
-	if( fhsounds == -1 ) {
-	     crash("setupdigi: cant open sounds");
-	}
+     fhsounds=open("sounds",O_RDONLY|O_BINARY);
+     if( fhsounds == -1 ) {
+          crash("setupdigi: cant open sounds");
+     }
      memset(digilist,0, 4096);
-	lseek(fhsounds,-4096L,SEEK_END);
-	i=read(fhsounds,( void *)digilist, 4096);
+     lseek(fhsounds,-4096L,SEEK_END);
+     i=read(fhsounds,( void *)digilist, 4096);
      if( i != 4096 ) {
           crash("setupdigi: bad read of digilist");
      }
@@ -205,7 +205,7 @@ setupmidi()
 
      melodicbankptr=( LPSTR)0;
      drumbankptr=( LPSTR)0;
-	digitalbankptr=( LPSTR)0;
+     digitalbankptr=( LPSTR)0;
 
      if( (musicmode != MM_MIDIFM) && (musicmode != MM_MIDIDIGI) )
           goto nobanks;
@@ -215,56 +215,56 @@ setupmidi()
      if( (melodicbankptr == ( LPSTR)NULL) || (drumbankptr == ( LPSTR)NULL) ) {
           crash("setupmidi: failed malloc");
      }
-	if( (fh=open("melodic.bnk",O_RDONLY)) == -1 ) {
+     if( (fh=open("melodic.bnk",O_RDONLY)) == -1 ) {
           crash("setupmidi: cant open melodic.bnk");
      }
-	read(fh, ( void * )melodicbankptr, MELODICBANKLENGTH);
-	close(fh);
-	rv=sosMIDISetInsData(*fhmididriverptr, melodicbankptr, 1);
+     read(fh, ( void * )melodicbankptr, MELODICBANKLENGTH);
+     close(fh);
+     rv=sosMIDISetInsData(*fhmididriverptr, melodicbankptr, 1);
      if( rv != _ERR_NO_ERROR ) {
           crash("setupmidi: bad SetInsData");
      }
-	if( (fh=open("drum.bnk",O_RDONLY)) == -1 ) {
+     if( (fh=open("drum.bnk",O_RDONLY)) == -1 ) {
           crash("setupmidi: cant open drum.bnk");
      }
-	read(fh, ( void * )drumbankptr, DRUMBANKLENGTH);
-	close(fh);
-	rv=sosMIDISetInsData(*fhmididriverptr, drumbankptr, 1);
+     read(fh, ( void * )drumbankptr, DRUMBANKLENGTH);
+     close(fh);
+     rv=sosMIDISetInsData(*fhmididriverptr, drumbankptr, 1);
      if( rv != _ERR_NO_ERROR ) {
           crash("setupmidi: bad SetInsData");
      }
 
-	if( (musicmode == MM_MIDIDIGI) && (midihardwareptr->wPort == 0x388) ) {
-		if( (fh=open("test.dig",O_BINARY|O_RDWR)) == -1 ) {
+     if( (musicmode == MM_MIDIDIGI) && (midihardwareptr->wPort == 0x388) ) {
+          if( (fh=open("test.dig",O_BINARY|O_RDWR)) == -1 ) {
                crash("setupmidi: cant open test.dig");
           }
-   	     dl=lseek(fh, 0L, SEEK_END);
-   	     lseek(fh, 0L, SEEK_SET);
-		digitalbankptr=( LPSTR)malloc(( size_t)dl);
+          dl=lseek(fh, 0L, SEEK_END);
+          lseek(fh, 0L, SEEK_SET);
+          digitalbankptr=( LPSTR)malloc(( size_t)dl);
           if( digitalbankptr == ( LPSTR)NULL ) {
                crash("setupmidi: failed malloc digbnkptr");
           }
-		rv=read(fh, ( void * )digitalbankptr, dl);
+          rv=read(fh, ( void * )digitalbankptr, dl);
           if( rv != dl ) {
                crash("setupmidi: bad .dig read");
           }
-		close(fh);
-		rv=sosMIDISetInsData(*fhmididigidriverptr, digitalbankptr, 1);
+          close(fh);
+          rv=sosMIDISetInsData(*fhmididigidriverptr, digitalbankptr, 1);
           if( rv != _ERR_NO_ERROR ) {
                crash("setupmidi: bad SetInsData");
           }
-	}	
+     }    
 
 nobanks:
 
      if( musicmode != MM_NOHARDWARE ) {
-		if( (fhsongs=open("SONGS",O_RDONLY | O_BINARY)) == -1 ) {
+          if( (fhsongs=open("SONGS",O_RDONLY | O_BINARY)) == -1 ) {
                crash("setupmidi: cant open songs");
           }
           lseek(fhsongs, 0, SEEK_SET);
-		lseek(fhsongs, -4096, SEEK_END);
-		read(fhsongs, ( void *)songlist, 4096);
-	}
+          lseek(fhsongs, -4096, SEEK_END);
+          read(fhsongs, ( void *)songlist, 4096);
+     }
 
 //jsa venom
      for( i=0; i<SONGSPERLEVEL; i++ ) {
@@ -279,7 +279,7 @@ nobanks:
      songptr[1]->buffer=&secondsongdata;
      songptr[2]->buffer=&thirdsongdata;
 
-	 totalsongsperlevel=SONGSPERLEVEL*AVAILMODES;
+      totalsongsperlevel=SONGSPERLEVEL*AVAILMODES;
 
 
 }
@@ -317,10 +317,10 @@ VOID _far cdecl
 digiloopcallback(WORD fhdriver, WORD action, WORD fhsample)
 {
      if ( action == _SAMPLE_LOOPING ) {
-			if(LoopPending) {
-				SND_SwapLoops();
-				LoopPending = 0;
-			}
+               if(LoopPending) {
+                    SND_SwapLoops();
+                    LoopPending = 0;
+               }
      }
 } 
 
@@ -367,8 +367,8 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
                sbufptr[sn]->cache_lock=0x00;
                return(-1);
           }
-	     lseek(fhsounds, sbufptr[sn]->offset, SEEK_SET);
-	     nr=read(fhsounds,( void *)(sbufptr[sn]->cache_ptr),sbufptr[sn]->cache_length);
+          lseek(fhsounds, sbufptr[sn]->offset, SEEK_SET);
+          nr=read(fhsounds,( void *)(sbufptr[sn]->cache_ptr),sbufptr[sn]->cache_length);
           if( nr != sbufptr[sn]->cache_length ) {
                sbufptr[sn]->cache_ptr=0L;
                sbufptr[sn]->cache_lock=0x00;
@@ -384,29 +384,29 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
      }
      else {
           dist=labs(posx[screenpeek]-sndx)+labs(posy[screenpeek]-sndy);
-		 if( (type&ST_AMBUPDATE) || (type&ST_VEHUPDATE) ) {
-		     if( dist < AMBUPDATEDIST ) {
+           if( (type&ST_AMBUPDATE) || (type&ST_VEHUPDATE) ) {
+               if( dist < AMBUPDATEDIST ) {
                    vol = (AMBUPDATEDIST<<3)-(dist<<3);
                }
                else {
                    vol=0;                   
                }
-		 }
-       	 else {	
-		     if(dist < 1500L)
-			     vol = 0x7fff;
-			else if(dist > 8500L) {
+           }
+           else {   
+               if(dist < 1500L)
+                    vol = 0x7fff;
+               else if(dist > 8500L) {
                     if(sn >= S_MALE_COMEONYOU)
-			          vol = 0x0000;
+                         vol = 0x0000;
                     else
                          vol = 0x1f00;
                }
-			else
-			     vol = 39000L-(dist<<2);
+               else
+                    vol = 39000L-(dist<<2);
            }
-	      pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
-   	   	 if( (pan < 0) || (pan > 35) ) 
-      	     pan=13;
+           pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
+           if( (pan < 0) || (pan > 35) ) 
+               pan=13;
      }
      if( (vol < 0) )
          vol=0;
@@ -431,7 +431,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
           sampleptr[i]->wSamplePanLocation=0x8000;
      sampleptr[i]->wSamplePanSpeed=0;
 
-	dsoundptr[i]->handle=sosDIGIStartSample(*fhdigidriverptr,sampleptr[i]);
+     dsoundptr[i]->handle=sosDIGIStartSample(*fhdigidriverptr,sampleptr[i]);
      if( dsoundptr[i]->handle == _ERR_NO_SLOTS ) {
           dsoundptr[i]->handle=NULL_HANDLE;
           dsoundptr[i]->plevel=0;
@@ -442,7 +442,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
           return(-1);
      }
      else {
-	     sbufptr[sn]->users++;
+          sbufptr[sn]->users++;
          #ifdef SNDDEBUG
           showmessage("SND %03d ADDR %08ld USRS %02d", sn, sbufptr[sn]->cache_ptr, sbufptr[sn]->users);
          #endif
@@ -493,21 +493,21 @@ updatesounds(int    snum)
           dist=labs(posx[snum]-dsoundptr[i]->x)+labs(posy[snum]-dsoundptr[i]->y);
 
           if(dsoundptr[i]->type==ST_AMBUPDATE) {
-		     if( dist < AMBUPDATEDIST ) {
+               if( dist < AMBUPDATEDIST ) {
                     vol = (AMBUPDATEDIST<<3)-(dist<<3);
                }
                else {
                     vol=0;                   
                }
           }
-		else {
-		     if(dist < 1500L)
-		 		vol = 0x7fff;
-		 	else if(dist > 8500L)
-		 		vol = 0x1f00;
-		 	else
-		 		vol = 39000L-(dist<<2);
-		}
+          else {
+               if(dist < 1500L)
+                    vol = 0x7fff;
+               else if(dist > 8500L)
+                    vol = 0x1f00;
+               else
+                    vol = 39000L-(dist<<2);
+          }
 
           if( (vol < 0) )
               vol=0;
@@ -536,41 +536,41 @@ updatevehiclesnds(int i, long sndx, long sndy)
 {
      long      dist=0L,vol=0L,pan=0L;
 
-	if( soundmode == SM_NOHARDWARE ) {
-   	     return;
+     if( soundmode == SM_NOHARDWARE ) {
+          return;
      }
      if( (i < 0) || (i > MAXSOUNDS) ) {
           return;
      }
 
-	dsoundptr[i]->x=sndx;
-	dsoundptr[i]->y=sndy;
+     dsoundptr[i]->x=sndx;
+     dsoundptr[i]->y=sndy;
 
      dist=labs(posx[screenpeek]-sndx)+labs(posy[screenpeek]-sndy);
 
 
-	if( dist < 1000L ) {
-		vol = 0x7fff;
+     if( dist < 1000L ) {
+          vol = 0x7fff;
      }
-	else if( dist > 9000L ) {
-		vol = 0x0000;
+     else if( dist > 9000L ) {
+          vol = 0x0000;
      }
-	else {
-		vol = 36000L-(dist<<2);
+     else {
+          vol = 36000L-(dist<<2);
      }
      if( (vol < 0) || (vol > 0x7FFF) ) {
           vol=0x7fff;
      }
 
      if( dsoundptr[i]->handle != NULL_HANDLE ) 
-	     sosDIGISetSampleVolume(*fhdigidriverptr, dsoundptr[i]->handle, vol);
+          sosDIGISetSampleVolume(*fhdigidriverptr, dsoundptr[i]->handle, vol);
 
      pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
      if( (pan < 0) || (pan > 35) ) 
           pan=13;
 
      if( dsoundptr[i]->handle != NULL_HANDLE ) 
-	     sosDIGISetPanLocation(*fhdigidriverptr, dsoundptr[i]->handle, PanArray[pan]);
+          sosDIGISetPanLocation(*fhdigidriverptr, dsoundptr[i]->handle, PanArray[pan]);
 }
 
 
@@ -687,27 +687,27 @@ void menusong(int insubway)
 {
 int i,index;
 
-	if( musicmode == MM_NOHARDWARE )
-    	return;
-	
+     if( musicmode == MM_NOHARDWARE )
+     return;
+     
     for( i=0; i<SONGSPERLEVEL; i++ ) {
          removesong(i);
     }
 
      if(insubway)
-	     index=(NUMLEVELS*(AVAILMODES*SONGSPERLEVEL)+3);
+          index=(NUMLEVELS*(AVAILMODES*SONGSPERLEVEL)+3);
 
      else                
-     	index=NUMLEVELS*(AVAILMODES*SONGSPERLEVEL);
+          index=NUMLEVELS*(AVAILMODES*SONGSPERLEVEL);
 
      switch( musicmode ) {
      case MM_MIDIFM:
           break;
      case MM_MIDIAWE32:
-		 index++;        
+           index++;        
           break;
      case MM_MIDIGEN:
-		 index+=2;
+           index+=2;
           break;
      }
 
@@ -724,7 +724,7 @@ int i,index;
      songptr[0]->buffer=&basesongdata;
 
      playsong(BASESONG);
-	
+     
 
 }
 
@@ -744,16 +744,16 @@ startmusic(int level)
           removesong(i);
      }
 
-	index=totalsongsperlevel*(level);                 
+     index=totalsongsperlevel*(level);                 
 
      switch( musicmode ) {
      case MM_MIDIFM:
           break;
      case MM_MIDIAWE32:
-		 index+=SONGSPERLEVEL;        
+           index+=SONGSPERLEVEL;        
           break;
      case MM_MIDIGEN:
-		 index+=SONGSPERLEVEL*2;
+           index+=SONGSPERLEVEL*2;
           break;
      }
 
@@ -868,7 +868,7 @@ uninitsb(void)
                sosMIDIStopSong(songptr[i]->handle);
                sosMIDIUnInitSong(songptr[i]->handle);
           }
-		sosMIDIUnInitDriver(*fhmididriverptr, _TRUE );
+          sosMIDIUnInitDriver(*fhmididriverptr, _TRUE );
          sosMIDIUnInitSystem();
     }
 
@@ -880,16 +880,16 @@ uninitsb(void)
           }
     }
 
-	if( soundmode != SM_NOHARDWARE ) {
+     if( soundmode != SM_NOHARDWARE ) {
           for( i=0; i<MAXSOUNDS; i++ ) {
                if( dsoundptr[i]->handle == NULL_HANDLE )
                     continue;
                sosDIGIStopSample(*fhdigidriverptr, dsoundptr[i]->handle);
           }
-	     if( soundmode != SM_NOHARDWARE ) {
-	          sosTIMERRemoveEvent(*fhdigifillptr);
-		     sosDIGIUnInitDriver(*fhdigidriverptr, _TRUE,_TRUE);
-		     sosDIGIUnInitSystem();
+          if( soundmode != SM_NOHARDWARE ) {
+               sosTIMERRemoveEvent(*fhdigifillptr);
+               sosDIGIUnInitDriver(*fhdigidriverptr, _TRUE,_TRUE);
+               sosDIGIUnInitSystem();
           }
      }
 
@@ -899,9 +899,9 @@ uninitsb(void)
           close(fhsongs);
 
      if( hLoopFile != -1 )
-	      close( hLoopFile );
+           close( hLoopFile );
      if( LoopList != ( DWORD *)NULL )
-	      free( LoopList );
+           free( LoopList );
 
      if( melodicbankptr )
           free( ( void *)melodicbankptr);
@@ -916,77 +916,77 @@ uninitsb(void)
 void
 initlooptable(void)
 {
-	if(!digiloopflag) 
-		return;
-	
-	hLoopFile = open("LOOPS",O_RDONLY | O_BINARY);
-	if( hLoopFile == -1 ) {
-		crash("initlooptable: cant open loops");
-	}
-	LoopList = ( DWORD    *)malloc(0x1000); 
+     if(!digiloopflag) 
+          return;
+     
+     hLoopFile = open("LOOPS",O_RDONLY | O_BINARY);
+     if( hLoopFile == -1 ) {
+          crash("initlooptable: cant open loops");
+     }
+     LoopList = ( DWORD    *)malloc(0x1000); 
     if( LoopList == ( DWORD *)NULL )
          crash("initlooptable: cant get mem for LoopList");
-	lseek(hLoopFile,-4096L,SEEK_END);
-	read(hLoopFile,(void *)FP_OFF(LoopList),4096);
+     lseek(hLoopFile,-4096L,SEEK_END);
+     read(hLoopFile,(void *)FP_OFF(LoopList),4096);
 }
 
 void
 tekprepdigiloops(void)
 {
-	if( !digiloopflag )
-		return;
+     if( !digiloopflag )
+          return;
 
-	loopbufptr[0]->cache_lock=1;
-	allocache(&(loopbufptr[0]->cache_ptr), MAX_LOOP_LENGTH, &(loopbufptr[0]->cache_lock));
-	if( loopbufptr[0]->cache_ptr == 0L ) {
-		loopbufptr[0]->cache_lock=0x00;
-		digiloopflag=0;
- 	}
+     loopbufptr[0]->cache_lock=1;
+     allocache(&(loopbufptr[0]->cache_ptr), MAX_LOOP_LENGTH, &(loopbufptr[0]->cache_lock));
+     if( loopbufptr[0]->cache_ptr == 0L ) {
+          loopbufptr[0]->cache_lock=0x00;
+          digiloopflag=0;
+     }
 
-	loopbufptr[1]->cache_lock=1;
-	allocache(&(loopbufptr[1]->cache_ptr), MAX_LOOP_LENGTH, &(loopbufptr[1]->cache_lock));
-	if( loopbufptr[1]->cache_ptr == 0L ) {
-		loopbufptr[1]->cache_lock=0x00;
-		digiloopflag=0;
-	}
+     loopbufptr[1]->cache_lock=1;
+     allocache(&(loopbufptr[1]->cache_ptr), MAX_LOOP_LENGTH, &(loopbufptr[1]->cache_lock));
+     if( loopbufptr[1]->cache_ptr == 0L ) {
+          loopbufptr[1]->cache_lock=0x00;
+          digiloopflag=0;
+     }
 }
 
 void 
 SND_LoadLoop(int load_start)
 {
-     int	nr=0;
-	SeekIndex = ( LoopList[(LoopIndex * 3)+0] * 4096 );
-	SampleSize= (WORD)LoopList[(LoopIndex * 3) + 1];
+     int  nr=0;
+     SeekIndex = ( LoopList[(LoopIndex * 3)+0] * 4096 );
+     SampleSize= (WORD)LoopList[(LoopIndex * 3) + 1];
      lseek(hLoopFile, SeekIndex, SEEK_SET);
 
      if(!load_start) {
-	     nr=read(hLoopFile,( void *)(loopbufptr[looptoggle]->cache_ptr),SampleSize);
-   	     if( nr != SampleSize ) {
-   		     loopbufptr[looptoggle]->cache_ptr=0L;
-   		     loopbufptr[looptoggle]->cache_lock=0x00;
-   		     crash("read problem with loops");
-		}
+          nr=read(hLoopFile,( void *)(loopbufptr[looptoggle]->cache_ptr),SampleSize);
+          if( nr != SampleSize ) {
+               loopbufptr[looptoggle]->cache_ptr=0L;
+               loopbufptr[looptoggle]->cache_lock=0x00;
+               crash("read problem with loops");
+          }
           loopsampleptr[looptoggle]->lpSamplePtr=( LPSTR)loopbufptr[looptoggle]->cache_ptr;
-	     loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
-	     loopsampleptr[looptoggle]->dwSampleByteLength= SampleSize;
-	}
-	else {
-	     nr=read(hLoopFile,( void *)(loopbufptr[looptoggle]->cache_ptr),SampleSize);
-   	     if( nr != SampleSize ) {
-   		     loopbufptr[looptoggle]->cache_ptr=0L;
-   		     loopbufptr[looptoggle]->cache_lock=0x00;
-   		     crash("read problem with loops");
-		}
+          loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
+          loopsampleptr[looptoggle]->dwSampleByteLength= SampleSize;
+     }
+     else {
+          nr=read(hLoopFile,( void *)(loopbufptr[looptoggle]->cache_ptr),SampleSize);
+          if( nr != SampleSize ) {
+               loopbufptr[looptoggle]->cache_ptr=0L;
+               loopbufptr[looptoggle]->cache_lock=0x00;
+               crash("read problem with loops");
+          }
          loopsampleptr[looptoggle]->lpSamplePtr=( LPSTR)loopbufptr[looptoggle]->cache_ptr;
-	     loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
-	     loopsampleptr[looptoggle]->dwSampleByteLength= SampleSize;
-	     lsoundptr[looptoggle]->handle=sosDIGIStartSample(*fhdigidriverptr,loopsampleptr[looptoggle]);
-	     looptoggle^=1;
-	}
+          loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
+          loopsampleptr[looptoggle]->dwSampleByteLength= SampleSize;
+          lsoundptr[looptoggle]->handle=sosDIGIStartSample(*fhdigidriverptr,loopsampleptr[looptoggle]);
+          looptoggle^=1;
+     }
 
-	LoopIndex++;
-	if(LoopIndex>MAX_SND_LOOPS-1)
-	     LoopIndex=0;
+     LoopIndex++;
+     if(LoopIndex>MAX_SND_LOOPS-1)
+          LoopIndex=0;
 }
 
 VOID 
@@ -994,21 +994,21 @@ SND_SwapLoops(VOID)
 {
      int temp,i;
 
-	temp=looptoggle^1;
+     temp=looptoggle^1;
 
-	if( !sosDIGISampleDone(*fhdigidriverptr,lsoundptr[temp]->handle) )
-	{
-		sosDIGIStopSample(*fhdigidriverptr,lsoundptr[temp]->handle);
-		lsoundptr[looptoggle]->handle = sosDIGIStartSample(*fhdigidriverptr,loopsampleptr[looptoggle] );
-	}
-	  
-	looptoggle^=1;
+     if( !sosDIGISampleDone(*fhdigidriverptr,lsoundptr[temp]->handle) )
+     {
+          sosDIGIStopSample(*fhdigidriverptr,lsoundptr[temp]->handle);
+          lsoundptr[looptoggle]->handle = sosDIGIStartSample(*fhdigidriverptr,loopsampleptr[looptoggle] );
+     }
+       
+     looptoggle^=1;
 
 }
 
 #endif
 
-int	     digiloopflag=0;
+int       digiloopflag=0;
 
 void
 initsb(char UNUSED(option1),char UNUSED(option2),int UNUSED(digihz),

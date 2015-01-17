@@ -41,183 +41,183 @@ struct menu {
      struct menu *nextopt;
      char tomenu,backmenu;
 } menu[][MAXSUBOPTIONS]={
-     {{-1,1,1,0,0,NULL,NULL,0,0},                        // 0
-      {-1,1,1,0,0,NULL,NULL,0,0},
-      {-1,1,1,0,0,NULL,NULL,0,0},
-      {-1,1,1,0,0,NULL,NULL,0,0},
-      {-1,1,1,0,0,NULL,NULL,0,0},
-      {-1,1,1,0,0,NULL,NULL,0,0}},
-     {{-1,1,1,0,0,"TEKWAR MENU",&menu[1][1],0,0},        // 1 MAIN MENU
-      {-1,3,1,0,2,"NEW GAME",&menu[1][2],2,0},
-      {-1,4,1,2,2,"OPTIONS",&menu[1][3],3,0},
-      {-1,5,1,4,2,"LOAD GAME",&menu[1][4],6,0},
-      {-1,6,1,6,2,"SAVE GAME",&menu[1][5],7,0},
-      {-1,7,1,8,2,"  ABORT  ",NULL,4,0}},
-     {{-1,1,1,0,0,"DIFFICULTY",&menu[2][1],0,1},         // 2 DIFFICULTY LEVEL
-      {-1,3,1,0,2,"EASY",&menu[2][2],0,1},
-      {-1,4,1,0,2,"MEDIUM",&menu[2][3],0,1},
-      {-1,5,1,0,2,"HARD",NULL,0,1},
-      {-1,6,1,0,2,NULL,NULL,0,1},
-      {-1,7,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,0,"OPTIONS MENU",&menu[3][1],0,1},       // 3 OPTIONS MENU
-      //{-1,3,1,0,2,"SELECT MISSION",&menu[3][2],5,1},
-      {-1,4,1,0,2,"MOUSE SENSITIVITY",&menu[3][2],9,1},
-      {-1,5,1,0,2,"SOUND/MUSIC VOLUME",&menu[3][3],8,1},
-      {-1,6,1,0,2,&headbobstr[0],NULL,0,1},
-      {-1,3,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,5,1,0,3,"ABORT MISSION Y/N?",NULL,0,1},        // 4 QUIT TO DOS
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,0,"SELECT LOCATIONS",&menu[5][1],0,3},// 5 DAY/NIGHT MISSION
-      {-1,3,1,0,2,"CITY",&menu[5][2],0,3},
-      {-1,4,1,0,2,"HOSPITAL",&menu[5][3],0,3},
-      {-1,5,1,0,2,"POLICE STATION",&menu[5][4],0,3},
-      {-1,6,1,0,2,"WAREHOUSE",NULL,0,3},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,3,"LOAD GAME MENU",NULL,0,1},            // 6 LOAD GAME MENU
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,3,"SAVE GAME MENU",NULL,0,1},            // 7 SAVE GAME MENU
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,3,"SOUND/MUSIC VOLUME",&menu[8][1],0,3}, // 8 SOUND EFFECTS VOLUME
-      {-1,3,1,0,2,"SOUND VOLUME",&menu[8][2],0,3},
-      {-1,6,1,0,2,"MUSIC VOLUME",NULL,0,3},
-      {-1,0,1,0,2,NULL,NULL,0,3},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,3,"MOUSE SENSITIVITY",NULL,0,3},         // 9 MOUSE SENSITIVITY
-      {-1,0,1,0,2,NULL,NULL,0,3},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}},
-     {{-1,1,1,0,3,"SCREEN SIZE",NULL,0,3},               // 10 SCREEN SIZE
-      {-1,0,1,0,2,NULL,NULL,0,3},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1},
-      {-1,0,1,0,2,NULL,NULL,0,1}}
+    {{-1,1,1,0,0,NULL,NULL,0,0},                        // 0
+     {-1,1,1,0,0,NULL,NULL,0,0},
+     {-1,1,1,0,0,NULL,NULL,0,0},
+     {-1,1,1,0,0,NULL,NULL,0,0},
+     {-1,1,1,0,0,NULL,NULL,0,0},
+     {-1,1,1,0,0,NULL,NULL,0,0}},
+    {{-1,1,1,0,0,"TEKWAR MENU",&menu[1][1],0,0},        // 1 MAIN MENU
+     {-1,3,1,0,2,"NEW GAME",&menu[1][2],2,0},
+     {-1,4,1,2,2,"OPTIONS",&menu[1][3],3,0},
+     {-1,5,1,4,2,"LOAD GAME",&menu[1][4],6,0},
+     {-1,6,1,6,2,"SAVE GAME",&menu[1][5],7,0},
+     {-1,7,1,8,2,"  ABORT  ",NULL,4,0}},
+    {{-1,1,1,0,0,"DIFFICULTY",&menu[2][1],0,1},         // 2 DIFFICULTY LEVEL
+     {-1,3,1,0,2,"EASY",&menu[2][2],0,1},
+     {-1,4,1,0,2,"MEDIUM",&menu[2][3],0,1},
+     {-1,5,1,0,2,"HARD",NULL,0,1},
+     {-1,6,1,0,2,NULL,NULL,0,1},
+     {-1,7,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,0,"OPTIONS MENU",&menu[3][1],0,1},       // 3 OPTIONS MENU
+     //{-1,3,1,0,2,"SELECT MISSION",&menu[3][2],5,1},
+     {-1,4,1,0,2,"MOUSE SENSITIVITY",&menu[3][2],9,1},
+     {-1,5,1,0,2,"SOUND/MUSIC VOLUME",&menu[3][3],8,1},
+     {-1,6,1,0,2,&headbobstr[0],NULL,0,1},
+     {-1,3,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,5,1,0,3,"ABORT MISSION Y/N?",NULL,0,1},        // 4 QUIT TO DOS
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,0,"SELECT LOCATIONS",&menu[5][1],0,3},// 5 DAY/NIGHT MISSION
+     {-1,3,1,0,2,"CITY",&menu[5][2],0,3},
+     {-1,4,1,0,2,"HOSPITAL",&menu[5][3],0,3},
+     {-1,5,1,0,2,"POLICE STATION",&menu[5][4],0,3},
+     {-1,6,1,0,2,"WAREHOUSE",NULL,0,3},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,3,"LOAD GAME MENU",NULL,0,1},            // 6 LOAD GAME MENU
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,3,"SAVE GAME MENU",NULL,0,1},            // 7 SAVE GAME MENU
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,3,"SOUND/MUSIC VOLUME",&menu[8][1],0,3}, // 8 SOUND EFFECTS VOLUME
+     {-1,3,1,0,2,"SOUND VOLUME",&menu[8][2],0,3},
+     {-1,6,1,0,2,"MUSIC VOLUME",NULL,0,3},
+     {-1,0,1,0,2,NULL,NULL,0,3},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,3,"MOUSE SENSITIVITY",NULL,0,3},         // 9 MOUSE SENSITIVITY
+     {-1,0,1,0,2,NULL,NULL,0,3},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}},
+    {{-1,1,1,0,3,"SCREEN SIZE",NULL,0,3},               // 10 SCREEN SIZE
+     {-1,0,1,0,2,NULL,NULL,0,3},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1},
+     {-1,0,1,0,2,NULL,NULL,0,1}}
 };
 int  lastselopt[16]={
      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 };
 
 int      framecnt,frameval[AVERAGEFRAMES];
-char      blink=0xFF;
+char     blink=0xFF;
 int      menuspincnt=0L;
 int      activemenu=0;
-char      requesttoquit;
-char      dofadein=0;
+char     requesttoquit;
+char     dofadein=0;
 unsigned char whiteshifts[NUMREDSHIFTS][768];
 unsigned char redshifts[NUMREDSHIFTS][768];
-int       redcount,whitecount;
-char      palshifted;
-char      depresscount;
-int       selopt=1;
-char      otoggles[MAXTOGGLES];
-char      tektempbuf[TEKTEMPBUFSIZE];
-char      gameover=0; 
-char      demowon=0;
-char      outofsync=0;
-char      rearviewdraw;
-int       timedinv;
-char      loadsavenames[MAXLOADSAVEOPTS][MAXLOADSAVESIZE];
-char      lockeybuf[MAXLOADSAVESIZE];                                
+int      redcount,whitecount;
+char     palshifted;
+char     depresscount;
+int      selopt=1;
+char     otoggles[MAXTOGGLES];
+char     tektempbuf[TEKTEMPBUFSIZE];
+char     gameover=0; 
+char     demowon=0;
+char     outofsync=0;
+char     rearviewdraw;
+int      timedinv;
+char     loadsavenames[MAXLOADSAVEOPTS][MAXLOADSAVESIZE];
+char     lockeybuf[MAXLOADSAVESIZE];                                
 int      invredcards[MAXPLAYERS], invbluecards[MAXPLAYERS];
-short     symbols[7];
-short     symbolsdeposited[7];
+short    symbols[7];
+short    symbolsdeposited[7];
 int      invaccutrak[MAXPLAYERS];
-int       noenemiesflag;
-int       noguardflag;
-int       nostalkflag;
-int       nochaseflag;
-int       nostrollflag;
-int       nobriefflag;   
-char      messagebuf[MSGBUFSIZE];
-char      notininventory;
-char      redrawborders;
-int       curblink,loadnewgame;
-int       locmessagelen,loctypemode;
-int       mousesensitivity,musicv=16,soundv=16;
+int      noenemiesflag;
+int      noguardflag;
+int      nostalkflag;
+int      nochaseflag;
+int      nostrollflag;
+int      nobriefflag;   
+char     messagebuf[MSGBUFSIZE];
+char     notininventory;
+char     redrawborders;
+int      curblink,loadnewgame;
+int      locmessagelen,loctypemode;
+int      mousesensitivity,musicv=16,soundv=16;
 int      curblinkclock;
-int       messagex;
-short     hcpos,wppos,rvpos;                                         
-int       autocenter[MAXPLAYERS],menudirect;
-int       hcmoving,rvmoving,wpmoving;
-short     winner=-1;
-char      rvonemotime;
-char      wponemotime;
-char      hconemotime;
-int       lastsec;
-int       lastscore;
-char      lasttimetoggle;
-char      lastscoretoggle;
-char      lastinvtoggle;
-int       lastwx2;
+int      messagex;
+short    hcpos,wppos,rvpos;                                         
+int      autocenter[MAXPLAYERS],menudirect;
+int      hcmoving,rvmoving,wpmoving;
+short    winner=-1;
+char     rvonemotime;
+char     wponemotime;
+char     hconemotime;
+int      lastsec;
+int      lastscore;
+char     lasttimetoggle;
+char     lastscoretoggle;
+char     lastinvtoggle;
+int      lastwx2;
 int      lastinvr,lastinvb,lastinvacc;
-int       fortieth;
-int       seconds=0;
-int       minutes=0;
-int       hours=0;
-int       messageon=0;
-int       difficulty;
-int       currentmapno=0;
+int      fortieth;
+int      seconds=0;
+int      minutes=0;
+int      hours=0;
+int      messageon=0;
+int      difficulty;
+int      currentmapno=0;
 int      warpretang,warpretsect;
 int      warpretx,warprety,warpretz;
-int       mission=0;
-char      numlives=0;
-char      mission_accomplished=0;
-int       civillianskilled=0;
-char      generalplay;
-char      novideoid;
-char      singlemapmode;
-int       newnetleader=0,oldnetleader=0;
+int      mission=0;
+char     numlives=0;
+char     mission_accomplished=0;
+int      civillianskilled=0;
+char     generalplay;
+char     novideoid;
+char     singlemapmode;
+int      newnetleader=0,oldnetleader=0;
 int      netclock;
-int       allsymsdeposited=0;
-int       killedsonny=0;
+int      allsymsdeposited=0;
+int      killedsonny=0;
 
 
 void
 fadeout(int UNUSED(start), int UNUSED(end), int UNUSED(red), int UNUSED(green), int UNUSED(blue), int UNUSED(steps))
 {
-//	int		i,j,orig,delta;
-//	char      *origptr,*newptr;
+//   int       i,j,orig,delta;
+//   char      *origptr,*newptr;
 
      finishpaletteshifts();
 /*
      asmwaitvrt(1);
-	getpalette(&palette1[0][0]);
-	memcpy(palette2,palette1,768);
+     getpalette(&palette1[0][0]);
+     memcpy(palette2,palette1,768);
 
-	for( i=0; i<steps; i++ ) {
-		origptr=&palette1[start][0];
-		newptr=&palette2[start][0];
-		for( j=start; j<=end; j++ ) {
-			orig = *origptr++;
-			delta = red-orig;
-			*newptr++ = orig + delta * i / steps;
-			orig = *origptr++;
-			delta = green-orig;
-			*newptr++ = orig + delta * i / steps;
-			orig = *origptr++;
-			delta = blue-orig;
-			*newptr++ = orig + delta * i / steps;
-		}
+     for( i=0; i<steps; i++ ) {
+          origptr=&palette1[start][0];
+          newptr=&palette2[start][0];
+          for( j=start; j<=end; j++ ) {
+               orig = *origptr++;
+               delta = red-orig;
+               *newptr++ = orig + delta * i / steps;
+               orig = *origptr++;
+               delta = green-orig;
+               *newptr++ = orig + delta * i / steps;
+               orig = *origptr++;
+               delta = blue-orig;
+               *newptr++ = orig + delta * i / steps;
+          }
 
-		asmwaitvrt(1);
-		asmsetpalette(&palette2[0][0]);
-	}
+          asmwaitvrt(1);
+          asmsetpalette(&palette2[0][0]);
+     }
 */
  return;
 }
@@ -233,33 +233,33 @@ clearkeys(void)
 void
 fadein(int UNUSED(start), int UNUSED(end), int UNUSED(steps))
 {
-/*	int  i,j,delta;
+/*   int  i,j,delta;
 
      if( steps == 0 ) {
           return;
      }
 
-	asmwaitvrt(1);
-	getpalette(&palette1[0][0]);
-	memcpy(&palette2[0][0],&palette1[0][0],sizeof(palette1));
+     asmwaitvrt(1);
+     getpalette(&palette1[0][0]);
+     memcpy(&palette2[0][0],&palette1[0][0],sizeof(palette1));
 
-	start *= 3;
-	end = end*3+2;
+     start *= 3;
+     end = end*3+2;
 
      // fade through intermediate frames
-	for( i=0; i<steps; i++ ) {
-		for( j=start; j<=end; j++ ) {
-			delta=palette[j]-palette1[0][j];
-			palette2[0][j]=palette1[0][j] + delta * i / steps;
-		}
+     for( i=0; i<steps; i++ ) {
+          for( j=start; j<=end; j++ ) {
+               delta=palette[j]-palette1[0][j];
+               palette2[0][j]=palette1[0][j] + delta * i / steps;
+          }
 
-		asmwaitvrt(1);
-		asmsetpalette(&palette2[0][0]);
-	}
+          asmwaitvrt(1);
+          asmsetpalette(&palette2[0][0]);
+     }
 
      // final color
-	asmwaitvrt(1);
-	asmsetpalette(palette);
+     asmwaitvrt(1);
+     asmsetpalette(palette);
 */
      dofadein=0;
      clearkeys();
@@ -278,34 +278,34 @@ fog()
 int
 initpaletteshifts(void)
 {
-	unsigned char *workptr,*baseptr;
-	int       i,j,delta;
+     unsigned char *workptr,*baseptr;
+     int       i,j,delta;
 
-	for( i=1; i<=NUMREDSHIFTS; i++ ) {
-		workptr=&redshifts[i-1][0];
-		baseptr=&palette[0];
-		for( j=0; j<=255; j++) {
-			delta=64-*baseptr;
-			*workptr++=*baseptr++ + delta * i / REDSTEPS;
-			delta=-*baseptr;
-			*workptr++=*baseptr++ + delta * i / REDSTEPS;
-			delta=-*baseptr;
-			*workptr++=*baseptr++ + delta * i / REDSTEPS;
-		}
-	}
+     for( i=1; i<=NUMREDSHIFTS; i++ ) {
+          workptr=&redshifts[i-1][0];
+          baseptr=&palette[0];
+          for( j=0; j<=255; j++) {
+               delta=64-*baseptr;
+               *workptr++=*baseptr++ + delta * i / REDSTEPS;
+               delta=-*baseptr;
+               *workptr++=*baseptr++ + delta * i / REDSTEPS;
+               delta=-*baseptr;
+               *workptr++=*baseptr++ + delta * i / REDSTEPS;
+          }
+     }
 
-	for( i=1; i<=NUMWHITESHIFTS; i++ ) {
-		workptr=&whiteshifts[i-1][0];
-		baseptr=&palette[0];
-		for( j=0; j<=255; j++ ) {
-			delta = 64-*baseptr;
-			*workptr++ = *baseptr++ + delta * i / WHITESTEPS;
-			delta = 62-*baseptr;
-			*workptr++ = *baseptr++ + delta * i / WHITESTEPS;
-			delta = 0-*baseptr;
-			*workptr++ = *baseptr++ + delta * i / WHITESTEPS;
-		}
-	}
+     for( i=1; i<=NUMWHITESHIFTS; i++ ) {
+          workptr=&whiteshifts[i-1][0];
+          baseptr=&palette[0];
+          for( j=0; j<=255; j++ ) {
+               delta = 64-*baseptr;
+               *workptr++ = *baseptr++ + delta * i / WHITESTEPS;
+               delta = 62-*baseptr;
+               *workptr++ = *baseptr++ + delta * i / WHITESTEPS;
+               delta = 0-*baseptr;
+               *workptr++ = *baseptr++ + delta * i / WHITESTEPS;
+          }
+     }
 
      return 0;
 }
@@ -370,49 +370,49 @@ updatepaletteshifts(void)
 {
      int   red,white;
 
-	if (whitecount)
-	{
-		white = whitecount/WHITETICS +1;
-		if (white>NUMWHITESHIFTS)
-			white = NUMWHITESHIFTS;
-		whitecount -= TICSPERFRAME;
-		if (whitecount < 0)
-			whitecount = 0;
-	}
-	else {
-		white = 0;
+     if (whitecount)
+     {
+          white = whitecount/WHITETICS +1;
+          if (white>NUMWHITESHIFTS)
+               white = NUMWHITESHIFTS;
+          whitecount -= TICSPERFRAME;
+          if (whitecount < 0)
+               whitecount = 0;
+     }
+     else {
+          white = 0;
      }
 
-	if (redcount)
-	{
-		red = redcount/10 +1;
-		if (red>NUMREDSHIFTS)
-			red = NUMREDSHIFTS;
-		redcount -= TICSPERFRAME;
-		if (redcount < 0)
-			redcount = 0;
-	}
-	else {
-		red = 0;
+     if (redcount)
+     {
+          red = redcount/10 +1;
+          if (red>NUMREDSHIFTS)
+               red = NUMREDSHIFTS;
+          redcount -= TICSPERFRAME;
+          if (redcount < 0)
+               redcount = 0;
+     }
+     else {
+          red = 0;
      }
 
 
-	if( red ) {
-		//asmsetpalette(redshifts[red-1]);
-        debugprintf("updatepaletteshifts redshifts[%d]\n", red-1);
-		palshifted = 1;
-	}
-	else if( white ) {
-		//asmsetpalette(whiteshifts[white-1]);
-        debugprintf("updatepaletteshifts whiteshifts[%d]\n", white-1);
-		palshifted = 1;
-	}
-	else if( palshifted ) {
- 		//asmsetpalette(&palette[0]);     // back to normal
-        debugprintf("updatepaletteshifts reset\n");
+     if( red ) {
+          //asmsetpalette(redshifts[red-1]);
+          debugprintf("updatepaletteshifts redshifts[%d]\n", red-1);
+          palshifted = 1;
+     }
+     else if( white ) {
+          //asmsetpalette(whiteshifts[white-1]);
+          debugprintf("updatepaletteshifts whiteshifts[%d]\n", white-1);
+          palshifted = 1;
+     }
+     else if( palshifted ) {
+          //asmsetpalette(&palette[0]);     // back to normal
+          debugprintf("updatepaletteshifts reset\n");
 //          setbrightness(brightness);
-		palshifted = 0;
-	}
+          palshifted = 0;
+     }
 
  return;
 }
@@ -420,40 +420,40 @@ updatepaletteshifts(void)
 void
 setup3dscreen()
 {
-	int      i, dax, day, dax2, day2;
+     int      i, dax, day, dax2, day2;
 
-	if( screensize > xdim ) {
-		dax = 0; day = 0;
-		dax2 = xdim-1; day2 = ydim-1;
-	}
-	else {
-		dax = (xdim>>1)-(screensize>>1);
-		dax2 = dax+screensize-1;
-		day = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
-		day2 = day + ((screensize*(ydim-32))/xdim)-1;
-		tekview(&dax,&day,&dax2,&day2);
-		setview(dax,day>>detailmode,dax2,day2>>detailmode);
-	}
-	if( screensize <= xdim ) {
-		permanentwritespritetile(0L,0L,BACKGROUND,0,0L,0L,xdim-1,ydim-1,0);      
-		permanentwritesprite((xdim-320)>>1,ydim-32,STATUSBAR,0,0,0,xdim-1,ydim-1,0);
-		i = ((xdim-320)>>1);
-		while (i >= 8) i -= 8, permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0);
-		if (i >= 4) i -= 4, permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0);
-		i = ((xdim-320)>>1)+320;
-		while (i <= xdim-8) permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0), i += 8;
-		if (i <= xdim-4) permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0), i += 4;
-	}
+     if( screensize > xdim ) {
+          dax = 0; day = 0;
+          dax2 = xdim-1; day2 = ydim-1;
+     }
+     else {
+          dax = (xdim>>1)-(screensize>>1);
+          dax2 = dax+screensize-1;
+          day = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
+          day2 = day + ((screensize*(ydim-32))/xdim)-1;
+          tekview(&dax,&day,&dax2,&day2);
+          setview(dax,day>>detailmode,dax2,day2>>detailmode);
+     }
+     if( screensize <= xdim ) {
+          permanentwritespritetile(0L,0L,BACKGROUND,0,0L,0L,xdim-1,ydim-1,0);      
+          permanentwritesprite((xdim-320)>>1,ydim-32,STATUSBAR,0,0,0,xdim-1,ydim-1,0);
+          i = ((xdim-320)>>1);
+          while (i >= 8) i -= 8, permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0);
+          if (i >= 4) i -= 4, permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0);
+          i = ((xdim-320)>>1)+320;
+          while (i <= xdim-8) permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0), i += 8;
+          if (i <= xdim-4) permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0), i += 4;
+     }
 }
 
 void
 finishpaletteshifts(void)
 {
-	if( palshifted == 1 ) {
-		palshifted = 0;
-		//asmsetpalette(&palette[0]);
-        debugprintf("finishpaletteshifts\n");
-	}
+     if( palshifted == 1 ) {
+          palshifted = 0;
+          //asmsetpalette(&palette[0]);
+          debugprintf("finishpaletteshifts\n");
+     }
 
  return;
 }
@@ -483,29 +483,29 @@ tektitlescreen()
      int  i,j,k,l;
      char *ptr;
 
-	setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
-	setview(0L,0L,xdim-1,ydim-1);
-	loadtile(TITLESCRPIC);
-	loadtile(BACKGROUND);
-	i=0;
+     setgamemode(0, vesares[option[6]&15][0],vesares[option[6]&15][1], 8);
+     setview(0L,0L,xdim-1,ydim-1);
+     loadtile(TITLESCRPIC);
+     loadtile(BACKGROUND);
+     i=0;
      j=1621;
-	for( k=0; k<256; k++ ) {
-	     for( l=0; l<256; l++ ) {
-	          ptr  = (char *)(waloff[TITLESCRPIC]+i);
-	          *ptr =*(char *)(waloff[BACKGROUND]+i);
-	          i = (i+j)&65535;
+     for( k=0; k<256; k++ ) {
+          for( l=0; l<256; l++ ) {
+               ptr  = (char *)(waloff[TITLESCRPIC]+i);
+               *ptr =*(char *)(waloff[BACKGROUND]+i);
+               i = (i+j)&65535;
                j = (j+4)&65535;
-	     }
-	     overwritesprite(0L,0L,TITLESCRPIC,0,0,0);
-	     nextpage();
-	}
+          }
+          overwritesprite(0L,0L,TITLESCRPIC,0,0,0);
+          nextpage();
+     }
 }
 #endif
 
 void
 tekfirstpass()
 {
-    setbrightness(brightness, palette, 0);
+     setbrightness(brightness, palette, 0);
 }
 
 void
@@ -742,7 +742,7 @@ void
 holyon()
 {
      if( screensize <= xdim ) {
-           printext((xdim>>1)-16,4,"HOLY",ALPHABET2,255);
+          printext((xdim>>1)-16,4,"HOLY",ALPHABET2,255);
      }
 }
 
@@ -762,8 +762,8 @@ showtime()
 
      if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_TIME] ) {
-  	          sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
-	          printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
+               sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
+               printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
           }
           lastsec=0;
      }
@@ -780,8 +780,8 @@ showtime()
                if( lastsec != seconds ) {
                     permanentwritesprite(xdim-80,ydim-12,TIMERESTORE,
                                          0,xdim-80,ydim-12,xdim-1,ydim-1,0);
-  	               sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
-	               printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
+                    sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
+                    printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
                     lastsec=seconds;
                }
                lasttimetoggle=toggles[TOGGLE_TIME];
@@ -797,12 +797,12 @@ showscore()
      if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_SCORE] ) {
                if( score[screenpeek] == 1 ) {
-  	               sprintf(tektempbuf,"%08d", 0);
+                    sprintf(tektempbuf,"%08d", 0);
                }
                else {
-  	               sprintf(tektempbuf,"%08d", score[screenpeek]);
+                    sprintf(tektempbuf,"%08d", score[screenpeek]);
                }
-	          printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
+               printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
           }
           lastscore=0;
      }
@@ -820,12 +820,12 @@ showscore()
                     permanentwritesprite(xdim-160,ydim-12,SCORERESTORE,
                                          0,xdim-160,ydim-12,xdim-1,ydim-1,0);
                     if( score[screenpeek] == 1 ) {
-  	                    sprintf(tektempbuf,"%08d", 0);
+                         sprintf(tektempbuf,"%08d", 0);
                     }
                     else {
-  	                    sprintf(tektempbuf,"%08d", score[screenpeek]);
+                         sprintf(tektempbuf,"%08d", score[screenpeek]);
                     }
-	               printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
+                    printext(xdim-160,ydim-12,tektempbuf,alphabet,255);
                     lastscore=score[screenpeek];
                     if( score[screenpeek]==0 )
                          score[screenpeek]=1;
@@ -1608,13 +1608,13 @@ newmap(int mapno)
           sprite[sn].x=warpretx;
           sprite[sn].y=warprety;
           sprite[sn].z=warpretz;
-	     changespritesect(sn,warpretsect);
-		posx[p]=sprite[sn].x;
-		posy[p]=sprite[sn].y;
-		posz[p]=sprite[sn].z;
-     	ang[p]=((warpretang+1024)&2047);
-		cursectnum[p]=sprite[sn].sectnum;
-     	updatesector(posx[p],posy[p],cursectnum[p]);
+          changespritesect(sn,warpretsect);
+          posx[p]=sprite[sn].x;
+          posy[p]=sprite[sn].y;
+          posz[p]=sprite[sn].z;
+          ang[p]=((warpretang+1024)&2047);
+          cursectnum[p]=sprite[sn].sectnum;
+          updatesector(posx[p],posy[p],cursectnum[p]);
           break;
      default:
           break;
@@ -1631,16 +1631,16 @@ newmap(int mapno)
           sprite[sn].x=warpretx;
           sprite[sn].y=warprety;
           sprite[sn].ang=warpretang;
-	     copybuf(&sprite[sn].x,&osprite[sn].x,3);
-	     changespritesect(sn,warpretsect);
+          copybuf(&sprite[sn].x,&osprite[sn].x,3);
+          changespritesect(sn,warpretsect);
 
-     	posx[p]=sprite[sn].x;
-     	posy[p]=sprite[sn].y;
-		ang[p]=sprite[sn].ang;
-     	cursectnum[p]=sprite[sn].sectnum;
+          posx[p]=sprite[sn].x;
+          posy[p]=sprite[sn].y;
+          ang[p]=sprite[sn].ang;
+          cursectnum[p]=sprite[sn].sectnum;
 
           //updatesector(posx[p],posy[p],cursectnum[p]);
-		//pushmove(&posx[p],&posy[p],&posz[p],&cursectnum[p],128L,4<<8,4<<8,CLIPMASK0);
+          //pushmove(&posx[p],&posy[p],&posz[p],&cursectnum[p],128L,4<<8,4<<8,CLIPMASK0);
           break;
      default:
           break;
@@ -2186,8 +2186,8 @@ domenuinput(void)
 void
 rearview(int snum)
 {
-	int      cposx, cposy, cposz, choriz, czoom;
-	short     cang;
+     int      cposx, cposy, cposz, choriz, czoom;
+     short     cang;
      short     plrang,plrhoriz;
      int       oldwx1,oldwx2,oldwy1,oldwy2;
 
@@ -2205,14 +2205,14 @@ rearview(int snum)
      oang[snum]=(plrang+1024)&2047;
      ohoriz[snum]=(200-plrhoriz);
 
-	cposx = oposx[snum]+mulscale(posx[snum]-oposx[snum],0,16);
-	cposy = oposy[snum]+mulscale(posy[snum]-oposy[snum],0,16);
-	cposz = oposz[snum]+mulscale(posz[snum]-oposz[snum],0,16);
-	if (frameinterpolate == 0)
-		{ cposx = posx[snum]; cposy = posy[snum]; cposz = posz[snum]; }
-	choriz = ohoriz[snum]+mulscale(horiz[snum]-ohoriz[snum],0,16);
-	czoom = ozoom[snum]+mulscale(zoom[snum]-ozoom[snum],0,16);
-	cang = oang[snum]+mulscale(((ang[snum]+1024-oang[snum])&2047)-1024,0,16);
+     cposx = oposx[snum]+mulscale(posx[snum]-oposx[snum],0,16);
+     cposy = oposy[snum]+mulscale(posy[snum]-oposy[snum],0,16);
+     cposz = oposz[snum]+mulscale(posz[snum]-oposz[snum],0,16);
+     if (frameinterpolate == 0)
+          { cposx = posx[snum]; cposy = posy[snum]; cposz = posz[snum]; }
+     choriz = ohoriz[snum]+mulscale(horiz[snum]-ohoriz[snum],0,16);
+     czoom = ozoom[snum]+mulscale(zoom[snum]-ozoom[snum],0,16);
+     cang = oang[snum]+mulscale(((ang[snum]+1024-oang[snum])&2047)-1024,0,16);
 
      drawrooms(cposx,cposy,cposz,cang,choriz,cursectnum[snum]);
      rearviewdraw=1;
@@ -2242,18 +2242,18 @@ tekargv(int argc, char const * const argv[])
      int       p;
      char      argmatch=0;
 
-	if( (argc >= 2) ) {
-		if( strchr(argv[1],'.') != 0 ) {
-     		strcpy(boardfilename,argv[1]);
+     if( (argc >= 2) ) {
+          if( strchr(argv[1],'.') != 0 ) {
+               strcpy(boardfilename,argv[1]);
                if( (strcmp(boardfilename,"matrix.map") == 0) || (strcmp(boardfilename,"MATRIX.MAP") == 0) ) {
                     mission=7;
                }
                singlemapmode=1;
                nobriefflag=1;
           }
-	}
-	else {
-		strcpy(boardfilename,"subway0.map");
+     }
+     else {
+          strcpy(boardfilename,"subway0.map");
      }
 
      goreflag=1;
@@ -2402,49 +2402,49 @@ tekendscreen()
 
      memset(keystatus, 0, sizeof(keystatus));
      if( xdim == 640 ) {
-     	setview(0L,0L,xdim-1,ydim-1);
-	     loadtile(ES1A_SVGA);
+          setview(0L,0L,xdim-1,ydim-1);
+          loadtile(ES1A_SVGA);
           overwritesprite(0L,0L,ES1A_SVGA,0,0,0);
-	     loadtile(ES1B_SVGA);
+          loadtile(ES1B_SVGA);
           overwritesprite(0L,239L,ES1B_SVGA,0,0,0);
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
           }
           memset(keystatus, 0, sizeof(keystatus));
-	     loadtile(ES2A_SVGA);
+          loadtile(ES2A_SVGA);
           overwritesprite(0L,0L,ES2A_SVGA,0,0,0);
-	     loadtile(ES2B_SVGA);
+          loadtile(ES2B_SVGA);
           overwritesprite(0L,239L,ES2B_SVGA,0,0,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
           }
      }
      else if( xdim == 320 ) {
-     	setview(0L,0L,xdim-1,ydim-1);
-	     loadtile(ES1_VGA);
+          setview(0L,0L,xdim-1,ydim-1);
+          loadtile(ES1_VGA);
           overwritesprite(0L,0L,ES1_VGA,0,0,0);
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
           }
           memset(keystatus, 0, sizeof(keystatus));
-	     loadtile(ES2_VGA);
+          loadtile(ES2_VGA);
           overwritesprite(0L,0L,ES2_VGA,0,0,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
           }
      }
      else {
-     	setview(0L,0L,xdim-1,ydim-1);
-	     loadtile(ES1_VGA);
+          setview(0L,0L,xdim-1,ydim-1);
+          loadtile(ES1_VGA);
           overwritesprite(0,0,ES1_VGA,0,0x02,0);
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
           }
           memset(keystatus, 0, sizeof(keystatus));
-	     loadtile(ES2_VGA);
+          loadtile(ES2_VGA);
           overwritesprite(0,0,ES2_VGA,0,0x02,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {

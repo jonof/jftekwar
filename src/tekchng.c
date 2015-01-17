@@ -64,24 +64,24 @@ changehealth(short snum, short deltahealth)
           }
      }
 
-	if (health[snum] > 0)
-	{
-		health[snum] += deltahealth;
+     if (health[snum] > 0)
+     {
+          health[snum] += deltahealth;
           if( health[snum] > healthmax )
                health[snum]=healthmax;
 
-		if (health[snum] <= 0)
-		{
-			health[snum] = -1;
+          if (health[snum] <= 0)
+          {
+               health[snum] = -1;
                playsound(S_PLAYERDIE, posx[snum],posy[snum], 0,ST_NOUPDATE);
-		}
-	}
+          }
+     }
 
      if( (health[snum] <= 0) && (option[4] != 0) ) {
           playerdropitems(snum);
      }
 
-	return(health[snum] <= 0);     
+     return(health[snum] <= 0);     
 }
 
 void
@@ -91,7 +91,7 @@ changescore(short snum, short deltascore)
           return;
      }
 
-	score[snum] += deltascore;
+     score[snum] += deltascore;
      score[snum]&=0xFFFFFFFE;
 
      if( (score[snum] < 0) || (score[snum] > 99999999) ) 

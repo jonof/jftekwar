@@ -1061,9 +1061,9 @@ gunstatuslistcode(void)
           if( hitobject != 0 ) {
                j=jsinsertsprite(sprite[i].sectnum, 3);
                if( j != -1 ) {
-				fillsprite(j,sprptr[i]->x,sprptr[i]->y,sprptr[i]->z+(8<<8),0,-4,0,32,
+                    fillsprite(j,sprptr[i]->x,sprptr[i]->y,sprptr[i]->z+(8<<8),0,-4,0,32,
                          64,64,0,0,
-					EXPLOSION,sprptr[i]->ang,0,0,0,i,sprptr[i]->sectnum,3,63,0,0);
+                         EXPLOSION,sprptr[i]->ang,0,0,0,i,sprptr[i]->sectnum,3,63,0,0);
                }
                jsdeletesprite((short)i);
           }
@@ -1157,7 +1157,7 @@ tekdrawgun(int gun,short p)
           }
      }
 
-	if( (syncvel[p]|syncsvel[p]) != 0 ) {
+     if( (syncvel[p]|syncsvel[p]) != 0 ) {
           switch( pic ) {
           case GUN01FIRESTART:
           case GUN02FIRESTART:
