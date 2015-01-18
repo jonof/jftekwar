@@ -78,6 +78,7 @@ smkshowmenu()
           return;
      }
 
+     setview(0,0, xdim-1, ydim-1);
      clearview(0);
      rotatesprite(160<<16, 100<<16, divscale16(200, tilesizx[SMKPICNUM]),
                  512, SMKPICNUM, 0, 0, 2+4, 0, 0, xdim-1, ydim-1);

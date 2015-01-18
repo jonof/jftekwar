@@ -18,7 +18,7 @@ int       dbgflag;
 int       dbgcolumn;
 short     mousebias=1;
 short     biasthreshhold=72;
-char      biasthreshholdon=0;  
+char      biasthreshholdon=0;
 short     lastmousy;
 char      keyedhorizon;
 //** Les START - 09/26/95
@@ -55,23 +55,23 @@ unsigned char option[NUMOPTIONS] = {
 unsigned char keys[NUMKEYS] = {
      200,         // 0  FWD
      208,         // 1  BKWD
-     203,         // 2  RIGHT  
-     205,         // 3  LEFT  
-      42,         // 4  RUN / AMPLIFY  
-      56,         // 5  STRAFE  
-      29,         // 6  SHOOT  
-      57,         // 7  USE  
-      45,         // 8  JUMP  
+     203,         // 2  RIGHT
+     205,         // 3  LEFT
+      42,         // 4  RUN / AMPLIFY
+      56,         // 5  STRAFE
+      29,         // 6  SHOOT
+      57,         // 7  USE
+      45,         // 8  JUMP
       46,         // 9  CROUCH
-     201,         // 10 LOOK UP  
-     209,         // 11 LOOK DOWN  
-      51,         // 12 SLIDE LEFT     
-      52,         // 13 SLIDE RIGHT  
-      15,         // 14 MAP MODE  
-     156,         // 15 SWITCH PLAYER  
+     201,         // 10 LOOK UP
+     209,         // 11 LOOK DOWN
+      51,         // 12 SLIDE LEFT
+      52,         // 13 SLIDE RIGHT
+      15,         // 14 MAP MODE
+     156,         // 15 SWITCH PLAYER
       13,         // 16 EXPAND VIEW
       12,         // 17 SHRINK VIEW
-      50,         // 18 MESSAGE MODE  
+      50,         // 18 MESSAGE MODE
      199,         // 19 AUTOCENTER
       19,         // 20 TOGGLE REARVIEW
       18,         // 21 TOGGLE PREPARED ITEM
@@ -87,7 +87,7 @@ unsigned char keys[NUMKEYS] = {
       26          // 31 N/U
 };
 unsigned char moreoptions[MAXMOREOPTIONS] = {
-        1,     // 0  MOUSE ON/OFF         
+        1,     // 0  MOUSE ON/OFF
        29,     // 1  MOUSE BUTTON 1 MAP
       200,     // 2  MOUSE BUTTON 2 MAP
         0,     // 3  JOYSTICK ON/OFF
@@ -105,7 +105,7 @@ unsigned char moreoptions[MAXMOREOPTIONS] = {
         0      // 15 N/U
 };
 char toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
-int  gamestuff[MAXGAMESTUFF] = { 
+int  gamestuff[MAXGAMESTUFF] = {
      -1,       // 0  joyxcenter
      -1,       // 1  joyycenter
       0,       // 2  screensize
@@ -113,9 +113,9 @@ int  gamestuff[MAXGAMESTUFF] = {
     100,       // 4  biasthreshhold
       0,       // 5  warpretang
       0,       // 6  warpretsect
-      0,       // 7 
-      0,       // 8 
-      0,       // 9 
+      0,       // 7
+      0,       // 8
+      0,       // 9
       0,       // 10
       0,       // 11
       0,       // 12
@@ -335,7 +335,7 @@ app_main(int argc, char const * const argv[])
         teknetpickmap();
           sendlogon();
           if( option[4] < 5 ) {
-               waitplayers=2; 
+               waitplayers=2;
           }
           else {
                waitplayers=option[4]-3;
@@ -394,7 +394,7 @@ missionselection:
           fsyncangvel[i] = syncangvel[i] = osyncangvel[i] = 0;
           fsyncbits[i] = syncbits[i] = osyncbits[i] = 0;
      }
-     resettiming(); 
+     resettiming();
 
      ready2send = 1;
     #ifdef NETNAMES
@@ -411,7 +411,7 @@ missionselection:
           memcpy(netnames[myconnectindex],localname,10);
           netnames[myconnectindex][10]=0;
      }
-    #endif           
+    #endif
      screenpeek=myconnectindex;
      while( !gameover ) {
         handleevents();
@@ -431,7 +431,7 @@ gameends:
 
      copyrightscreen();
 
-     sendlogoff();        
+     sendlogoff();
      uninitmultiplayers();
      uninitsb();
      cduninit();
@@ -468,13 +468,13 @@ processinput(short snum)
      }
 
      if( (syncvel[snum]|syncsvel[snum]) != 0 ) {
-          // no run while crouching 
+          // no run while crouching
           if( ((syncbits[snum]&2) != 0) && (mission != 7) ) {
                doubvel = 1+((syncbits[snum]&256) == 0);
           }
           else {
                doubvel = (TICSPERFRAME<<((syncbits[snum]&256)>0));
-               doubvel<<=1;  
+               doubvel<<=1;
           }
           xvect = 0, yvect = 0;
           if( syncvel[snum] != 0 ) {
@@ -523,9 +523,9 @@ processinput(short snum)
      }
 
      // ang += angvel*constant, engine calculates angvel
-     if( syncangvel[snum] != 0 ) {      
+     if( syncangvel[snum] != 0 ) {
           doubvel = TICSPERFRAME;
-          // if run key then turn faster 
+          // if run key then turn faster
           if( (syncbits[snum]&256) > 0 ) {
                doubvel += (TICSPERFRAME>>1);
           }
@@ -614,7 +614,7 @@ processinput(short snum)
      if (((syncbits[snum]&4) > 0) && (horiz[snum] < 100+(200>>1))) horiz[snum] += 4;   //+
 
      // 32 pixels above floor is where player should be
-     goalz = globloz-(KENSPLAYERHEIGHT<<8);  
+     goalz = globloz-(KENSPLAYERHEIGHT<<8);
 
      // kens slime sector
      if( sector[cursectnum[snum]].lotag == 4 ) {
@@ -635,13 +635,13 @@ processinput(short snum)
      }
 
      // case where ceiling & floor are too close
-     if( goalz < globhiz+(16<<8) ) {   
+     if( goalz < globhiz+(16<<8) ) {
           goalz = ((globloz+globhiz)>>1);
      }
 
      // climb ladder or regular z movement
      if( (mission == 7) || sector[cursectnum[snum]].lotag == SECT_LOTAG_CLIMB ) {
-          if( (syncbits[snum]&1) > 0 ) {  
+          if( (syncbits[snum]&1) > 0 ) {
                if( posz[snum] > (sector[cursectnum[snum]].ceilingz+2048) ) {
                     posz[snum]-=64;
                     if( (syncbits[snum]&256) > 0 ) {
@@ -651,7 +651,7 @@ processinput(short snum)
                          posz[snum]-=256;
                     }
                }
-          }  
+          }
           else if( (syncbits[snum]&2) > 0 ) {
                if( posz[snum] < (sector[cursectnum[snum]].floorz-2048) ) {
                     posz[snum]+=64;
@@ -667,7 +667,7 @@ processinput(short snum)
      else {
           if( health[snum] >= 0 ) {
                // jump key
-               if( (syncbits[snum]&1) > 0 ) {              
+               if( (syncbits[snum]&1) > 0 ) {
                     if( posz[snum] >= globloz-(KENSPLAYERHEIGHT<<8) ) {
                     goalz -= (16<<8);
 //                    if( (syncbits[snum]&256) > 0 ) {
@@ -693,7 +693,7 @@ processinput(short snum)
                goalz -= ((*ptr)<<8);
           }
          */
-          // gravity, plus check for if on an elevator 
+          // gravity, plus check for if on an elevator
           if( posz[snum] < goalz ) {
                hvel[snum] += (TICSPERFRAME<<5)+1;
           }
@@ -861,7 +861,7 @@ processinput(short snum)
                     if (neartagsprite >= MAXSPRITES) {
                          crash("game1118: Invalid sprite index (%d)",neartagsprite);
                     }
-                    if( sprite[neartagsprite].lotag == 4 ) { 
+                    if( sprite[neartagsprite].lotag == 4 ) {
                          tekswitchtrigger(snum);
                     }
                     else {
@@ -871,12 +871,12 @@ processinput(short snum)
           }
      }
 
-     // fire weapon 
-     if( (syncbits[snum]&2048) > 0 ) {      
-          tekfiregun((syncbits[snum]>>13)&15,snum); 
+     // fire weapon
+     if( (syncbits[snum]&2048) > 0 ) {
+          tekfiregun((syncbits[snum]>>13)&15,snum);
      }
 
-     // map mode 
+     // map mode
      if( (syncbits[snum]&4096) > (oflags[snum]&4096) ) {
           if (dimensionmode[snum] == 3) {
                dimensionmode[snum]=1;
@@ -913,7 +913,7 @@ drawscreen(short snum, int dasmoothratio)
      cposy = oposy[snum]+mulscale(posy[snum]-oposy[snum],smoothratio,16);
      cposz = oposz[snum]+mulscale(posz[snum]-oposz[snum],smoothratio,16);
      if( frameinterpolate == 0 ) {
-          cposx = posx[snum]; cposy = posy[snum]; cposz = posz[snum]; 
+          cposx = posx[snum]; cposy = posy[snum]; cposz = posz[snum];
      }
      cposz+=headbob;
      choriz = ohoriz[snum]+mulscale(horiz[snum]-ohoriz[snum],smoothratio,16);
@@ -925,7 +925,7 @@ drawscreen(short snum, int dasmoothratio)
                for( i=connecthead; i>=0; i=connectpoint2[i] ) {
                     frame2draw[i] = 1;
                }
-               redrawbackfx();    
+               redrawbackfx();
                for( i=connecthead,j=0; i>=0; i=connectpoint2[i],j++ ) {
                     if( frame2draw[i] != 0 ) {
                          if( numplayers <= 4 ) {
@@ -969,7 +969,7 @@ drawscreen(short snum, int dasmoothratio)
                }
           }
           else {
-               redrawbackfx(); 
+               redrawbackfx();
                drawrooms(cposx,cposy,cposz,cang,choriz,cursectnum[snum]);
                analyzesprites(posx[snum],posy[snum]);
                drawmasks();
@@ -1091,14 +1091,14 @@ drawscreen(short snum, int dasmoothratio)
      if( syncstat != 0 ) {
           printext256(68L,84L,31,0,"OUT OF SYNC!",0);
      }
-     if( syncstate != 0 ) { 
+     if( syncstate != 0 ) {
           printext256(68L,92L,31,0,"Missed Network packet!",0);
      }
     #endif
 
      tekscreenfx();
 
-    #ifdef  NETWORKDIAGNOSTICS 
+    #ifdef  NETWORKDIAGNOSTICS
      if( (option[4] > 0) ) {
           for( i=connecthead ; i >= 0 ; i=connectpoint2[i] ) {
                sprintf(tektempbuf,"%2d %5d %5d %5d %5d %3d %4d", i,posx[i],posy[i],posz[i],ang[i],horiz[i],health[i]);
@@ -1115,9 +1115,9 @@ drawscreen(short snum, int dasmoothratio)
     #endif
 
      nextpage();
-     if( dofadein != 0 ) {   
-          fadein(0,255,dofadein);    
-     }           
+     if( dofadein != 0 ) {
+          fadein(0,255,dofadein);
+     }
 
     #ifdef OOGIE
      // F5 key
@@ -1143,7 +1143,7 @@ drawscreen(short snum, int dasmoothratio)
      }
 
     #ifdef STEREOMODE_ADJUSTMENT_ACTIVE
-     if( stereofps != 0 ) { 
+     if( stereofps != 0 ) {
           if( (keystatus[0x2a]|keystatus[0x36]) > 0 ) {
                if (keystatus[0x1a] > 0) stereopixelwidth--;   //Shift [
                if (keystatus[0x1b] > 0) stereopixelwidth++;   //Shift ]
@@ -1163,7 +1163,7 @@ drawscreen(short snum, int dasmoothratio)
                     connectpoint2[numplayers-1] = numplayers;
                     connectpoint2[numplayers] = -1;
                     initplayersprite(numplayers);
-                    clearallviews(0L); 
+                    clearallviews(0L);
                     numplayers++;
                }
           }
@@ -1275,7 +1275,7 @@ domovethings()
                recsyncbits[reccnt][j] = syncbits[i];
                j++;
           }
-          reccnt++; 
+          reccnt++;
           if( reccnt > 16383 ) {
                reccnt = 16383;
           }
@@ -1284,8 +1284,8 @@ domovethings()
      lockclock += TICSPERFRAME;
 
      for( i=connecthead; i>=0; i=connectpoint2[i] ) {
-          processinput(i);                       
-          checktouchsprite(i,cursectnum[i]);     
+          processinput(i);
+          checktouchsprite(i,cursectnum[i]);
           startwall = sector[cursectnum[i]].wallptr;
           endwall = startwall + sector[cursectnum[i]].wallnum;
           for( j=startwall,wal=&wall[j]; j<endwall; j++,wal++ ) {
@@ -1297,8 +1297,8 @@ domovethings()
 
      doanimations();
 
-     tagcode();         
-     statuslistcode();  
+     tagcode();
+     statuslistcode();
 
      checkmasterslaveswitch();
 }
@@ -1355,13 +1355,13 @@ getinput()
      int     mousx, mousy, bstatus;
      short     moving,strafing,turning;
 
-     if( activemenu != 0 ) {              
+     if( activemenu != 0 ) {
           domenuinput();
-     }   
+     }
 
      // normal game keys active
      if( typemode == 0 ) {
-          // shift+shift+R 
+          // shift+shift+R
           if( (keystatus[0x2a]&keystatus[0x36]&keystatus[0x13]) > 0 ) {
                keystatus[0x13] = 0;
                playback();
@@ -1376,9 +1376,9 @@ getinput()
           }
          #endif
           for( i=7; i>=0; i-- ) {
-               if( (keystatus[i+2] > 0) && tekhasweapon(i,screenpeek) ) { 
-                    keystatus[i+2] = 0; 
-                    locselectedgun = i; 
+               if( (keystatus[i+2] > 0) && tekhasweapon(i,screenpeek) ) {
+                    keystatus[i+2] = 0;
+                    locselectedgun = i;
                     break;
                }
           }
@@ -1395,7 +1395,7 @@ getinput()
                bstatus=0;
           }
           // if horizon key down
-          if( keystatus[58] == 0 ) { 
+          if( keystatus[58] == 0 ) {
                if( mousy > (biasthreshhold) ) {
                     mousebias=-1;
                }
@@ -1542,7 +1542,7 @@ getinput()
           i=horiz[myconnectindex]+((( int)mousy)>>3);
           if( i > 200 ) i=200;
           if( i < 0   ) i=0;
-          horiz[myconnectindex]=i;               
+          horiz[myconnectindex]=i;
           keyedhorizon=1;
           mousy=0;
      }
@@ -1580,7 +1580,7 @@ getinput()
 
 
      if( typemode == 0 ) {
-         #ifdef MASTERSWITCHING 
+         #ifdef MASTERSWITCHING
           locbits |= (keystatus[0x32]<<9);                  //M (be master)
          #endif
           locbits |= ((keystatus[keys[14]]==1)<<12);        //Map mode
@@ -1600,10 +1600,10 @@ getinput()
 //    locbits |= (((bstatus&1)>(oldmousebstatus&1))<<11);    //Shoot Mse
 
      if( typemode != 0 ) {
-         #ifdef MASTERSWITCHING 
-          locbits &= ~(keystatus[0x32]<<9);               
+         #ifdef MASTERSWITCHING
+          locbits &= ~(keystatus[0x32]<<9);
          #endif
-          locbits &= ~((keystatus[keys[14]]==1)<<12);     
+          locbits &= ~((keystatus[keys[14]]==1)<<12);
      }
 
      if( (joyb == 236) || (joyb == 220) || (joyb == 124) || (joyb == 188) ) {
@@ -1615,7 +1615,7 @@ getinput()
 
      oldmousebstatus = bstatus;
      if( (locbits&2048) > 0 ) {
-          oldmousebstatus &= ~1;  
+          oldmousebstatus &= ~1;
      }
 
      // trap print scrn key
@@ -1663,7 +1663,7 @@ getinput()
           }
          #endif
           // if typing mode reset kbrd fifo
-          if( (keystatus[keys[18]]) > 0 ) {   
+          if( (keystatus[keys[18]]) > 0 ) {
                keystatus[keys[18]] = 0;
                typemode = 1;
                keyfifoplc = keyfifoend;
@@ -1677,9 +1677,9 @@ getinput()
                if( keystate != 0 ) {
                     // backspace key
                     if( ch == 0xe ) {
-                         if( typemessageleng == 0 ) { 
-                              typemode = 0; 
-                              break; 
+                         if( typemessageleng == 0 ) {
+                              typemode = 0;
+                              break;
                          }
                          typemessageleng--;
                     }
@@ -1692,7 +1692,7 @@ getinput()
                     if( (ch == 0x1c) || (ch == 0x9c) ) {
                          keystatus[0x1c] = 0; keystatus[0x9c] = 0;
                          if( typemessageleng > 0 ) {
-                              tempbuf[0] = 2;          
+                              tempbuf[0] = 2;
                               // sending text is message type 4
                               for( j=typemessageleng-1; j>=0; j-- ) {
                                    tempbuf[j+1] = typemessage[j];
@@ -2154,8 +2154,8 @@ getpackets()
                          sendpacket(connecthead,tempbuf,2);
                     break;
                case 255:  //[255] (logout)
-                    deletesprite(playersprite[other]); 
-                    sprintf(tektempbuf,"%2d %8s HAS QUIT", other,netnames[other]); 
+                    deletesprite(playersprite[other]);
+                    sprintf(tektempbuf,"%2d %8s HAS QUIT", other,netnames[other]);
                     showmessage(tektempbuf);
                     break;
           }
@@ -2219,12 +2219,12 @@ getsyncstat()
      updatecrc16(crc,randomseed); updatecrc16(crc,randomseed>>8);
      for(i=connecthead;i>=0;i=connectpoint2[i])
      {
-          updatecrc16(crc,posx[i]);     
-          updatecrc16(crc,posy[i]);     
-          updatecrc16(crc,posz[i]);     
-          updatecrc16(crc,ang[i]);      
-          updatecrc16(crc,horiz[i]);    
-          updatecrc16(crc,health[i]);   
+          updatecrc16(crc,posx[i]);
+          updatecrc16(crc,posy[i]);
+          updatecrc16(crc,posz[i]);
+          updatecrc16(crc,ang[i]);
+          updatecrc16(crc,horiz[i]);
+          updatecrc16(crc,health[i]);
      }
 
     #if SPRITES_CRC_CHECK
@@ -2238,7 +2238,7 @@ getsyncstat()
           }
      }
     #endif
- 
+
      return(crc);
 }
 #endif
