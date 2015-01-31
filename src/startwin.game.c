@@ -376,7 +376,7 @@ int startwin_idle(void *v)
 	return 0;
 }
 
-//extern int xdimgame, ydimgame, bppgame, forcesetup;
+extern int xdimgame, ydimgame, bppgame, forcesetup;
 
 int startwin_run(void)
 {
@@ -388,11 +388,11 @@ int startwin_run(void)
 	SetPage(TAB_CONFIG);
 	EnableConfig(1);
 
-	settings.fullscreen = 0;//fullscreen;
-	settings.xdim3d = 640;//xdimgame;
-	settings.ydim3d = 480;//ydimgame;
-	settings.bpp3d = 32;//bppgame;
-	settings.forcesetup = 1;//forcesetup;
+	settings.fullscreen = fullscreen;
+	settings.xdim3d = xdimgame;
+	settings.ydim3d = ydimgame;
+	settings.bpp3d = bppgame;
+	settings.forcesetup = forcesetup;
 	PopulateForm();
 
 	while (done < 0) {
@@ -410,11 +410,11 @@ int startwin_run(void)
 	SetPage(TAB_MESSAGES);
 	EnableConfig(0);
 	if (done) {
-		// fullscreen = settings.fullscreen;
-		// xdimgame = settings.xdim3d;
-		// ydimgame = settings.ydim3d;
-		// bppgame = settings.bpp3d;
-		// forcesetup = settings.forcesetup;
+		fullscreen = settings.fullscreen;
+		xdimgame = settings.xdim3d;
+		ydimgame = settings.ydim3d;
+		bppgame = settings.bpp3d;
+		forcesetup = settings.forcesetup;
 	}
 
 	return done;

@@ -40,6 +40,7 @@ extern int recording;
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
 extern int fullscreen, xdimgame, ydimgame, bppgame;
+extern int forcesetup;
 extern unsigned char option[NUMOPTIONS];
 extern unsigned char keys[NUMKEYS];
 extern unsigned char moreoptions[MAXMOREOPTIONS];

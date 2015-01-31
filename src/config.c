@@ -60,7 +60,7 @@ int loadsetup(const char *fn)
 
 	if ((fp = Bfopen(fn, "rt")) == NULL) return -1;
 
-	//if (readconfig(fp, "forcesetup", val, VL) > 0) { forcesetup = (Batoi(val) != 0); }
+	if (readconfig(fp, "forcesetup", val, VL) > 0) { forcesetup = (Batoi(val) != 0); }
 	if (readconfig(fp, "fullscreen", val, VL) > 0) { fullscreen = (Batoi(val) != 0); }
 	if (readconfig(fp, "xdim", val, VL) > 0) xdimgame = Batoi(val);
 	if (readconfig(fp, "ydim", val, VL) > 0) ydimgame = Batoi(val);
@@ -202,7 +202,7 @@ int writesetup(const char *fn)
 	"keyconsole = %X\n"
 	"\n",
 	
-	1/*forcesetup*/, fullscreen, xdimgame, ydimgame, bppgame,
+	forcesetup, fullscreen, xdimgame, ydimgame, bppgame,
 #ifdef RENDERTYPEWIN
 	maxrefreshfreq,
 #endif

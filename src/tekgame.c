@@ -38,6 +38,7 @@ int recording = -2;
 
 #ifdef    TEKWAR
 int xdimgame = 640, ydimgame = 480, bppgame = 8;
+int forcesetup = 1;
 
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
@@ -288,6 +289,8 @@ debugout(short p)
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
+extern int startwin_run(void);
+
 int
 app_main(int argc, char const * const argv[])
 {
@@ -296,12 +299,104 @@ app_main(int argc, char const * const argv[])
 
      sprintf(tektempbuf, TITLE, VERS);
      initputs(tektempbuf);
+     initputs("\n\n");
      wm_setapptitle(tektempbuf);
 
-     initgroupfile("stuff.dat");
+#if defined(PREFIX)
+     {
+          const char *prefixdir = PREFIX;
+          if (prefixdir && prefixdir[0]) {
+               addsearchpath(prefixdir);
+          }
+     }
+#endif
+
+     {
+          char *supportdir = Bgetsupportdir(1);
+          char *appdir = Bgetappdir();
+          char dirpath[BMAX_PATH+1];
+
+          // the OSX app bundle, or on Windows the directory where the EXE was launched
+          if (appdir) {
+               addsearchpath(appdir);
+               free(appdir);
+          }
+        
+          // the global support files directory
+          if (supportdir) {
+               Bsnprintf(dirpath, sizeof(dirpath), "%s/JFTekWar", supportdir);
+               addsearchpath(dirpath);
+               free(supportdir);
+          }
+     }
+
      tekargv(argc, argv);
+
+     // creating a 'user_profiles_disabled' file in the current working
+     // directory where the game was launched makes the installation
+     // "portable" by writing into the working directory
+     if (access("user_profiles_disabled", F_OK) == 0) {
+          char cwd[BMAX_PATH+1];
+          if (getcwd(cwd, sizeof(cwd))) {
+               addsearchpath(cwd);
+          }
+     } else {
+          char *supportdir;
+          char dirpath[BMAX_PATH+1];
+          int asperr;
+
+          if ((supportdir = Bgetsupportdir(0))) {
+               Bsnprintf(dirpath, sizeof(dirpath), "%s/"
+#if defined(_WIN32) || defined(__APPLE__)
+                    "JFTekWar"
+#else
+                    ".jftekwar"
+#endif
+                    , supportdir);
+               asperr = addsearchpath(dirpath);
+               if (asperr == -2) {
+                    if (Bmkdir(dirpath, S_IRWXU) == 0) {
+                         asperr = addsearchpath(dirpath);
+                    } else {
+                         asperr = -1;
+                    }
+               }
+               if (asperr == 0) {
+                    chdir(dirpath);
+               }
+               free(supportdir);
+          }
+     }
+
+     buildsetlogfile("tekwar.log");
+
+     if (preinitengine()) {
+          wm_msgbox("Build Engine Initialisation Error",
+               "There was a problem initialising the Build engine: %s", engineerrstr);
+          exit(1);
+     }
+
      lm("tekloadsetup");
      tekloadsetup();
+
+#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
+    if (forcesetup) {
+        if (quitevent || !startwin_run()) {
+            uninitengine();
+            exit(0);
+        }
+    }
+#endif
+
+     lm("initgroupfile");
+     initgroupfile("stuff.dat");
+
+     if (initengine()) {
+          wm_msgbox("Build Engine Initialisation Error",
+               "There was a problem initialising the Build engine: %s", engineerrstr);
+          exit(1);
+     }
+
      lm("inittimer");
      inittimer(CLKIPS);
      lm("tekinitmultiplayers");

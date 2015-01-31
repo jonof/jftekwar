@@ -8,12 +8,14 @@
 #include "compat.h"
 #include "baselayer.h"
 #include "pragmas.h"
+#include "cache1d.h"
 
 #include "tekwar.h"
 
 #include "smacker.h"
 
 static smk smkmenu;
+static unsigned char *smkbuf;
 #define SMKPICNUM (MAXTILES-1)
 
 void
@@ -26,9 +28,30 @@ void
 smkopenmenu(char *name)
 {
      unsigned long xsiz, ysiz;
+     int fh, flen;
+
+     fh = kopen4load(name, 0);
+     if (fh < 0) {
+          debugprintf("smkopenmenu(\"%s\") failed\n", name);
+          return;
+     }
+
+     flen = kfilelength(fh);
+     smkbuf = (unsigned char *)malloc(flen);
+
+     if (smkbuf == NULL) {
+          kclose(fh);
+          debugprintf("smkopenmenu(\"%s\") malloc of %d bytes failed\n", name, flen);
+          return;
+     }
+
+     kread(fh, smkbuf, flen);
+     kclose(fh);
     
-     smkmenu = smk_open_file(name, SMK_MODE_DISK);
+     smkmenu = smk_open_memory(smkbuf, flen);
      if (!smkmenu) {
+          free(smkbuf);
+          smkbuf = 0;
           debugprintf("smk_open_file(\"%s\") returned null\n", name);
           return;
      }
@@ -95,4 +118,6 @@ smkclosemenu()
      waloff[SMKPICNUM] = 0;
     
      smk_close(smkmenu);
+     free(smkbuf);
+     smkbuf = 0;
 }

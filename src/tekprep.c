@@ -817,10 +817,6 @@ tekloadsetup()
           close(fil);
      }
      */
-    if (initengine()) {
-        crash("error initialising engine: %s", engineerrstr);
-    }
-
     loadsetup("tekwar.ini");
 }
 
