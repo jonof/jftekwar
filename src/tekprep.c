@@ -40,7 +40,7 @@ prepareboard(char *daboardfilename)
      int      i, j, k, s, dax, day, daz, dax2, day2;
      int       l;
 
-     initsprites();   
+     initsprites();
 
      if( firsttimethru ) {
           getmessageleng = 0;
@@ -404,12 +404,12 @@ prepareboard(char *daboardfilename)
           }
      }
      if( (startspotcnt == 0) && (option[4] != 0) ) {
-          crash("no net startspots");
+          crashgame("no net startspots");
      }
 
      for(i=0;i<(MAXSECTORS>>3);i++) show2dsector[i] = 0xff;
      for(i=0;i<(MAXWALLS>>3);i++) show2dwall[i] = 0xff;
-     automapping = 0;  
+     automapping = 0;
      // tags that make wall/sector not show up on 2D map
      for( i=0; i < MAXSECTORS; i++ ) {
           if( sector[i].lotag == 9901 ) {
@@ -555,7 +555,7 @@ placerandompic(int picnum)
                     if (inside(dax,day,k) == 1)
                     {
                          j=jsinsertsprite(k,0);
-                         if( j != -1 ) { 
+                         if( j != -1 ) {
                               fillsprite(j,dax,day,sector[k].floorz,0,-8,0,
                                          12,16,16,0,0,0,0,
                                          0,0,0,0,k,0,0,0,-1);
@@ -609,7 +609,7 @@ initplayersprite(short snum)
 
      i=jsinsertsprite(cursectnum[snum], 8);
      if( i == -1 ) {
-          crash("initplayersprite: jsinsertsprite on player %d failed", snum);
+          crashgame("initplayersprite: jsinsertsprite on player %d failed", snum);
      }
      playersprite[snum]=i;
      sprite[i].x=posx[snum];
@@ -639,7 +639,7 @@ initplayersprite(short snum)
      sprite[i].lotag=0;
      sprite[i].hitag=0;
      // important to set extra = -1
-     sprite[i].extra=-1;     
+     sprite[i].extra=-1;
 
      tekrestoreplayer(snum);
 }
@@ -682,7 +682,7 @@ tekpreinit(void)
           }
           kclose(fh);
      }
-     if( (option[4] != 0) && ((fh=kopen4load("nlookup.dat",0)) >= 0) ) {  
+     if( (option[4] != 0) && ((fh=kopen4load("nlookup.dat",0)) >= 0) ) {
           l=kgetc(fh);
           for (j=0 ; j < l ; j++) {
                k=kgetc(fh);
@@ -701,7 +701,7 @@ tekpreinit(void)
      pskyoff[2]=2;
      pskyoff[3]=3;
      pskybits=2;    // tile 4 times, every 90 deg.
-     parallaxtype=1;   
+     parallaxtype=1;
      parallaxyoffs=112;
      initptrlists();
      initpaletteshifts();
@@ -718,7 +718,8 @@ tekpreinit(void)
 void
 tekinitmultiplayers(int argc, char const * const argv[])
 {
-      initmultiplayers(argc, argv);
+      //initmultiplayers(argc, argv);
+     initsingleplayers();
 }
 
 short mappic[]={
@@ -793,7 +794,7 @@ teknetpickmap(void)
      }
      else if (keystatus[0x01]) {
           keystatus[0x01]=0;
-          crash("Multiplayer game aborted!");
+          crashgame("Multiplayer game aborted!");
      }
 skippick:*/
      prepareboard(boardfilename);
@@ -808,7 +809,7 @@ tekloadsetup()
 {
      /*
      int  fil;
-     
+
      if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
      {
           read(fil,&option[0],NUMOPTIONS);

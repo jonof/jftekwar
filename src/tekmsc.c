@@ -965,7 +965,7 @@ nextnetlevel()
           } while (readyplayers < numplayers && keystatus[0x01] == 0);
           if (keystatus[0x01]) {
                keystatus[0x01]=0;
-               crash("Multiplayer game aborted!");
+               crashgame("Multiplayer game aborted!");
           }
           if (dbgflag) {
                fprintf(dbgfp,"\nNEW LEVEL\n\n");
@@ -1497,7 +1497,7 @@ newmap(int mapno)
      case 3:
           newmap=mapreturn(currentmapno);
           if( newmap != mapno ) {
-               crash("bad return map");
+               crashgame("bad return map");
           }
           break;
      }
@@ -2207,15 +2207,15 @@ tekargv(int argc, char const * const argv[])
      goreflag=1;
 
      for( p=1 ; p < argc ; p++ ) {
-          if (strcasecmp(argv[p],"PRACTICE") == 0) {
+          if (Bstrcasecmp(argv[p],"PRACTICE") == 0) {
                generalplay=1;
                argmatch++;
           }
-          if (strcasecmp(argv[p],"NOVIDEOID") == 0) {
+          if (Bstrcasecmp(argv[p],"NOVIDEOID") == 0) {
                novideoid=1;
                argmatch++;
           }
-          if (strcasecmp(argv[p],"NETNAME") == 0) {
+          if (Bstrcasecmp(argv[p],"NETNAME") == 0) {
                bypasscdcheck=1;
                if( (p+1) < argc ) {
                     memset(localname,0,sizeof(localname));
@@ -2224,47 +2224,47 @@ tekargv(int argc, char const * const argv[])
                }
                argmatch++;
           }
-          if (strcasecmp(argv[p],"NOGORE") == 0) {
+          if (Bstrcasecmp(argv[p],"NOGORE") == 0) {
                argmatch++;
                goreflag=0;
           }
-          if (strcasecmp(argv[p],"NOENEMIES") == 0) {
+          if (Bstrcasecmp(argv[p],"NOENEMIES") == 0) {
                argmatch++;
                noenemiesflag=1;
           }
-          if (strcasecmp(argv[p],"NOGUARD") == 0) {
+          if (Bstrcasecmp(argv[p],"NOGUARD") == 0) {
                argmatch++;
                noguardflag=1;
           }
-          if (strcasecmp(argv[p],"NOSTALK") == 0) {
+          if (Bstrcasecmp(argv[p],"NOSTALK") == 0) {
                argmatch++;
                nostalkflag=1;
           }
-          if (strcasecmp(argv[p],"NOCHASE") == 0) {
+          if (Bstrcasecmp(argv[p],"NOCHASE") == 0) {
                argmatch++;
                nochaseflag=1;
           }
-          if (strcasecmp(argv[p],"NOSTROLL") == 0) {
+          if (Bstrcasecmp(argv[p],"NOSTROLL") == 0) {
                argmatch++;
                nostrollflag=1;
           }
-          if (strcasecmp(argv[p],"DIGILOOPS") == 0) {
+          if (Bstrcasecmp(argv[p],"DIGILOOPS") == 0) {
                argmatch++;
                digiloopflag=1;
           }
-          if (strcasecmp(argv[p],"NOBRIEFS") == 0) {
+          if (Bstrcasecmp(argv[p],"NOBRIEFS") == 0) {
                argmatch++;
                nobriefflag=1;
           }
-          if (strcasecmp(argv[p],"DEBUG") == 0) {
+          if (Bstrcasecmp(argv[p],"DEBUG") == 0) {
                argmatch++;
                dbgflag=1;
           }
-          if (strcasecmp(argv[p],"COOP") == 0) {
+          if (Bstrcasecmp(argv[p],"COOP") == 0) {
                argmatch++;
                coopmode=1;
           }
-          if (strcasecmp(argv[p],"SWITCHLEVELS") == 0) {
+          if (Bstrcasecmp(argv[p],"SWITCHLEVELS") == 0) {
                argmatch++;
                switchlevelsflag=1;
           }
@@ -3154,7 +3154,7 @@ choosingmap:
           case  6: newgame("mid1.map");    break;
           case  7: newgame("mid2.map");    break;
           case  8: newgame("mid3.map");    break;
-          default: crash("chsmp: bad map num");
+          default: crashgame("chsmp: bad map num");
           }
      }
      else {
@@ -3168,7 +3168,7 @@ choosingmap:
           case  6: newgame("ware1.map");   break;
           case  7: newgame("ware2.map");   break;
           case  8: newgame("ware3.map");   break;
-          default: crash("chsmp: bad map num");
+          default: crashgame("chsmp: bad map num");
           }
      }
 

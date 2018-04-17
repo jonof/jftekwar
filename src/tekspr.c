@@ -11,8 +11,8 @@
 #include "tekwar.h"
 
 // from tekstat
-#define   FLOATING       322  
-#define   PINBALL        403     
+#define   FLOATING       322
+#define   PINBALL        403
 
 
 short
@@ -25,10 +25,10 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
-          crash("messing w plrsprite at 17");
+          crashgame("messing w plrsprite at 17");
      }
     #endif
-    
+
      switch (cliptype) {
           case NORMALCLIP: dcliptype = CLIPMASK0; break;
           case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
@@ -78,10 +78,10 @@ floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, i
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
-          crash("messing w plrsprite at 18");
+          crashgame("messing w plrsprite at 18");
      }
     #endif
-    
+
      switch (cliptype) {
           case NORMALCLIP: dcliptype = CLIPMASK0; break;
           case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
@@ -119,10 +119,10 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
-          crash("messing w plrsprite at 19");
+          crashgame("messing w plrsprite at 19");
      }
     #endif
-    
+
      switch (cliptype) {
           case NORMALCLIP: dcliptype = CLIPMASK0; break;
           case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
@@ -140,7 +140,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
      px=spr->x;
      py=spr->y;
      pz=spr->z;
-     daz = spr->z+zoffs; 
+     daz = spr->z+zoffs;
      retval = clipmove(&spr->x,&spr->y,&daz,&dasectnum,dx,dy,
                                    ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
      if( (dasectnum != spr->sectnum) && (dasectnum >= 0) ) {
@@ -200,10 +200,10 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
-          crash("messing w plrsprite at 20");
+          crashgame("messing w plrsprite at 20");
      }
     #endif
-    
+
      switch (cliptype) {
           case NORMALCLIP: dcliptype = CLIPMASK0; break;
           case PROJECTILECLIP: dcliptype = CLIPMASK1; break;
@@ -212,7 +212,7 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
 
      spr = &sprite[spritenum];
 
-     dasectnum = spr->sectnum; 
+     dasectnum = spr->sectnum;
      retval = clipmove(&spr->x,&spr->y,&spr->z,&dasectnum,dx,dy,
                                    ((int)spr->clipdist)<<2,ceildist,flordist,dcliptype);
 
@@ -228,7 +228,7 @@ flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int
           daz=(globloz+globhiz);
           spr->z=(daz>>1);
      }
- 
+
      return(retval);
 }
 
@@ -290,12 +290,12 @@ analyzesprites(int dax, int day)
                break;
           case AUTOGUN:
                if (k <= 4) {
-                    tspr->picnum += k;    
-                    tspr->cstat &= ~4; 
+                    tspr->picnum += k;
+                    tspr->cstat &= ~4;
                }
                else {
-                    tspr->picnum += (8-k); 
-                    tspr->cstat |= 4;     
+                    tspr->picnum += (8-k);
+                    tspr->cstat |= 4;
                }
                break;
           case JAKESTANDPIC:
@@ -324,9 +324,9 @@ analyzesprites(int dax, int day)
           case SWATSTANDPIC:
           case PROBE1:
           case RS232:
-               if (k <= 4) {           
+               if (k <= 4) {
                     tspr->picnum += k;
-                    tspr->cstat &= ~4; 
+                    tspr->cstat &= ~4;
                }
                else {
                     tspr->picnum += ((8-k));
@@ -354,7 +354,7 @@ analyzesprites(int dax, int day)
           case SSALATTACKPIC:
           case SGOLATTACKPIC:
           case SWATATTACKPIC:
-               if( k <= 4 ) {           
+               if( k <= 4 ) {
                     tspr->picnum += (k<<1);
                     tspr->cstat &= ~4;   //clear x-flipping bit
                }
@@ -391,7 +391,7 @@ analyzesprites(int dax, int day)
           case JAKEDEATHPIC+6:
           case JAKEDEATHPIC+7:
           case JAKEDEATHPIC+8:
-               if( k <= 4 ) { 
+               if( k <= 4 ) {
                     tspr->picnum += (k);
                     tspr->cstat &= ~4;   //clear x-flipping bit
                }
@@ -401,9 +401,9 @@ analyzesprites(int dax, int day)
                }
                break;
           // mirrorman
-          case 1079:  
+          case 1079:
           case 1074:
-               if( k <= 4 ) { 
+               if( k <= 4 ) {
                     tspr->picnum += (k);
                     tspr->cstat |= 4;
                }
@@ -642,7 +642,7 @@ checktouchsprite(short snum, short sectnum)
                     }
                     break;
                case 3836:
-                    if( (ammo8[snum] < MAXAMMO) ) { 
+                    if( (ammo8[snum] < MAXAMMO) ) {
                          ammo8[snum]+=25;
                          if( ammo8[snum] > MAXAMMO ) {
                               ammo8[snum]=MAXAMMO;
@@ -758,7 +758,7 @@ operatesprite(short dasprite)
      }
 }
 
-#define   DROPSIES       406    
+#define   DROPSIES       406
 #define   MAXDROPANGLES  6
 unsigned char      dropanglecnt;
 short     dropangles[MAXDROPANGLES] = { 0, 1792, 512, 768, 1536, 1024 };
@@ -787,7 +787,7 @@ void
 playerdropitems(int snum)
 {
      if( !validplayer(snum) ) {
-          crash("dropitems on bad plrnum");
+          crashgame("dropitems on bad plrnum");
      }
 
      if( (weapons[snum]&flags32[GUN2FLAG]) != 0 ) {

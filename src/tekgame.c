@@ -289,13 +289,14 @@ debugout(short p)
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
-extern int startwin_run(void);
 
 int
 app_main(int argc, char const * const argv[])
 {
      int      i, waitplayers;
      int     other;
+     int startretval = STARTWIN_RUN;
+     struct startwin_settings settings;
 
      sprintf(tektempbuf, TITLE, VERS);
      initputs(tektempbuf);
@@ -321,7 +322,7 @@ app_main(int argc, char const * const argv[])
                addsearchpath(appdir);
                free(appdir);
           }
-        
+
           // the global support files directory
           if (supportdir) {
                Bsnprintf(dirpath, sizeof(dirpath), "%s/JFTekWar", supportdir);
@@ -379,13 +380,29 @@ app_main(int argc, char const * const argv[])
      lm("tekloadsetup");
      tekloadsetup();
 
-#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK2))
-    if (forcesetup) {
-        if (quitevent || !startwin_run()) {
+#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK))
+     memset(&settings, 0, sizeof(settings));
+     settings.fullscreen = fullscreen;
+     settings.xdim3d = xdimgame;
+     settings.ydim3d = ydimgame;
+     settings.bpp3d = bppgame;
+     settings.forcesetup = forcesetup;
+
+     if (forcesetup) {
+		if (!quitevent) {
+			startretval = startwin_run(&settings);
+		}
+        if (quitevent || startretval == STARTWIN_CANCEL) {
             uninitengine();
             exit(0);
         }
-    }
+     }
+
+     fullscreen = settings.fullscreen;
+     xdimgame = settings.xdim3d;
+     ydimgame = settings.ydim3d;
+     bppgame = settings.bpp3d;
+     forcesetup = settings.forcesetup;
 #endif
 
      lm("initgroupfile");
@@ -554,11 +571,11 @@ processinput(short snum)
 
      // move player snum
      if (snum < 0 || snum >= MAXPLAYERS) {
-          crash("game712: Invalid player number (%d)",snum);
+          crashgame("game712: Invalid player number (%d)",snum);
      }
 
      if (cursectnum[snum] < 0 || cursectnum[snum] >= numsectors) {
-          crash("game718: Invalid sector for player %d @ %ld,%ld (%d)",snum,
+          crashgame("game718: Invalid sector for player %d @ %ld,%ld (%d)",snum,
                posx[snum],posy[snum],cursectnum[snum]);
      }
 
@@ -599,11 +616,11 @@ processinput(short snum)
      }
 
      if (cursectnum[snum] < 0 || cursectnum[snum] >= numsectors) {
-          crash("game748: Invalid sector for player %d @ %ld,%ld (%d)",snum,
+          crashgame("game748: Invalid sector for player %d @ %ld,%ld (%d)",snum,
                posx[snum],posy[snum],cursectnum[snum]);
      }
      if (playersprite[snum] < 0 || playersprite[snum] >= MAXSPRITES) {
-          crash("game751: Invalid sprite for player %d (%d)",snum,playersprite[snum]);
+          crashgame("game751: Invalid sprite for player %d (%d)",snum,playersprite[snum]);
      }
 
      // getzrange returns the highest and lowest z's for an entire box,
@@ -642,7 +659,7 @@ processinput(short snum)
                if( option[4] != 0 ) {
                     netstartspot(&posx[snum],&posy[snum],&cursectnum[snum]);
                     if (cursectnum[snum] < 0 || cursectnum[snum] >= numsectors) {
-                         crash("game818: Invalid sector for player %d (%d)",snum,cursectnum[snum]);
+                         crashgame("game818: Invalid sector for player %d (%d)",snum,cursectnum[snum]);
                     }
                     placerandompic(KLIPPIC);
                     placerandompic(MEDICKITPIC);
@@ -795,7 +812,7 @@ processinput(short snum)
           else {
                if( (globlohit&0xC000) == 0xC000 ) {     // on a sprite
                     if ((globlohit-49152) < 0 || (globlohit-49152) >= MAXSPRITES) {
-                         crash("game961: Invalid sprite index (%d)",globlohit-49152);
+                         crashgame("game961: Invalid sprite index (%d)",globlohit-49152);
                     }
                     if( sprite[globlohit-49152].lotag >= 1500 ) {
                          onelev[snum]=1;
@@ -843,12 +860,12 @@ processinput(short snum)
      // kens waterfountain
      if( (waterfountainwall[snum] >= 0) && (health[snum] >= 0) ) {
           if (neartagwall < 0 || neartagwall >= numwalls) {
-               crash("game1009: Invalid wall (%d)",neartagwall);
+               crashgame("game1009: Invalid wall (%d)",neartagwall);
           }
           if( (wall[neartagwall].lotag != 7) || ((syncbits[snum]&1024) == 0) ) {
                i = waterfountainwall[snum];
                if (i < 0 || i >= numwalls) {
-                    crash("game1014: Invalid wall index (%d)",i);
+                    crashgame("game1014: Invalid wall index (%d)",i);
                }
                if( wall[i].overpicnum == USEWATERFOUNTAIN ) {
                     wall[i].overpicnum = WATERFOUNTAIN;
@@ -882,7 +899,7 @@ processinput(short snum)
           // kens water fountain
           if( neartagwall >= 0 ) {
               if (neartagwall >= numwalls) {
-                    crash("game1053: Invalid wall index (%d)",neartagwall);
+                    crashgame("game1053: Invalid wall index (%d)",neartagwall);
                }
                if ( wall[neartagwall].lotag == 7 ) {
                     if( wall[neartagwall].overpicnum == WATERFOUNTAIN ) {
@@ -906,7 +923,7 @@ processinput(short snum)
           if( (oflags[snum]&1024) == 0 ) {
                if( neartagsector >= 0 ) {
                     if (neartagsector >= numsectors) {
-                         crash("game1070: Invalid sector index (%d)",neartagsector);
+                         crashgame("game1070: Invalid sector index (%d)",neartagsector);
                     }
                     if( sector[neartagsector].hitag == 0 ) {
                          operatesector(neartagsector);
@@ -914,7 +931,7 @@ processinput(short snum)
                }
                if( neartagwall >= 0 ) {
                     if (neartagwall >= numwalls) {
-                         crash("game1078: Invalid wall index (%d)",neartagwall);
+                         crashgame("game1078: Invalid wall index (%d)",neartagwall);
                     }
                     if( wall[neartagwall].lotag == 2 ) {
                          for( i=0; i<numsectors; i++ ) {
@@ -954,7 +971,7 @@ processinput(short snum)
                }
                if( neartagsprite >= 0 ) {
                     if (neartagsprite >= MAXSPRITES) {
-                         crash("game1118: Invalid sprite index (%d)",neartagsprite);
+                         crashgame("game1118: Invalid sprite index (%d)",neartagsprite);
                     }
                     if( sprite[neartagsprite].lotag == 4 ) {
                          tekswitchtrigger(snum);

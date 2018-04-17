@@ -22,10 +22,10 @@
 char      bypasscdcheck=0;
 
 void
-crash(char *s,...)
+crashgame(char *s,...)
 {
      va_list argptr;
-     
+
      musicoff();
      sendlogoff();
      uninitmultiplayers();
@@ -36,7 +36,7 @@ crash(char *s,...)
      uninitengine();
      uninitgroupfile();
      teksavesetup();
-     
+
      va_start(argptr,s);
      vprintf(s,argptr);
      va_end(argptr);

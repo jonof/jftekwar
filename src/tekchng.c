@@ -11,8 +11,8 @@
 
 #define   MAXSTUNPOINTS       1000
 
-int      stun[MAXPLAYERS],stuntics[MAXPLAYERS];                     
-int      fallz[MAXPLAYERS];                                         
+int      stun[MAXPLAYERS],stuntics[MAXPLAYERS];
+int      fallz[MAXPLAYERS];
 
 
 int
@@ -21,7 +21,7 @@ changehealth(short snum, short deltahealth)
      int       healthmax;
 
      if( !validplayer(snum) ) {
-          crash("chnghlth bad plrnum");
+          crashgame("chnghlth bad plrnum");
      }
      if( toggles[TOGGLE_GODMODE] != 0 ) {
           return(0);
@@ -81,7 +81,7 @@ changehealth(short snum, short deltahealth)
           playerdropitems(snum);
      }
 
-     return(health[snum] <= 0);     
+     return(health[snum] <= 0);
 }
 
 void
@@ -94,7 +94,7 @@ changescore(short snum, short deltascore)
      score[snum] += deltascore;
      score[snum]&=0xFFFFFFFE;
 
-     if( (score[snum] < 0) || (score[snum] > 99999999) ) 
+     if( (score[snum] < 0) || (score[snum] > 99999999) )
           score[snum]=0;
 
 }

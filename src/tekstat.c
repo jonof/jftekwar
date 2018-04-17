@@ -39,18 +39,18 @@ FILE      *dbgfp2;
 #define   DONTBOTHERDISTANCE       20480
 #define   HEARGUNSHOTDIST          10240
 
-#define   INANIMATE      0       
+#define   INANIMATE      0
 #define   PLAYER         8
-#define   INACTIVE       100     
-#define   STANDING       201     
-#define   AMBUSH         202     
-#define   GUARD          203     
-#define   STALK          204     
-#define   FLEE           205     
-#define   CHASE          206     
-#define   PATROL         207     
-#define   CRAWL          208     
-#define   STROLL         209     
+#define   INACTIVE       100
+#define   STANDING       201
+#define   AMBUSH         202
+#define   GUARD          203
+#define   STALK          204
+#define   FLEE           205
+#define   CHASE          206
+#define   PATROL         207
+#define   CRAWL          208
+#define   STROLL         209
 #define   VIRUS          250
 #define   PLRVIRUS       255
 #define   ATTACK         300
@@ -69,16 +69,16 @@ FILE      *dbgfp2;
 #define   DELAYEDATTACK  313
 #define   MIRRORMAN1     320
 #define   MIRRORMAN2     321
-#define   FLOATING       322  
+#define   FLOATING       322
 #define   PROJHIT        400
 #define   PROJECTILE     401
 #define   TOSS           402
-#define   PINBALL        403     
+#define   PINBALL        403
 #define   KINDLING       405
-#define   DROPSIES       406    
+#define   DROPSIES       406
 #define   RUNTHRU        407
 #define   BLOODFLOW      408
-#define   FLY            500     
+#define   FLY            500
 #define   RODENT         502
 #define   TIMEBOMB       602
 #define   STACKED        610
@@ -106,7 +106,7 @@ FILE      *dbgfp2;
 #define   FX_NXTSTTPAIN       0x0020
 #define   FX_NXTSTTDEATH      0x0040
 
-#define   NO_PIC              0    
+#define   NO_PIC              0
 
 #define   MINATTACKDIST  8192L
 #define   CHASEATTDIST   8192L
@@ -126,17 +126,17 @@ struct    picattribtype  picinfo;
 struct    picattribtype  *picinfoptr=&picinfo;
 
 #define   MAXBOBS   32
-int      bobbing[MAXBOBS] = { 
+int      bobbing[MAXBOBS] = {
      0,  2,  4,  6,  8, 10, 12, 14,
-    16, 14, 12, 10,  8,  6,  4,  2, 
+    16, 14, 12, 10,  8,  6,  4,  2,
      0, -2, -4, -6, -8,-10,-12,-14,
-   -16,-14,-12,-10, -8, -6, -4, -2 
+   -16,-14,-12,-10, -8, -6, -4, -2
 };
 
 // angles, 0 east start, 22.5deg(==128scaled) resolution
 short  leftof[17]  = { 1920,    0,  128,  256,
                         384,  512,  640,  768,
-                        896, 1024, 1152, 1280, 
+                        896, 1024, 1152, 1280,
                        1408, 1536, 1664, 1792, 1920 };
 
 short  rightof[17] = {  128,  256,  384,  512,
@@ -168,7 +168,7 @@ struct TPACK    XTsavetype {
 };
 struct XTsavetype XTsave;
 struct TPACK    XTtrailertype {
-     int      numXTs;          
+     int      numXTs;
      int      start;
      char      mapname[13];
      char      ID[13];
@@ -193,7 +193,7 @@ struct    sectflashtype {
 };
 struct    sectflashtype  sectflash;
 
-int       vadd;     
+int       vadd;
 char      ensfirsttime=1;
 int      stackedcheck;
 
@@ -271,7 +271,7 @@ isaplayersprite(int sprnum)
           }
      }
      if( sprptr[sprnum]->statnum == 8 ) {
-          crash("isplrspr: non plr has statnm 8");
+          crashgame("isplrspr: non plr has statnm 8");
      }
      return(0);
 }
@@ -292,7 +292,7 @@ clearXTpics(short spriteno)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spriteno) ) {
-          crash("messing w plrsprite at 2");
+          crashgame("messing w plrsprite at 2");
      }
     #endif
 
@@ -317,7 +317,7 @@ mapXT(int sn)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 0");
+          crashgame("messing w plrsprite at 0");
      }
     #endif
 
@@ -335,9 +335,9 @@ mapXT(int sn)
 }
 
 void
-noextcrash(int i, int loc)
+noextcrashgame(int i, int loc)
 {
-     crash("sprite at %d,%d no extension from  %d", sprite[i].x,sprite[i].y, loc);
+     crashgame("sprite at %d,%d no extension from  %d", sprite[i].x,sprite[i].y, loc);
 }
 
 #ifdef  VERIFYSTATS
@@ -349,7 +349,7 @@ verifystatus(int i, int stat)
      }
      if( sprptr[i]->statnum != stat ) {
           if( nextspritestat[i] != -1 ) {
-               crash("verifystatus fail for %d", stat);
+               crashgame("verifystatus fail for %d", stat);
           }
           vbad++;
      }
@@ -412,7 +412,7 @@ initspriteXTs()
           return 0;
      }
 
-     // read in XTtrailer 
+     // read in XTtrailer
      klseek(fh, -((int)sizeof(struct XTtrailertype)), SEEK_END);
      memset(&XTtrailer, 0, sizeof(struct XTtrailertype));
      kread(fh, &XTtrailer, sizeof(struct XTtrailertype));
@@ -449,7 +449,7 @@ noext:
      }
 
      // adjust speed for difficulty
-     for( i=0; i<MAXSPRITES; i++ ) { 
+     for( i=0; i<MAXSPRITES; i++ ) {
           if( sprite[i].extra != -1 ) {
               #ifdef  NOSHOWSPRITES
 	          show2dsprite[i>>3] &= ~(1<<(i&7));
@@ -562,7 +562,7 @@ isvisible(short i, short target)
 {
 
      if( !validplayer(target) ) {
-          crash("isvisible: bad targetnum");
+          crashgame("isvisible: bad targetnum");
      }
 
 	if( sintable[(sprptr[i]->ang+2560)&2047]*(posx[target]-sprptr[i]->x) + sintable[(sprptr[i]->ang+2048)&2047]*(posy[target]-sprptr[i]->y) >= 0) {
@@ -580,7 +580,7 @@ getpicinfo(short picnum)
 {
      int      amask=picanm[picnum];
 
-     picinfoptr->numframes=amask&0x0000003F;     
+     picinfoptr->numframes=amask&0x0000003F;
      picinfoptr->animtype =( amask&0x000000C0 )>>6;
      picinfoptr->xcenteroffset=( amask&0x0000FF00 )>>8;
      picinfoptr->ycenteroffset=( amask&0x00FF0000 )>>16;
@@ -596,14 +596,14 @@ wallangle(int wn)
      w1x=wallptr[wn]->x; w1y=wallptr[wn]->y;
      wn=wallptr[wn]->point2;
      w2x=wallptr[wn]->x; w2y=wallptr[wn]->y;
-     wang=getangle(w2x-w1x, w2y-w1y); 
+     wang=getangle(w2x-w1x, w2y-w1y);
 
  return(wang);
 }
 
 short
 arbitraryangle(void)
-{        
+{
      switch( RMOD4("STAT642 ") ) {
      case 0:
      case 1:
@@ -624,7 +624,7 @@ wallnormal(int wn)
      w1x=wallptr[wn]->x; w1y=wallptr[wn]->y;
      wn=wallptr[wn]->point2;
      w2x=wallptr[wn]->x; w2y=wallptr[wn]->y;
-     wnorm=getangle(w2x-w1x, w2y-w1y); 
+     wnorm=getangle(w2x-w1x, w2y-w1y);
      wnorm=(wnorm+512L)&2047;
 
  return(wnorm);
@@ -634,7 +634,7 @@ short
 walldeflect(int wn, short angin)
 {
      short     wnorm,refract,delta,angout;
-     
+
      wnorm=wallnormal(wn);
 
      refract=(angin+1024)&2047;
@@ -651,7 +651,7 @@ walldeflect(int wn, short angin)
 
 short
 spritedeflect(int sn, short angin)
-{ 
+{
      short     angout;
 
      switch ( sprptr[sn]->statnum ) {
@@ -684,7 +684,7 @@ tweakdeathdist(short i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 1");
+          crashgame("messing w plrsprite at 1");
      }
     #endif
 
@@ -705,7 +705,7 @@ splash(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 3");
+          crashgame("messing w plrsprite at 3");
      }
     #endif
 
@@ -737,7 +737,7 @@ pickupsprite(short sn)
 {
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 4");
+          crashgame("messing w plrsprite at 4");
      }
     #endif
 
@@ -770,7 +770,7 @@ toss(short snum)
      int       j;
 
      if( !validplayer(snum) ) {
-          crash("toss: bad plrnum");
+          crashgame("toss: bad plrnum");
      }
      if( pickup.picnum == 0 ) {
           return;
@@ -801,10 +801,10 @@ toss(short snum)
                break;
           case TUBEBOMB+1:
                sprptr[j]->picnum=TUBEBOMB;
-               break;               
+               break;
           case DARTBOMB+1:
                sprptr[j]->picnum=DARTBOMB;
-               break;               
+               break;
           default:
                sprptr[j]->picnum=pickup.picnum;
                break;
@@ -836,7 +836,7 @@ triggersprite(short sn)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 5");
+          crashgame("messing w plrsprite at 5");
      }
     #endif
 
@@ -850,7 +850,7 @@ triggersprite(short sn)
 
           case SPR_LOTAG_MORPH:
                break;
-          case SPR_LOTAG_SPAWNCHASE:  
+          case SPR_LOTAG_SPAWNCHASE:
 	          j = jsinsertsprite(sprptr[sn]->sectnum,  sprXTptr[ sprptr[sn]->extra ]->basestat);
                if ( j == -1 ) {
                     break;
@@ -863,7 +863,7 @@ triggersprite(short sn)
 		     sprptr[j]->x = sprptr[sn]->x+( sintable[(sprptr[sn]->ang+512)&2047]>>6 );
 		     sprptr[j]->y = sprptr[sn]->y+( sintable[sprptr[sn]->ang&2047]>>6 );
 		     sprptr[j]->z = sprptr[sn]->z;
-		     sprptr[j]->cstat = 0x101; 
+		     sprptr[j]->cstat = 0x101;
                sprptr[j]->picnum = sprXTptr[ sprptr[sn]->extra ]->basepic;
 		     sprptr[j]->shade = sprptr[sn]->shade;
 		     sprptr[j]->sectnum = sprptr[sn]->sectnum;
@@ -889,7 +889,7 @@ triggersprite(short sn)
                sprptr[sn]->lotag=0;
                sprptr[sn]->hitag=0;
                clearXTpics(sn);
-			break;   
+			break;
           default:
                newstatus(sn, sprXTptr[ sprptr[sn]->extra ]->basestat);
                break;
@@ -907,7 +907,7 @@ sectortriggersprites(short snum)
      }
 
      if( !validplayer(snum) ) {
-          crash("sectrtrgrsprts: bad plrnum");
+          crashgame("sectrtrgrsprts: bad plrnum");
      }
 
      if( sectptr[cursectnum[snum]]->lotag == SECT_LOTAG_SHOWMESSAGE ) {
@@ -938,7 +938,7 @@ sectortriggersprites(short snum)
           if( sprptr[i]->hitag == sectptr[cursectnum[snum]]->hitag ) {
                ext=sprptr[i]->extra;
                if( !validext(ext) ) {
-                    noextcrash(i, 300);
+                    noextcrashgame(i, 300);
                }
                sprXTptr[i]->aimask|=AI_JUSTSHOTAT;
                ambushyell(i, ext);
@@ -966,7 +966,7 @@ sectortriggersprites(short snum)
           nexti=nextspritestat[i];
           ext=sprptr[i]->extra;
           if( (!validext(ext)) || (sprXTptr[ext]->basestat == GUARD) ) {
-               if( sprptr[i]->hitag == sectptr[cursectnum[snum]]->hitag ) 
+               if( sprptr[i]->hitag == sectptr[cursectnum[snum]]->hitag )
                     sprXTptr[ext]->aimask&=~AI_GAVEWARNING;
                     givewarning(i, ext);
                     sprXTptr[ext]->aimask|=AI_ENCROACHMENT;
@@ -994,23 +994,23 @@ bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hi
      case 71:
      case 72:
      case 87:
-     case 93:  
-     case 92:  
-     case 95:  
-     case 97:  
-     case 98:  
-     case 99:  
-     case 124:  
-     case 126: 
-     case 147:  
-     case 152:  
-     case 214:  
-     case 215:  
-     case 235:  
-     case 236:  
-     case 636:  
+     case 93:
+     case 92:
+     case 95:
+     case 97:
+     case 98:
+     case 99:
+     case 124:
+     case 126:
+     case 147:
+     case 152:
+     case 214:
+     case 215:
+     case 235:
+     case 236:
+     case 636:
      case 855:
-     case 1457:  
+     case 1457:
           return;
      default:
           break;
@@ -1027,7 +1027,7 @@ bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hi
                     sprptr[j]->x=hitx;
                     sprptr[j]->y=hity;
                     sprptr[j]->z=hitz+2048;
-                    if( sprptr[j]->z > sectptr[sect]->floorz ) 
+                    if( sprptr[j]->z > sectptr[sect]->floorz )
                          sprptr[j]->z=sectptr[sect]->floorz-2048;
                     sprptr[j]->xrepeat=16;
                     sprptr[j]->yrepeat=16;
@@ -1036,7 +1036,7 @@ bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hi
                     sprptr[j]->zvel=0;
                     sprptr[j]->cstat=0x0090;
                     sprptr[j]->ang=wallnormal(wn);
-                    sprptr[j]->shade=0; 
+                    sprptr[j]->shade=0;
                     sprptr[j]->extra=-1;
                     sprptr[j]->lotag=0;
                     sprptr[j]->hitag=0;
@@ -1103,7 +1103,7 @@ playervirus(short pnum, int pic)
      int       j,nextj;
 
      if( !validplayer(pnum) ) {
-          crash("plrvrus: bad plrnum");
+          crashgame("plrvrus: bad plrnum");
      }
 
 	j=headspritestat[PLRVIRUS];
@@ -1135,7 +1135,7 @@ playervirus(short pnum, int pic)
      sprptr[j]->owner=pnum;  // host
 
      playsound(S_FIRELOOP,sprptr[j]->x,sprptr[j]->y,0,ST_UPDATE);
-     
+
      return(1);
 }
 
@@ -1210,7 +1210,7 @@ deathdropitem(short sprnum)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sprnum) ) {
-          crash("messing w plrsprite at 7");
+          crashgame("messing w plrsprite at 7");
      }
     #endif
 
@@ -1259,7 +1259,7 @@ deathdropitem(short sprnum)
 
      // tweak the size of the pic
      switch( sprptr[j]->picnum ) {
-     case KLIPPIC: 
+     case KLIPPIC:
            sprptr[j]->xrepeat-=2;
            sprptr[j]->yrepeat-=2;
            break;
@@ -1323,15 +1323,15 @@ deathsounds(int pic, int x,int y)
      case 3080:
      case 3084:
           playsound(S_HOLOGRAMDIE,x,y,0,ST_NOUPDATE);
-          break;      
-     case 3973:          //matrix character death 
+          break;
+     case 3973:          //matrix character death
           if( krand_intercept("STAT1364") < 32767 ) {
                playsound(S_MATRIX_DIE1,x,y,0,ST_NOUPDATE);
           }
           else {
                playsound(S_MATRIX_DIE2,x,y,0,ST_NOUPDATE);
           }
-          break;               
+          break;
 
      }
 }
@@ -1341,7 +1341,7 @@ hideplea(short sn, short ext)
 {
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 8");
+          crashgame("messing w plrsprite at 8");
      }
     #endif
 
@@ -1353,7 +1353,7 @@ hideplea(short sn, short ext)
           playsound(S_MALE_DONTHURT+(krand_intercept("STAT1390")&5),sprptr[sn]->x,sprptr[sn]->y,0,ST_UNIQUE);
           if(krand_intercept("STAT1391")&1) {
                sprXTptr[ext]->aimask|=AI_DIDHIDEPLEA;
-          }                    
+          }
           break;
      case SARAHWALKPIC:
      case SAMWALKPIC:
@@ -1370,7 +1370,7 @@ fleescream(short sn, short ext)
 {
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 9");
+          crashgame("messing w plrsprite at 9");
      }
     #endif
 
@@ -1413,7 +1413,7 @@ rubitinsound(int UNUSED(p), int sn)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 10");
+          crashgame("messing w plrsprite at 10");
      }
     #endif
 
@@ -1445,17 +1445,17 @@ newstatus(short sn, int  seq)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 11");
+          crashgame("messing w plrsprite at 11");
      }
     #else
      if( isaplayersprite(sn) ) {
           return;
      }
     #endif
-     
+
      ext=sprptr[sn]->extra;
-     if( !validext(ext) ) {  
-          noextcrash(sn, 0);     
+     if( !validext(ext) ) {
+          noextcrashgame(sn, 0);
      }
 
      switch( seq ) {
@@ -1561,7 +1561,7 @@ newstatus(short sn, int  seq)
                    #endif
                }
                break;
-          case ATTACK:    
+          case ATTACK:
                // standard 5 angles, 2 frames/angle
                newpic=sprXTptr[ext]->attackpic;
                if( newpic != NO_PIC ) {
@@ -1573,20 +1573,20 @@ newstatus(short sn, int  seq)
                     case 3:
                     case 4:
                     case 5:
-                         sprptr[sn]->lotag=32;  
+                         sprptr[sn]->lotag=32;
                          sprptr[sn]->hitag=32;
                          break;
                     default:
-                         sprptr[sn]->lotag=64;  
+                         sprptr[sn]->lotag=64;
                          sprptr[sn]->hitag=64;
-                         break;                         
+                         break;
                     }
                    #ifdef NEWSTAT_DEBUG
                     showmessage("ATTACK");
                    #endif
                }
                break;
-          case DELAYEDATTACK:    
+          case DELAYEDATTACK:
                // standard 5 angles, 2 frames/angle
                sprptr[sn]->lotag=95;
                changespritestat(sn, DELAYEDATTACK);
@@ -1608,12 +1608,12 @@ newstatus(short sn, int  seq)
                break;
           case SQUAT:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, SQUAT);
                     // standard 3 frames
                     // stay squat for 4 TICSPERFRAME
-                    sprptr[sn]->lotag=47;   
-                    sprptr[sn]->hitag=64;   
+                    sprptr[sn]->lotag=47;
+                    sprptr[sn]->hitag=64;
                    #ifdef NEWSTAT_DEBUG
                     showmessage("SQUAT");
                    #endif
@@ -1621,7 +1621,7 @@ newstatus(short sn, int  seq)
                break;
           case UNSQUAT:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, UNSQUAT);
                     sprptr[sn]->lotag=47;
                     sprptr[sn]->hitag=0;
@@ -1632,10 +1632,10 @@ newstatus(short sn, int  seq)
                break;
           case DODGE:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, SQUAT);
                     // standard 2 frames
-                    sprptr[sn]->lotag=31;   
+                    sprptr[sn]->lotag=31;
                     sprptr[sn]->hitag=0;
                    #ifdef NEWSTAT_DEBUG
                     showmessage("DODGE");
@@ -1644,7 +1644,7 @@ newstatus(short sn, int  seq)
                break;
           case UNDODGE:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, UNSQUAT);
                     sprptr[sn]->lotag=31;
                     sprptr[sn]->hitag=0;
@@ -1655,10 +1655,10 @@ newstatus(short sn, int  seq)
                break;
           case HIDE:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, HIDE);
                     // standard 2 frames
-                    sprptr[sn]->lotag=31; 
+                    sprptr[sn]->lotag=31;
                     sprptr[sn]->hitag=256;
                    #ifdef NEWSTAT_DEBUG
                     showmessage("HIDE");
@@ -1667,7 +1667,7 @@ newstatus(short sn, int  seq)
                break;
           case UNHIDE:
                newpic=sprXTptr[ext]->squatpic;
-               if ( newpic != NO_PIC ) { 
+               if ( newpic != NO_PIC ) {
                     changespritestat(sn, UNHIDE);
                     sprptr[sn]->lotag=31;
                     sprptr[sn]->hitag=0;
@@ -1678,7 +1678,7 @@ newstatus(short sn, int  seq)
                break;
           case PAIN:
                newpic=sprXTptr[ext]->painpic;
-               if ( newpic != 0 ) { 
+               if ( newpic != 0 ) {
                     changespritestat(sn,PAIN);
                     sprptr[sn]->picnum=newpic;
                     sprptr[sn]->lotag=16;
@@ -1736,7 +1736,7 @@ newstatus(short sn, int  seq)
           case DEATH:
                newpic=sprXTptr[ext]->deathpic;
                sprptr[sn]->cstat&=~257;
-               if( newpic != 0 ) {  
+               if( newpic != 0 ) {
                     changespritestat(sn,DEATH);
                     deathdropitem(sn);
                     getpicinfo(newpic);
@@ -1763,7 +1763,7 @@ damagesprite(int hitsprite, int points)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(hitsprite) ) {
-          crash("messing w plrsprite at 12");
+          crashgame("messing w plrsprite at 12");
      }
     #else
      if( isaplayersprite(hitsprite) ) {
@@ -1775,8 +1775,8 @@ damagesprite(int hitsprite, int points)
 
      switch( sprptr[hitsprite]->statnum ) {
      case INANIMATE:
-          if( validext(ext) ) { 
-               newstatus(hitsprite, DEATH); 
+          if( validext(ext) ) {
+               newstatus(hitsprite, DEATH);
           }
           return(0);
      case GENEXPLODE1:
@@ -1845,12 +1845,12 @@ attackifclose(short i, int snum, int dist)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 13");
+          crashgame("messing w plrsprite at 13");
      }
     #endif
 
      if( !validplayer(snum) ) {
-          crash("atakifclse: bad plrnum");
+          crashgame("atakifclse: bad plrnum");
      }
      if( health[snum] <= 0 ) {
           return;
@@ -1898,7 +1898,7 @@ attackifclose(short i, int snum, int dist)
           switch( sprptr[i]->statnum ) {
           default:
                sprptr[i]->ang=
-                 getangle(posx[snum]-sprptr[i]->x,posy[snum]-sprptr[i]->y);               
+                 getangle(posx[snum]-sprptr[i]->x,posy[snum]-sprptr[i]->y);
                newstatus(i, ATTACK);
                break;
           }
@@ -1908,14 +1908,14 @@ attackifclose(short i, int snum, int dist)
 }
 
 void
-enemygunshot(int  sn) 
+enemygunshot(int  sn)
 {
      int       j,nextj,ext;
      int      dist;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 14");
+          crashgame("messing w plrsprite at 14");
      }
     #endif
 
@@ -1925,7 +1925,7 @@ enemygunshot(int  sn)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(sn,100);
+               noextcrashgame(sn,100);
           }
      	dist = labs(sprptr[sn]->x-sprptr[j]->x)+labs(sprptr[sn]->y-sprptr[j]->y);
  		if( dist < HEARGUNSHOTDIST ) {
@@ -1941,7 +1941,7 @@ enemygunshot(int  sn)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(sn,101);
+               noextcrashgame(sn,101);
           }
 
           // guards not woken by enemies gun shot
@@ -1967,7 +1967,7 @@ enemygunshot(int  sn)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(sn,102);
+               noextcrashgame(sn,102);
           }
      	dist = labs(sprptr[sn]->x-sprptr[j]->x)+labs(sprptr[sn]->y-sprptr[j]->y);
  		if( dist < HEARGUNSHOTDIST ) {
@@ -1986,7 +1986,7 @@ playergunshot(int snum)
      int      dist;
 
      if( !validplayer(snum) ) {
-          crash("plgunsht: bad plrnum");
+          crashgame("plgunsht: bad plrnum");
      }
 
 	j=headspritestat[STROLL];
@@ -1995,7 +1995,7 @@ playergunshot(int snum)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(j,103);
+               noextcrashgame(j,103);
           }
      	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
@@ -2011,7 +2011,7 @@ playergunshot(int snum)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(j,105);
+               noextcrashgame(j,105);
           }
      	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
@@ -2027,7 +2027,7 @@ playergunshot(int snum)
 
           ext=sprptr[j]->extra;
           if( !validext(ext) ) {
-               noextcrash(j,106);
+               noextcrashgame(j,106);
           }
      	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
@@ -2045,28 +2045,28 @@ enemywoundplayer(short plrhit, short sprnum, char guntype)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sprnum) ) {
-          crash("messing w plrsprite at 15");
+          crashgame("messing w plrsprite at 15");
      }
     #endif
 
      if( !validplayer(plrhit) ) {
           return;
      }
-                               
+
      switch( guntype ) {
      case 0:
           damage=64;
           break;
-     case 1:  
+     case 1:
      case 2:
      case 3:
      case 4:
      case 5:
           damage=128;
-          break; 
+          break;
      case 6:
-     default: 
-          damage=256;   
+     default:
+          damage=256;
           break;
      }
      switch( difficulty ) {
@@ -2085,7 +2085,7 @@ enemywoundplayer(short plrhit, short sprnum, char guntype)
      changehealth(plrhit,-damage);
 }
 
-void                
+void
 enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
               short dasectnum,char guntype)
 {
@@ -2095,13 +2095,13 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sprnum) ) {
-          crash("messing w plrsprite at 16");
+          crashgame("messing w plrsprite at 16");
      }
     #endif
 
      ext=sprptr[sprnum]->extra;
      if( !validext(ext) ) {
-          crash("enemyshootgun: bad ext");
+          crashgame("enemyshootgun: bad ext");
      }
      target=sprXTptr[sprnum]->target;
      if( !validplayer(target) ) {
@@ -2209,9 +2209,9 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
                }
           }
           return;
-     case GUN3FLAG:               
-     case GUN4FLAG:               
-     case GUN5FLAG:               
+     case GUN3FLAG:
+     case GUN4FLAG:
+     case GUN5FLAG:
           daang2=daang;
           daz2=((100-dahoriz)<<11);
           z=posz[target];     // instead of calculating a dot product angle
@@ -2227,7 +2227,7 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
                     damagesprite(hitsprite,tekgundamage(guntype,x,y,z,hitsprite));
                }
           }
-          else {                   
+          else {
                j=jsinsertsprite(hitsect, 3);
                if( j != -1 ) {
                     fillsprite(j,hitx,hity,hitz+(8<<8),2,-4,0,32,16,16,0,0,
@@ -2235,7 +2235,7 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
                }
           }
           break;
-     case GUN6FLAG:               
+     case GUN6FLAG:
 	     j = jsinsertsprite(sprptr[sprnum]->sectnum, PROJECTILE);
           if ( j ==  -1 ) {
                break;
@@ -2250,7 +2250,7 @@ enemyshootgun(short sprnum,int x,int y,int z,short daang,int dahoriz,
 	          sprptr[j]->z=sectptr[sprptr[sprnum]->sectnum]->floorz-8192;
                break;
           }
-	     sprptr[j]->cstat=0x01;      
+	     sprptr[j]->cstat=0x01;
 	     sprptr[j]->picnum=PULSARPIC;
 	     sprptr[j]->shade=-32;
 	     sprptr[j]->xrepeat=32;
@@ -2285,7 +2285,7 @@ isahologram(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 21");
+          crashgame("messing w plrsprite at 21");
      }
     #endif
 
@@ -2305,7 +2305,7 @@ isanandroid(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 22");
+          crashgame("messing w plrsprite at 22");
      }
     #endif
 
@@ -2329,20 +2329,20 @@ enemynewsector(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 23");
+          crashgame("messing w plrsprite at 23");
      }
     #endif
-     
+
      if( ensfirsttime == 1 ) {
           ensfirsttime=0;
-          return;          
+          return;
      }
 
      switch( sectptr[sprptr[i]->sectnum]->lotag ) {
      case 4:
           playsound(S_SPLASH,sprptr[i]->x,sprptr[i]->y,0,ST_UPDATE);
           break;
-     default: 
+     default:
           break;
      }
      switch( sectptr[sprptr[i]->sectnum]->hitag ) {
@@ -2379,7 +2379,7 @@ enemynewsector(int i)
     		}
           jsdeletesprite(i);
           break;
-     default: 
+     default:
           operatesector(sprptr[i]->sectnum);  // JEFF TEST
           break;
      }
@@ -2390,7 +2390,7 @@ ambushyell(short sn, short ext)
 {
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
-          crash("messing w plrsprite at 24");
+          crashgame("messing w plrsprite at 24");
      }
     #endif
 
@@ -2420,7 +2420,7 @@ givewarning(short i, short ext)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 25");
+          crashgame("messing w plrsprite at 25");
      }
     #endif
 
@@ -2434,7 +2434,7 @@ givewarning(short i, short ext)
           return;
 
      dist=labs(posx[screenpeek]-sprptr[i]->x)+labs(posy[screenpeek]-sprptr[i]->y);
-     if( dist > 5000 ) {  
+     if( dist > 5000 ) {
           return;
      }
 
@@ -2471,14 +2471,14 @@ statuslistcode()
 
      if( (lockclock-stackedcheck) > 30 ) {
           stackedcheck=lockclock;
-	     i = headspritestat[STACKED]; 
+	     i = headspritestat[STACKED];
 	     while (i >= 0)
 	     {
 		     nexti = nextspritestat[i];
-               
-               if( sprptr[i]->z != sectptr[sprptr[i]->sectnum]->floorz ) { 
+
+               if( sprptr[i]->z != sectptr[sprptr[i]->sectnum]->floorz ) {
                     spr=sprptr[i];
-	               tempshort=spr->cstat; 
+	               tempshort=spr->cstat;
                     spr->cstat&=~1;
                	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
      				     &globhiz,&globhihit,&globloz,&globlohit,
@@ -2486,7 +2486,7 @@ statuslistcode()
                	spr->cstat=tempshort;
                     if( spr->z != globloz ) {
                          spr->hitag=0;
-                         changespritestat(i, FALL); 
+                         changespritestat(i, FALL);
                     }
                }
               #ifdef  VERIFYSTATS
@@ -2515,7 +2515,7 @@ statuslistcode()
 
           spr->z+=(TICSPERFRAME<<11);
 
-          tempshort=spr->cstat; 
+          tempshort=spr->cstat;
           spr->cstat&=~1;
          	getzrange(spr->x,spr->y,spr->z-1,spr->sectnum,
 			     &globhiz,&globhihit,&globloz,&globlohit,
@@ -2568,7 +2568,7 @@ statuslistcode()
 		i = nexti;
 	}
 
-	i=headspritestat[RUNTHRU];    
+	i=headspritestat[RUNTHRU];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
@@ -2639,7 +2639,7 @@ statuslistcode()
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,19);
+               noextcrashgame(i,19);
           }
           sprXTptr[ext]->target=0;
 
@@ -2679,7 +2679,7 @@ statuslistcode()
 		i = nexti;
 	}
 
-	i=headspritestat[TIMEBOMB];    
+	i=headspritestat[TIMEBOMB];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
@@ -2700,7 +2700,7 @@ statuslistcode()
 		i = nexti;
 	}
 
-	i=headspritestat[BLOODFLOW];    
+	i=headspritestat[BLOODFLOW];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
@@ -2722,7 +2722,7 @@ statuslistcode()
 		i = nexti;
 	}
 
-	i = headspritestat[DROPSIES]; 
+	i = headspritestat[DROPSIES];
 	while (i != -1)
 	{
 		nexti = nextspritestat[i];
@@ -2822,7 +2822,7 @@ dropsiescontinue:
 		i = nexti;
 	}
 
-	i = headspritestat[TOSS];    
+	i = headspritestat[TOSS];
 	while (i != -1)
 	{
 		nexti = nextspritestat[i];
@@ -2854,11 +2854,11 @@ dropsiescontinue:
 		}
 		if( sprite[i].z > globloz-(tilesizy[BOMB]<<4) ) {
                switch( globlohit&0xC000 ) {
-               case 49152: 
+               case 49152:
                     // direct hit on head
                     hitsprite=globlohit&0x0FFF;
                     if( playerhit(hitsprite, &pnum) ) {
-                         changehealth(pnum, -40);                    
+                         changehealth(pnum, -40);
                     }
                     else if( sprptr[hitsprite]->extra != -1 ) {
                          playsound(S_BUSHIT,sprptr[hitsprite]->x,sprptr[hitsprite]->y,0,ST_NOUPDATE);
@@ -2921,7 +2921,7 @@ dropsiescontinue:
                     sprptr[i]->ang=arbitraryangle();
                     sprptr[i]->picnum=RATPIC;
                     sprXTptr[ext]->basestat=RODENT;
-                    newstatus(i, RODENT);                    
+                    newstatus(i, RODENT);
                     sprptr[i]->xvel=4;
                     sprptr[i]->yvel=4;
                     sprptr[i]->zvel=0;
@@ -2966,13 +2966,13 @@ tosscontinue:
      }
 
 	i = headspritestat[AMBUSH];
-	while (i >= 0) 
+	while (i >= 0)
      {
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,1);
+               noextcrashgame(i,1);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3007,14 +3007,14 @@ ambushcontinue:
           i = nexti;
 	}
 
-     i = headspritestat[STALK];   
+     i = headspritestat[STALK];
 	while (i >= 0)
-	{    
+	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,2);
+               noextcrashgame(i,2);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3052,7 +3052,7 @@ ambushcontinue:
 			     sprptr[i]->ang=((sprptr[i]->ang+(TICSPERFRAME<<1))&2047);
                }
                if( RMOD16("STAT3291") == 0 )
-                    attackifclose(i, target, dist); 
+                    attackifclose(i, target, dist);
                if( sprptr[i]->statnum != ATTACK ) {
                     daang=((daang+1024)&2047);
 			     dax=( ((sintable[(sprptr[i]->ang+512)&2047])*sprptr[i]->xvel) <<3 );
@@ -3078,7 +3078,7 @@ ambushcontinue:
                     }
                }
           }
-          else { 
+          else {
 			if( ((sprptr[i]->ang+2048-daang)&2047) < 1024 ) {
 			     sprptr[i]->ang=((sprptr[i]->ang+2048-(TICSPERFRAME<<1))&2047);
                }
@@ -3129,14 +3129,14 @@ stalkcontinue:
 		i = nexti;
 	}
 
-     i = headspritestat[CHASE];   
+     i = headspritestat[CHASE];
 	while (i >= 0)
-	{    
+	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,3);
+               noextcrashgame(i,3);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3188,7 +3188,7 @@ stalkcontinue:
 			     sprptr[i]->ang=((sprptr[i]->ang+(TICSPERFRAME<<1))&2047);
                }
                if( RMOD4("STAT3427") == 0 ) {
-                    attackifclose(i, target, dist); 
+                    attackifclose(i, target, dist);
                }
                if( sprptr[i]->statnum != ATTACK ) {
 			     dax=( ((sintable[(sprptr[i]->ang+512)&2047])*sprptr[i]->xvel) <<3 );
@@ -3214,7 +3214,7 @@ stalkcontinue:
                     }
                }
           }
-          else { 
+          else {
 			if( ((sprptr[i]->ang+2048-daang)&2047) < 1024 ) {
 			     sprptr[i]->ang=((sprptr[i]->ang+2048-(TICSPERFRAME<<1))&2047);
                }
@@ -3263,15 +3263,15 @@ chasecontinue:
          #endif
 		i = nexti;
 	}
-     
+
      i=headspritestat[GUARD];
 	while (i >= 0)
-	{    
+	{
           nexti=nextspritestat[i];
-            
+
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,4);
+               noextcrashgame(i,4);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3297,19 +3297,19 @@ chasecontinue:
           prevz=sprptr[i]->z;
           prevsect=sprptr[i]->sectnum;
 
-          if( ((sprXTptr[ext]->aimask)&AI_JUSTSHOTAT) ) { 
+          if( ((sprXTptr[ext]->aimask)&AI_JUSTSHOTAT) ) {
 	          if( cansee(targx,targy,targz,targsect, sprptr[i]->x,sprptr[i]->y,
                           sprptr[i]->z-(tilesizy[sprptr[i]->picnum]<<7),sprptr[i]->sectnum) == 1 ) {
-                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);               
+                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);
                     sprXTptr[ext]->aimask|=AI_WASATTACKED;  // guard needs to take action
                }
                goto guardcontinue;
           }
-                                            
+
           if( (drawweap[target]) && isvisible(i, target) && !((sprXTptr[ext]->aimask)&(AI_WASATTACKED|AI_ENCROACHMENT)) ) {
                  givewarning(i, ext);
-                 sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);               
-                 sprptr[i]->picnum=sprXTptr[ext]->attackpic+1; 
+                 sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);
+                 sprptr[i]->picnum=sprXTptr[ext]->attackpic+1;
                  if( dist < 1024 )
                     newstatus(i, ATTACK);
                  goto guardcontinue;
@@ -3322,7 +3322,7 @@ chasecontinue:
           case 0:
                sprXTptr[ext]->aimask&=~AI_GAVEWARNING;
                if( RMOD16("STAT3561") == 0 ) {
-                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);               
+                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);
                     newstatus(i, STANDING);
                }
                else {
@@ -3337,7 +3337,7 @@ chasecontinue:
           default:
               if( (RMOD4("STAT3575") == 0) && (cansee(targx,targy,targz,targsect, sprptr[i]->x,sprptr[i]->y,
                           sprptr[i]->z-(tilesizy[sprptr[i]->picnum]<<7),sprptr[i]->sectnum) == 1) ) {
-                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);               
+                    sprptr[i]->ang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);
                     newstatus(i, ATTACK);
                }
                else {
@@ -3365,14 +3365,14 @@ guardcontinue:
 		i = nexti;
      }
 
-     i = headspritestat[FLEE];   
+     i = headspritestat[FLEE];
 	while (i >= 0)
-	{    
+	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,5);
+               noextcrashgame(i,5);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3420,7 +3420,7 @@ guardcontinue:
 	          if( cansee(targx,targy,targz,targsect,sprptr[i]->x,sprptr[i]->y,sprptr[i]->z-(tilesizy[sprptr[i]->picnum]<<7),sprptr[i]->sectnum) == 1 ) {
                     attackifclose(i, target, dist);
                     if( sprptr[i]->statnum != ATTACK ) {
-                         daang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);               
+                         daang=getangle(targx-sprptr[i]->x,targy-sprptr[i]->y);
                          sprptr[i]->ang=((daang+1024)&2047);
                          movestat=movesprite(( short)i,dax,day,0L,1024,1024,CLIFFCLIP);
                          if( (movestat != 0) && RMOD2("STAT3663") )
@@ -3432,7 +3432,7 @@ guardcontinue:
                          newstatus(i, HIDE);
                }
           }
-           
+
           if( sprptr[i]->sectnum != prevsect ) {
                if( sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_OFFLIMITS_ALL ) {
                     setsprite(i,prevx,prevy,prevz);
@@ -3453,13 +3453,13 @@ fleecontinue:
 	}
 
      i=headspritestat[STROLL];
-     while( i >= 0 ) 
+     while( i >= 0 )
      {
           nexti=nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,6);
+               noextcrashgame(i,6);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3494,12 +3494,12 @@ fleecontinue:
                     newstatus(i, FLEE);
                }
                goto strollcontinue;
-          }                    
+          }
 
           if( (drawweap[target]) && isvisible(i, target) ) {
                daang=(getangle(posx[target]-sprptr[i]->x,posy[target]-sprptr[i]->y)&2047);
                sprptr[i]->ang=((daang+1024)&2047);
-              #define HIDEDISTANCE      4096 
+              #define HIDEDISTANCE      4096
                if( dist < HIDEDISTANCE ) {
                     newstatus(i, HIDE);
                }
@@ -3511,7 +3511,7 @@ fleecontinue:
                     newstatus(i, FLEE);
                }
                goto strollcontinue;
-          }   
+          }
 
 	     dax=( ((sintable[(sprptr[i]->ang+512)&2047])*sprptr[i]->xvel) <<3 );
 	     day=( ((sintable[sprptr[i]->ang])*sprptr[i]->yvel) <<3 );
@@ -3538,7 +3538,7 @@ fleecontinue:
 
           if( sprptr[i]->sectnum != prevsect ) {
                if( (sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_OFFLIMITS_CIVILLIAN) ||
-                   (sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_OFFLIMITS_ALL) ) {  
+                   (sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_OFFLIMITS_ALL) ) {
                     setsprite(i,prevx,prevy,prevz);
                     sprptr[i]->ang=arbitraryangle();
                }
@@ -3556,14 +3556,14 @@ strollcontinue:
 		i = nexti;
      }
 
-     i = headspritestat[FLY];   
-     while( i >= 0 ) 
+     i = headspritestat[FLY];
+     while( i >= 0 )
      {
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,7);
+               noextcrashgame(i,7);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3591,10 +3591,10 @@ strollcontinue:
               sprptr[i]->x,sprptr[i]->y,sprptr[i]->z-(tilesizy[sprptr[i]->picnum]<<7),sprptr[i]->sectnum) ) {
                if( sprXTptr[ext]->weapon == 0 ) {
                     if( dist < 5120 ) {
-                         sprptr[i]->ang=getangle(posx[target]-sprptr[i]->x,posy[target]-sprptr[i]->y);               
+                         sprptr[i]->ang=getangle(posx[target]-sprptr[i]->x,posy[target]-sprptr[i]->y);
                     }
                     if( dist < 1024 ) {
-                         sprptr[i]->ang=getangle(posx[target]-sprptr[i]->x,posy[target]-sprptr[i]->y);               
+                         sprptr[i]->ang=getangle(posx[target]-sprptr[i]->x,posy[target]-sprptr[i]->y);
                          if( RMOD4("STAT3835") == 0 ) {
                               newstatus(i, ATTACK);
                          }
@@ -3614,14 +3614,14 @@ flycontinue:
 		i = nexti;
 	}
 
-     i = headspritestat[RODENT];   
+     i = headspritestat[RODENT];
 	while (i >= 0)
-	{    
+	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,3);
+               noextcrashgame(i,3);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3679,14 +3679,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[STANDING];    
-	while( i >= 0 ) 
+	i=headspritestat[STANDING];
+	while( i >= 0 )
      {
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,8);
+               noextcrashgame(i,8);
           }
 
 		mindist = 0x7fffffff; target = connecthead;
@@ -3704,12 +3704,12 @@ rodentcontinue:
 
           if( ((sprXTptr[ext]->aimask)&AI_JUSTSHOTAT) != 0 ) {
                sprptr[i]->lotag=0;
-          }   
+          }
           if( ((sprXTptr[ext]->aimask)&AI_ENCROACHMENT) != 0 ) {
                sprptr[i]->lotag=0;
-          }   
+          }
           if( (drawweap[target]) ) {
-                 if( isvisible(i, target) ) 
+                 if( isvisible(i, target) )
                        sprptr[i]->lotag=0;
           }
 
@@ -3727,14 +3727,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[ATTACK];    
+	i=headspritestat[ATTACK];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,9);
+               noextcrashgame(i,9);
           }
 
           if( sprptr[i]->lotag == sprptr[i]->hitag ) {   // fire instance
@@ -3748,7 +3748,7 @@ rodentcontinue:
 		if (sprptr[i]->lotag < 0) {
                sprptr[i]->lotag=0;
                if( ((sprXTptr[ext]->aimask)&AI_TIMETODODGE) ){
-                      sprXTptr[ext]->aimask&=~AI_TIMETODODGE; 
+                      sprXTptr[ext]->aimask&=~AI_TIMETODODGE;
 			     newstatus(i, DODGE);
                }
                else {
@@ -3764,14 +3764,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[DELAYEDATTACK];    
+	i=headspritestat[DELAYEDATTACK];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,10);
+               noextcrashgame(i,10);
           }
 
 		sprptr[i]->lotag -= ((int)TICSPERFRAME);
@@ -3789,14 +3789,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[SQUAT];    
+	i=headspritestat[SQUAT];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,11);
+               noextcrashgame(i,11);
           }
 
           if( sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_NOSTANDING ) {
@@ -3827,14 +3827,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[UNSQUAT];    
+	i=headspritestat[UNSQUAT];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,12);
+               noextcrashgame(i,12);
           }
 
 		sprptr[i]->lotag -= ((int)TICSPERFRAME);
@@ -3856,14 +3856,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[HIDE];    
+	i=headspritestat[HIDE];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,13);
+               noextcrashgame(i,13);
           }
 
           if( sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_NOSTANDING ) {
@@ -3876,7 +3876,7 @@ rodentcontinue:
           if( ((sprXTptr[ext]->aimask)&AI_JUSTSHOTAT) != 0 ) {
                sprptr[i]->lotag=0;
                sprptr[i]->hitag=0;
-          }                    
+          }
 
 		sprptr[i]->lotag -= ((int)TICSPERFRAME);
 		if (sprptr[i]->lotag < 0) {
@@ -3899,14 +3899,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[UNHIDE];    
+	i=headspritestat[UNHIDE];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,14);
+               noextcrashgame(i,14);
           }
 
 		sprptr[i]->lotag -= ((int)TICSPERFRAME);
@@ -3928,14 +3928,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[PAIN];    
-	while( i >= 0 ) 
+	i=headspritestat[PAIN];
+	while( i >= 0 )
      {
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,15);
+               noextcrashgame(i,15);
           }
 
 		sprptr[i]->lotag -= ((int)TICSPERFRAME);
@@ -3950,14 +3950,14 @@ rodentcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[DEATH];    
+	i=headspritestat[DEATH];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
 
           ext=sprptr[i]->extra;
           if( !validext(ext) ) {
-               noextcrash(i,16);
+               noextcrashgame(i,16);
           }
 
           if( isanandroid(i) ) {
@@ -4002,14 +4002,14 @@ deathcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[PLRVIRUS];    
-	while( i >= 0 ) 
+	i=headspritestat[PLRVIRUS];
+	while( i >= 0 )
      {
 		nexti = nextspritestat[i];
 
           host=sprptr[i]->owner;
           if( !validplayer(host) ) {
-               crash("plrvirus lost host");
+               crashgame("plrvirus lost host");
           }
 
           sprptr[i]->x=posx[host];
@@ -4039,8 +4039,8 @@ deathcontinue:
 		i = nexti;
 	}
 
-	i=headspritestat[VIRUS];    
-	while( i >= 0 ) 
+	i=headspritestat[VIRUS];
+	while( i >= 0 )
      {
 		nexti = nextspritestat[i];
 
@@ -4091,8 +4091,8 @@ deathcontinue:
 	}
 
 menuison:
-      
-	i=headspritestat[MIRRORMAN1];    
+
+	i=headspritestat[MIRRORMAN1];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
@@ -4107,7 +4107,7 @@ menuison:
           }
           deltapy=py-36596;
 
-          if( drawweap[screenpeek] ) 
+          if( drawweap[screenpeek] )
                sprptr[i]->picnum=1079;
           else
                sprptr[i]->picnum=1074;
@@ -4121,14 +4121,14 @@ menuison:
           sprptr[i]->z=pz+(42<<8);
 
           sprptr[i]->ang=(ang[screenpeek]+1024)&2047;
-          
+
          #ifdef  VERIFYSTATS
           verifystatus(nexti,MIRRORMAN1);
          #endif
 		i = nexti;
 	}
 
-	i=headspritestat[MIRRORMAN2];    
+	i=headspritestat[MIRRORMAN2];
 	while (i >= 0)
 	{
 		nexti = nextspritestat[i];
@@ -4143,7 +4143,7 @@ menuison:
           }
           deltapy=38980-py;
 
-          if( drawweap[screenpeek] ) 
+          if( drawweap[screenpeek] )
                sprptr[i]->picnum=1079;
           else
                sprptr[i]->picnum=1074;
@@ -4157,14 +4157,14 @@ menuison:
           sprptr[i]->z=pz+(42<<8);
 
           sprptr[i]->ang=(ang[screenpeek]+1024)&2047;
-          
+
          #ifdef  VERIFYSTATS
           verifystatus(nexti,MIRRORMAN2);
          #endif
 		i = nexti;
 	}
 
-	i = headspritestat[PROJECTILE]; 
+	i = headspritestat[PROJECTILE];
 	while (i != -1)
 	{
 		nexti = nextspritestat[i];
@@ -4189,7 +4189,7 @@ menuison:
                     }
                     else {
                          damagesprite(hitsprite,
-                         tekgundamage(6,sprptr[i]->x,sprptr[i]->y,sprptr[i]->z,hitsprite));               
+                         tekgundamage(6,sprptr[i]->x,sprptr[i]->y,sprptr[i]->z,hitsprite));
                     }
                }
                jsdeletesprite(i);
@@ -4215,7 +4215,7 @@ menuison:
           }
      }
 
-     gunstatuslistcode();      
+     gunstatuslistcode();
 }
 
 int
@@ -4226,7 +4226,7 @@ playerhit(int hitsprite, int *pnum)
      for( j=connecthead ; j >= 0 ; j=connectpoint2[j] ) {
           if( playersprite[j] == hitsprite ) {
                if( sprptr[hitsprite]->statnum != 8 ) {
-                    crash("plrhit: plrsprt lost sttnm 8");
+                    crashgame("plrhit: plrsprt lost sttnm 8");
                }
                *pnum=j;
                return(1);
@@ -4243,7 +4243,7 @@ checkblastarea(int spr)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spr) ) {
-          crash("messing w plrsprite at 27");
+          crashgame("messing w plrsprite at 27");
      }
     #endif
 
@@ -4268,7 +4268,7 @@ checkblastarea(int spr)
 		nexti = nextspritesect[i];
           if( (i != spr) && (!isaplayersprite(i)) ) {
                switch( sprptr[i]->statnum ) {
-               case PLAYER:            
+               case PLAYER:
                case BOMBPROJECTILESTAT:
                case BOMBPROJECTILESTAT2:
                case RUNTHRU:
@@ -4295,7 +4295,7 @@ genexplosion1(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 30");
+          crashgame("messing w plrsprite at 30");
      }
     #endif
 
@@ -4317,7 +4317,7 @@ genexplosion2(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 31");
+          crashgame("messing w plrsprite at 31");
      }
     #endif
 
@@ -4341,7 +4341,7 @@ bombexplosion(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 32");
+          crashgame("messing w plrsprite at 32");
      }
     #endif
 
@@ -4351,7 +4351,7 @@ bombexplosion(int i)
                      -16,0,0,34,34,0,0,BOMBEXP1PIC,sprptr[i]->ang,
 	                sintable[(sprptr[i]->ang+2560)&2047]>>6,sintable[(sprptr[i]->ang+2048)&2047]>>6,
 	                30L,i+4096,sprptr[i]->sectnum, 5,32,0,-1);
-          playsound(S_RIC2, sprptr[i]->x,sprptr[i]->y,0,ST_NOUPDATE); 
+          playsound(S_RIC2, sprptr[i]->x,sprptr[i]->y,0,ST_NOUPDATE);
      }
 }
 
@@ -4367,7 +4367,7 @@ androidexplosion(int i)
 	                sintable[(sprptr[i]->ang+2560)&2047]>>6,sintable[(sprptr[i]->ang+2048)&2047]>>6,
 	                30L,i+4096,sprptr[i]->sectnum, 5,32,0,-1);
      }
-     playsound(S_ANDROID_DIE, sprptr[i]->x,sprptr[i]->y,0,ST_NOUPDATE); 
+     playsound(S_ANDROID_DIE, sprptr[i]->x,sprptr[i]->y,0,ST_NOUPDATE);
 }
 
 void
@@ -4377,7 +4377,7 @@ blastmark(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 33");
+          crashgame("messing w plrsprite at 33");
      }
     #endif
 
@@ -4410,7 +4410,7 @@ forceexplosion(int i)
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(i) ) {
-          crash("messing w plrsprite at 34");
+          crashgame("messing w plrsprite at 34");
      }
     #endif
 
@@ -4440,7 +4440,7 @@ sectorflash(short s)
 {
      if(  sectflash.step != 0 ) {
           return;
-     } 
+     }
      sectflash.sectnum=s;
      sectflash.step=1;
      sectflash.ovis=sectptr[s]->visibility;

@@ -141,11 +141,11 @@ int       fdxref[MAXSECTORS],numfloordoors;
 #define   MAXSECTORVEHICLES   10
 #define   MAXVEHICLEPOINTS    200
 #define   MAXVEHICLETRACKS    50
-#define   MAXVEHICLESECTORS   30                                
+#define   MAXVEHICLESECTORS   30
 #define   SECTORVEHICLETAG    1010
 struct sectorvehicle {
      short acceleration,accelto;
-     short speed,speedto,movespeed;                              
+     short speed,speedto,movespeed;
      short angle,angleto;
      int pivotx,pivoty;
      short numpoints;
@@ -156,14 +156,14 @@ struct sectorvehicle {
      short tracknum;
      int trackx[MAXVEHICLETRACKS];
      int tracky[MAXVEHICLETRACKS];
-     char stop[MAXVEHICLETRACKS];                                
+     char stop[MAXVEHICLETRACKS];
      int distx,disty;
-     short sector[MAXVEHICLESECTORS];                            
-     short numsectors;                                           
-     int waittics,waitdelay;                                    
+     short sector[MAXVEHICLESECTORS];
+     short numsectors;
+     int waittics,waitdelay;
      short stoptrack;
      short killw[4];
-     int  soundindex;          
+     int  soundindex;
 };
 struct    sectorvehicle  sectorvehicle[MAXSECTORVEHICLES];
 struct    sectorvehicle  *sectvehptr[MAXSECTORVEHICLES];
@@ -296,7 +296,7 @@ operatesector(short dasector)
      centy /= (endwall-startwall+1);
 
      // kens swinging door
-     if( datag == 13 ) {  
+     if( datag == 13 ) {
           for( i=0; i<swingcnt; i++ ) {
                if( swingsector[i] == dasector ) {
                     if( swinganginc[i] == 0 ) {
@@ -483,7 +483,7 @@ tagcode()
                          }
                          swinganginc[i] = 0;
                     }
-                    if (swingang[i] == swingangopen[i]) { 
+                    if (swingang[i] == swingangopen[i]) {
                          if( j == ((TICSPERFRAME<<2)-1) ) {
                               playsound(S_JUMP,swingx[i][0],swingy[i][0],0,ST_UPDATE);
                          }
@@ -615,7 +615,7 @@ tagcode()
           subwayx[i] += (subwayvel[i]&0xfffffffc);
 
           k = subwaystop[i][subwaygoalstop[i]] - subwayx[i];
-          if( k > 0 ) { 
+          if( k > 0 ) {
                if( k > 2048 ) {
                     if( subwayvel[i] == 12 ) {
                          playsound(S_SUBWAYSTART,subwayx[0],subwaytracky1[0],0,ST_UNIQUE | ST_NOUPDATE);
@@ -731,8 +731,8 @@ tekpreptags()
      spritetype *spr;
 
      totalmapsndfx=0;
-     secnt=0;                                    
-     memset(sexref,0,sizeof(int)*MAXSECTORS);    
+     secnt=0;
+     memset(sexref,0,sizeof(int)*MAXSECTORS);
 
      for (j=0 ; j < MAXSECTORS ; j++) {
           memset(&sectoreffect[j],0,sizeof(struct sectoreffect));
@@ -761,7 +761,7 @@ tekpreptags()
           sprelevptr[j]=&spriteelev[j];
           memset(&spriteelev[j],0,sizeof(struct spriteelev));
      }
-     for (j=0 ; j < MAXMAPSOUNDFX ; j++) {   
+     for (j=0 ; j < MAXMAPSOUNDFX ; j++) {
           mapsndfxptr[j]=&mapsndfx[j];
           memset(mapsndfxptr[j], 0, sizeof(struct mapsndfxtype));
      }
@@ -851,7 +851,7 @@ tekpreptags()
                doorptr[n]->centz=(sectptr[j]->ceilingz+sectptr[j]->floorz)/2;
                doorptr[n]->type=sectptr[j]->lotag;
                doorptr[n]->sector=j;
-               doorxref[j]=n;  
+               doorxref[j]=n;
                break;
           case DOORFLOORTAG:
                k=fdxref[j]=numfloordoors++;
@@ -964,14 +964,14 @@ tekpreptags()
                     sectvehptr[k]->pointy[n]=y1-wallptr[i]->y;
                     n++;
                     if (n >= MAXVEHICLEPOINTS) {
-                         crash("tekprepareboard: vehicle #%d has too "
+                         crashgame("tekprepareboard: vehicle #%d has too "
                               "many points",sectptr[j]->hitag);
                     }
                }
                sectvehptr[k]->numpoints=n;
-               n=sectvehptr[k]->numsectors++;    
-               sectvehptr[k]->sector[n]=j;       
-               sectvehptr[k]->soundindex=-1; 
+               n=sectvehptr[k]->numsectors++;
+               sectvehptr[k]->sector[n]=j;
+               sectvehptr[k]->soundindex=-1;
           }
      }
 
@@ -1019,7 +1019,7 @@ tekpreptags()
                     if (septrlist[s]->sectorflags == 0) {
                          s=sexref[secnt++]=spr->sectnum;
                          if (secnt == MAXSECTORS) {
-                              crash("setupboard: Sector Effector limit exceeded");
+                              crashgame("setupboard: Sector Effector limit exceeded");
                          }
                          septrlist[s]->warpto=-1;
                     }
@@ -1133,7 +1133,7 @@ tekpreptags()
                          if (spr->hitag >= 100) {
                               k=(spr->hitag-100)+1;
                               if (k >= MAXELEVFLOORS) {
-                                   crash("setupboard: Only %d levels allowed "
+                                   crashgame("setupboard: Only %d levels allowed "
                                         "for sprite elevators",MAXELEVFLOORS);
                               }
                               sprelevptr[j]->floorz[k]=spr->z;
@@ -1194,7 +1194,7 @@ tekoperatesector(short dasector)
      case PLATFORMDROPTAG:
           i=doorxref[s];
           if (i == -1) {
-               crash("operatesector: invalid door reference for sector %d",s);
+               crashgame("operatesector: invalid door reference for sector %d",s);
           }
           switch (doorptr[i]->state) {
           case D_NOTHING:
@@ -1249,7 +1249,7 @@ warp(int *x, int *y, int *z, short * UNUSED(daang), short *dasector)
      }
      *x = dax / (endwall-startwall+1);
      *y = day / (endwall-startwall+1);
-     *z = sector[*dasector].floorz-(42<<8);  
+     *z = sector[*dasector].floorz-(42<<8);
 
      updatesector(*x,*y,dasector);
 }
@@ -1272,7 +1272,7 @@ tekwarp(int *x, int *y, int *z, short *dasector)
      }
      *x = dax / (endwall-startwall+1);
      *y = day / (endwall-startwall+1);
-     *z = sector[*dasector].floorz-(42<<8);  
+     *z = sector[*dasector].floorz-(42<<8);
 
      updatesector(*x,*y,dasector);
 }
@@ -1323,7 +1323,7 @@ teknewsector(short p)
                sprite[playersprite[p]].z += (KENSPLAYERHEIGHT<<8);
           }
      }
- 
+
      for( n=connecthead; n >= 0; n=connectpoint2[n] ) {
           if( (sectptr[cursectnum[n]]->lotag == 1) || (sectptr[cursectnum[n]]->lotag == 2) ) {
                for( i=0; i < numsectors; i++ ) {
@@ -1358,10 +1358,10 @@ tektagcode(void)
      sectortype     *sect;
      struct    sectoreffect   *septr;
 
-     for( p=connecthead; p >= 0; p=connectpoint2[p] ) {    
+     for( p=connecthead; p >= 0; p=connectpoint2[p] ) {
           tekanimweap((syncbits[p]>>13)&15,p);
           tekhealstun(p);
-     }   
+     }
 
      for( i=0; i < numdoors; i++ ) {
           movedoors(i);
@@ -1371,7 +1371,7 @@ tektagcode(void)
           for( i=0; i < secnt; i++ ) {
                s=sexref[i];
               if (s < 0 || s >= numsectors) {
-                   crash("tag1402: Invalid sector effect index (%d,e=%d)",s,i);
+                   crashgame("tag1402: Invalid sector effect index (%d,e=%d)",s,i);
               }
                sect=sectptr[s];
                septr=septrlist[s];
@@ -1541,7 +1541,7 @@ tektagcode(void)
           for( i=0; i < numvehicles; i++ ) {
                movevehicles(i);
           }
-     }  
+     }
 
      tekdoanimpic();
      tekdodelayfuncs();
@@ -1629,7 +1629,7 @@ sectorblocked(int   s)
      for( i=connecthead ; i >= 0 ; i=connectpoint2[i] ) {
           if( cursectnum[i] == s )
                rv=1;
-          if( testneighborsectors(cursectnum[i], s) == 1 ) 
+          if( testneighborsectors(cursectnum[i], s) == 1 )
                rv=1;
      }
      if( headspritesect[s] != -1 )
@@ -1661,7 +1661,7 @@ movedoors(int d)
           for( i=0 ; i < secnt ; i++ ) {
                sx=sexref[i];
                if( sx == door->sector ) {
-                    if( ((septrlist[sx]->sectorflags)&flags32[QUICKCLOSE]) != 0) {   
+                    if( ((septrlist[sx]->sectorflags)&flags32[QUICKCLOSE]) != 0) {
                          if( mission == 7 ) {
                               stayopen=1;
                          }
@@ -1698,13 +1698,13 @@ movedoors(int d)
                     playsound(S_BAYDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
                     if( baydoorloop == -1 ) {
                          baydoorloop=playsound(S_BAYDOORLOOP,door->centx,door->centy,20,ST_UNIQUE);
-                    }                   
+                    }
                     break;
                case DST_HYDRAULICDOOR:
                     playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
                     playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
-                    
+
                case DST_ELEVATORDOOR:
                     playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
@@ -1736,9 +1736,9 @@ movedoors(int d)
                break;
           case DOORDOWNTAG:
                playsound(S_BIGSWINGOP,door->centx,door->centy,0,ST_UPDATE);
-               
+
                door->goalz[0]=sectptr[nextsectorneighborz(s,sectptr[s]->ceilingz,1,1)]->floorz;
-               
+
                break;
 
 
@@ -1791,7 +1791,7 @@ movedoors(int d)
                     playsound(S_AIRDOOR_OPEN,door->centx,door->centy,0,ST_UPDATE);
                     playsound(S_AIRDOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
-                    
+
                case DST_ELEVATORDOOR:
                     playsound(S_ELEVATOR_DOOR,door->centx,door->centy,0,ST_UPDATE);
                     break;
@@ -1965,7 +1965,7 @@ movedoors(int d)
                }
                else {
                     z=sectptr[s]->floorz;
-               }  
+               }
                z=stepdoor(z,door->goalz[0],door,D_SHUTSOUND);
                if( door->type == DOORUPTAG ) {
                     sectptr[s]->ceilingz=z;
@@ -2030,10 +2030,10 @@ movedoors(int d)
                switch( door->subtype ) {
                case DST_BAYDOOR:
                     playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
-                    if( baydoorloop>=0 ) {  
+                    if( baydoorloop>=0 ) {
                          stopsound(baydoorloop);
                          baydoorloop=-1;
-                    }             
+                    }
                     break;
                case DST_HYDRAULICDOOR:
                     playsound(S_AIRDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
@@ -2072,10 +2072,10 @@ movedoors(int d)
           default:
                if( door->type == BOXDELAYTAG || door->type == PLATFORMDELAYTAG ) {
                     playsound(S_PLATFORMSTOP,door->centx,door->centy,0,ST_UPDATE);
-                    if( loopinsound >= 0 ) {  
+                    if( loopinsound >= 0 ) {
                          stopsound(loopinsound);
                          loopinsound=-1;
-                    }             
+                    }
                     showsect2d(door->sector,door->goalz[0]);
                }
                else {
@@ -2092,10 +2092,10 @@ movedoors(int d)
                switch( door->subtype ) {
                case DST_BAYDOOR:
                     playsound(S_BAYDOOR_CLOSE,door->centx,door->centy,0,ST_UPDATE);
-                    if( baydoorloop>=0 ) {  
+                    if( baydoorloop>=0 ) {
                          stopsound(baydoorloop);
                          baydoorloop=-1;
-                    }             
+                    }
                     break;
 
                case DST_HYDRAULICDOOR:
@@ -2337,37 +2337,37 @@ movevehicles(int v)
      vptr=sectvehptr[v];
 
      if( vptr->soundindex == -1 ) {
-                                        
+
           for( i=0; i<32; i++) {        //find mapno using names array
-               if( !(strcasecmp(boardfilename,mapnames[i]) ) )
+               if( !(Bstrcasecmp(boardfilename,mapnames[i]) ) )
                     break;
           }
           switch( v ) {
-          case 0:      
+          case 0:
                switch( i ) {
                     case 4:   //level1.map
-                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 8:   //city1.map
-                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);        
+                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 11:  //beach1.map
-                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 17:  //mid3.map
-                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 19:  //sewer2.map
-                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 20:   //inds1.map
-                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 25:  //ware1.map
-                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);          
+                         vptr->soundindex=playsound(S_FORKLIFTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 26:   //ware2.map
-                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);        
+                         vptr->soundindex=playsound(S_TRUCKLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     default:
                          break;
@@ -2376,13 +2376,13 @@ movevehicles(int v)
           case 1:
                switch( i ) {
                     case 4:   //level1.map
-                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);      
+                         vptr->soundindex=playsound(S_TRAMBUSLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 11:   //beach1.map
-                         vptr->soundindex=playsound(S_BOATLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);         
+                         vptr->soundindex=playsound(S_BOATLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     case 26:   //ware2.map
-                         vptr->soundindex=playsound(S_CARTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);         
+                         vptr->soundindex=playsound(S_CARTLOOP,vptr->pivotx,vptr->pivoty,-1,ST_VEHUPDATE);
                          break;
                     default:
                          break;
@@ -2392,7 +2392,7 @@ movevehicles(int v)
                break;
           }
      }
-     
+
      if( vptr->waittics > 0 ) {
           vptr->waittics-=TICSPERFRAME;
           if( vptr->soundindex != -1 ) {
@@ -2470,7 +2470,7 @@ movevehicles(int v)
           }
           vptr->speed=s;
      }
-     rotang=curang=vptr->angle;                                 
+     rotang=curang=vptr->angle;
      if( curang != vptr->angleto ) {
           vptr->angle=vptr->angleto;
           curang=vptr->angle;
@@ -2508,8 +2508,8 @@ movevehicles(int v)
           switch( v ) {
           //jsa vehicles
           case 0:
-               if( !(strcasecmp(boardfilename,"CITY1.MAP")) || !(strcasecmp(boardfilename,"WARE2.MAP")))
-                    playsound(S_TRUCKSTOP,vptr->pivotx,vptr->pivoty,0,ST_AMBUPDATE);      
+               if( !(Bstrcasecmp(boardfilename,"CITY1.MAP")) || !(Bstrcasecmp(boardfilename,"WARE2.MAP")))
+                    playsound(S_TRUCKSTOP,vptr->pivotx,vptr->pivoty,0,ST_AMBUPDATE);
                break;
           default:
                break;
@@ -2574,7 +2574,7 @@ movevehicles(int v)
           }
      }
      for( p=connecthead ; p >= 0 ; p=connectpoint2[p] ) {
-          if( onveh[p] ) { 
+          if( onveh[p] ) {
                continue;
           }
           x=posx[p];
@@ -2706,7 +2706,7 @@ tekdoanimpic(void)
      }
 }
 
-void 
+void
 checkmapsndfx(short p)
 {
 
@@ -2733,14 +2733,14 @@ checkmapsndfx(short p)
           case MAP_SFX_SECTOR:
                if((cursectnum[p] != ocursectnum[p]) && (cursectnum[p] == mapsndfxptr[i]->sector) ) {
                    mapsndfxptr[i]->id=playsound(mapsndfxptr[i]->snum, mapsndfxptr[i]->x,mapsndfxptr[i]->y, mapsndfxptr[i]->loops, ST_UNIQUE);
-               }                    
+               }
                break;
           default:
                break;
           }
      }
 
-     if( !strncasecmp("SUBWAY",boardfilename,6) ) {
+     if( !Bstrncasecmp("SUBWAY",boardfilename,6) ) {
           if( ambsubloop == -1 ) {
                ambsubloop=playsound(S_SUBSTATIONLOOP, 0, 0, -1, ST_IMMEDIATE);
           }

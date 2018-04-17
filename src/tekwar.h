@@ -4,13 +4,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#define TEKWAR 
+#define TEKWAR
 
 #define BETA   1
 #define DEBUG  1
 
 #define CLKIPS      120
-#define MSGBUFSIZE  40             
+#define MSGBUFSIZE  40
 #define DOOMGUY     999
 #define KENSPLAYERHEIGHT    34
 
@@ -218,7 +218,7 @@ struct TPACK spriteextension {
      unsigned  char      class;
      signed    char      hitpoints;
      unsigned  short     target;
-     unsigned  short     fxmask;  
+     unsigned  short     fxmask;
      unsigned  short     aimask;
      short     basestat;
      unsigned  short     basepic;
@@ -246,7 +246,7 @@ struct TPACK spriteextension {
 
 #undef TPACK
 
-// use this function whenever you need to verify your 
+// use this function whenever you need to verify your
 // extension index
 extern    int       seconds;
 extern    int       minutes;
@@ -282,7 +282,7 @@ extern    int      firedonetics[MAXPLAYERS];
 extern    int      lastgun[MAXPLAYERS];
 extern    int       drawweap[MAXPLAYERS];
 
-extern    int      flags32[];                                                  
+extern    int      flags32[];
 
 #define   TOGGLE_RETICULE     0
 #define   TOGGLE_TIME         1
@@ -326,9 +326,9 @@ extern    int      flags32[];
 #define   S_ALARM                       1
 
 #define   S_SEWERLOOP1                  2          //sewer sounds
-#define   S_SEWERLOOP2                  3 
-#define   S_SEWERLOOP3                  4                  
-#define   S_SEWERLOOP4                  5                  
+#define   S_SEWERLOOP2                  3
+#define   S_SEWERLOOP3                  4
+#define   S_SEWERLOOP4                  5
 #define   S_SEWERSPLASH1                6
 #define   S_SEWERSPLASH2                7
 #define   S_SEWERSPLASH3                8
@@ -350,7 +350,7 @@ extern    int      flags32[];
 #define   S_MATRIX12                    23
 
 #define   S_WH_SWITCH                   24        //warehouse
-#define   S_WH_GRINDING                 25             
+#define   S_WH_GRINDING                 25
 #define   S_WH_TRACKSTOP                26
 #define   S_WH_STEAMPRESS               27
 #define   S_WH_CLANK                    28
@@ -379,51 +379,51 @@ extern    int      flags32[];
 #define   S_ALARM2                      46
 #define   S_ALARM3                      47
 
-#define   S_STATUS1                     48        //menus and status       
-#define   S_STATUS2                     49   
-#define   S_HEALTHMONITOR               50   
+#define   S_STATUS1                     48        //menus and status
+#define   S_STATUS2                     49
+#define   S_HEALTHMONITOR               50
 #define   S_REARMONITOR                 51
 #define   S_MENUSOUND1                  52
-#define   S_MENUSOUND2                  53 
+#define   S_MENUSOUND2                  53
 #define   S_BEEP                        54
 #define   S_BOOP                        55
 
 #define   S_MATRIXDOOR1                 56      //doors
 #define   S_MATRIXDOOR2                 57
-#define   S_MATRIXDOOR3                 58   
+#define   S_MATRIXDOOR3                 58
 #define   S_SIDEDOOR1                   59
 #define   S_SIDEDOOR2                   60
-#define   S_BIGSWINGOP                  61 
-#define   S_BIGSWINGCL                  62 
+#define   S_BIGSWINGOP                  61
+#define   S_BIGSWINGCL                  62
 #define   S_FLOOROPEN                   63
-#define   S_BAYDOOR_OPEN                64  
+#define   S_BAYDOOR_OPEN                64
 #define   S_BAYDOOR_CLOSE               65
 #define   S_BAYDOORLOOP                 66
 #define   S_UPDOWNDR2_OP                67
-#define   S_UPDOWNDR2_CL                68   
+#define   S_UPDOWNDR2_CL                68
 #define   S_DOORKLUNK                   69
 #define   S_AIRDOOR                     70
-#define   S_AIRDOOR_OPEN                71 
-#define   S_AIRDOOR_CLOSE               72 
+#define   S_AIRDOOR_OPEN                71
+#define   S_AIRDOOR_CLOSE               72
 #define   S_ELEVATOR_DOOR               73
 
-#define   S_SUBSTATIONLOOP              74        //vehicles     
+#define   S_SUBSTATIONLOOP              74        //vehicles
 #define   S_SUBWAYLOOP                  75
-#define   S_SUBWAYSTART                 76 
+#define   S_SUBWAYSTART                 76
 #define   S_SUBWAYSTOP                  77
 #define   S_TRUCKLOOP                   78
 #define   S_TRUCKSTART                  79
-#define   S_TRUCKSTOP                   80 
+#define   S_TRUCKSTOP                   80
 #define   S_TRAMBUSLOOP                 81
 #define   S_BOATLOOP                    82
 #define   S_CARTLOOP                    83
-#define   S_FORKLIFTLOOP                84               
+#define   S_FORKLIFTLOOP                84
 
 
-#define   S_RIC1                        85        //guns 
-#define   S_RIC2                        86  
-#define   S_WEAPON1                     87  
-#define   S_WEAPON2                     88  
+#define   S_RIC1                        85        //guns
+#define   S_RIC2                        86
+#define   S_WEAPON1                     87
+#define   S_WEAPON2                     88
 #define   S_WEAPON3                     89
 
 #define   S_WEAPON4                     90
@@ -434,11 +434,11 @@ extern    int      flags32[];
 
 
 
-#define   S_ENEMYGUN1                   95                  
+#define   S_ENEMYGUN1                   95
 #define   S_ENEMYGUN2                   96
 #define   S_ENEMYGUN3                   97
 #define   S_ENEMYGUN4                   98
-#define   S_WITCH                       99  
+#define   S_WITCH                       99
 #define   S_PLATFORMSTART               100
 #define   S_PLATFORMSTOP                101
 #define   S_PLATFORMLOOP                102
@@ -448,11 +448,11 @@ extern    int      flags32[];
 #define   S_AUTOGUNEXPLODE              106
 #define   S_BUSHIT                      107
 #define   S_FORCEFIELDHUMLOOP           108
-#define   S_KEYCARDBLIP                 109 
+#define   S_KEYCARDBLIP                 109
 #define   S_PICKUP_BONUS                110
 #define   S_JUMP                        111
 #define   S_GLASSBREAK1                 112
-#define   S_GLASSBREAK2                 113                                
+#define   S_GLASSBREAK2                 113
 #define   S_EXPLODE1                    114
 #define   S_EXPLODE2                    115
 #define   S_SMALLGLASS1                 116
@@ -499,11 +499,11 @@ extern    int      flags32[];
 #define   S_MALE_SCRAPEBOTBARREL        157
 #define   S_MALE_DONTHURT               158
 #define   S_MALE_DONTSHOOT              159
-#define   S_MALE_PLEASEDONTSHOOT        160 
+#define   S_MALE_PLEASEDONTSHOOT        160
 #define   S_MALE_DONTSHOOT2             161
 #define   S_MALE_PLEASEDONTSHOOT2       162
 #define   S_MALE_OHMYGOD                163
-#define   S_MALE_GETDOWNTAKECOVER       164 
+#define   S_MALE_GETDOWNTAKECOVER       164
 #define   S_MALE_HESGOTGUN              165
 #define   S_MALE_IDONTBELIEVE           166
 #define   S_MALE_RUNAWAY                167
@@ -513,11 +513,11 @@ extern    int      flags32[];
 #define   S_MALE_CALLTHEPOLICE          171
 #define   S_MALE_HELPCALLPOLICE         172
 #define   S_MALE_HEYBACKOFF             173
-#define   S_MALE_HESGOTAGUN             174 
+#define   S_MALE_HESGOTAGUN             174
 #define   S_FEM_RUNHEGOTGUN             175
 #define   S_FEM_RUN                     176
 #define   S_FEM_EVRYRUNHEGOTGUN         177
-#define   S_FEM_CALLACOP                178      
+#define   S_FEM_CALLACOP                178
 #define   S_FEM_OHNO                    179
 #define   S_FEM_MOVEHEKILLUS            180
 #define   S_FEM_HESGOTAGUN1             181
@@ -856,4 +856,10 @@ void warpsprite(short spritenum);
 
 extern char      bypasscdcheck;
 
-void crash(char *s,...);
+void crashgame(char *s,...);
+
+struct startwin_settings {
+    int fullscreen;
+    int xdim3d, ydim3d, bpp3d;
+    int forcesetup;
+};

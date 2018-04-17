@@ -13,7 +13,7 @@
 #include "tekwar.h"
 
 #define   NUMWEAPONS               8
-                                   
+
 #define   FORCEPROJECTILESTAT      710
 #define   DARTPROJECTILESTAT       712
 #define   BOMBPROJECTILESTAT       714
@@ -37,7 +37,7 @@ short     ammo5[MAXPLAYERS];
 short     ammo6[MAXPLAYERS];
 short     ammo7[MAXPLAYERS];
 short     ammo8[MAXPLAYERS];
-int      weapons[MAXPLAYERS];          // flags for weapons onself   
+int      weapons[MAXPLAYERS];          // flags for weapons onself
 int      firedonetics[MAXPLAYERS];
 int      lastgun[MAXPLAYERS];
 int       drawweap[MAXPLAYERS];
@@ -52,8 +52,8 @@ struct guntype {
      short tics;              // tics to delay for each frame
 } guntype[NUMWEAPONS]={
      //   pic         firepic    endfirepic rep /             \ pos  tics/frame
-     {GUN07READY,GUN07FIRESTART,GUN07FIREEND,0,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*8}, 
-     {GUN04READY,GUN04FIRESTART,GUN04FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*4}, 
+     {GUN07READY,GUN07FIRESTART,GUN07FIREEND,0,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*8},
+     {GUN04READY,GUN04FIRESTART,GUN04FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*4},
      {GUN01READY,GUN01FIRESTART,GUN01FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*4},
      {GUN03READY,GUN03FIRESTART,GUN03FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*2},
      {GUN02READY,GUN02FIRESTART,GUN02FIREEND,1,{0,1,0,0,0,0,0,0},2,TICSPERFRAME*2},
@@ -89,8 +89,8 @@ validplayer(int snum)
 void
 restockammo(int snum)
 {
-     ammo1[snum]=MAXAMMO;     
-     ammo2[snum]=MAXAMMO>>1;     
+     ammo1[snum]=MAXAMMO;
+     ammo2[snum]=MAXAMMO>>1;
      ammo3[snum]=20;
      ammo4[snum]=0;
      ammo5[snum]=MAXAMMO;
@@ -116,11 +116,11 @@ tekgundamage(int gun,int UNUSED(x),int UNUSED(y),int UNUSED(z),int UNUSED(hitspr
      default: damage= 2; break;
      }
      switch( difficulty ) {
-     case 0:  
+     case 0:
      case 1:  damage+=4; break;
      case 2:  damage+=4; break;
      case 3:
-     default:  damage+=10; break;    
+     default:  damage+=10; break;
      }
 
      return(damage);
@@ -196,7 +196,7 @@ playerwoundplayer(short plrhit, short plr, char guntype)
      if( !validplayer(plrhit) || !validplayer(plr) ) {
           return;
      }
-                               
+
      switch( guntype ) {
      case 2:  score=5;  damage=48;   break;
      case 3:  score=10; damage=192;  break;
@@ -239,11 +239,11 @@ killscore(short hs, short snum, char guntype)
      else {
           switch( sprXTptr[ext]->class ) {
           case CLASS_NULL:
-               return;       
+               return;
           case CLASS_FCIAGENT:
                score=-500;
                break;
-          case CLASS_CIVILLIAN:       
+          case CLASS_CIVILLIAN:
                score=-500;
                break;
           case CLASS_SPIDERDROID:
@@ -251,16 +251,16 @@ killscore(short hs, short snum, char guntype)
                break;
           case CLASS_COP:
                score=-500;
-               break;   
+               break;
           case CLASS_MECHCOP:
                score=-50;
-               break;    
+               break;
           case CLASS_TEKBURNOUT:
                score=100;
-               break; 
+               break;
           case CLASS_TEKGOON:
                score=200;
-               break;    
+               break;
           case CLASS_ASSASSINDROID:
                score=300;
                break;
@@ -269,10 +269,10 @@ killscore(short hs, short snum, char guntype)
                break;
           case CLASS_TEKBOSS:
                score=300;
-               break;     
+               break;
           case CLASS_TEKLORD:
                score=500;
-               break;     
+               break;
           }
           switch( guntype ) {
           case 0:
@@ -297,7 +297,7 @@ void
 playerpainsound(int p)
 {
      if( !validplayer(p) ) {
-          crash("playerpainsnd: bad plr num");
+          crashgame("playerpainsnd: bad plr num");
      }
 
      if( krand_intercept(" GUN 341") < 1024 ) {
@@ -305,7 +305,7 @@ playerpainsound(int p)
      }
 }
 
-void                          
+void
 shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
      short dasectnum,char guntype)
 {
@@ -315,9 +315,9 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
      int  cx,cy,i,j,daz2,hitx,hity,hitz,xydist,zdist;
      int   rv,pnum;
 
-     if( health[snum] <= 0 ) {     
-          return;                  
-     }                             
+     if( health[snum] <= 0 ) {
+          return;
+     }
 
      guntype+=1;
      switch (guntype) {
@@ -355,7 +355,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
                          if( (rv == 1) && (goreflag) ) {
                               if( spewblood(hitsprite, hitz, daang) != 0 ) {
                                    sprptr[hitsprite]->cstat&=0xFEFE;  // non hitscan and non block
-                                   // must preserve values from previous hitscan call, 
+                                   // must preserve values from previous hitscan call,
                                    // thus the bloodxhitx, bloodwall, etc...
                                    hitscan(x,y,z,dasectnum,sintable[(daang2+2560)&2047],
                                            sintable[(daang2+2048)&2047],daz2,
@@ -414,7 +414,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
                }
           }
           break;
-     case GUN4FLAG:                 
+     case GUN4FLAG:
           ammo4[snum]--;
           if( ammo4[snum] < 0 ) {
                ammo4[snum]=0;
@@ -441,7 +441,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
                   &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( (hitsprite >= 0) && (sprptr[hitsprite]->statnum < MAXSTATUS)) {
                xydist=klabs(posx[snum]-sprptr[hitsprite]->x)+klabs(posy[snum]-sprptr[hitsprite]->y);
-               zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) ); 
+               zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) );
                if( (xydist > 768) || (zdist > 50) ) {
                     break;
                }
@@ -470,7 +470,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
                   &hitsect,&hitwall,&hitsprite,&hitx,&hity,&hitz,CLIPMASK1);
           if( (hitsprite >= 0) && (sprptr[hitsprite]->statnum < MAXSTATUS)) {
                xydist=klabs(posx[snum]-sprptr[hitsprite]->x)+klabs(posy[snum]-sprptr[hitsprite]->y);
-               zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) ); 
+               zdist=klabs( (posz[snum]>>8)-((sprptr[hitsprite]->z>>8)-(tilesizy[sprptr[hitsprite]->picnum]>>1)) );
                if( (xydist > 2560) || (zdist > 576) ) {
                     break;
                }
@@ -526,7 +526,7 @@ shootgun(short snum,int x,int y,int z,short daang,int dahoriz,
     }
 
     if( guntype != GUN1FLAG )
-          playergunshot(snum); 
+          playergunshot(snum);
 }
 
 #define   DIEFRAMETIME   (160/(JAKETWITCHPIC-JAKEDEATHPIC))
@@ -542,7 +542,7 @@ tekanimweap(int gun,short p)
      struct guntype *gunptr;
 
      if (gun < 0 || gun >= NUMWEAPONS) {
-          crash("gun589: Invalid gun number (%d,p=%d)",gun,p);
+          crashgame("gun589: Invalid gun number (%d,p=%d)",gun,p);
      }
      if (option[4] != 0) {
           if (health[p] < 0 && dieframe[p] == 0) {
@@ -654,7 +654,7 @@ tekanimweap(int gun,short p)
                               else
                                    playsound(S_WEAPON6 ,0,0,0,ST_IMMEDIATE);
                               break;
-                         case 7: 
+                         case 7:
                               if(option[4] != 0)
                                    playsound(S_WEAPON7 ,posx[p],posy[p],0,ST_NOUPDATE);
                               else
@@ -704,7 +704,7 @@ tekanimweap(int gun,short p)
      }
 }
 
-int       
+int
 tekexplodebody(int i)
 {
      int  j,k,r,ext;
@@ -742,7 +742,7 @@ tekexplodebody(int i)
           break;
      default:
           return(0);
-     }          
+     }
 
      r=(krand_intercept(" GUN 787")%72)+8;
      for (k=0 ; k < r ; k++) {
@@ -849,7 +849,7 @@ gunstatuslistcode(void)
           i=nexti;
      }
 
-     i=headspritestat[ROCKETPROJECTILESTAT];  
+     i=headspritestat[ROCKETPROJECTILESTAT];
      while (i >= 0) {
           nexti=nextspritestat[i];
 
@@ -888,14 +888,14 @@ gunstatuslistcode(void)
                }
           }
           if( hitobject != 0 ) {
-               bombexplosion(i);   
+               bombexplosion(i);
                jsdeletesprite((short)i);
           }
 
           i=nexti;
      }
 
-     i=headspritestat[MATRIXPROJECTILESTAT];  
+     i=headspritestat[MATRIXPROJECTILESTAT];
      while (i >= 0) {
           nexti=nextspritestat[i];
 
@@ -920,7 +920,7 @@ gunstatuslistcode(void)
           i=nexti;
      }
 
-     i=headspritestat[BOMBPROJECTILESTAT];  
+     i=headspritestat[BOMBPROJECTILESTAT];
      while (i >= 0) {
           nexti=nextspritestat[i];
 
@@ -959,14 +959,14 @@ gunstatuslistcode(void)
                }
           }
           if( hitobject != 0 ) {
-               bombexplosion(i);   
+               bombexplosion(i);
                jsdeletesprite((short)i);
           }
 
           i=nexti;
      }
- 
-     i=headspritestat[BOMBPROJECTILESTAT2];  
+
+     i=headspritestat[BOMBPROJECTILESTAT2];
      while (i >= 0) {
           nexti=nextspritestat[i];
 
@@ -1009,14 +1009,14 @@ gunstatuslistcode(void)
                }
           }
           if( hitobject != 0 ) {
-               bombexplosion(i);   
+               bombexplosion(i);
                jsdeletesprite((short)i);
           }
 
           i=nexti;
      }
 
-     i=headspritestat[DARTPROJECTILESTAT];  
+     i=headspritestat[DARTPROJECTILESTAT];
      while (i >= 0) {
           nexti=nextspritestat[i];
           dax=((((int)sprptr[i]->xvel)*TICSPERFRAME)<<13);
@@ -1049,7 +1049,7 @@ gunstatuslistcode(void)
                          killscore(hitsprite, sprptr[i]->owner, 4);
                          changespritestat(hitsprite, VANISH);
                          //jsdeletesprite(hitsprite);
-                    } 
+                    }
                     else {
                          rv=damagesprite(hitsprite, 500);
                          if( rv == 1 ) {
@@ -1185,9 +1185,9 @@ tekdrawgun(int gun,short p)
 
 int
 tekhasweapon(int gun,short snum)
-{  
+{
      int       hasit=0;
-     
+
      if( mission == 7 ) {
           if( gun != 7 ) {
                if( snum == screenpeek ) {

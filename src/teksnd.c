@@ -45,7 +45,7 @@ DWORD    *LoopList;
 #define   BASESONG            0
 #define   MAXBASESONGLENGTH   44136
 #define   AVAILMODES          3
-#define   SONGSPERLEVEL       3 
+#define   SONGSPERLEVEL       3
 #define   NUMLEVELS       7
 
 int       totalsongsperlevel;
@@ -146,18 +146,18 @@ setupdigi()
 
      digilist=( DWORD *)malloc(( size_t)4096);
      if( digilist == ( DWORD *)NULL ) {
-          crash("setupdigi: digilist malloc failed");
+          crashgame("setupdigi: digilist malloc failed");
      }
 
      fhsounds=open("sounds",O_RDONLY|O_BINARY);
      if( fhsounds == -1 ) {
-          crash("setupdigi: cant open sounds");
+          crashgame("setupdigi: cant open sounds");
      }
      memset(digilist,0, 4096);
      lseek(fhsounds,-4096L,SEEK_END);
      i=read(fhsounds,( void *)digilist, 4096);
      if( i != 4096 ) {
-          crash("setupdigi: bad read of digilist");
+          crashgame("setupdigi: bad read of digilist");
      }
 
      for( i=0; i<TOTALSOUNDS; i++ ) {
@@ -213,53 +213,53 @@ setupmidi()
      melodicbankptr=( LPSTR)malloc(( size_t)MELODICBANKLENGTH);
      drumbankptr=( LPSTR)malloc(( size_t)DRUMBANKLENGTH);
      if( (melodicbankptr == ( LPSTR)NULL) || (drumbankptr == ( LPSTR)NULL) ) {
-          crash("setupmidi: failed malloc");
+          crashgame("setupmidi: failed malloc");
      }
      if( (fh=open("melodic.bnk",O_RDONLY)) == -1 ) {
-          crash("setupmidi: cant open melodic.bnk");
+          crashgame("setupmidi: cant open melodic.bnk");
      }
      read(fh, ( void * )melodicbankptr, MELODICBANKLENGTH);
      close(fh);
      rv=sosMIDISetInsData(*fhmididriverptr, melodicbankptr, 1);
      if( rv != _ERR_NO_ERROR ) {
-          crash("setupmidi: bad SetInsData");
+          crashgame("setupmidi: bad SetInsData");
      }
      if( (fh=open("drum.bnk",O_RDONLY)) == -1 ) {
-          crash("setupmidi: cant open drum.bnk");
+          crashgame("setupmidi: cant open drum.bnk");
      }
      read(fh, ( void * )drumbankptr, DRUMBANKLENGTH);
      close(fh);
      rv=sosMIDISetInsData(*fhmididriverptr, drumbankptr, 1);
      if( rv != _ERR_NO_ERROR ) {
-          crash("setupmidi: bad SetInsData");
+          crashgame("setupmidi: bad SetInsData");
      }
 
      if( (musicmode == MM_MIDIDIGI) && (midihardwareptr->wPort == 0x388) ) {
           if( (fh=open("test.dig",O_BINARY|O_RDWR)) == -1 ) {
-               crash("setupmidi: cant open test.dig");
+               crashgame("setupmidi: cant open test.dig");
           }
           dl=lseek(fh, 0L, SEEK_END);
           lseek(fh, 0L, SEEK_SET);
           digitalbankptr=( LPSTR)malloc(( size_t)dl);
           if( digitalbankptr == ( LPSTR)NULL ) {
-               crash("setupmidi: failed malloc digbnkptr");
+               crashgame("setupmidi: failed malloc digbnkptr");
           }
           rv=read(fh, ( void * )digitalbankptr, dl);
           if( rv != dl ) {
-               crash("setupmidi: bad .dig read");
+               crashgame("setupmidi: bad .dig read");
           }
           close(fh);
           rv=sosMIDISetInsData(*fhmididigidriverptr, digitalbankptr, 1);
           if( rv != _ERR_NO_ERROR ) {
-               crash("setupmidi: bad SetInsData");
+               crashgame("setupmidi: bad SetInsData");
           }
-     }    
+     }
 
 nobanks:
 
      if( musicmode != MM_NOHARDWARE ) {
           if( (fhsongs=open("SONGS",O_RDONLY | O_BINARY)) == -1 ) {
-               crash("setupmidi: cant open songs");
+               crashgame("setupmidi: cant open songs");
           }
           lseek(fhsongs, 0, SEEK_SET);
           lseek(fhsongs, -4096, SEEK_END);
@@ -285,7 +285,7 @@ nobanks:
 }
 
 
-VOID _far cdecl 
+VOID _far cdecl
 soundcallback(WORD fhdriver, WORD action, WORD fhsample)
 {
      int  i;
@@ -300,7 +300,7 @@ soundcallback(WORD fhdriver, WORD action, WORD fhsample)
                if( dsoundptr[i]->handle == fhsample ) {
                     sbufptr[dsoundptr[i]->sndnum]->users--;
                     if( sbufptr[dsoundptr[i]->sndnum]->users == 0 ) {
-                         sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;                              
+                         sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;
                     }
                     dsoundptr[i]->handle=NULL_HANDLE;
                     dsoundptr[i]->plevel=0;
@@ -313,7 +313,7 @@ soundcallback(WORD fhdriver, WORD action, WORD fhsample)
      return;
 }
 
-VOID _far cdecl 
+VOID _far cdecl
 digiloopcallback(WORD fhdriver, WORD action, WORD fhsample)
 {
      if ( action == _SAMPLE_LOOPING ) {
@@ -322,7 +322,7 @@ digiloopcallback(WORD fhdriver, WORD action, WORD fhsample)
                     LoopPending = 0;
                }
      }
-} 
+}
 
 int
 playsound(int sn, long sndx,long sndy, int loop, short type)
@@ -348,7 +348,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
      }
 
      for( i=0; i<MAXSOUNDS; i++ ) {
-          if( dsoundptr[i]->handle == NULL_HANDLE ) 
+          if( dsoundptr[i]->handle == NULL_HANDLE )
                break;
      }
      if( i == MAXSOUNDS ) {
@@ -389,10 +389,10 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
                    vol = (AMBUPDATEDIST<<3)-(dist<<3);
                }
                else {
-                   vol=0;                   
+                   vol=0;
                }
            }
-           else {   
+           else {
                if(dist < 1500L)
                     vol = 0x7fff;
                else if(dist > 8500L) {
@@ -405,7 +405,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
                     vol = 39000L-(dist<<2);
            }
            pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
-           if( (pan < 0) || (pan > 35) ) 
+           if( (pan < 0) || (pan > 35) )
                pan=13;
      }
      if( (vol < 0) )
@@ -427,7 +427,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
      sampleptr[i]->dwSamplePitchAdd=0;
      sampleptr[i]->dwSampleByteLength=sbufptr[sn]->cache_length;
      sampleptr[i]->wSamplePanLocation=PanArray[pan];
-     if( sampleptr[i]->wSamplePanLocation > 0xffff ) 
+     if( sampleptr[i]->wSamplePanLocation > 0xffff )
           sampleptr[i]->wSamplePanLocation=0x8000;
      sampleptr[i]->wSamplePanSpeed=0;
 
@@ -449,7 +449,7 @@ playsound(int sn, long sndx,long sndy, int loop, short type)
          dsoundptr[i]->sndnum=sn;
      }
 
-     return(i);    
+     return(i);
 }
 
 stopsound(int i)
@@ -461,13 +461,13 @@ stopsound(int i)
      }
      if( dsoundptr[i]->handle == NULL_HANDLE )
           return;
-     
+
      sosDIGIStopSample(*fhdigidriverptr, dsoundptr[i]->handle);
      sbufptr[dsoundptr[i]->sndnum]->users--;
      if( sbufptr[dsoundptr[i]->sndnum]->users < 0 )
               sbufptr[dsoundptr[i]->sndnum]->users=0;
      if( sbufptr[dsoundptr[i]->sndnum]->users == 0 ) {
-         sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;                              
+         sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;
      }
      dsoundptr[i]->handle=NULL_HANDLE;
      dsoundptr[i]->plevel=0;
@@ -480,7 +480,7 @@ updatesounds(int    snum)
      long      dist=0L,vol=0L,pan=0L;
      int       i,bufnum,panindx;
 
-     if( (toggles[TOGGLE_SOUND] == 0) || (soundmode == SM_NOHARDWARE) ) 
+     if( (toggles[TOGGLE_SOUND] == 0) || (soundmode == SM_NOHARDWARE) )
           return;
 
      for( i=0; i<MAXSOUNDS; i++ ) {
@@ -497,7 +497,7 @@ updatesounds(int    snum)
                     vol = (AMBUPDATEDIST<<3)-(dist<<3);
                }
                else {
-                    vol=0;                   
+                    vol=0;
                }
           }
           else {
@@ -519,7 +519,7 @@ updatesounds(int    snum)
           }
          #ifdef DYNAMICPANPERFECT
           panindx=((getangle(posx[snum]-dsoundptr[i]->x,posy[snum]-dsoundptr[i]->y)+(2047-ang[snum]))&2047) >> 6;
-          if( (panindx < 0) || (panindx > 35) ) 
+          if( (panindx < 0) || (panindx > 35) )
                panindx=13;
           pan=PanArray[panindx];
           if( pan > 0xffff )
@@ -562,24 +562,24 @@ updatevehiclesnds(int i, long sndx, long sndy)
           vol=0x7fff;
      }
 
-     if( dsoundptr[i]->handle != NULL_HANDLE ) 
+     if( dsoundptr[i]->handle != NULL_HANDLE )
           sosDIGISetSampleVolume(*fhdigidriverptr, dsoundptr[i]->handle, vol);
 
      pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
-     if( (pan < 0) || (pan > 35) ) 
+     if( (pan < 0) || (pan > 35) )
           pan=13;
 
-     if( dsoundptr[i]->handle != NULL_HANDLE ) 
+     if( dsoundptr[i]->handle != NULL_HANDLE )
           sosDIGISetPanLocation(*fhdigidriverptr, dsoundptr[i]->handle, PanArray[pan]);
 }
 
 
-VOID _far cdecl 
+VOID _far cdecl
 songcallback(WORD shandle)
 {
 }
 
-VOID _far cdecl 
+VOID _far cdecl
 triggercallback(WORD shandle, BYTE track, BYTE id)
 {
 }
@@ -590,7 +590,7 @@ stopsong(int sn)
           return;
 
      if( songptr[sn]->playing == 0 ) {
-          return;     
+          return;
      }
      if( songptr[sn]->pending != 0 ) {    // cant stop a pending song
           return;                         // since may be interrupted
@@ -626,7 +626,7 @@ playsong(int sn)
      if( (sn < 0) || (sn >= SONGSPERLEVEL) || (songptr[sn]->playing != 0) || (songptr[sn]->pending != 0) ) {
           return(0);
      }
-     
+
      if( songptr[sn]->handle != NULL_HANDLE ) {
           removesong(sn);
      }
@@ -644,7 +644,7 @@ playsong(int sn)
           fpos=tell(fhsongs);
           rv=read(fhsongs, ( void *)songptr[sn]->buffer, songptr[sn]->length);
           if( rv != songptr[sn]->length ) {
-              crash("playsong: bad read");
+              crashgame("playsong: bad read");
           }
           rv=sosMIDIInitSong(songdataptr, trackmapptr, ( WORD _far *)&(songptr[sn]->handle));
           if( rv != _ERR_NO_ERROR ) {
@@ -653,7 +653,7 @@ playsong(int sn)
           }
      }
      else {
-          rv=sosMIDIResetSong(songptr[sn]->handle, songdataptr); 
+          rv=sosMIDIResetSong(songptr[sn]->handle, songdataptr);
           if( rv != _ERR_NO_ERROR ) {
                songptr[sn]->handle=NULL_HANDLE;
               #ifdef MUSICDEBUG
@@ -689,7 +689,7 @@ int i,index;
 
      if( musicmode == MM_NOHARDWARE )
      return;
-     
+
     for( i=0; i<SONGSPERLEVEL; i++ ) {
          removesong(i);
     }
@@ -697,14 +697,14 @@ int i,index;
      if(insubway)
           index=(NUMLEVELS*(AVAILMODES*SONGSPERLEVEL)+3);
 
-     else                
+     else
           index=NUMLEVELS*(AVAILMODES*SONGSPERLEVEL);
 
      switch( musicmode ) {
      case MM_MIDIFM:
           break;
      case MM_MIDIAWE32:
-           index++;        
+           index++;
           break;
      case MM_MIDIGEN:
            index+=2;
@@ -718,13 +718,13 @@ int i,index;
           songptr[0]->pending=0;
           songptr[0]->length=( WORD)songlist[(index*3)+1];
           if( songptr[0]->length >= MAXBASESONGLENGTH ) {
-               crash("prepsongs: basesong exceeded max length");
+               crashgame("prepsongs: basesong exceeded max length");
           }
      }
      songptr[0]->buffer=&basesongdata;
 
      playsong(BASESONG);
-     
+
 
 }
 
@@ -739,18 +739,18 @@ startmusic(int level)
      if( level > 6 ) {
           return;
      }
-     
+
      for( i=0; i<SONGSPERLEVEL; i++ ) {
           removesong(i);
      }
 
-     index=totalsongsperlevel*(level);                 
+     index=totalsongsperlevel*(level);
 
      switch( musicmode ) {
      case MM_MIDIFM:
           break;
      case MM_MIDIAWE32:
-           index+=SONGSPERLEVEL;        
+           index+=SONGSPERLEVEL;
           break;
      case MM_MIDIGEN:
            index+=SONGSPERLEVEL*2;
@@ -764,7 +764,7 @@ startmusic(int level)
           songptr[i]->pending=0;
           songptr[i]->length=( WORD)songlist[((index*3)+(i*3))+1];
           if( songptr[i]->length >= MAXBASESONGLENGTH ) {
-               crash("prepsongs: basesong exceeded max length");
+               crashgame("prepsongs: basesong exceeded max length");
           }
      }
      songptr[0]->buffer=&basesongdata;
@@ -843,7 +843,7 @@ stopallsounds()
           if( sbufptr[dsoundptr[i]->sndnum]->users < 0 )
               sbufptr[dsoundptr[i]->sndnum]->users=0;
           if( sbufptr[dsoundptr[i]->sndnum]->users == 0 ) {
-               sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;                              
+               sbufptr[dsoundptr[i]->sndnum]->cache_lock=0x00;
           }
           dsoundptr[i]->handle=NULL_HANDLE;
           dsoundptr[i]->plevel=0;
@@ -916,16 +916,16 @@ uninitsb(void)
 void
 initlooptable(void)
 {
-     if(!digiloopflag) 
+     if(!digiloopflag)
           return;
-     
+
      hLoopFile = open("LOOPS",O_RDONLY | O_BINARY);
      if( hLoopFile == -1 ) {
-          crash("initlooptable: cant open loops");
+          crashgame("initlooptable: cant open loops");
      }
-     LoopList = ( DWORD    *)malloc(0x1000); 
+     LoopList = ( DWORD    *)malloc(0x1000);
     if( LoopList == ( DWORD *)NULL )
-         crash("initlooptable: cant get mem for LoopList");
+         crashgame("initlooptable: cant get mem for LoopList");
      lseek(hLoopFile,-4096L,SEEK_END);
      read(hLoopFile,(void *)FP_OFF(LoopList),4096);
 }
@@ -951,7 +951,7 @@ tekprepdigiloops(void)
      }
 }
 
-void 
+void
 SND_LoadLoop(int load_start)
 {
      int  nr=0;
@@ -964,7 +964,7 @@ SND_LoadLoop(int load_start)
           if( nr != SampleSize ) {
                loopbufptr[looptoggle]->cache_ptr=0L;
                loopbufptr[looptoggle]->cache_lock=0x00;
-               crash("read problem with loops");
+               crashgame("read problem with loops");
           }
           loopsampleptr[looptoggle]->lpSamplePtr=( LPSTR)loopbufptr[looptoggle]->cache_ptr;
           loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
@@ -975,7 +975,7 @@ SND_LoadLoop(int load_start)
           if( nr != SampleSize ) {
                loopbufptr[looptoggle]->cache_ptr=0L;
                loopbufptr[looptoggle]->cache_lock=0x00;
-               crash("read problem with loops");
+               crashgame("read problem with loops");
           }
          loopsampleptr[looptoggle]->lpSamplePtr=( LPSTR)loopbufptr[looptoggle]->cache_ptr;
           loopsampleptr[looptoggle]->dwSampleSize= SampleSize;
@@ -989,7 +989,7 @@ SND_LoadLoop(int load_start)
           LoopIndex=0;
 }
 
-VOID 
+VOID
 SND_SwapLoops(VOID)
 {
      int temp,i;
@@ -1001,7 +1001,7 @@ SND_SwapLoops(VOID)
           sosDIGIStopSample(*fhdigidriverptr,lsoundptr[temp]->handle);
           lsoundptr[looptoggle]->handle = sosDIGIStartSample(*fhdigidriverptr,loopsampleptr[looptoggle] );
      }
-       
+
      looptoggle^=1;
 
 }

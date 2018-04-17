@@ -11,11 +11,13 @@
 *.grp
 *.cfg
 *~
+/src/version-auto.c
+
 /xcode/*.xcodeproj/*
 !/xcode/*.xcodeproj/project.pbxproj
 /xcode/build
-/Makefile.user
-/engineoverrides.mak
+/Makefile.*user
+
 /build
 /tekwar
 /grpfiles.cache
