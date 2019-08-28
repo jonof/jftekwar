@@ -1,6 +1,7 @@
 *.o
 *.obj
 *.a
+*.pdb
 *.res
 *.exe
 *.art
