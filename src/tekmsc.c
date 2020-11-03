@@ -398,19 +398,30 @@ updatepaletteshifts(void)
 
 
      if( red ) {
-          //asmsetpalette(redshifts[red-1]);
-          debugprintf("updatepaletteshifts redshifts[%d]\n", red-1);
+#if USE_POLYMOST && USE_OPENGL
+          if (getrendermode() >= 3)
+               setpalettefade(64,0,0,64 * red / REDSTEPS);
+          else
+#endif
+               setbrightness(brightness,&redshifts[red-1][0],0);
           palshifted = 1;
      }
      else if( white ) {
-          //asmsetpalette(whiteshifts[white-1]);
-          debugprintf("updatepaletteshifts whiteshifts[%d]\n", white-1);
+#if USE_POLYMOST && USE_OPENGL
+          if (getrendermode() >= 3)
+               setpalettefade(64,62,0,64 * white / WHITESTEPS);
+          else
+#endif
+               setbrightness(brightness,&whiteshifts[white-1][0],0);
           palshifted = 1;
      }
      else if( palshifted ) {
-          //asmsetpalette(&palette[0]);     // back to normal
-          debugprintf("updatepaletteshifts reset\n");
-//          setbrightness(brightness);
+#if USE_POLYMOST && USE_OPENGL
+          if (getrendermode() >= 3)
+               setpalettefade(0,0,0,0);
+          else
+#endif
+               setbrightness(brightness,&palette[0],0);  // back to normal
           palshifted = 0;
      }
 
@@ -451,8 +462,12 @@ finishpaletteshifts(void)
 {
      if( palshifted == 1 ) {
           palshifted = 0;
-          //asmsetpalette(&palette[0]);
-          debugprintf("finishpaletteshifts\n");
+#if USE_POLYMOST && USE_OPENGL
+          if (getrendermode() >= 3)
+               setpalettefade(0,0,0,0);
+          else
+#endif
+               setbrightness(brightness,&palette[0],0);
      }
 
  return;
