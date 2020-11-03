@@ -3,7 +3,19 @@
 #include "compat.h"
 #include "baselayer.h"
 #include "build.h"
-#include "tekwar.h"
+#include "startwin.h"
+
+static struct soundQuality_t {
+    int frequency;
+    int samplesize;
+    int channels;
+} soundQualities[] = {
+    { 44100, 16, 2 },
+    { 22050, 16, 2 },
+    { 11025, 16, 2 },
+    { 0, 0, 0 },    // May be overwritten by custom sound settings.
+    { 0, 0, 0 },
+};
 
 #include <stdlib.h>
 
@@ -21,6 +33,10 @@
     IBOutlet NSTabViewItem *tabMessages;
     IBOutlet NSPopUpButton *videoMode3DPUButton;
 
+    IBOutlet NSPopUpButton *soundQualityPUButton;
+    IBOutlet NSButton *useMouseButton;
+    IBOutlet NSButton *useJoystickButton;
+
     IBOutlet NSButton *cancelButton;
     IBOutlet NSButton *startButton;
 }
@@ -28,6 +44,7 @@
 - (int)modalRun;
 - (void)closeQuietly;
 - (void)populateVideoModes:(BOOL)firstTime;
+- (void)populateSoundQuality:(BOOL)firstTime;
 
 - (IBAction)fullscreenClicked:(id)sender;
 
@@ -84,7 +101,6 @@
 - (void)populateVideoModes:(BOOL)firstTime
 {
     int i, mode3d = -1;
-    int idx3d = -1;
     int xdim = 0, ydim = 0, bpp = 0, fullscreen = 0;
     int cd[] = { 32, 24, 16, 15, 8, 0 };
     NSMenu *menu3d = nil;
@@ -124,7 +140,6 @@
     for (i = 0; i < validmodecnt; i++) {
         if (validmode[i].fs != fullscreen) continue;
 
-        if (i == mode3d) idx3d = i;
         menuitem = [menu3d addItemWithTitle:[NSString stringWithFormat:@"%d %C %d %d-bpp",
                                           validmode[i].xdim, 0xd7, validmode[i].ydim, validmode[i].bpp]
                                      action:nil
@@ -132,7 +147,47 @@
         [menuitem setTag:i];
     }
 
-    if (idx3d >= 0) [videoMode3DPUButton selectItemWithTag:idx3d];
+    if (mode3d >= 0) [videoMode3DPUButton selectItemWithTag:mode3d];
+}
+
+- (void)populateSoundQuality:(BOOL)firstTime
+{
+    int i, curidx = -1;
+    NSMenu *menu = nil;
+    NSMenuItem *menuitem = nil;
+
+    if (firstTime) {
+        /*
+        for (i = 0; soundQualities[i].frequency > 0; i++) {
+            if (soundQualities[i].frequency == settings->samplerate &&
+                soundQualities[i].samplesize == settings->bitspersample &&
+                soundQualities[i].channels == settings->channels) {
+                curidx = i;
+                break;
+            }
+        }
+        if (curidx < 0) {
+            soundQualities[i].frequency = settings->samplerate;
+            soundQualities[i].samplesize = settings->bitspersample;
+            soundQualities[i].channels = settings->channels;
+        }
+        */
+    }
+
+    menu = [soundQualityPUButton menu];
+    [menu removeAllItems];
+
+    for (i = 0; soundQualities[i].frequency > 0; i++) {
+        menuitem = [menu addItemWithTitle:[NSString stringWithFormat:@"%d kHz, %d-bit, %s",
+                                          soundQualities[i].frequency / 1000,
+                                          soundQualities[i].samplesize,
+                                          soundQualities[i].channels == 1 ? "Mono" : "Stereo"]
+                                   action:nil
+                            keyEquivalent:@""];
+        [menuitem setTag:i];
+    }
+
+    if (curidx >= 0) [soundQualityPUButton selectItemAtIndex:curidx];
 }
 
 - (IBAction)fullscreenClicked:(id)sender
@@ -160,6 +215,16 @@
         settings->fullscreen = validmode[mode].fs;
     }
 
+    settings->usemouse = [useMouseButton state] == NSOnState;
+    settings->usejoy = [useJoystickButton state] == NSOnState;
+
+    mode = [[soundQualityPUButton selectedItem] tag];
+    if (mode >= 0) {
+//        settings->samplerate = soundQualities[mode].frequency;
+//        settings->bitspersample = soundQualities[mode].samplesize;
+//        settings->channels = soundQualities[mode].channels;
+    }
+
     settings->forcesetup = [alwaysShowButton state] == NSOnState;
 
     if (inmodal) {
@@ -176,6 +241,13 @@
     [self populateVideoModes:YES];
     [fullscreenButton setEnabled:YES];
     [fullscreenButton setState: (settings->fullscreen ? NSOnState : NSOffState)];
+
+//    [soundQualityPUButton setEnabled:YES];
+//    [self populateSoundQuality:YES];
+    [useMouseButton setEnabled:YES];
+    [useMouseButton setState: (settings->usemouse ? NSOnState : NSOffState)];
+    [useJoystickButton setEnabled:YES];
+    [useJoystickButton setState: (settings->usejoy ? NSOnState : NSOffState)];
 
     [cancelButton setEnabled:YES];
     [startButton setEnabled:YES];

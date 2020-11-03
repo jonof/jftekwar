@@ -42,7 +42,7 @@ extern int recording;
 extern int fullscreen, xdimgame, ydimgame, bppgame;
 extern int forcesetup;
 extern unsigned char option[NUMOPTIONS];
-extern unsigned char keys[NUMKEYS];
+extern int keys[NUMKEYS];
 extern unsigned char moreoptions[MAXMOREOPTIONS];
 extern char toggles[MAXTOGGLES];
 extern int  gamestuff[MAXGAMESTUFF];
@@ -857,9 +857,3 @@ void warpsprite(short spritenum);
 extern char      bypasscdcheck;
 
 void crashgame(char *s,...);
-
-struct startwin_settings {
-    int fullscreen;
-    int xdim3d, ydim3d, bpp3d;
-    int forcesetup;
-};

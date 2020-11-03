@@ -8,7 +8,6 @@
 
 #include "build.h"
 #include "winlayer.h"
-#include "tekwar.h"
 
 #include <windows.h>
 #include <windowsx.h>
@@ -17,6 +16,7 @@
 #include <uxtheme.h>
 #include <stdio.h>
 
+#include "startwin.h"
 #include "gameres.h"
 
 #define TAB_CONFIG 0

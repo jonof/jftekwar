@@ -4,6 +4,8 @@
 #include "cache1d.h"
 #include "baselayer.h"
 #include "mmulti.h"
+#include "startwin.h"
+#include "version.h"
 
 #include "tekwar.h"
 #include "tekver.c"
@@ -53,7 +55,7 @@ unsigned char option[NUMOPTIONS] = {
       2,       // 6  VIDEO RES CHOICE
       0        // 7  SOUND FREQ
 };
-unsigned char keys[NUMKEYS] = {
+int keys[NUMKEYS] = {
      200,         // 0  FWD
      208,         // 1  BKWD
      203,         // 2  RIGHT
@@ -298,16 +300,11 @@ app_main(int argc, char const * const argv[])
      int startretval = STARTWIN_RUN;
      struct startwin_settings settings;
 
-     sprintf(tektempbuf, TITLE, VERS);
-     initputs(tektempbuf);
-     initputs("\n\n");
-     wm_setapptitle(tektempbuf);
-
-#if defined(PREFIX)
+#if defined(DATADIR)
      {
-          const char *prefixdir = PREFIX;
-          if (prefixdir && prefixdir[0]) {
-               addsearchpath(prefixdir);
+          const char *datadir = DATADIR;
+          if (datadir && datadir[0]) {
+               addsearchpath(datadir);
           }
      }
 #endif
@@ -333,6 +330,7 @@ app_main(int argc, char const * const argv[])
 
      tekargv(argc, argv);
 
+     // default behaviour is to write to the user profile directory, but
      // creating a 'user_profiles_disabled' file in the current working
      // directory where the game was launched makes the installation
      // "portable" by writing into the working directory
@@ -347,13 +345,12 @@ app_main(int argc, char const * const argv[])
           int asperr;
 
           if ((supportdir = Bgetsupportdir(0))) {
-               Bsnprintf(dirpath, sizeof(dirpath), "%s/"
 #if defined(_WIN32) || defined(__APPLE__)
-                    "JFTekWar"
+               const char *confdir = "JFTekWar";
 #else
-                    ".jftekwar"
+               const char *confdir = ".jftekwar";
 #endif
-                    , supportdir);
+               Bsnprintf(dirpath, sizeof(dirpath), "%s/%s", supportdir, confdir);
                asperr = addsearchpath(dirpath);
                if (asperr == -2) {
                     if (Bmkdir(dirpath, S_IRWXU) == 0) {
@@ -371,6 +368,12 @@ app_main(int argc, char const * const argv[])
 
      buildsetlogfile("tekwar.log");
 
+     wm_setapptitle("JFTekWar");
+     buildprintf("\nJFTekWar\n"
+          "Based on " TITLE "\n"
+          "Version %s.\nBuilt %s %s.\n",
+        VERS, game_version, game_date, game_time);
+
      if (preinitengine()) {
           wm_msgbox("Build Engine Initialisation Error",
                "There was a problem initialising the Build engine: %s", engineerrstr);
@@ -381,28 +384,39 @@ app_main(int argc, char const * const argv[])
      tekloadsetup();
 
 #if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK))
-     memset(&settings, 0, sizeof(settings));
-     settings.fullscreen = fullscreen;
-     settings.xdim3d = xdimgame;
-     settings.ydim3d = ydimgame;
-     settings.bpp3d = bppgame;
-     settings.forcesetup = forcesetup;
+    {
+        struct startwin_settings settings;
 
-     if (forcesetup) {
-		if (!quitevent) {
-			startretval = startwin_run(&settings);
-		}
-        if (quitevent || startretval == STARTWIN_CANCEL) {
-            uninitengine();
-            exit(0);
+        memset(&settings, 0, sizeof(settings));
+        settings.fullscreen = fullscreen;
+        settings.xdim3d = xdimgame;
+        settings.ydim3d = ydimgame;
+        settings.bpp3d = bppgame;
+        settings.forcesetup = forcesetup;
+        settings.usemouse = !!(option[3]&1);
+        settings.usejoy = !!(option[3]&2);
+//        settings.samplerate = MixRate;
+//        settings.bitspersample = NumBits;
+//        settings.channels = NumChannels;
+
+        if (forcesetup) {
+            if (startwin_run(&settings) == STARTWIN_CANCEL) {
+                uninitengine();
+                exit(0);
+            }
         }
-     }
 
-     fullscreen = settings.fullscreen;
-     xdimgame = settings.xdim3d;
-     ydimgame = settings.ydim3d;
-     bppgame = settings.bpp3d;
-     forcesetup = settings.forcesetup;
+        fullscreen = settings.fullscreen;
+        xdimgame = settings.xdim3d;
+        ydimgame = settings.ydim3d;
+        bppgame = settings.bpp3d;
+        forcesetup = settings.forcesetup;
+        option[3] = (option[3]&~1)|(settings.usemouse);
+        option[3] = (option[3]&~2)|(settings.usejoy<<1);
+//        MixRate = settings.samplerate;
+//        NumBits = settings.bitspersample;
+//        NumChannels = settings.channels;
+    }
 #endif
 
      lm("initgroupfile");

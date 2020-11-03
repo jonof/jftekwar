@@ -19,6 +19,5 @@
 /xcode/build
 /Makefile.*user
 
-/build
 /tekwar
-/grpfiles.cache
+/build

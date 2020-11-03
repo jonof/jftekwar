@@ -11,8 +11,8 @@ static long frameval[AVERAGEFRAMES], framecnt = 0;
 
 long vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
 									  {1280,1024},{1600,1200}};
-char option[NUMOPTIONS] = {0,0,0,0,0,0,98,0};
-char keys[NUMKEYS] =
+unsigned char option[NUMOPTIONS] = {0,0,0,0,0,0,98,0};
+int keys[NUMKEYS] =
 {
 	0xc8,0xd0,0xcb,0xcd,0x2a,0x9d,0x1d,0x39,
 	0x1e,0x2c,0xd1,0xc9,0x33,0x34,

@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>au.id.jonof.jftekwar.build</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -23,8 +23,6 @@
 	</dict>
 	<key>NSHighResolutionCapable</key>
 	<true/>
-	<key>NSHumanReadableCopyright</key>
-	<string>See BUILDLIC.TXT for terms</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

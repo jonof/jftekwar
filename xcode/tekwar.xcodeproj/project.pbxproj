@@ -38,9 +38,10 @@
 		AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D31A4E565A00CE4329 /* teksmk.c */; };
 		AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D41A4E565A00CE4329 /* teksnd.c */; };
 		AB98B2DF1A6B87E6009E8749 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = AB98B2DE1A6B87E6009E8749 /* config.c */; };
+		AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
+		AB9C0F2D2551AB90007AF521 /* version-auto.c in Sources */ = {isa = PBXBuildFile; fileRef = AB5BD5FD23123FA500BC4BEF /* version-auto.c */; };
 		AB9E4ABD23125D810008A90E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; };
-		AB9E4ABE23125D810008A90E /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AB9E4AC123125D8E0008A90E /* Game Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9E4AC023125D8E0008A90E /* Game Images.xcassets */; };
+		AB9E4ABE23125D810008A90E /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABC75BD61A49C19A007D0D43 /* startwin.game.nib */; };
 		ABC75BDB1A49C2D8007D0D43 /* libengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BC91A49BFB1007D0D43 /* libengine.a */; };
 		ABC75BE01A49C347007D0D43 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
@@ -63,7 +64,7 @@
 		ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */; };
 		ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABD03E751A52745C0012B9D1 /* startwin.editor.nib */; };
 		ABD03E781A52747F0012B9D1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; };
-		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		ABD03E7B1A5274870012B9D1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
 		ABD03E7C1A5274910012B9D1 /* libeditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCB1A49BFB1007D0D43 /* libeditor.a */; };
 		ABD03E7D1A5274910012B9D1 /* libeditorsupp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCD1A49BFB1007D0D43 /* libeditorsupp.a */; };
@@ -205,13 +206,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JFTekWar.entitlements; sourceTree = "<group>"; };
+		AB1754DD25A7F83000C581C8 /* Build Editor for JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Build Editor for JFTekWar.entitlements"; sourceTree = "<group>"; };
 		AB3AE6C11A4D423600CE4329 /* b5compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = b5compat.c; sourceTree = "<group>"; };
 		AB3AE6D01A4E561600CE4329 /* tekcdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekcdr.c; sourceTree = "<group>"; };
 		AB3AE6D31A4E565A00CE4329 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
 		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; };
 		AB5BD5FD23123FA500BC4BEF /* version-auto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "version-auto.c"; sourceTree = "<group>"; };
 		AB98B2DE1A6B87E6009E8749 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
-		AB9E4AC023125D8E0008A90E /* Game Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Game Images.xcassets"; path = "JFTekWar/Game Images.xcassets"; sourceTree = "<group>"; };
+		AB9C0F142551AAF3007AF521 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JFTekWar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JFTekWar-Info.plist"; sourceTree = "<group>"; };
 		ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = engine.xcodeproj; path = ../jfbuild/xcode/engine.xcodeproj; sourceTree = "<group>"; };
@@ -311,11 +314,12 @@
 		ABC75BD41A49C16E007D0D43 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				AB9C0F142551AAF3007AF521 /* Images.xcassets */,
 				ABD03E2B1A522B970012B9D1 /* libsmacker */,
 				ABC75BE41A49C3DB007D0D43 /* src */,
 				ABC75BD61A49C19A007D0D43 /* startwin.game.nib */,
+				AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */,
 				ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */,
-				AB9E4AC023125D8E0008A90E /* Game Images.xcassets */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -378,6 +382,7 @@
 			children = (
 				ABD03E691A5272890012B9D1 /* src */,
 				ABD03E751A52745C0012B9D1 /* startwin.editor.nib */,
+				AB1754DD25A7F83000C581C8 /* Build Editor for JFTekWar.entitlements */,
 				ABD03E6A1A5272920012B9D1 /* Build Editor-Info.plist */,
 			);
 			name = Editor;
@@ -466,7 +471,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
-				en,
 				Base,
 			);
 			mainGroup = ABC75B921A49BC18007D0D43;
@@ -552,8 +556,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */,
 				ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */,
-				AB9E4AC123125D8E0008A90E /* Game Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +598,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABC75BFE1A49C3DB007D0D43 /* tekgame.c in Sources */,
+				AB9C0F2D2551AB90007AF521 /* version-auto.c in Sources */,
 				ABC75C021A49C3DB007D0D43 /* tekmsc.c in Sources */,
 				ABC75C071A49C3DB007D0D43 /* tekstat.c in Sources */,
 				ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */,
@@ -701,7 +706,9 @@
 		ABC75B971A49BC18007D0D43 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -715,7 +722,8 @@
 					../src,
 					../jfbuild/include,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
 				WARNING_CFLAGS = (
 					"-W",
 					"-Wall",
@@ -726,7 +734,9 @@
 		ABC75B981A49BC18007D0D43 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
@@ -739,7 +749,7 @@
 					../src,
 					../jfbuild/include,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				WARNING_CFLAGS = (
 					"-W",
 					"-Wall",
@@ -751,10 +761,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JFTekWar.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S7U4E54CHC;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
@@ -769,10 +781,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JFTekWar.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = S7U4E54CHC;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
@@ -786,7 +800,10 @@
 		ABD03E631A5272100012B9D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = EditorAppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Build Editor for JFTekWar.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";
@@ -798,7 +815,10 @@
 		ABD03E641A5272100012B9D1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = EditorAppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Build Editor for JFTekWar.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @executable_path/../Frameworks";

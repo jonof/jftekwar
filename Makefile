@@ -13,8 +13,8 @@
 # Debugging options
 RELEASE ?= 1
 
-# Base path of app installation
-PREFIX ?= /usr/local/share/games/jftekwar
+# Path where game data is installed
+DATADIR ?= /usr/local/share/games/jftekwar
 
 # Engine source code path
 EROOT ?= jfbuild
@@ -23,7 +23,8 @@ EROOT ?= jfbuild
 #  USE_POLYMOST   - enables Polymost renderer
 #  USE_OPENGL     - enables OpenGL support in Polymost
 #     Define as 0 to disable OpenGL
-#     Define as 1 or 2 for GL 2.1 profile
+#     Define as USE_GL2 (or 1 or 2) for GL 2.0/2.1 profile
+#     Define as USE_GLES2 (or 12) for GLES 2.0 profile
 #  USE_ASM        - enables the use of assembly code
 USE_POLYMOST ?= 1
 USE_OPENGL ?= 1
@@ -100,6 +101,10 @@ include $(EROOT)/Makefile.shared
 ifeq ($(PLATFORM),LINUX)
 	NASMFLAGS+= -f elf
 endif
+ifeq ($(PLATFORM),BSD)
+	NASMFLAGS+= -f elf
+	GAMELIBS+= -pthread
+endif
 ifeq ($(PLATFORM),WINDOWS)
 	OURCFLAGS+= -I$(DXROOT)/include
 	NASMFLAGS+= -f win32 --prefix _
@@ -135,7 +140,7 @@ OURCFLAGS+= $(BUILDCFLAGS)
 LIBS+= $(BUILDLIBS)
 
 ifneq ($(PLATFORM),WINDOWS)
-	OURCFLAGS+= -DPREFIX=\"$(PREFIX)\"
+	OURCFLAGS+= -DDATADIR=\"$(DATADIR)\"
 endif
 
 .PHONY: clean all engine $(ELIB)/$(ENGINELIB) $(ELIB)/$(EDITORLIB)
