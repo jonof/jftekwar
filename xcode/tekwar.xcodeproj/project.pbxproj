@@ -33,6 +33,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
+		AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */; };
+		AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755DB25BC470100C581C8 /* AudioToolbox.framework */; };
+		AB1755DE25BC471200C581C8 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755DD25BC471200C581C8 /* AudioUnit.framework */; };
 		AB3AE6C21A4D423600CE4329 /* b5compat.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6C11A4D423600CE4329 /* b5compat.c */; };
 		AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D01A4E561600CE4329 /* tekcdr.c */; };
 		AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D31A4E565A00CE4329 /* teksmk.c */; };
@@ -73,6 +77,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AB1755CB25BC46AC00C581C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB2E9E421011E61700DD2F1F;
+			remoteInfo = jfaudiolib;
+		};
+		AB1755CD25BC46AC00C581C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB32FA7F1077102D00A9BAFF;
+			remoteInfo = test;
+		};
+		AB1755D725BC46DC00C581C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AB2E9E411011E61600DD2F1F;
+			remoteInfo = jfaudiolib;
+		};
 		AB5BD5DF23123DA000BC4BEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
@@ -208,13 +233,17 @@
 /* Begin PBXFileReference section */
 		AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JFTekWar.entitlements; sourceTree = "<group>"; };
 		AB1754DD25A7F83000C581C8 /* Build Editor for JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Build Editor for JFTekWar.entitlements"; sourceTree = "<group>"; };
+		AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jfaudiolib.xcodeproj; path = ../jfaudiolib/jfaudiolib.xcodeproj; sourceTree = "<group>"; };
+		AB1755DB25BC470100C581C8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		AB1755DD25BC471200C581C8 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		AB3AE6C11A4D423600CE4329 /* b5compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = b5compat.c; sourceTree = "<group>"; };
 		AB3AE6D01A4E561600CE4329 /* tekcdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekcdr.c; sourceTree = "<group>"; };
 		AB3AE6D31A4E565A00CE4329 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
-		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; };
+		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; tabWidth = 5; };
 		AB5BD5FD23123FA500BC4BEF /* version-auto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "version-auto.c"; sourceTree = "<group>"; };
 		AB98B2DE1A6B87E6009E8749 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
 		AB9C0F142551AAF3007AF521 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		ABB2753425BEBFAD006709E2 /* startwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = startwin.h; sourceTree = "<group>"; };
 		ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JFTekWar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JFTekWar-Info.plist"; sourceTree = "<group>"; };
 		ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = engine.xcodeproj; path = ../jfbuild/xcode/engine.xcodeproj; sourceTree = "<group>"; };
@@ -255,9 +284,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABC75BDB1A49C2D8007D0D43 /* libengine.a in Frameworks */,
+				AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */,
 				ABC75BE01A49C347007D0D43 /* AppKit.framework in Frameworks */,
 				ABC75BE11A49C36C007D0D43 /* SDL2.framework in Frameworks */,
 				AB9E4ABD23125D810008A90E /* SDL2.framework in Frameworks */,
+				AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */,
+				AB1755DE25BC471200C581C8 /* AudioUnit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,14 +308,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB1755C725BC46AC00C581C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */,
+				AB1755CE25BC46AC00C581C8 /* test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB1755D925BC46F100C581C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB1755DD25BC471200C581C8 /* AudioUnit.framework */,
+				AB1755DB25BC470100C581C8 /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		ABC75B921A49BC18007D0D43 = {
 			isa = PBXGroup;
 			children = (
 				ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */,
+				AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */,
 				ABC75BD41A49C16E007D0D43 /* Game */,
 				ABD03E681A52726F0012B9D1 /* Editor */,
 				ABC75B9E1A49BCC3007D0D43 /* Products */,
 				ABC75BDE1A49C311007D0D43 /* Linked Frameworks */,
+				AB1755D925BC46F100C581C8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -338,6 +390,7 @@
 			children = (
 				AB98B2DE1A6B87E6009E8749 /* config.c */,
 				ABD03E151A5181020012B9D1 /* StartupWinController.m */,
+				ABB2753425BEBFAD006709E2 /* startwin.h */,
 				AB3AE6C11A4D423600CE4329 /* b5compat.c */,
 				ABC75BE61A49C3DB007D0D43 /* names.h */,
 				AB3AE6D01A4E561600CE4329 /* tekcdr.c */,
@@ -412,6 +465,7 @@
 			);
 			dependencies = (
 				ABC75BE31A49C3AB007D0D43 /* PBXTargetDependency */,
+				AB1755D825BC46DC00C581C8 /* PBXTargetDependency */,
 				AB5BD5FC23123F8100BC4BEF /* PBXTargetDependency */,
 			);
 			name = JFTekWar;
@@ -481,6 +535,10 @@
 					ProductGroup = ABC75BBF1A49BFB1007D0D43 /* Products */;
 					ProjectRef = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
 				},
+				{
+					ProductGroup = AB1755C725BC46AC00C581C8 /* Products */;
+					ProjectRef = AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -493,6 +551,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libjfaudiolib.a;
+			remoteRef = AB1755CB25BC46AC00C581C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AB1755CE25BC46AC00C581C8 /* test */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = test;
+			remoteRef = AB1755CD25BC46AC00C581C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		AB5BD5E023123DA000BC4BEF /* bin2c */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
@@ -566,6 +638,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */,
+				AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,6 +706,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AB1755D825BC46DC00C581C8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = jfaudiolib;
+			targetProxy = AB1755D725BC46DC00C581C8 /* PBXContainerItemProxy */;
+		};
 		AB5BD5E823123DE400BC4BEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = ABC75B9C1A49BCC3007D0D43 /* JFTekWar */;
@@ -721,6 +799,7 @@
 				HEADER_SEARCH_PATHS = (
 					../src,
 					../jfbuild/include,
+					../jfaudiolib/include,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
@@ -748,6 +827,7 @@
 				HEADER_SEARCH_PATHS = (
 					../src,
 					../jfbuild/include,
+					../jfaudiolib/include,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				WARNING_CFLAGS = (

@@ -157,7 +157,6 @@ static struct soundQuality_t {
     NSMenuItem *menuitem = nil;
 
     if (firstTime) {
-        /*
         for (i = 0; soundQualities[i].frequency > 0; i++) {
             if (soundQualities[i].frequency == settings->samplerate &&
                 soundQualities[i].samplesize == settings->bitspersample &&
@@ -171,7 +170,6 @@ static struct soundQuality_t {
             soundQualities[i].samplesize = settings->bitspersample;
             soundQualities[i].channels = settings->channels;
         }
-        */
     }
 
     menu = [soundQualityPUButton menu];
@@ -220,9 +218,9 @@ static struct soundQuality_t {
 
     mode = [[soundQualityPUButton selectedItem] tag];
     if (mode >= 0) {
-//        settings->samplerate = soundQualities[mode].frequency;
-//        settings->bitspersample = soundQualities[mode].samplesize;
-//        settings->channels = soundQualities[mode].channels;
+        settings->samplerate = soundQualities[mode].frequency;
+        settings->bitspersample = soundQualities[mode].samplesize;
+        settings->channels = soundQualities[mode].channels;
     }
 
     settings->forcesetup = [alwaysShowButton state] == NSOnState;
@@ -242,8 +240,8 @@ static struct soundQuality_t {
     [fullscreenButton setEnabled:YES];
     [fullscreenButton setState: (settings->fullscreen ? NSOnState : NSOffState)];
 
-//    [soundQualityPUButton setEnabled:YES];
-//    [self populateSoundQuality:YES];
+    [soundQualityPUButton setEnabled:YES];
+    [self populateSoundQuality:YES];
     [useMouseButton setEnabled:YES];
     [useMouseButton setState: (settings->usemouse ? NSOnState : NSOffState)];
     [useJoystickButton setEnabled:YES];
@@ -364,6 +362,7 @@ int startwin_settitle(const char *s)
 
 int startwin_idle(void *v)
 {
+    (void)v;
     return 0;
 }
 

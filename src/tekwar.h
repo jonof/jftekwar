@@ -46,6 +46,7 @@ extern int keys[NUMKEYS];
 extern unsigned char moreoptions[MAXMOREOPTIONS];
 extern char toggles[MAXTOGGLES];
 extern int  gamestuff[MAXGAMESTUFF];
+extern int digihz[8];
 
 extern char frame2draw[MAXPLAYERS];
 extern int frameskipcnt[MAXPLAYERS];
@@ -756,9 +757,7 @@ void smkshowmenu();
 
 // teksnd.c
 
-extern int          digiloopflag;
-
-void initsb(char option1,char option2,int digihz,char option7a,char option7b,int val,char option7c);
+void initsb(char digistat,char musistat,int mixrate,char numspeakers,char bytespersample,char intspersec,char quality);
 void menusong(int insubway);
 void musicfade();
 void musicoff(void);

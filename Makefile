@@ -19,6 +19,9 @@ DATADIR ?= /usr/local/share/games/jftekwar
 # Engine source code path
 EROOT ?= jfbuild
 
+# JFAudioLib source path
+AUDIOLIBROOT ?= jfaudiolib
+
 # Engine options
 #  USE_POLYMOST   - enables Polymost renderer
 #  USE_OPENGL     - enables OpenGL support in Polymost
@@ -56,13 +59,15 @@ else
   debug=-ggdb -Og
 endif
 
+include $(AUDIOLIBROOT)/Makefile.shared
+
 CC?=gcc
 CXX?=g++
 NASM?=nasm
 RC?=windres
 OURCFLAGS=$(debug) -W -Wall -Wimplicit -Wno-unused \
 	-fno-strict-aliasing -DNO_GCC_BUILTINS \
-	-I$(INC) -I$(EINC) -I$(LIBSMACKERSRC)
+	-I$(INC) -I$(EINC) -I$(AUDIOLIBROOT)/include -I$(LIBSMACKERSRC)
 OURCXXFLAGS=-fno-exceptions -fno-rtti
 LIBS=-lm
 GAMELIBS=
@@ -100,16 +105,21 @@ include $(EROOT)/Makefile.shared
 
 ifeq ($(PLATFORM),LINUX)
 	NASMFLAGS+= -f elf
+	GAMELIBS+= $(JFAUDIOLIB_LDFLAGS)
 endif
 ifeq ($(PLATFORM),BSD)
 	NASMFLAGS+= -f elf
-	GAMELIBS+= -pthread
+	GAMELIBS+= $(JFAUDIOLIB_LDFLAGS) -pthread
 endif
 ifeq ($(PLATFORM),WINDOWS)
 	OURCFLAGS+= -I$(DXROOT)/include
 	NASMFLAGS+= -f win32 --prefix _
 	GAMEOBJS+= $(SRC)/gameres.$(res) $(SRC)/startwin_game.$o
 	EDITOROBJS+= $(SRC)/buildres.$(res)
+	GAMELIBS+= -ldsound \
+	       $(AUDIOLIBROOT)/third-party/mingw32/lib/libvorbisfile.a \
+	       $(AUDIOLIBROOT)/third-party/mingw32/lib/libvorbis.a \
+	       $(AUDIOLIBROOT)/third-party/mingw32/lib/libogg.a
 endif
 
 ifeq ($(RENDERTYPE),SDL)
@@ -143,7 +153,7 @@ ifneq ($(PLATFORM),WINDOWS)
 	OURCFLAGS+= -DDATADIR=\"$(DATADIR)\"
 endif
 
-.PHONY: clean all engine $(ELIB)/$(ENGINELIB) $(ELIB)/$(EDITORLIB)
+.PHONY: clean all engine $(ELIB)/$(ENGINELIB) $(ELIB)/$(EDITORLIB) $(AUDIOLIBROOT)/$(JFAUDIOLIB)
 
 # TARGETS
 
@@ -161,7 +171,7 @@ endif
 
 all: tekwar$(EXESUFFIX) build$(EXESUFFIX)
 
-tekwar$(EXESUFFIX): $(GAMEOBJS) $(ELIB)/$(ENGINELIB)
+tekwar$(EXESUFFIX): $(GAMEOBJS) $(ELIB)/$(ENGINELIB) $(AUDIOLIBROOT)/$(JFAUDIOLIB)
 	$(CXX) $(CXXFLAGS) $(OURCXXFLAGS) $(OURCFLAGS) -o $@ $^ $(LIBS) $(GAMELIBS) -Wl,-Map=$@.map
 
 build$(EXESUFFIX): $(EDITOROBJS) $(ELIB)/$(EDITORLIB) $(ELIB)/$(ENGINELIB)
@@ -181,6 +191,8 @@ $(EROOT)/generatesdlappicon$(EXESUFFIX):
 
 $(ELIB)/$(ENGINELIB): enginelib
 $(ELIB)/$(EDITORLIB): editorlib
+$(AUDIOLIBROOT)/$(JFAUDIOLIB):
+	$(MAKE) -C $(AUDIOLIBROOT) RELEASE=$(RELEASE)
 
 # RULES
 $(SRC)/%.$o: $(SRC)/%.nasm
@@ -216,6 +228,7 @@ ifeq ($(PLATFORM),DARWIN)
 else
 	-rm -f $(GAMEOBJS) $(EDITOROBJS)
 	$(MAKE) -C $(EROOT) clean
+	$(MAKE) -C $(AUDIOLIBROOT) clean
 endif
 
 veryclean: clean

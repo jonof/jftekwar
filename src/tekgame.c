@@ -53,7 +53,7 @@ unsigned char option[NUMOPTIONS] = {
       0,       // 4  MULTIPLAYER COUNT
       0,       // 5  MULTIPLYER SETTING
       2,       // 6  VIDEO RES CHOICE
-      0        // 7  SOUND FREQ
+      64+4+2   // 7  SOUND FREQ (22kHz 16bit stereo)
 };
 int keys[NUMKEYS] = {
      200,         // 0  FWD
@@ -126,6 +126,7 @@ int  gamestuff[MAXGAMESTUFF] = {
       0,       // 14
       0        // 15
 };
+int digihz[8] = {6000,8000,11025,16000,22050,32000,44100,48000};
 #endif
 
 char frame2draw[MAXPLAYERS];
@@ -395,9 +396,9 @@ app_main(int argc, char const * const argv[])
         settings.forcesetup = forcesetup;
         settings.usemouse = !!(option[3]&1);
         settings.usejoy = !!(option[3]&2);
-//        settings.samplerate = MixRate;
-//        settings.bitspersample = NumBits;
-//        settings.channels = NumChannels;
+        settings.samplerate = digihz[option[7]>>4];
+        settings.bitspersample = 1<<(((option[7]&2)>0)+3);
+        settings.channels = ((option[7]&4)>0)+1;
 
         if (forcesetup) {
             if (startwin_run(&settings) == STARTWIN_CANCEL) {
@@ -413,9 +414,10 @@ app_main(int argc, char const * const argv[])
         forcesetup = settings.forcesetup;
         option[3] = (option[3]&~1)|(settings.usemouse);
         option[3] = (option[3]&~2)|(settings.usejoy<<1);
-//        MixRate = settings.samplerate;
-//        NumBits = settings.bitspersample;
-//        NumChannels = settings.channels;
+        option[7] = 0;
+        for (i=0;i<8;i++) if (digihz[i] <= settings.samplerate) option[7] = i<<4;
+        option[7] |= (settings.bitspersample == 16)<<1;
+        option[7] |= (settings.channels == 2)<<2;
     }
 #endif
 
@@ -432,8 +434,6 @@ app_main(int argc, char const * const argv[])
      inittimer(CLKIPS);
      lm("tekinitmultiplayers");
      tekinitmultiplayers(0, NULL);
-     lm("initsb");
-     initsb(option[1],option[2],0,0,0,0,0);
      lm("loadpics");
      loadpics("tiles000.art", 8*1048576);
      lm("tekpreinit");
@@ -455,6 +455,9 @@ app_main(int argc, char const * const argv[])
      }
 
      setgamemode(fullscreen, xdimgame, ydimgame, bppgame);
+
+     lm("initsb");
+     initsb(option[1],option[2],digihz[option[7]>>4],((option[7]&4)>0)+1,((option[7]&2)>0)+1,0,0);
 
      if( option[4] > 0 ) {
         lm("multiplayer init");

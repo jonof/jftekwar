@@ -2265,7 +2265,7 @@ tekargv(int argc, char const * const argv[])
           }
           if (Bstrcasecmp(argv[p],"DIGILOOPS") == 0) {
                argmatch++;
-               digiloopflag=1;
+               //digiloopflag=1;
           }
           if (Bstrcasecmp(argv[p],"NOBRIEFS") == 0) {
                argmatch++;
