@@ -249,6 +249,8 @@ setupmidi(void)
 static void
 soundcallback(unsigned int i)
 {
+     if (i == (unsigned int)-1) return;
+
      sbuf[dsound[i].sndnum].users--;
      if( sbuf[dsound[i].sndnum].users == 0 ) {
           sbuf[dsound[i].sndnum].cache_lock=0x00;

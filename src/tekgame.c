@@ -494,7 +494,7 @@ app_main(int argc, char const * const argv[])
      }
 
      if( option[4] == 0 ) {
-          smkplayseq("INTRO");
+          smkplayseq("intro");
      }
 
 missionselection:

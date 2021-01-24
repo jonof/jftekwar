@@ -2454,7 +2454,7 @@ choosemission()
      fadeout(0,255,0,0,0,25);
 
      if( allsymsdeposited == 1 ) {
-          smkplayseq("FINALB");
+          smkplayseq("finalb");
           allsymsdeposited=2;
      }
      if( allsymsdeposited == 2) {
@@ -2464,8 +2464,8 @@ choosemission()
      }
      if( allsymsdeposited == 3) {
           if( killedsonny == 1 ) {
-               smkplayseq("FINALDB");
-               smkplayseq("CREDITS");
+               smkplayseq("finaldb");
+               smkplayseq("credits");
                return(0);
           }
           else {
@@ -2729,31 +2729,31 @@ nextmissionright:
 
      switch( mission ) {
      case 2:
-          smkplayseq("ROSSI1");
+          smkplayseq("rossi1");
           strcpy(boardfilename,"subway1.map");
           break;
      case 1:
-          smkplayseq("DIMARCO1");
+          smkplayseq("dimarco1");
           strcpy(boardfilename,"subway0.map");
           break;
      case 5:
-          smkplayseq("CONNOR1");
+          smkplayseq("connor1");
           strcpy(boardfilename,"subway2.map");
           break;
      case 4:
-          smkplayseq("SONNY1");
+          smkplayseq("sonny1");
           strcpy(boardfilename,"subway2.map");
           break;
      case 6:
-          smkplayseq("JANUS1");
+          smkplayseq("janus1");
           strcpy(boardfilename,"subway3.map");
           break;
      case 3:
-          smkplayseq("LOWELL1");
+          smkplayseq("lowell1");
           strcpy(boardfilename,"subway1.map");
           break;
      case 0:
-          smkplayseq("DOLLAR1");
+          smkplayseq("dollar1");
           strcpy(boardfilename,"subway0.map");
           break;
      case 8:
@@ -3338,50 +3338,50 @@ debriefing()
           if( civillianskilled == 0 ) {
                switch( mission ) {
                case 2:
-                    smkplayseq("ROSSI2");
+                    smkplayseq("rossi2");
                     break;
                case 1:
-                    smkplayseq("DIMARCO2");
+                    smkplayseq("dimarco2");
                     break;
                case 5:
-                    smkplayseq("CONNOR2");
+                    smkplayseq("connor2");
                     break;
                case 4:
-                    smkplayseq("SONNY2");
+                    smkplayseq("sonny2");
                     break;
                case 6:
-                    smkplayseq("JANUS2");
+                    smkplayseq("janus2");
                     break;
                case 3:
-                    smkplayseq("LOWELL2");
+                    smkplayseq("lowell2");
                     break;
                case 0:
-                    smkplayseq("DOLLAR2");
+                    smkplayseq("dollar2");
                     break;
                }
           }
           else {
                switch( mission ) {
                case 2:
-                    smkplayseq("ROSSI3");
+                    smkplayseq("rossi3");
                     break;
                case 1:
-                    smkplayseq("DIMARCO3");
+                    smkplayseq("dimarco3");
                     break;
                case 5:
-                    smkplayseq("CONNOR3");
+                    smkplayseq("connor3");
                     break;
                case 4:
-                    smkplayseq("SONNY3");
+                    smkplayseq("sonny3");
                     break;
                case 6:
-                    smkplayseq("JANUS3");
+                    smkplayseq("janus3");
                     break;
                case 3:
-                    smkplayseq("LOWELL3");
+                    smkplayseq("lowell3");
                     break;
                case 0:
-                    smkplayseq("DOLLAR3");
+                    smkplayseq("dollar3");
                     break;
                }
           }
@@ -3390,50 +3390,50 @@ debriefing()
           if( civillianskilled == 0 ) {
                switch( mission ) {
                case 2:
-                    smkplayseq("ROSSI4");
+                    smkplayseq("rossi4");
                     break;
                case 1:
-                    smkplayseq("DIMARCO4");
+                    smkplayseq("dimarco4");
                     break;
                case 5:
-                    smkplayseq("CONNOR4");
+                    smkplayseq("connor4");
                     break;
                case 4:
-                    smkplayseq("SONNY4");
+                    smkplayseq("sonny4");
                     break;
                case 6:
-                    smkplayseq("JANUS4");
+                    smkplayseq("janus4");
                     break;
                case 3:
-                    smkplayseq("LOWELL4");
+                    smkplayseq("lowell4");
                     break;
                case 0:
-                    smkplayseq("DOLLAR4");
+                    smkplayseq("dollar4");
                     break;
                }
           }
           else {
                switch( mission ) {
                case 2:
-                    smkplayseq("ROSSI5");
+                    smkplayseq("rossi5");
                     break;
                case 1:
-                    smkplayseq("DIMARCO5");
+                    smkplayseq("dimarco5");
                     break;
                case 5:
-                    smkplayseq("CONNOR5");
+                    smkplayseq("connor5");
                     break;
                case 4:
-                    smkplayseq("SONNY5");
+                    smkplayseq("sonny5");
                     break;
                case 6:
-                    smkplayseq("JANUS5");
+                    smkplayseq("janus5");
                     break;
                case 3:
-                    smkplayseq("LOWELL5");
+                    smkplayseq("lowell5");
                     break;
                case 0:
-                    smkplayseq("DOLLAR5");
+                    smkplayseq("dollar5");
                     break;
                }
           }
