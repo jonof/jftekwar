@@ -807,36 +807,14 @@ skippick:*/
 void
 tekloadsetup()
 {
-     /*
-     int  fil;
-
-     if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
-     {
-          read(fil,&option[0],NUMOPTIONS);
-          read(fil,&keys[0],NUMKEYS);
-          tekloadmoreoptions(fil);
-          close(fil);
-     }
-     */
     loadsetup("tekwar.ini");
+    tekloadmoreoptions();
 }
 
 void
 teksavesetup(void)
 {
-     /*
-     int  fil;
-
-     if ((fil=open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1) {
-          if (option[4] < 5) {
-               option[4]=0;
-          }
-          write(fil,&option[0],NUMOPTIONS);
-          write(fil,&keys[0],NUMKEYS);
-          teksavemoreoptions(fil);
-          close(fil);
-     }
-     */
+     teksavemoreoptions();
      writesetup("tekwar.ini");
 }
 

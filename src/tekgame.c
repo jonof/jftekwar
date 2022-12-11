@@ -89,7 +89,7 @@ int keys[NUMKEYS] = {
       26,         // 30 N/U
       26          // 31 N/U
 };
-unsigned char moreoptions[MAXMOREOPTIONS] = {
+int moreoptions[MAXMOREOPTIONS] = {
         1,     // 0  MOUSE ON/OFF
        29,     // 1  MOUSE BUTTON 1 MAP
       200,     // 2  MOUSE BUTTON 2 MAP
@@ -107,7 +107,7 @@ unsigned char moreoptions[MAXMOREOPTIONS] = {
         0,     // 14 N/U
         0      // 15 N/U
 };
-char toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
+int toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
 int  gamestuff[MAXGAMESTUFF] = {
      -1,       // 0  joyxcenter
      -1,       // 1  joyycenter

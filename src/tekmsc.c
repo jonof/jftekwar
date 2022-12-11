@@ -2299,14 +2299,8 @@ tekargv(int argc, char const * const argv[])
 }
 
 void
-tekloadmoreoptions(int fil)
+tekloadmoreoptions(void)
 {
-     int       rv;
-
-     rv=read(fil,&moreoptions[0],MAXMOREOPTIONS);
-     rv=read(fil,&toggles[0],MAXTOGGLES);
-     rv=read(fil,&gamestuff[0],MAXGAMESTUFF<<2);
-
      toggles[TOGGLE_GODMODE]=0;
      if (toggles[TOGGLE_REARVIEW]) {
           rvmoving=1;
@@ -2338,7 +2332,7 @@ initmoreoptions()
 }
 
 void
-teksavemoreoptions(int fil)
+teksavemoreoptions(void)
 {
      moreoptions[8]=difficulty;
      moreoptions[9]=soundv;
@@ -2351,10 +2345,6 @@ teksavemoreoptions(int fil)
      gamestuff[2]=( int)screensize;
      gamestuff[3]=brightness;
      gamestuff[4]=biasthreshhold;
-
-     write(fil,&moreoptions[0],MAXMOREOPTIONS);
-     write(fil,&toggles[0],MAXTOGGLES);
-     write(fil,&gamestuff[0],MAXGAMESTUFF<<2);
 }
 
 void

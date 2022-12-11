@@ -24,7 +24,6 @@ enum {
 };
 
 static int tmprenderer = -1;
-static int tmpbrightness = -1;
 static int tmpsamplerate = -1;
 static int tmpmusic = -1;
 static int tmpmouse = -1;
@@ -55,14 +54,13 @@ static struct {
 	},
 #if USE_POLYMOST
 	{ "renderer", type_int, &tmprenderer,
-		"; 3D-mode renderer type\n"
+		"; Renderer type\n"
 		";   0  - classic\n"
-		";   2  - software Polymost\n"
 		";   3  - OpenGL Polymost\n"
 	},
 #endif
-	{ "brightness", type_int, &tmpbrightness,
-		"; 3D mode brightness setting\n"
+	{ "brightness", type_int, &gamestuff[3],
+		"; Brightness setting\n"
 		";   0  - lowest\n"
 		";   15 - highest\n"
 	},
@@ -144,6 +142,24 @@ static struct {
 	{ "key2dzoomout", type_hex, &keys[17], NULL },
 	{ "keychat", type_hex, &keys[18], NULL },
 	{ "keyconsole", type_hex, &keys[19], NULL },
+
+	{ "difficulty", type_int, &moreoptions[8], "; Difficulty\n" },
+	{ "soundvolume", type_int, &moreoptions[9], "; Sound volume\n" },
+	{ "musicvolume", type_int, &moreoptions[10], "; Music volume\n" },
+	{ "mousesensitivity", type_int, &moreoptions[11], "; Mouse sensitivity\n" },
+	{ "headbob", type_bool, &moreoptions[12], "; Head bob\n" },
+
+	{ "screensize", type_int, &gamestuff[2], "; Screen size\n" },
+	{ "biasthreshold", type_int, &gamestuff[4], "; Bias threshold\n" },
+
+	{ "showreticule", type_bool, &toggles[TOGGLE_RETICULE], "; Show reticule\n" },
+	{ "showtime", type_bool, &toggles[TOGGLE_TIME], "; Show time\n" },
+	{ "showscore", type_bool, &toggles[TOGGLE_SCORE], "; Show score\n" },
+	{ "showrearview", type_bool, &toggles[TOGGLE_REARVIEW], "; Show rear view\n" },
+	{ "showprepareditem", type_bool, &toggles[TOGGLE_UPRT], "; Show prepared item\n" },
+	{ "showhealth", type_bool, &toggles[TOGGLE_HEALTH], "; Show health\n" },
+	{ "showinventory", type_bool, &toggles[TOGGLE_INVENTORY], "; Show inventory\n" },
+
 	{ NULL, 0, NULL, NULL }
 };
 
@@ -216,9 +232,6 @@ int loadsetup(const char *fn)
 		setrendermode(tmprenderer);
 	}
 #endif
-	if (tmpbrightness >= 0) {
-		brightness = min(max(tmpbrightness,0),15);
-	}
 	if (tmpsamplerate >= 0) {
 		option[7] = (tmpsamplerate & 0x0f) << 4;
 		option[7] |= 1<<1;	// 16-bit
@@ -239,6 +252,8 @@ int loadsetup(const char *fn)
 	}
 	OSD_CaptureKey(keys[19]);
 
+	gamestuff[3] = min(max(gamestuff[3],0),15);	// Brightness.
+
 	scriptfile_close(cfg);
 	scriptfile_clearsymbols();
 
@@ -253,7 +268,6 @@ int writesetup(const char *fn)
 	fp = Bfopen(fn,"wt");
 	if (!fp) return -1;
 
-	tmpbrightness = brightness;
 #if USE_POLYMOST
 	tmprenderer = getrendermode();
 #endif
