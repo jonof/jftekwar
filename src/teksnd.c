@@ -258,6 +258,10 @@ soundcallback(unsigned int i)
      dsound[i].handle=NULL_HANDLE;
      dsound[i].plevel=0;
      dsound[i].sndnum=-1;
+
+     if (dsound[i].type&ST_VEHUPDATE) {
+          vehiclesoundstopped(i);
+     }
 }
 
 

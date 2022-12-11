@@ -2325,6 +2325,17 @@ clearvehiclesoundindexes()
 }
 
 void
+vehiclesoundstopped(int sindex)
+{
+     int i;
+
+     for( i=0; i < MAXSECTORVEHICLES; i++ ) {
+          if (sectvehptr[i]->soundindex == sindex)
+               sectvehptr[i]->soundindex = -1;
+     }
+}
+
+void
 movevehicles(int v)
 {
      short     a,angv,ato,angto,curang,i,n,p,rotang,s,sto,stoptrack,track;

@@ -850,6 +850,7 @@ void tektagsave(int fil);
 int testneighborsectors(short sect1, short sect2);
 void warp(int *x, int *y, int *z, short *daang, short *dasector);
 void warpsprite(short spritenum);
+void vehiclesoundstopped(int sindex);
 
 // tektxt.c
 
