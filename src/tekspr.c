@@ -69,12 +69,14 @@ kenmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordis
 }
 
 short
-floatmovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
+floatmovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
      int daz, zoffs;
      short retval, dasectnum;
      unsigned int dcliptype;
      spritetype *spr;
+
+     (void)dz;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {
@@ -174,7 +176,7 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
      }
      if( (globloz != pz) && (spr->extra >= 0) && (spr->extra < MAXSPRITES) ) {
           spr->z=globloz;
-          deltaz=labs(pz-globloz);
+          deltaz=abs(pz-globloz);
           jumpz=tilesizy[spr->picnum]+(spr->yrepeat-64);
           jumpz<<=8;
           if( deltaz > jumpz ) {
@@ -191,12 +193,14 @@ movesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, 
 }
 
 short
-flymovesprite(short spritenum, int dx, int dy, int UNUSED(dz), int ceildist, int flordist, char cliptype)
+flymovesprite(short spritenum, int dx, int dy, int dz, int ceildist, int flordist, char cliptype)
 {
      int           daz;
      short          retval, dasectnum, tempshort;
     unsigned int dcliptype;
      spritetype *spr;
+
+     (void)dz;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(spritenum) ) {

@@ -6,10 +6,11 @@ void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
                  dapalnum,8+16,cx1,cy1,cx2,cy2);
 }
 
-void permanentwritespritetile(int UNUSED(thex), int UNUSED(they), short tilenum, signed char shade,
+void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum) {
     int x, y, xsiz, ysiz, tx1, ty1, tx2, ty2;
     
+    (void)thex; (void)they;
     xsiz = tilesizx[tilenum]; tx1 = cx1/xsiz; tx2 = cx2/xsiz;
     ysiz = tilesizy[tilenum]; ty1 = cy1/ysiz; ty2 = cy2/ysiz;
     
@@ -28,11 +29,13 @@ void overwritesprite(int thex, int they, short tilenum, signed char shade,
                  windowx1,windowy1,windowx2,windowy2);
 }
 
-void printext(int x, int y, char *buffer, short tilenum, char UNUSED(invisiblecol))
+void printext(int x, int y, char *buffer, short tilenum, char invisiblecol)
 {
     int i;
     unsigned char ch;
     
+    (void)invisiblecol;
+
     for(i=0;buffer[i]!=0;i++) {
         ch = (unsigned char)buffer[i];
         rotatesprite((x-((ch&15)<<3))<<16,(y-((ch>>4)<<3))<<16,65536L,0,tilenum,0,0,8+16+128,x,y,x+7,y+7);

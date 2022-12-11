@@ -1047,9 +1047,11 @@ bloodonwall(int wn, int x,int y,int z, short sect, short daang, int hitx, int hi
 }
 
 int
-spewblood(int sprnum, int hitz, short UNUSED(daang))
+spewblood(int sprnum, int hitz, short daang)
 {
      int       j,ext=sprptr[sprnum]->extra;
+
+     (void)daang;
 
      if( option[4] != 0 ) {
           return(0);
@@ -1407,9 +1409,11 @@ fleescream(short sn, short ext)
 }
 
 void
-rubitinsound(int UNUSED(p), int sn)
+rubitinsound(int p, int sn)
 {
      int       ext=sprptr[sn]->extra;
+
+     (void)p;
 
     #ifdef PLRSPRDEBUG
      if( isaplayersprite(sn) ) {
@@ -1927,7 +1931,7 @@ enemygunshot(int  sn)
           if( !validext(ext) ) {
                noextcrashgame(sn,100);
           }
-     	dist = labs(sprptr[sn]->x-sprptr[j]->x)+labs(sprptr[sn]->y-sprptr[j]->y);
+     	dist = abs(sprptr[sn]->x-sprptr[j]->x)+abs(sprptr[sn]->y-sprptr[j]->y);
  		if( dist < HEARGUNSHOTDIST ) {
                sprXTptr[ext]->aimask|=AI_JUSTSHOTAT;
           }
@@ -1946,7 +1950,7 @@ enemygunshot(int  sn)
 
           // guards not woken by enemies gun shot
           if( sprXTptr[ext]->basestat != GUARD ) {
-     	     dist = labs(sprptr[sn]->x-sprptr[j]->x)+labs(sprptr[sn]->y-sprptr[j]->y);
+     	     dist = abs(sprptr[sn]->x-sprptr[j]->x)+abs(sprptr[sn]->y-sprptr[j]->y);
  		     if( dist < HEARGUNSHOTDIST ) {
                     sprXTptr[ext]->aimask|=AI_JUSTSHOTAT;
                }
@@ -1997,7 +2001,7 @@ playergunshot(int snum)
           if( !validext(ext) ) {
                noextcrashgame(j,103);
           }
-     	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
+     	dist = abs(sprptr[j]->x-posx[snum])+abs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
                sprXTptr[ext]->aimask|=AI_JUSTSHOTAT;
           }
@@ -2013,7 +2017,7 @@ playergunshot(int snum)
           if( !validext(ext) ) {
                noextcrashgame(j,105);
           }
-     	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
+     	dist = abs(sprptr[j]->x-posx[snum])+abs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
                sprXTptr[ext]->aimask|=AI_JUSTSHOTAT;
           }
@@ -2029,7 +2033,7 @@ playergunshot(int snum)
           if( !validext(ext) ) {
                noextcrashgame(j,106);
           }
-     	dist = labs(sprptr[j]->x-posx[snum])+labs(sprptr[j]->y-posy[snum]);
+     	dist = abs(sprptr[j]->x-posx[snum])+abs(sprptr[j]->y-posy[snum]);
  		if( dist < HEARGUNSHOTDIST ) {
                sprXTptr[ext]->aimask|=AI_JUSTSHOTAT;
           }
@@ -2433,7 +2437,7 @@ givewarning(short i, short ext)
      if( sprXTptr[ext]->aimask&AI_GAVEWARNING )
           return;
 
-     dist=labs(posx[screenpeek]-sprptr[i]->x)+labs(posy[screenpeek]-sprptr[i]->y);
+     dist=abs(posx[screenpeek]-sprptr[i]->x)+abs(posy[screenpeek]-sprptr[i]->y);
      if( dist > 5000 ) {
           return;
      }
@@ -2978,7 +2982,7 @@ tosscontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3020,7 +3024,7 @@ ambushcontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3142,7 +3146,7 @@ stalkcontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3277,7 +3281,7 @@ chasecontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3378,7 +3382,7 @@ guardcontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( (drawweap[target] == 0) || (mindist > DONTBOTHERDISTANCE) ) {
@@ -3465,7 +3469,7 @@ fleecontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3569,7 +3573,7 @@ strollcontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3627,7 +3631,7 @@ flycontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( mindist > DONTBOTHERDISTANCE ) {
@@ -3692,7 +3696,7 @@ rodentcontinue:
 		mindist = 0x7fffffff; target = connecthead;
 		for(p=connecthead;p>=0;p=connectpoint2[p])
 		{
-			dist = labs(sprite[i].x-posx[p])+labs(sprite[i].y-posy[p]);
+			dist = abs(sprite[i].x-posx[p])+abs(sprite[i].y-posy[p]);
 			if (dist < mindist) mindist = dist, target = p;
 		}
           if( sectptr[sprptr[i]->sectnum]->lotag == SECT_LOTAG_NOSTANDING ) {

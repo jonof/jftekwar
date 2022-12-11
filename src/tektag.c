@@ -1218,12 +1218,12 @@ tekoperatesector(short dasector)
 }
 
 void
-warp(int *x, int *y, int *z, short * UNUSED(daang), short *dasector)
+warp(int *x, int *y, int *z, short *daang, short *dasector)
 {
      short          startwall, endwall, s;
-     int           i, j, dax, day, ox, oy;
+     int           i, j, dax, day;
 
-     ox = *x; oy = *y;
+     (void)daang;
 
      for( i=0; i<warpsectorcnt; i++ ) {
           if( warpsectorlist[i] == *dasector ) {
@@ -2338,7 +2338,7 @@ vehiclesoundstopped(int sindex)
 void
 movevehicles(int v)
 {
-     short     a,angv,ato,angto,curang,i,n,p,rotang,s,sto,stoptrack,track;
+     short     a,ato,curang,i,n,p,rotang,s,sto,stoptrack,track;
      int      distx,disty,px,py,x,y;
      int      xvect,xvect2,yvect,yvect2;
      int      lox,loy,hix,hiy;
@@ -2444,8 +2444,8 @@ movevehicles(int v)
           disty=vptr->tracky[track]-py;
           vptr->angleto=getangle(distx,disty);
           vptr->accelto=8;
-          vptr->distx=labs(distx);
-          vptr->disty=labs(disty);
+          vptr->distx=abs(distx);
+          vptr->disty=abs(disty);
           distx=vptr->distx;
           disty=vptr->disty;
      }
@@ -2732,7 +2732,7 @@ checkmapsndfx(short p)
      for( i=0; i<totalmapsndfx; i++ ) {
           switch(mapsndfxptr[i]->type) {
           case MAP_SFX_AMBIENT:
-               dist=labs(posx[p]-mapsndfxptr[i]->x)+labs(posy[p]-mapsndfxptr[i]->y);
+               dist=abs(posx[p]-mapsndfxptr[i]->x)+abs(posy[p]-mapsndfxptr[i]->y);
                if( (dist > AMBUPDATEDIST) && (mapsndfxptr[i]->id!=-1) ) {
                     stopsound(mapsndfxptr[i]->id);
                     mapsndfxptr[i]->id=-1;
@@ -2797,23 +2797,23 @@ checkmapsndfx(short p)
 void
 tektagsave(int fil)
 {
-     int  i,rv;
+     int  i;
 
-     rv=write(fil,&numanimates,sizeof(int));
+     write(fil,&numanimates,sizeof(int));
      for (i=0 ; i < numanimates ; i++) {
           write(fil,&animpic[i],sizeof(struct animpic));
      }
-     rv=write(fil,&numdelayfuncs,sizeof(short));
+     write(fil,&numdelayfuncs,sizeof(short));
      for (i=0 ; i < numdelayfuncs ; i++) {
           write(fil,&delayfunc[i],sizeof(struct delayfunc));
      }
-     rv=write(fil,onelev,MAXPLAYERS);
-     rv=write(fil,&secnt,sizeof(int));
+     write(fil,onelev,MAXPLAYERS);
+     write(fil,&secnt,sizeof(int));
      for (i=0 ; i < secnt ; i++) {
           write(fil,&sectoreffect[i],sizeof(struct sectoreffect));
      }
-     rv=write(fil,sexref,MAXSECTORS*sizeof(int));
-     rv=write(fil,&numdoors,sizeof(int));
+     write(fil,sexref,MAXSECTORS*sizeof(int));
+     write(fil,&numdoors,sizeof(int));
      for (i=0 ; i < numdoors ; i++) {
           write(fil,&doortype[i],sizeof(struct doortype));
      }
@@ -2840,23 +2840,23 @@ tektagsave(int fil)
 void
 tektagload(int fil)
 {
-     int  i,rv;
+     int  i;
 
-     rv=read(fil,&numanimates,sizeof(int));
+     read(fil,&numanimates,sizeof(int));
      for (i=0 ; i < numanimates ; i++) {
           read(fil,&animpic[i],sizeof(struct animpic));
      }
-     rv=read(fil,&numdelayfuncs,sizeof(short));
+     read(fil,&numdelayfuncs,sizeof(short));
      for (i=0 ; i < numdelayfuncs ; i++) {
           read(fil,&delayfunc[i],sizeof(struct delayfunc));
      }
-     rv=read(fil,onelev,MAXPLAYERS);
-     rv=read(fil,&secnt,sizeof(int));
+     read(fil,onelev,MAXPLAYERS);
+     read(fil,&secnt,sizeof(int));
      for (i=0 ; i < secnt ; i++) {
           read(fil,&sectoreffect[i],sizeof(struct sectoreffect));
      }
-     rv=read(fil,sexref,MAXSECTORS*sizeof(int));
-     rv=read(fil,&numdoors,sizeof(int));
+     read(fil,sexref,MAXSECTORS*sizeof(int));
+     read(fil,&numdoors,sizeof(int));
      for (i=0 ; i < numdoors ; i++) {
           read(fil,&doortype[i],sizeof(struct doortype));
      }

@@ -354,7 +354,7 @@ int
 playsound(int sn, int sndx, int sndy, int loop, short type)
 {
      int       i,nr=0;
-     int      dist=0L,vol=0L,pan=0L,dx,dy;
+     int      dist=0L,pan=0L,dx,dy;
 
      if( (toggles[TOGGLE_SOUND] == 0) || !fxstarted || (sn < 0) || (sn >= TOTALSOUNDS) )
           return(-1);
@@ -554,8 +554,8 @@ soundmastervolume(int vol)
 void
 updatesounds(int snum)
 {
-     int      dist=0L,vol=0L,pan=0L,dx,dy;
-     int       i,bufnum,panindx;
+     int      dist=0L,pan=0L,dx,dy;
+     int       i;
 
      if( (toggles[TOGGLE_SOUND] == 0) || !fxstarted )
           return;

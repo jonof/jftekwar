@@ -189,10 +189,12 @@ int      killedsonny=0;
 
 
 void
-fadeout(int UNUSED(start), int UNUSED(end), int UNUSED(red), int UNUSED(green), int UNUSED(blue), int UNUSED(steps))
+fadeout(int start, int end, int red, int green, int blue, int steps)
 {
 //   int       i,j,orig,delta;
 //   char      *origptr,*newptr;
+
+     (void)start; (void)end; (void)red; (void)green; (void)blue; (void)steps;
 
      finishpaletteshifts();
 /*
@@ -231,8 +233,9 @@ clearkeys(void)
 }
 
 void
-fadein(int UNUSED(start), int UNUSED(end), int UNUSED(steps))
+fadein(int start, int end, int steps)
 {
+     (void)start; (void)end; (void)steps;
 /*   int  i,j,delta;
 
      if( steps == 0 ) {
@@ -481,11 +484,11 @@ showmessage(char *fmt,...)
      memset(messagebuf,   '\0', MSGBUFSIZE);
 
      va_start(vargs,fmt);
-     vsprintf(messagebuf,fmt,vargs);
+     Bvsnprintf(messagebuf,sizeof(messagebuf),fmt,vargs);
      va_end(vargs);
 
      messagebuf[MSGBUFSIZE-1]='\0';
-     messagex=(xdim>>1)-( ((strlen(messagebuf))>>1)*8 );
+     messagex=(xdim>>1)-( (((int)strlen(messagebuf))>>1)*8 );
      if( messagex < 0 )
           messagex=0;
      messageon=1;
@@ -903,8 +906,7 @@ skipsyms:
 void
 nextnetlevel()
 {
-     int  i,j,len,other,readyplayers,playerreadyflag[MAXPLAYERS];
-     int lastpacketclock,packets=0L;
+     int  i,len,other,readyplayers,playerreadyflag[MAXPLAYERS];
 
      if( strcmp(boardfilename,"NET1.MAP") == 0) {
           strcpy(boardfilename,"NET2.MAP");
@@ -1052,7 +1054,6 @@ int
 tekscreenfx(void)
 {
      int  ammo,n;
-     int i;
      static short hcpic,rvpic,wppic;
 
      updatepaletteshifts();
@@ -1490,7 +1491,7 @@ mapreturn(int cmap)
 void
 newmap(int mapno)
 {
-     int       i,sn,p;
+     int       sn,p;
      int       savhealth;
      int       savestun;
      int       savereds;
@@ -1649,7 +1650,7 @@ mprintf(short x,short y,char prop,char shade,char palnum,char *stg,...)
      vsprintf((char *)tempbuf,stg,vargs);
      va_end(vargs);
      Bstrupr((char *)tempbuf);
-     n=strlen((char *)tempbuf);
+     n=(int)strlen((char *)tempbuf);
      if (x == -1) {
           if (prop) {
                pic=MFONT_A;
@@ -1736,7 +1737,7 @@ void
 domenu(void)
 {
      char pal;
-     int  i,stepy;
+     int  i;
      int dax,dax2,day,day2;
      struct menu *mptr;
      static int firstpass,odiff,osoundv,omusicv,omousesens,oheadb;
@@ -1851,7 +1852,7 @@ domenu(void)
                               if (ydim >= 400) {
                                    day<<=1;
                               }
-                              rotatesprite((dax+((strlen(lockeybuf)+1)*16)+5)<<16, day<<16, 65536l, 0, YELLOWLIGHTPIC,
+                              rotatesprite((dax+(((int)strlen(lockeybuf)+1)*16)+5)<<16, day<<16, 65536l, 0, YELLOWLIGHTPIC,
                                    0, 0, 8+16, 0, 0, xdim-1, ydim-1);
                          }
                     }
@@ -2078,7 +2079,7 @@ domenuinput(void)
                     if (strcmp(loadsavenames[selopt-1],"-EMPTY-") != 0) {
                          strncpy(lockeybuf,loadsavenames[selopt-1],
                               MAXLOADSAVESIZE);
-                         locmessagelen=strlen(lockeybuf);
+                         locmessagelen=(int)strlen(lockeybuf);
                     }
                     else {
                          memset(lockeybuf,0,sizeof(lockeybuf));
@@ -2819,55 +2820,51 @@ donewgame:
 void
 teksavemissioninfo(int fil)
 {
-     int       rv;
-
-     rv=write(fil,symbols,sizeof(symbols));
-     rv=write(fil,symbolsdeposited,sizeof(symbolsdeposited));
-     rv=write(fil,&difficulty,sizeof(difficulty));
-     rv=write(fil,&currentmapno,sizeof(currentmapno));
+     write(fil,symbols,sizeof(symbols));
+     write(fil,symbolsdeposited,sizeof(symbolsdeposited));
+     write(fil,&difficulty,sizeof(difficulty));
+     write(fil,&currentmapno,sizeof(currentmapno));
     #if 0
-     rv=write(fil,&warpretang,sizeof(warpretang));
-     rv=write(fil,&warpretsect,sizeof(warpretsect));
-     rv=write(fil,&warpretx,sizeof(warpretx));
-     rv=write(fil,&warprety,sizeof(warprety));
-     rv=write(fil,&warpretz,sizeof(warpretz));
+     write(fil,&warpretang,sizeof(warpretang));
+     write(fil,&warpretsect,sizeof(warpretsect));
+     write(fil,&warpretx,sizeof(warpretx));
+     write(fil,&warprety,sizeof(warprety));
+     write(fil,&warpretz,sizeof(warpretz));
     #endif
-     rv=write(fil,&mission,sizeof(mission));
-     rv=write(fil,&numlives,sizeof(numlives));
-     rv=write(fil,&mission_accomplished,sizeof(mission_accomplished));
-     rv=write(fil,&civillianskilled,sizeof(civillianskilled));
-     rv=write(fil,&generalplay,sizeof(generalplay));
-     rv=write(fil,&singlemapmode,sizeof(singlemapmode));
-     rv=write(fil,&allsymsdeposited,sizeof(allsymsdeposited));
-     rv=write(fil,&killedsonny,sizeof(killedsonny));
+     write(fil,&mission,sizeof(mission));
+     write(fil,&numlives,sizeof(numlives));
+     write(fil,&mission_accomplished,sizeof(mission_accomplished));
+     write(fil,&civillianskilled,sizeof(civillianskilled));
+     write(fil,&generalplay,sizeof(generalplay));
+     write(fil,&singlemapmode,sizeof(singlemapmode));
+     write(fil,&allsymsdeposited,sizeof(allsymsdeposited));
+     write(fil,&killedsonny,sizeof(killedsonny));
 }
 
 void
 tekloadmissioninfo(int fil)
 {
-     int       rv;
-
      musicfade();
 
-     rv=read(fil,symbols,sizeof(symbols));
-     rv=read(fil,symbolsdeposited,sizeof(symbolsdeposited));
-     rv=read(fil,&difficulty,sizeof(difficulty));
-     rv=read(fil,&currentmapno,sizeof(currentmapno));
+     read(fil,symbols,sizeof(symbols));
+     read(fil,symbolsdeposited,sizeof(symbolsdeposited));
+     read(fil,&difficulty,sizeof(difficulty));
+     read(fil,&currentmapno,sizeof(currentmapno));
     #if 0
-     rv=read(fil,&warpretang,sizeof(warpretang));
-     rv=read(fil,&warpretsect,sizeof(warpretsect));
-     rv=read(fil,&warpretx,sizeof(warpretx));
-     rv=read(fil,&warprety,sizeof(warprety));
-     rv=read(fil,&warpretz,sizeof(warpretz));
+     read(fil,&warpretang,sizeof(warpretang));
+     read(fil,&warpretsect,sizeof(warpretsect));
+     read(fil,&warpretx,sizeof(warpretx));
+     read(fil,&warprety,sizeof(warprety));
+     read(fil,&warpretz,sizeof(warpretz));
     #endif
-     rv=read(fil,&mission,sizeof(mission));
-     rv=read(fil,&numlives,sizeof(numlives));
-     rv=read(fil,&mission_accomplished,sizeof(mission_accomplished));
-     rv=read(fil,&civillianskilled,sizeof(civillianskilled));
-     rv=read(fil,&generalplay,sizeof(generalplay));
-     rv=read(fil,&singlemapmode,sizeof(singlemapmode));
-     rv=read(fil,&allsymsdeposited,sizeof(allsymsdeposited));
-     rv=read(fil,&killedsonny,sizeof(killedsonny));
+     read(fil,&mission,sizeof(mission));
+     read(fil,&numlives,sizeof(numlives));
+     read(fil,&mission_accomplished,sizeof(mission_accomplished));
+     read(fil,&civillianskilled,sizeof(civillianskilled));
+     read(fil,&generalplay,sizeof(generalplay));
+     read(fil,&singlemapmode,sizeof(singlemapmode));
+     read(fil,&allsymsdeposited,sizeof(allsymsdeposited));
+     read(fil,&killedsonny,sizeof(killedsonny));
 
      if( generalplay == 1 ) {
           startmusic(rand()%7);
@@ -2924,7 +2921,7 @@ int
 choosemap()
 {
      int       lastmap,map,set;
-     int      clock,helpclock,stall;
+     int      helpclock,stall;
 
      musicfade();
 
@@ -3191,7 +3188,6 @@ void
 missionaccomplished(int  sn)
 {
      int       ext;
-     char      results=0;
 
      if( option[4] != 0 ) {
           return;

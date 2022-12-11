@@ -106,9 +106,11 @@ tekgunrep(int gun)                // is "gun" an automatic weapon?
 }
 
 int
-tekgundamage(int gun,int UNUSED(x),int UNUSED(y),int UNUSED(z),int UNUSED(hitsprite))
+tekgundamage(int gun,int x,int y,int z,int hitsprite)
 {
      int       damage;
+
+     (void)x; (void)y; (void)z; (void)hitsprite;
 
      switch( gun ) {
      case 1:  damage= 2; break;

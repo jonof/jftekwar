@@ -819,8 +819,9 @@ teksavesetup(void)
 }
 
 void
-tekview(int * UNUSED(x1),int *y1, int * UNUSED(x2),int *y2)
+tekview(int *x1, int *y1, int *x2, int *y2)
 {
+    (void)x1; (void)x2;
      if( screensize <= xdim ) {
           *y1+=16;
           *y2+=16;

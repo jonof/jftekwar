@@ -114,7 +114,7 @@ static struct soundQuality_t {
         fullscreen = settings->fullscreen;
     } else {
         fullscreen = ([fullscreenButton state] == NSOnState);
-        mode3d = [[videoMode3DPUButton selectedItem] tag];
+        mode3d = (int)[[videoMode3DPUButton selectedItem] tag];
         if (mode3d >= 0) {
             xdim = validmode[mode3d].xdim;
             ydim = validmode[mode3d].ydim;
@@ -205,7 +205,7 @@ static struct soundQuality_t {
 {
     int mode = -1;
 
-    mode = [[videoMode3DPUButton selectedItem] tag];
+    mode = (int)[[videoMode3DPUButton selectedItem] tag];
     if (mode >= 0) {
         settings->xdim3d = validmode[mode].xdim;
         settings->ydim3d = validmode[mode].ydim;
@@ -216,7 +216,7 @@ static struct soundQuality_t {
     settings->usemouse = [useMouseButton state] == NSOnState;
     settings->usejoy = [useJoystickButton state] == NSOnState;
 
-    mode = [[soundQualityPUButton selectedItem] tag];
+    mode = (int)[[soundQualityPUButton selectedItem] tag];
     if (mode >= 0) {
         settings->samplerate = soundQualities[mode].frequency;
         settings->bitspersample = soundQualities[mode].samplesize;

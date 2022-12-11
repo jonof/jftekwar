@@ -21,7 +21,7 @@ static smk smkmenu, smkseq;
 
 #define SMKAUDIOBUFSZ (32768)
 static char *smkaudiobuf;
-static unsigned int smkaudiowrite = 0, smkaudioread = 0;
+static unsigned long smkaudiowrite = 0, smkaudioread = 0;
 
 static void smkplayfeeder(char **ptr, unsigned int *length) {
      *ptr = &smkaudiobuf[smkaudioread];
@@ -108,7 +108,7 @@ smkplayseq(char *name)
      for (decodeframe = 0, result = smk_first(smkseq);
                decodeframe < NUMSMKTILES;
                decodeframe++, result = smk_next(smkseq)) {
-          int audiolen;
+          unsigned long audiolen;
           const unsigned char *audiodata;
 
           if (result != SMK_MORE && result != SMK_LAST) {
@@ -123,7 +123,7 @@ smkplayseq(char *name)
           audiodata = smk_get_audio(smkseq, 0);
 
           while (audiolen > 0) {
-               int slice = SMKAUDIOBUFSZ - smkaudiowrite;
+               unsigned long slice = SMKAUDIOBUFSZ - smkaudiowrite;
                if (slice > audiolen) slice = audiolen;
                memcpy(&smkaudiobuf[smkaudiowrite], audiodata, slice);
                audiolen -= slice;
@@ -135,7 +135,7 @@ smkplayseq(char *name)
      }
 
      smkaudioread = 0;
-     voice = FX_StartDemandFeedPlayback(smkplayfeeder, audio_rate[0],
+     voice = FX_StartDemandFeedPlayback(smkplayfeeder, (int)audio_rate[0],
           0, 63, 63, 63, 1, (unsigned int)-1);
      if (voice < 0) {
           debugprintf("smkplayseq(\"%s\") failed to start audio playback\n", name);
@@ -159,7 +159,7 @@ smkplayseq(char *name)
           nextpage();
 
           while ((decodeframe+1)%NUMSMKTILES != playframe%NUMSMKTILES && result != SMK_LAST) {
-               int audiolen;
+               unsigned long audiolen;
                const unsigned char *audiodata;
 
                result = smk_next(smkseq);
@@ -175,7 +175,7 @@ smkplayseq(char *name)
                audiolen = smk_get_audio_size(smkseq, 0);
                audiodata = smk_get_audio(smkseq, 0);
                while (audiolen > 0) {
-                    int slice = SMKAUDIOBUFSZ - smkaudiowrite;
+                    unsigned long slice = SMKAUDIOBUFSZ - smkaudiowrite;
                     if (slice > audiolen) slice = audiolen;
                     memcpy(&smkaudiobuf[smkaudiowrite], audiodata, slice);
                     audiolen -= slice;

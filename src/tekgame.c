@@ -583,8 +583,6 @@ processinput(short snum)
 {
      int      nexti;
      int      i,j, doubvel, xvect, yvect, goalz;
-     int      dax, day;
-     char      *ptr;
 
      // move player snum
      if (snum < 0 || snum >= MAXPLAYERS) {
@@ -982,8 +980,8 @@ processinput(short snum)
                          if (j == SWITCH3ON)  wall[neartagwall].overpicnum = SWITCH3OFF;
                          if (j == SWITCH3OFF) wall[neartagwall].overpicnum = SWITCH3ON;
                          i = wall[neartagwall].point2;
-                         dax = ((wall[neartagwall].x+wall[i].x)>>1);
-                         day = ((wall[neartagwall].y+wall[i].y)>>1);
+                         //dax = ((wall[neartagwall].x+wall[i].x)>>1);
+                         //day = ((wall[neartagwall].y+wall[i].y)>>1);
                     }
                }
                if( neartagsprite >= 0 ) {
