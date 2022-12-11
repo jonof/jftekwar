@@ -20,6 +20,8 @@ $(SRC)/tekver.$o: $(SRC)/tekver.c
 $(SRC)/version.$o: $(SRC)/version.c
 $(SRC)/version-auto.$o: $(SRC)/version-auto.c
 
+$(SRC)/bstub.$o: $(SRC)/bstub.c $(build_h) $(EINC)/editor.h $(EINC)/pragmas.h $(EINC)/baselayer.h $(EINC)/cache1d.h $(INC)/names.h
+
 $(SRC)/startwin_game.$o: $(SRC)/startwin_game.c $(EINC)/build.h $(EINC)/winlayer.h $(EINC)/compat.h $(INC)/startwin.h $(INC)/gameres.h
 $(SRC)/startgtk_game.$o: $(SRC)/startgtk_game.c $(EINC)/build.h $(EINC)/baselayer.h $(EINC)/compat.h $(INC)/startwin.h
 

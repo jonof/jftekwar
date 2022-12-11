@@ -1,26 +1,28 @@
 #include "build.h"
-
-#define TEKWAR 1
+#include "editor.h"
+#include "pragmas.h"
+#include "baselayer.h"
+#include "cache1d.h"
+#include "names.h"
 
 #define AVERAGEFRAMES 16
-
-static long frameval[AVERAGEFRAMES], framecnt = 0;
+static int averagefps;
+static unsigned int frameval[AVERAGEFRAMES], framecnt = 0;
 
 #define NUMOPTIONS 8
 #define NUMKEYS 19
 
-long vesares[7][2] = {{320,200},{640,400},{640,480},{800,600},{1024,768},
-									  {1280,1024},{1600,1200}};
 unsigned char option[NUMOPTIONS] = {0,0,0,0,0,0,98,0};
-int keys[NUMKEYS] =
+int keys[NUMBUILDKEYS] =
 {
 	0xc8,0xd0,0xcb,0xcd,0x2a,0x9d,0x1d,0x39,
 	0x1e,0x2c,0xd1,0xc9,0x33,0x34,
-	0x9c,0x1c,0xd,0xc,0xf,
+	0x9c,0x1c,0xd,0xc,0xf,0x45
 };
 
+char *defsfilename = "tekwar.def";
+int nextvoxid = 0;
 
-#ifdef TEKWAR
 #define   PULSELIGHT     0
 #define   FLICKERLIGHT   1
 #define   DELAYEFFECT    2
@@ -80,26 +82,41 @@ int keys[NUMKEYS] =
 #define   PTS_TEKLORD              200
 
 static   char tempbuf[256];
-static   int  numsprite[2000];
 static   char lo[32];
 static   char hi[32];
 static   const char *levelname;
 static   short curwall=0,wallpicnum=0,curwallnum=0;
 static   short cursprite=0,curspritenum=0;
 static   char wallsprite=0;
-static   char helpon=0;
-static   char once=0;
 
 struct    picattribtype  {
-     char      numframes;
-     char      animtype;
+     unsigned  char      numframes;
+     unsigned  char      animtype;
      signed    char      ycenteroffset,xcenteroffset;
-     char      animspeed;
+     unsigned  char      animspeed;
      };
 
-struct    spriteextension {
-     char      class;
-     char      hitpoints;
+#ifdef __GNUC__
+#  if __GNUC__ == 4 && __GNUC_MINOR__ >= 7
+#    define TPACK __attribute__ ((packed, gcc_struct))
+#  else
+#    define TPACK __attribute__ ((packed))
+#  endif
+#else
+#define TPACK
+#endif
+
+#ifdef _MSC_VER
+#pragma pack(1)
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(push,1);
+#endif
+
+struct TPACK spriteextension {
+     unsigned  char      class;
+     signed    char      hitpoints;
      unsigned  short     target;
      unsigned  short     fxmask;  
      unsigned  short     aimask;
@@ -114,24 +131,35 @@ struct    spriteextension {
      unsigned  short     squatpic;
      unsigned  short     morphpic;
      unsigned  short     specialpic;
-     char      lock;
-     char      weapon;
+     unsigned  char      lock;
+     unsigned  char      weapon;
      short     ext2;
      };
-struct    spriteextension  spriteXT[MAXSPRITES];
 
-struct    XTsavetype {
+struct TPACK XTsavetype {
      short     XTnum;
      struct    spriteextension      sprXT;
 };
-struct XTsavetype XTsave;
 
-struct    XTtrailertype {
-     long      numXTs;          
-     long      start;
+struct TPACK XTtrailertype {
+     int      numXTs;          
+     int      start;
      char      mapname[13];
      char      ID[13];
 };
+
+#ifdef _MSC_VER
+#pragma pack()
+#endif
+
+#ifdef __WATCOMC__
+#pragma pack(pop)
+#endif
+
+#undef TPACK
+
+struct    spriteextension  spriteXT[MAXSPRITES];
+struct XTsavetype XTsave;
 struct    XTtrailertype  XTtrailer;
 
 #define   TRAILERID "**MAP_EXTS**"
@@ -150,33 +178,37 @@ char liststates=0;
 char matchcstats=0;
 char docleanup=0;
 char spriteextmodified=0;
-long      tickdelay;
-#endif
 
-#ifdef TEKWAR
+
+int  JS_CheckExtras(void);
+void JS_DeleteExt(short sn);
+int  JS_FirstFreeExt(void);
+int  JS_InitExtension(short sn, short en);
+int  JS_LockExt(short j);
+int  JS_ShowSpriteExts(short spritenum);
+void checkextras(void);
+
+
 // overrides of engine insert/delete sprite
-deletesprite(short spritenum)
+void ExtDeleteSprite(short spritenum)
 {
 	if( (sprite[spritenum].extra!=-1) ) {
           JS_DeleteExt(spritenum);
      }
-
-     deletespritestat(spritenum);
-     return(deletespritesect(spritenum));
 }
 
 void
 PrintStatus(char *string,int num,char x,char y,char color)
 {
      sprintf(tempbuf,"%s %d",string,num);
-     printext16(x*8,y*8,color,-1,tempbuf,0);
+     printext16(x*8,ydim16+y*8,color,-1,tempbuf,0);
 }
 
 void
 PrintStatusStr(char *string,char *s,char x,char y,char color)
 {
      sprintf(tempbuf,"%s %s",string,s);
-     printext16(x*8,y*8,color,-1,tempbuf,0);
+     printext16(x*8,ydim16+y*8,color,-1,tempbuf,0);
 }
 
 void
@@ -186,13 +218,13 @@ SpriteName(short spritenum, char *lo2)
 }
 
 void
-JS_MatchCstats()
+JS_MatchCstats(void)
 {
      char      what[50];
      int       i,ans;
 
      sprintf(what, "1=YES,MATCH SPR CSTATS. 0 TO CANCEL. ");
-     ans=getnumber16(what, 0, 2L);
+     ans=getnumber16(what, 0, 2L, 0);
 
      if( ans != 1 ) {
           printmessage16("Cancelled...");
@@ -211,15 +243,12 @@ JS_MatchCstats()
 }
 
 void
-JS_CleanupExtensions()
+JS_CleanupExtensions(void)
 {
      char      what[50];
 
      sprintf(what, "Checking extras...");
      printmessage16(what);
-     tickdelay=totalclock;
-     while ( (totalclock-tickdelay)<50 )
-          ;
      checkextras();
 }
 
@@ -233,9 +262,6 @@ JS_RecordExt(int sn)
      if( sprite[sn].extra < 0 ) {
           sprintf(what, "Sprite has no EXT to record !");
           printmessage16(what);
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<50 )
-               ;
           return;
      }
 
@@ -245,9 +271,6 @@ JS_RecordExt(int sn)
 
      sprintf(what, "Recording Ext %d for copying...", sn);
      printmessage16(what);
-     tickdelay=totalclock;
-     while ( (totalclock-tickdelay)<50 )
-          ;
 
      memcpy(&recXT, &spriteXT[recordXT], sizeof(struct spriteextension));     
 }
@@ -264,9 +287,6 @@ JS_CopyExt(int sn)
      if( (recordXT < 0) || (recordXT > MAXSPRITES) ) {
           sprintf(what, "NO current valid copy EXT to copy !");
           printmessage16(what);
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<50 )
-               ;
           return;
      }
 
@@ -275,27 +295,20 @@ JS_CopyExt(int sn)
      if( j < 0 ) {
           sprintf(what, "Mapping EXT for sprite %d...", sn);
           printmessage16(what);
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<50 )
-               ;
           j=JS_FirstFreeExt();
           if( j == -1 ) {
                printmessage16("ERROR! Not able to map to an extension.");
                return;
           }
           printmessage16("Extension Mapped.");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<50 )
-               ;
           sprite[sn].extra=j;
           JS_InitExtension(sn, j);
           JS_LockExt(j);
           JS_ShowSpriteExts(sn);
      }
      else {
-          putch(0x07);
-          sprintf(what, "Overwrite existing EXT for sprite %d ?  1=YES 0=NO ", sn);
-          ans=getnumber16(what, 0, 2L);
+          sprintf(tempbuf, "Overwrite existing EXT for sprite %d ?  1=YES 0=NO ", sn);
+          ans=getnumber16(tempbuf, 0, 2L, 0);
           if( ans != 1 ) {
                printmessage16("Not Copied...");
                return;
@@ -306,9 +319,6 @@ JS_CopyExt(int sn)
 
      sprintf(what, "Copying Ext %d to sprite %d...", recordXT, sn);
      printmessage16(what);
-     tickdelay=totalclock;
-     while ( (totalclock-tickdelay)<50 )
-          ;
 
      JS_ShowSpriteExts(sn);
 }
@@ -320,11 +330,8 @@ JS_DeleteExt(short sn)
 
      memset(&spriteXT[x], 0, sizeof(struct spriteextension));
 
-     if( qsetmode == 480 ) {
+     if( qsetmode != 200 ) {
           printmessage16("Deleting Extension...");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<60 )
-               ;
      }
 
      // reset recordXT
@@ -342,7 +349,7 @@ JS_ClearAllExts(void)
      int       i,ans;
 
      sprintf(what, "1=YES,DELETE ALL EXTS, 0 TO CANCEL. ");
-     ans=getnumber16(what, 0, 2L);
+     ans=getnumber16(what, 0, 2L, 0);
 
      if( ans != 1 ) {
           printmessage16("Cancelled...");
@@ -350,7 +357,7 @@ JS_ClearAllExts(void)
      }
 
      sprintf(what, "REALLY DELETE EXTS ? 1=YES  0=NO ");
-     ans=getnumber16(what, 0, 2L);
+     ans=getnumber16(what, 0, 2L, 0);
 
      if( ans != 1 ) {
           printmessage16("Cancelled...");
@@ -376,7 +383,7 @@ JS_ClearAllSprites(void)
      int       i,ans;
 
      sprintf(what, "1=YES,DELETE ALL SPRITES, 0 TO CANCEL. ");
-     ans=getnumber16(what, 0, 2L);
+     ans=getnumber16(what, 0, 2L, 0);
 
      if( ans != 1 ) {
           printmessage16("Cancelled...");
@@ -384,7 +391,7 @@ JS_ClearAllSprites(void)
      }
 
      sprintf(what, "REALLY DELETE SPRITES ? 1=YES  0=NO ");
-     ans=getnumber16(what, 0, 2L);
+     ans=getnumber16(what, 0, 2L, 0);
 
      if( ans != 1 ) {
           printmessage16("Cancelled...");
@@ -406,90 +413,35 @@ JS_ClearAllSprites(void)
 int
 JS_LoadSpriteExts(const char *mapname)
 {
-     int       fh,i,nr,xn,nex;
-     int       bh;
-     long      fsize;
-     size_t    ssize;
-     int       nopen=0;
-     int       res;
-     long      totr;
-     struct    stat      st1,st2;
-     char      buf[40],rdbuf[512];
-
-     ssize=sizeof(struct spriteextension);
+     int       fh,i,nr,nex;
 
      for (i=0; i<MAXSPRITES; i++) {
-          memset(&spriteXT[i], 0, ssize);
+          memset(&spriteXT[i], 0, sizeof(struct spriteextension));
           spriteXT[i].lock=0x00;
      }
 
-     ssize=sizeof(struct XTtrailertype);
-
-     fh=open(mapname, O_BINARY | O_RDONLY, S_IREAD | S_IWRITE);
+     fh = kopen4load(mapname, 0);
      if ( fh == -1 ) {
           return(-1);
      }
 
-     // check if file is already open
-     memset(&st1, 0, sizeof( struct stat));
-     memset(&st2, 0, sizeof( struct stat));
-     fstat(fh, &st1);
-     stat(mapname, &st2);
-
-    //#define   DOBACKUPS
-    #ifdef    DOBACKUPS
-     // make backup
-     if( (strcmp(mapname, "backup.map") == 0) || (strcmp(mapname, "BACKUP.MAP") == 0) )
-          goto backupdone;
-     bh=open("backup.map", O_CREAT | O_TRUNC | O_BINARY | O_RDWR, S_IREAD | S_IWRITE);
-     if ( bh == -1 ) {
-          goto backupdone;
-     }
-     totr=nr=0;
-     while( 1 ) {
-          nr=0;
-          nr=read(fh, rdbuf, 512);
-          totr+=nr;
-          if( nr > 0 ) {
-               write(bh, rdbuf, nr);
-          }
-          if( nr < 512 ) {
-               goto endof;
-          }
-     }
-endof:
-     close(bh);
-     lseek(fh, 0, SEEK_SET);
-backupdone:
-    #endif
-
      // read in XTtrailer 
-     lseek(fh, -(sizeof(struct XTtrailertype)), SEEK_END);
+     klseek(fh, -((int)sizeof(struct XTtrailertype)), SEEK_END);
      memset(&XTtrailer, 0, sizeof(struct XTtrailertype));
-     read(fh, &XTtrailer, sizeof(struct XTtrailertype));
+     kread(fh, &XTtrailer, sizeof(struct XTtrailertype));
 
      // if no previous extension info then continue
      if( strcmp(XTtrailer.ID, TRAILERID) != 0 ) {
-          if (qsetmode == 480) {
-               printmessage16("New File - No extension information...");
-               tickdelay=totalclock;
-               while ( (totalclock-tickdelay)<50 )
-                    ;
-          }
+          buildputs("New File - No extension information...\n");
           goto noext;
      }
 
-     if (qsetmode == 480) {
-          printmessage16("Reading in extensions...");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<40 )
-               ;
-     }
+     buildputs("Reading in extensions...\n");
 
      // load and intialize spriteXT array members
-     lseek(fh, XTtrailer.start, SEEK_SET);
+     klseek(fh, XTtrailer.start, SEEK_SET);
      for( i=0; i<XTtrailer.numXTs; i++ ) {
-          nr=read(fh, &XTsave, sizeof(struct XTsavetype));
+          nr=kread(fh, &XTsave, sizeof(struct XTsavetype));
           if( nr != sizeof(struct XTsavetype) )
                break;
           spriteXT[XTsave.XTnum]=XTsave.sprXT;  // struct assign
@@ -497,42 +449,22 @@ backupdone:
 
      nex=JS_CheckExtras();
      if( nex != i ) {
-          putch(0x07);
-          if (qsetmode == 480) {
-               sprintf(buf, "ERROR: %d Sprite Extras != %d Extensions.", nex,i);
-               printmessage16(buf);
-               tickdelay=totalclock;
-               while ( (totalclock-tickdelay)<200 )
-                    ;
-          }
+          buildprintf("ERROR: %d Sprite Extras != %d Extensions.\n", nex,i);
      }
      else {
-          if (qsetmode == 480) {
-               sprintf(buf, "Loaded %d extensions.", i);
-               printmessage16(buf);
-               tickdelay=totalclock;
-               while ( (totalclock-tickdelay)<60 )
-                    ;
-          }
+          buildprintf("Loaded %d extensions.\n", i);
      }
-
-     // strip exension info so build may write map file contiguously
-     lseek(fh, 0, SEEK_SET);
-     res=chsize(fh, XTtrailer.start);
 
 noext:
 
-     flushall();
-     close(fh);
-     nopen=flushall();
+     kclose(fh);
 
  return(0);
 }
 
-checkextras()
+void checkextras(void)
 {
      int       i,j,ext;
-     char      what[50];
      FILE      *fp;
 
      fp=fopen("exts", "wt");
@@ -554,9 +486,8 @@ checkextras()
           if( ext != -1 ) {
                if( spriteXT[ext].lock == 0x00 ) {
                     sprite[i].extra=-1;
-                    sprintf(what, "bad extra for %d", i);
-                    printmessage16(what);
-                    fprintf(fp, "Sprite %d at %ld,%ld mapped to unlocked XT %4d\n", i,sprite[i].x,sprite[i].y,ext);
+                    buildprintf("bad extra for %d\n", i);
+                    fprintf(fp, "Sprite %d at %d,%d mapped to unlocked XT %4d\n", i,sprite[i].x,sprite[i].y,ext);
                }
           }
      }
@@ -572,8 +503,7 @@ checkextras()
                }
                if( j == MAXSPRITES ) {
                     spriteXT[i].lock=0x00;
-                    sprintf(what, "extension %d had no map", i);
-                    printmessage16(what);
+                    buildprintf("extension %d had no map\n", i);
                     fprintf(fp, "No mapping for locked XT %4d\n", i);
                }
           }
@@ -586,8 +516,7 @@ checkextras()
           if( ext != -1 ) {
                for( j=0; j<MAXSPRITES; j++ ) {
                     if( (j != i) && (sprite[j].extra == ext) ) {
-                         sprintf(what, "non unique map for %d",i);
-                         printmessage16(what);
+                         buildprintf("non unique map for %d\n",i);
                          fprintf(fp, "Non unique mapping for %4d at %d,%d\n", i,sprite[i].x,sprite[i].y);
                          break;
                     }
@@ -602,20 +531,11 @@ checkextras()
 int
 JS_SaveSpriteExts(const char *mapname)
 {
-     int       fh,i,nr;
-     int       ssize;
+     int       fh,i;
 
-     ssize=sizeof(struct XTtrailertype);
-     ssize=sizeof(struct XTsavetype);
+     buildputs("Appending extensions...\n");
 
-     if (qsetmode == 480) {
-          printmessage16("Appending extensions...");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<60 )
-               ;
-     }
-
-     fh=open(mapname, O_CREAT | O_BINARY | O_WRONLY, S_IREAD | S_IWRITE);
+     fh=open(mapname, O_BINARY | O_WRONLY, 0);
      if ( fh == -1 ) {
           return(-1);
      }
@@ -631,7 +551,7 @@ JS_SaveSpriteExts(const char *mapname)
      XTtrailer.numXTs=0L;
 
      // go to end of map = beginning of eXTensions
-     XTtrailer.start=lseek(fh, 0, SEEK_END);
+     XTtrailer.start=(int)lseek(fh, 0, SEEK_END);
 
      // verify extension then
      // write extensions to end of map file
@@ -642,27 +562,24 @@ JS_SaveSpriteExts(const char *mapname)
                XTtrailer.numXTs++;
                XTsave.XTnum=i;
                XTsave.sprXT=spriteXT[i];
-               nr=write(fh, &XTsave, sizeof(struct XTsavetype));
+               write(fh, &XTsave, sizeof(struct XTsavetype));
           }
      }
 
      // write trailer 
      write(fh, &XTtrailer, sizeof(struct XTtrailertype));
-     flushall();
      close(fh);
 
  return(0);
 }
 
 int
-JS_CheckExtras()
+JS_CheckExtras(void)
 {
      int       i,nse;
-     spritetype     *sprptr;
 
      nse=0;
      for( i=0; i<MAXSPRITES; i++ ) {
-          sprptr=&sprite[i];
           if( sprite[i].extra != -1 )
                nse++;
      }
@@ -699,7 +616,6 @@ JS_ShowSpriteExts(short spritenum)
 {
      short     i=sprite[spritenum].extra;
      char      quip[128];
-     long      nf=0L;
      struct    picattribtype  picinfo;
 
 	if (qsetmode == 200)    //In 3D mode
@@ -714,7 +630,6 @@ JS_ShowSpriteExts(short spritenum)
      }
      if( spriteXT[i].lock != 0xFF ) {
           sprite[spritenum].extra=-1;
-          putch(0x07);
           printmessage16("Sprite Mapped to unlocked EXT - repaired.");
           return(-1);
      }
@@ -723,8 +638,8 @@ JS_ShowSpriteExts(short spritenum)
 
      PrintStatus("Sprite ", ( int)spritenum,1,4,11);
      PrintStatus("Picnum ", sprite[spritenum].picnum,1,5,11);
-     sprintf(quip, "%s", names[sprite[spritenum].picnum], spritenum);
-     PrintstatusStr(quip,"", 1,6,3);
+     sprintf(quip, "%s", names[sprite[spritenum].picnum]);
+     PrintStatusStr(quip,"", 1,6,3);
 
      PrintStatus("Status ", sprite[spritenum].statnum,1,7,11);
      switch( sprite[spritenum].statnum ) {
@@ -780,9 +695,7 @@ JS_ShowSpriteExts(short spritenum)
 
      switch ( ( int)spriteXT[i].lock ) {
      case 0x00:
-          putch(0x07);
           PrintStatusStr("ERROR Lock", " OFF" ,1,10,2);
-          putch(0x07);
           break;
      case 0xFF:
           PrintStatusStr("Lock      ", " ON" ,1,10,3);
@@ -946,17 +859,17 @@ JS_ShowSpriteExts(short spritenum)
      PrintStatus("MorphPic  ", ( int)spriteXT[i].morphpic  ,34,12,11);
      PrintStatus("SpecialPic", ( int)spriteXT[i].specialpic,34,13,11);
 
-     PrintStatusStr("", names[spriteXT[i].basepic]   ,50,4,3);
-     PrintStatusStr("", names[spriteXT[i].standpic]  ,50,5,3);
-     PrintStatusStr("", names[spriteXT[i].walkpic]   ,50,6,3);
-     PrintStatusStr("", names[spriteXT[i].runpic]    ,50,7,3);
-     PrintStatusStr("", names[spriteXT[i].attackpic] ,50,8,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].basepic]   ,50,4,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].standpic]  ,50,5,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].walkpic]   ,50,6,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].runpic]    ,50,7,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].attackpic] ,50,8,3);
 
-     PrintStatusStr("", names[spriteXT[i].deathpic]  ,50,9,3);
-     PrintStatusStr("", names[spriteXT[i].painpic]   ,50,10,3);
-     PrintStatusStr("", names[spriteXT[i].squatpic]  ,50,11,3);
-     PrintStatusStr("", names[spriteXT[i].morphpic]  ,50,12,3);
-     PrintStatusStr("", names[spriteXT[i].specialpic],50,13,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].deathpic]  ,50,9,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].painpic]   ,50,10,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].squatpic]  ,50,11,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].morphpic]  ,50,12,3);
+     PrintStatusStr("\x1b", names[spriteXT[i].specialpic],50,13,3);
 
      JS_GetPicInfo(&picinfo, spriteXT[i].basepic);
      switch( picinfo.animtype ) {
@@ -1179,84 +1092,75 @@ JS_EditSpriteExts(short spritenum)
 
      if ( j < 0 ) {        // .extra is initialized to -1 in build.obj
           printmessage16("No Previous Extension.");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<50 )
-               ;
           j=JS_FirstFreeExt();
           if ( j == -1 ) {
                printmessage16("ERROR! Not able to map to an extension.");
                return(-1);
           }
           printmessage16("Extension Mapped.");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<100 )
-               ;
           sprite[spritenum].extra=j;
           JS_InitExtension(spritenum, j);
           JS_LockExt(j);
      }
      else {
           printmessage16("Editing Existing Extension.");
-          tickdelay=totalclock;
-          while ( (totalclock-tickdelay)<100 )
-               ;
      }
 
      JS_ShowSpriteExts(spritenum);
 
      sprintf(what, "spriteextra[%d].class     = ", j);
-     spriteXT[j].class=getnumber16(what, spriteXT[j].class, 12L);
+     spriteXT[j].class=getnumber16(what, spriteXT[j].class, 12L, 0);
 
      sprintf(what, "spriteextra[%d].hitpoints = ", j);
-     spriteXT[j].hitpoints=getnumber16(what, spriteXT[j].hitpoints, 256L);
+     spriteXT[j].hitpoints=getnumber16(what, spriteXT[j].hitpoints, 256L, 0);
 
      sprintf(what, "spriteextra[%d].target    = ", j);
-     spriteXT[j].target=getnumber16(what, spriteXT[j].target, 4096L);
+     spriteXT[j].target=getnumber16(what, spriteXT[j].target, 4096L, 0);
                                                    
      sprintf(what, "spriteextra[%d].fxmask    = ", j);
-     spriteXT[j].fxmask=getnumber16(what, spriteXT[j].fxmask, 256L);
+     spriteXT[j].fxmask=getnumber16(what, spriteXT[j].fxmask, 256L, 0);
 
      sprintf(what, "spriteextra[%d].aimask    = ", j);
-     spriteXT[j].aimask=getnumber16(what, spriteXT[j].aimask, 256L);
+     spriteXT[j].aimask=getnumber16(what, spriteXT[j].aimask, 256L, 0);
 
      sprintf(what, "spriteextra[%d].basestat  = ", j);
-     spriteXT[j].basestat=getnumber16(what, spriteXT[j].basestat, 4096L);
+     spriteXT[j].basestat=getnumber16(what, spriteXT[j].basestat, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].basepic   = ", j);
-     spriteXT[j].basepic=getnumber16(what, spriteXT[j].basepic, 4096L);
+     spriteXT[j].basepic=getnumber16(what, spriteXT[j].basepic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].standpic = ", j);
-     spriteXT[j].standpic=getnumber16(what, spriteXT[j].standpic, 4096L);
+     spriteXT[j].standpic=getnumber16(what, spriteXT[j].standpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].walkpic = ", j);
-     spriteXT[j].walkpic=getnumber16(what, spriteXT[j].walkpic, 4096L);
+     spriteXT[j].walkpic=getnumber16(what, spriteXT[j].walkpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].runpic = ", j);
-     spriteXT[j].runpic=getnumber16(what, spriteXT[j].runpic, 4096L);
+     spriteXT[j].runpic=getnumber16(what, spriteXT[j].runpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].attackpic = ", j);
-     spriteXT[j].attackpic=getnumber16(what, spriteXT[j].attackpic, 4096L);
+     spriteXT[j].attackpic=getnumber16(what, spriteXT[j].attackpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].deathpic  = ", j);
-     spriteXT[j].deathpic=getnumber16(what, spriteXT[j].deathpic, 4096L);
+     spriteXT[j].deathpic=getnumber16(what, spriteXT[j].deathpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].painpic = ", j);
-     spriteXT[j].painpic=getnumber16(what, spriteXT[j].painpic, 4096L);
+     spriteXT[j].painpic=getnumber16(what, spriteXT[j].painpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].squatpic = ", j);
-     spriteXT[j].squatpic=getnumber16(what, spriteXT[j].squatpic, 4096L);
+     spriteXT[j].squatpic=getnumber16(what, spriteXT[j].squatpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].morphpic  = ", j);
-     spriteXT[j].morphpic=getnumber16(what, spriteXT[j].morphpic, 4096L);
+     spriteXT[j].morphpic=getnumber16(what, spriteXT[j].morphpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].specialpic  = ", j);
-     spriteXT[j].specialpic=getnumber16(what, spriteXT[j].specialpic, 4096L);
+     spriteXT[j].specialpic=getnumber16(what, spriteXT[j].specialpic, 4096L, 0);
 
      sprintf(what, "spriteextra[%d].weapon  = ", j);
-     spriteXT[j].weapon=getnumber16(what, spriteXT[j].weapon, 7L);
+     spriteXT[j].weapon=getnumber16(what, spriteXT[j].weapon, 7L, 0);
 
      sprintf(what, "spriteextra[%d].ext2  = ", j);
-     spriteXT[j].ext2=getnumber16(what, spriteXT[j].ext2, 4096L);
+     spriteXT[j].ext2=getnumber16(what, spriteXT[j].ext2, 4096L, 0);
 
      printmessage16("Sprite Extensions Saved.");
 
@@ -1271,17 +1175,13 @@ JS_ChangeVelocity(short sn)
      char      what[50];
 
      sprintf(what, "sprite[%d].xvel  = ", sn);
-     sprite[sn].xvel=getnumber16(what, sprite[sn].xvel, 10L);
+     sprite[sn].xvel=getnumber16(what, sprite[sn].xvel, 10L, 0);
 
      sprintf(what, "sprite[%d].yvel  = ", sn);          
-     sprite[sn].yvel=getnumber16(what, sprite[sn].yvel, 10L);
+     sprite[sn].yvel=getnumber16(what, sprite[sn].yvel, 10L, 0);
 
      sprintf(what, "sprite[%d].zvel  = ", sn);
-     sprite[sn].zvel=getnumber16(what, sprite[sn].zvel, 10L);
-
-     tickdelay=totalclock;
-     while ( (totalclock-tickdelay)<50 )
-          ;
+     sprite[sn].zvel=getnumber16(what, sprite[sn].zvel, 10L, 0);
 
      printmessage16("Velocities adjusted");
 
@@ -1291,7 +1191,6 @@ JS_ChangeVelocity(short sn)
  return(0);
 }
 
-#endif
 
 
 //Detecting 2D / 3D mode:
@@ -1313,90 +1212,100 @@ JS_ChangeVelocity(short sn)
 //   searchwall is the sprite if searchstat = 3 (Yeah, I know - it says wall,
 //                                      but trust me, it's the sprite number)
 
-void ExtInit(void)
+int ExtInit(void)
 {
-	long i, fil;
+	int i, rv = 0;
+	unsigned char remapbuf[256];
 
-    #ifdef TEKWAR
-     clrscr();
-     scrldn();
-     home(0L);
-     wrchar('T');
-     home(1L);
-     wrchar('e');
-     home(2L);
-     wrchar('k');
-     home(3L);
-     wrchar('w');
-     home(4L);
-     wrchar('a');
-     home(5L);
-     wrchar('r');
-     home(7L);
-     wrchar('B');
-     home(8L);
-     wrchar('U');
-     home(9L);
-     wrchar('I');
-     home(10L);
-     wrchar('L');
-     home(11L);
-     wrchar('D');
-     home(13L);
-     wrchar('V');
-     home(14L);
-     wrchar('1');
-     home(15L);
-     wrchar('.');
-     home(16L);
-     wrchar('2');
-     ontherange();
-    #endif
+	buildputs("Tekwar BUILD V1.2\n\n");
+
+#if defined(DATADIR)
+    {
+        const char *datadir = DATADIR;
+        if (datadir && datadir[0]) {
+            addsearchpath(datadir);
+        }
+    }
+#endif
+
+     {
+          char *supportdir = Bgetsupportdir(1);
+          char *appdir = Bgetappdir();
+          char dirpath[BMAX_PATH+1];
+
+          // the OSX app bundle, or on Windows the directory where the EXE was launched
+          if (appdir) {
+               addsearchpath(appdir);
+               free(appdir);
+          }
+
+          // the global support files directory
+          if (supportdir) {
+               Bsnprintf(dirpath, sizeof(dirpath), "%s/JFTekWar", supportdir);
+               addsearchpath(dirpath);
+               free(supportdir);
+          }
+     }
+
+     // default behaviour is to write to the user profile directory, but
+     // creating a 'user_profiles_disabled' file in the current working
+     // directory where the game was launched makes the installation
+     // "portable" by writing into the working directory
+     if (access("user_profiles_disabled", F_OK) == 0) {
+          char cwd[BMAX_PATH+1];
+          if (getcwd(cwd, sizeof(cwd))) {
+               addsearchpath(cwd);
+          }
+     } else {
+          char *supportdir;
+          char dirpath[BMAX_PATH+1];
+          int asperr;
+
+          if ((supportdir = Bgetsupportdir(0))) {
+#if defined(_WIN32) || defined(__APPLE__)
+               const char *confdir = "JFTekWar";
+#else
+               const char *confdir = ".jftekwar";
+#endif
+               Bsnprintf(dirpath, sizeof(dirpath), "%s/%s", supportdir, confdir);
+               asperr = addsearchpath(dirpath);
+               if (asperr == -2) {
+                    if (Bmkdir(dirpath, S_IRWXU) == 0) {
+                         asperr = addsearchpath(dirpath);
+                    } else {
+                         asperr = -1;
+                    }
+               }
+               if (asperr == 0) {
+                    chdir(dirpath);
+               }
+               free(supportdir);
+          }
+     }
 
 	initgroupfile("stuff.dat");
-
-    #ifdef LOADSETUP
-	if ((fil = open("setup.dat",O_BINARY|O_RDWR,S_IREAD)) != -1)
-	{
-		read(fil,&option[0],NUMOPTIONS);
-		read(fil,&keys[0],NUMKEYS);
-		memcpy((void *)buildkeys,(void *)keys,NUMKEYS);   //Trick to make build use setup.dat keys
-		close(fil);
-	}
-    #endif
-
+	bpp = 8;
+	if (loadsetup("build.cfg") < 0) buildputs("Configuration file not found, using defaults.\n"), rv = 1;
+	memcpy((void *)buildkeys,(void *)keys,sizeof(buildkeys));   //Trick to make build use setup.dat keys
 	if (option[4] > 0) option[4] = 0;
-	initmouse();
-
-	switch(option[0])
-	{
-		case 0: initengine(0,chainxres[option[6]&15],chainyres[option[6]>>4]); break;
-		case 1: initengine(1,vesares[option[6]&15][0],vesares[option[6]&15][1]); break;
-		case 2: initengine(2,320L,200L); break;
-		case 3: initengine(3,320L,200L); break;
-		case 4: initengine(4,320L,200L); break;
-		case 5: initengine(5,320L,200L); break;
-		case 6: initengine(6,320L,200L); break;
+	if (initengine()) {
+		wm_msgbox("Build Engine Initialisation Error",
+				"There was a problem initialising the Build engine: %s", engineerrstr);
+		return -1;
 	}
+	initinput();
+	initmouse();
 
 		//You can load your own palette lookup tables here if you just
 		//copy the right code!
 	for(i=0;i<256;i++)
-		tempbuf[i] = ((i+32)&255);  //remap colors for screwy palette sectors
-	makepalookup(16,tempbuf,0,0,0,1);
+		remapbuf[i] = ((i+32)&255);  //remap colors for screwy palette sectors
+	makepalookup(16,remapbuf,0,0,0,1);
 
-   #ifndef TEKWAR 
-	kensplayerheight = 32;
-	zmode = 0;
-	defaultspritecstat = 0;
-   #endif
-   #ifdef TEKWAR
 	kensplayerheight = 34;
 	zmode = 0;
 	defaultspritecstat = 0;
-   #endif
 
-   #ifdef TEKWAR
     parallaxtype=2;
     parallaxyoffs=112;
     pskyoff[0]=0;   
@@ -1406,12 +1315,14 @@ void ExtInit(void)
     pskybits=2;     // 4 tiles
     memset(&recXT, 0, sizeof(struct spriteextension));
     recordXT=-1;
-   #endif
+
+	return rv;
 }
 
 void ExtUnInit(void)
 {
 	uninitgroupfile();
+	writesetup("build.cfg");
 }
 
 void ExtPreCheckKeys(void)
@@ -1420,29 +1331,23 @@ void ExtPreCheckKeys(void)
 
 void ExtCheckKeys(void)
 {
-	long i;
+	int i, j;
 
 	if (qsetmode == 200)    //In 3D mode
 	{
-        #ifdef TEKWAR
          if( somethingintab == 3 )   // prevent extra value copy
               somethingintab = 254;
-        #endif
 
-		i = totalclock;
-		if (i != frameval[framecnt])
-		{
-			sprintf(tempbuf,"%ld",(120*AVERAGEFRAMES)/(i-frameval[framecnt]));
-			printext256(0L,0L,31,-1,tempbuf,1);
-			frameval[framecnt] = i;
-		}
-		framecnt = ((framecnt+1)&(AVERAGEFRAMES-1));
+		i = frameval[framecnt&(AVERAGEFRAMES-1)];
+		j = frameval[framecnt&(AVERAGEFRAMES-1)] = getticks(); framecnt++;
+		if (i != j) averagefps = ((mul3(averagefps)+((AVERAGEFRAMES*1000)/(j-i)) )>>2);
+		Bsprintf(tempbuf,"%d",averagefps);
+		printext256(0L,0L,31,-1,tempbuf,1);
 		
 		editinput();
 	}
 	else
 	{
-        #ifdef TEKWAR 
          if( keystatus[39] == 1 ) {  // ';' to clear all exts 
               keystatus[39]=0;
               JS_ClearAllExts();
@@ -1480,7 +1385,6 @@ void ExtCheckKeys(void)
               liststates=1;
               JS_SpriteXTManual();
          }
-        #endif 
 	}
 }
 
@@ -1488,18 +1392,23 @@ void ExtCleanUp(void)
 {
 }
 
+void ExtPreLoadMap(void)
+{
+}
+
 void ExtLoadMap(const char *mapname)
 {
-   #ifdef TEKWAR 
     JS_LoadSpriteExts(mapname);   
-   #endif 
+    wm_setwindowtitle(mapname);
+}
+
+void ExtPreSaveMap(void)
+{
 }
 
 void ExtSaveMap(const char *mapname)
 {
-   #ifdef TEKWAR 
     JS_SaveSpriteExts(mapname);  
-   #endif 
 }
 
 const char *ExtGetSectorCaption(short sectnum)
@@ -1510,12 +1419,6 @@ const char *ExtGetSectorCaption(short sectnum)
 	}
 	else
 	{
-        #ifndef TEKWAR 
-		sprintf(tempbuf,"%hu,%hu",(unsigned short)sector[sectnum].hitag,
-										  (unsigned short)sector[sectnum].lotag);
-        #endif
-
-        #ifdef TEKWAR
           switch((unsigned short)sector[sectnum].lotag) {
           case 1:
                sprintf(lo,"ACTIVATE SECTOR");
@@ -1549,33 +1452,17 @@ const char *ExtGetSectorCaption(short sectnum)
                break;
           }
           sprintf(tempbuf,"%hu,%s",(unsigned short)sector[sectnum].hitag,lo);
-        #endif 
 	}
 	return(tempbuf);
 }
 
 const char *ExtGetWallCaption(short wallnum)
 {
-   #ifdef TEKWAR
     long i=0;
-   #endif  
 
-   #ifndef TEKWAR
-	if ((wall[wallnum].lotag|wall[wallnum].hitag) == 0)
-	{
-		tempbuf[0] = 0;
-	}
-	else
-	{
-		sprintf(tempbuf,"%hu,%hu",(unsigned short)wall[wallnum].hitag,
-										  (unsigned short)wall[wallnum].lotag);
-	}
-   #endif
-
-   #ifdef TEKWAR
      if (keystatus[0x57] > 0) {    // f11   Grab pic 0x4e +
           wallpicnum=wall[curwall].picnum;
-          sprintf(tempbuf,"Grabed Wall Picnum %ld",wallpicnum);
+          sprintf(tempbuf,"Grabed Wall Picnum %d",wallpicnum);
           printmessage16(tempbuf);
      }
      if (keystatus[0x2b] > 0) {    // |
@@ -1614,25 +1501,11 @@ const char *ExtGetWallCaption(short wallnum)
           sprintf(tempbuf,"%hu,%hu",(unsigned short)wall[wallnum].hitag,
 										  (unsigned short)wall[wallnum].lotag);
      }
-   #endif  
 	return(tempbuf);
 }
 
 const char *ExtGetSpriteCaption(short spritenum)
 {
-   #ifndef TEKWAR 
-	if ((sprite[spritenum].lotag|sprite[spritenum].hitag) == 0)
-	{
-		tempbuf[0] = 0;
-	}
-	else
-	{
-		sprintf(tempbuf,"%hu,%hu",(unsigned short)sprite[spritenum].hitag,
-										  (unsigned short)sprite[spritenum].lotag);
-	}
-   #endif
-
-   #ifdef TEKWAR
      tempbuf[0]=0;
      if ((sprite[spritenum].lotag|sprite[spritenum].hitag) == 0) {
           SpriteName(spritenum,lo);
@@ -1687,7 +1560,6 @@ const char *ExtGetSpriteCaption(short spritenum)
           sprintf(tempbuf,"%hu,%hu %s",(unsigned short)sprite[spritenum].hitag,
                                    (unsigned short)sprite[spritenum].lotag,lo);
      }
-   #endif 
 	return(tempbuf);
 }
 
@@ -1709,36 +1581,11 @@ const char *ExtGetSpriteCaption(short spritenum)
 
 void ExtShowSectorData(short sectnum)   //F5
 {
-   #ifdef TEKWAR 
     int  i,effect;
     int  delay=0,rotating=0,switches=0,totsprites=0;
     char lighting[16],flooreffect[16],walleffect[16],ceileffect[16];
     char *secttype;
-   #endif 
 
-   #ifndef TEKWAR 
-	if (qsetmode == 200)    //In 3D mode
-	{
-	}
-	else
-	{
-		clearmidstatbar16();             //Clear middle of status bar
-
-		sprintf(tempbuf,"Sector %d",sectnum);
-		printext16(8,32,11,-1,tempbuf,0);
-
-		printext16(8,48,11,-1,"8*8 font: ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789",0);
-		printext16(8,56,11,-1,"3*5 font: ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789",1);
-
-		drawline16(320,68,344,80,4);       //Draw house
-		drawline16(344,80,344,116,4);
-		drawline16(344,116,296,116,4);
-		drawline16(296,116,296,80,4);
-		drawline16(296,80,320,68,4);
-	}
-   #endif
-
-   #ifdef TEKWAR 
      switch (sector[sectnum].lotag) {
      case 0:
           secttype="NORMAL";
@@ -1815,7 +1662,7 @@ void ExtShowSectorData(short sectnum)   //F5
      sprintf(tempbuf,"Level %s",levelname);
      printmessage16(tempbuf);
      sprintf(tempbuf,"Effects for Sector %d (type=%s)",sectnum,secttype);
-     printext16(1*8,4*8,11,-1,tempbuf,0);
+     printext16(1*8,ydim16+4*8,11,-1,tempbuf,0);
      PrintStatusStr("Lighting Effect =",lighting,2,6,11);
      PrintStatus("Tic Delay       =",delay,2,7,11);
      PrintStatusStr("Wall Effects    =",walleffect,2,8,11);
@@ -1824,7 +1671,6 @@ void ExtShowSectorData(short sectnum)   //F5
      PrintStatus("Rotating Sprites=",rotating,2,11,11);
      PrintStatus("Switches        =",switches,2,12,11);
      PrintStatus("Total Sprites   =",totsprites,2,13,11);
-   #endif  
 }
 
 void ExtShowWallData(short wallnum)       //F6
@@ -1837,26 +1683,12 @@ void ExtShowWallData(short wallnum)       //F6
 		clearmidstatbar16();             //Clear middle of status bar
 
 		sprintf(tempbuf,"Wall %d",wallnum);
-		printext16(8,32,11,-1,tempbuf,0);
+		printext16(8,ydim16+32,11,-1,tempbuf,0);
 	}
 }
 
 void ExtShowSpriteData(short spritenum)   //F6
 {
-   #ifndef TEKWAR 
-	if (qsetmode == 200)    //In 3D mode
-	{
-	}
-	else
-	{
-		clearmidstatbar16();             //Clear middle of status bar
-
-		sprintf(tempbuf,"Sprite %d",spritenum);
-		printext16(8,32,11,-1,tempbuf,0);
-	}
-   #endif 
-
-   #ifdef TEKWAR
     if( elapsedtime == 1) {
          elapsedtime=0;
     }
@@ -1871,77 +1703,27 @@ void ExtShowSpriteData(short spritenum)   //F6
     else {
          JS_ShowSpriteExts(spritenum);
     }
-   #endif
 }
 
-#ifndef TEKWAR
 void ExtEditSectorData(short sectnum)    //F7
 {
-	short nickdata;
-
 	if (qsetmode == 200)    //In 3D mode
 	{
-			//Ceiling
-		if (searchstat == 1)
-			sector[searchsector].ceilingpicnum++;   //Just a stupid example
-
-			//Floor
-		if (searchstat == 2)
-			sector[searchsector].floorshade++;      //Just a stupid example
 	}
 	else                    //In 2D mode
 	{
-		sprintf(tempbuf,"Sector (%ld) Nick's variable: ",sectnum);
-		nickdata = 0;
-		nickdata = getnumber16(tempbuf,nickdata,65536L);
-
 		printmessage16("");              //Clear message box (top right of status bar)
 		ExtShowSectorData(sectnum);
 	}
 }
-#endif
-
-
-#ifdef TEKWAR
-void ExtEditSectorData(short sectnum)    //F7
-{
-	short nickdata;
-
-	if (qsetmode == 200)    //In 3D mode
-	{
-			//Ceiling
-		if (searchstat == 1)
-			sector[searchsector].ceilingpicnum++;   //Just a stupid example
-
-			//Floor
-		if (searchstat == 2)
-			sector[searchsector].floorshade++;      //Just a stupid example
-	}
-	else                    //In 2D mode
-	{
-		sprintf(tempbuf,"Sector (%ld) visibility: %d.",sectnum, visibility); //sector[sectnum].visibility); oog
-		nickdata = 0;
-		nickdata = getnumber16(tempbuf,nickdata,65536L);
-
-		printmessage16("");              //Clear message box (top right of status bar)
-		ExtShowSectorData(sectnum);
-	}
-}
-#endif
 
 void ExtEditWallData(short wallnum)       //F8
 {
-	short nickdata;
-
 	if (qsetmode == 200)    //In 3D mode
 	{
 	}
 	else
 	{
-		sprintf(tempbuf,"Wall (%ld) Nick's variable: ",wallnum);
-		nickdata = 0;
-		nickdata = getnumber16(tempbuf,nickdata,65536L);
-
 		printmessage16("");              //Clear message box (top right of status bar)
 		ExtShowWallData(wallnum);
 	}
@@ -1949,25 +1731,6 @@ void ExtEditWallData(short wallnum)       //F8
 
 void ExtEditSpriteData(short spritenum)   //F8
 {
-   #ifndef TEKWAR 
-	short nickdata;
-
-	if (qsetmode == 200)    //In 3D mode
-	{
-	}
-	else
-	{
-		sprintf(tempbuf,"Sprite (%ld) Nick's variable: ",spritenum);
-		nickdata = 0;
-		nickdata = getnumber16(tempbuf,nickdata,65536L);
-		printmessage16("");
-
-		printmessage16("");              //Clear message box (top right of status bar)
-		ExtShowSpriteData(spritenum);
-	}
-   #endif
-
-   #ifdef TEKWAR
      cursprite=spritenum;
      curspritenum=0;
      if ( editvelocity == 1 ) {
@@ -1982,15 +1745,15 @@ void ExtEditSpriteData(short spritenum)   //F8
           keystatus[0x42]=0;
           return;
      }
-     sprintf(tempbuf,"Current Sprite %ld",cursprite);
+     sprintf(tempbuf,"Current Sprite %d",cursprite);
      printmessage16(tempbuf);
      JS_EditSpriteExts(spritenum);
      keystatus[0x42]=0;
-   #endif 
 }
 
-faketimerhandler()
+void faketimerhandler(void)
 {
+	sampletimer();
 }
 
 
