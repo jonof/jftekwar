@@ -252,8 +252,10 @@ soundcallback(unsigned int i)
      if (i == (unsigned int)-1) return;
 
      sbuf[dsound[i].sndnum].users--;
+     if( sbuf[dsound[i].sndnum].users < 0 )
+          sbuf[dsound[i].sndnum].users=0;
      if( sbuf[dsound[i].sndnum].users == 0 ) {
-          sbuf[dsound[i].sndnum].cache_lock=0x00;
+          sbuf[dsound[i].sndnum].cache_lock=199;
      }
      dsound[i].handle=NULL_HANDLE;
      dsound[i].plevel=0;
@@ -383,7 +385,7 @@ playsound(int sn, int sndx, int sndy, int loop, short type)
      dsound[i].type=type;
      dsound[i].x=sndx; dsound[i].y=sndy;
 
-     sbuf[sn].cache_lock=1;
+     sbuf[sn].cache_lock=200;
 
      if( sbuf[sn].cache_ptr == 0L ) {   // no longer in cache
           allocache(&sbuf[sn].cache_ptr, sbuf[sn].cache_length, &sbuf[sn].cache_lock);
@@ -520,7 +522,7 @@ stopsound(int i)
      if( sbuf[dsound[i].sndnum].users < 0 )
               sbuf[dsound[i].sndnum].users=0;
      if( sbuf[dsound[i].sndnum].users == 0 ) {
-         sbuf[dsound[i].sndnum].cache_lock=0x00;
+         sbuf[dsound[i].sndnum].cache_lock=199;
      }
      dsound[i].handle=NULL_HANDLE;
      dsound[i].plevel=0;
@@ -613,7 +615,7 @@ stopallsounds(void)
           if( sbuf[dsound[i].sndnum].users < 0 )
               sbuf[dsound[i].sndnum].users=0;
           if( sbuf[dsound[i].sndnum].users == 0 ) {
-               sbuf[dsound[i].sndnum].cache_lock=0x00;
+               sbuf[dsound[i].sndnum].cache_lock=199;
           }
           dsound[i].handle=NULL_HANDLE;
           dsound[i].plevel=0;
