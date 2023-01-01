@@ -152,7 +152,9 @@ smkplayseq(char *name)
 
           frame = playframe%NUMSMKTILES;
           setbrightness(brightness, smkpal[frame], 2);
+#if USE_POLYMOST && USE_OPENGL
           invalidatetile(SMKPICNUM0+frame, 0, -1);
+#endif
           clearallviews(0);
           rotatesprite(160<<16, 100<<16, divscale16(200, tilesizx[SMKPICNUM0+frame]),
                       512, SMKPICNUM0+frame, 0, 0, 2+4+64, 0, 0, xdim-1, ydim-1);
@@ -280,7 +282,9 @@ smkmenuframe(int fn)
      }
 
      waloff[SMKPICNUM0] = (intptr_t)smk_get_video(smkmenu);
+#if USE_POLYMOST && USE_OPENGL
      invalidatetile(SMKPICNUM0, 0, -1);
+#endif
 
      setbrightness(brightness, spal, 2);
 }

@@ -1017,13 +1017,11 @@ postwonmessage(int nw)
 void
 netstats()
 {
-     int       icnt,i;
-
     #ifdef NETNAMES
+     int       i;
+
      if( option[4] != 0 ) {
-          icnt=connecthead;
           for( i=connecthead ; i >= 0 ; i=connectpoint2[i] ) {
-               icnt=i;
               #if 0
                if( score[i] > score[newnetleader] ) {
                     if( score[newnetleader] < NETWINSCORE ) {
@@ -1740,7 +1738,10 @@ domenu(void)
      int  i;
      int dax,dax2,day,day2;
      struct menu *mptr;
-     static int firstpass,odiff,osoundv,omusicv,omousesens,oheadb;
+     static int firstpass;
+    #ifdef DYNAMICSAVESETUP
+     static int odiff,osoundv,omusicv,omousesens,oheadb;
+    #endif
 
      if (activemenu == HELPSCREEN) {
           showhelpscreen();
@@ -1749,11 +1750,13 @@ domenu(void)
      if (firstpass == 0) {
           firstpass=1;
           getloadsavenames();
+         #ifdef DYNAMICSAVESETUP
           odiff=difficulty;
           osoundv=soundv;
           omusicv=musicv;
           omousesens=mousesensitivity;
           oheadb=headbobon;
+         #endif
           if (headbobon) {
                strcpy(headbobstr,"HEAD BOB ON");
           }
@@ -2415,7 +2418,7 @@ choosemission()
      int      clock,helpclock;
      char      nogo,missiondone;
      char      onlymission8=0;
-     char      cdstopped=0;
+     //char      cdstopped=0;
 
      if( generalplay ) {
           return(choosemap());

@@ -594,7 +594,7 @@ void permanentwritesprite(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
 void permanentwritespritetile(int thex, int they, short tilenum, signed char shade,
         int cx1, int cy1, int cx2, int cy2, unsigned char dapalnum);
-void printext(int x, int y, char *buffer, short tilenum, char invisiblecol);
+void printext(int x, int y, char *buffer, short tilenum, unsigned char invisiblecol);
 void precache();
 void resettiming();
 

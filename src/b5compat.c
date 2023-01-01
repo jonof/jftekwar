@@ -29,7 +29,7 @@ void overwritesprite(int thex, int they, short tilenum, signed char shade,
                  windowx1,windowy1,windowx2,windowy2);
 }
 
-void printext(int x, int y, char *buffer, short tilenum, char invisiblecol)
+void printext(int x, int y, char *buffer, short tilenum, unsigned char invisiblecol)
 {
     int i;
     unsigned char ch;

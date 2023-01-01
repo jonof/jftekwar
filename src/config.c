@@ -19,7 +19,12 @@ enum {
 	type_hex = 3,
 };
 
+#if USE_POLYMOST
 static int tmprenderer = -1;
+#endif
+#ifdef RENDERTYPEWIN
+static unsigned tmpmaxrefreshfreq = -1;
+#endif
 static int tmpsamplerate = -1;
 static int tmpmusic = -1;
 static int tmpmouse = -1;
@@ -66,7 +71,7 @@ static struct {
 	},
 #endif
 #ifdef RENDERTYPEWIN
-	{ "maxrefreshfreq", type_int, &maxrefreshfreq,
+	{ "maxrefreshfreq", type_int, &tmpmaxrefreshfreq,
 		"; Maximum OpenGL mode refresh rate (Windows only, in Hertz)\n"
 	},
 #endif
@@ -228,6 +233,9 @@ int loadsetup(const char *fn)
 		setrendermode(tmprenderer);
 	}
 #endif
+#ifdef RENDERTYPEWIN
+	win_setmaxrefreshfreq(tmpmaxrefreshfreq);
+#endif
 	if (tmpsamplerate >= 0) {
 		option[7] = (tmpsamplerate & 0x0f) << 4;
 		option[7] |= 1<<1;	// 16-bit
@@ -266,6 +274,9 @@ int writesetup(const char *fn)
 
 #if USE_POLYMOST
 	tmprenderer = getrendermode();
+#endif
+#ifdef RENDERTYPEWIN
+	tmpmaxrefreshfreq = win_getmaxrefreshfreq();
 #endif
 	tmpsamplerate = option[7]>>4;
 	tmpmusic = option[2];

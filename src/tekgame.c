@@ -292,14 +292,15 @@ debugout(short p)
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
+#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK))
+# define HAVE_STARTWIN
+#endif
 
 int
 app_main(int argc, char const * const argv[])
 {
      int      i, waitplayers;
      int     other;
-     int startretval = STARTWIN_RUN;
-     struct startwin_settings settings;
 
 #if defined(DATADIR)
      {
@@ -384,7 +385,7 @@ app_main(int argc, char const * const argv[])
      lm("tekloadsetup");
      tekloadsetup();
 
-#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK))
+#ifdef HAVE_STARTWIN
     {
         struct startwin_settings settings;
 
@@ -431,7 +432,7 @@ app_main(int argc, char const * const argv[])
      }
 
      lm("inittimer");
-     inittimer(CLKIPS);
+     inittimer(CLKIPS, NULL);
      lm("tekinitmultiplayers");
      tekinitmultiplayers(0, NULL);
      lm("loadpics");
@@ -749,7 +750,7 @@ processinput(short snum)
           if( (globlohit&0xc000) != 49152 ) {
                goalz = globloz-(8<<8);
                if( posz[snum] >= goalz-(2<<8) ) {
-                    clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],-TICSPERFRAME<<14,-TICSPERFRAME<<14,128L,4<<8,4<<8,CLIPMASK0);
+                    clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],-(TICSPERFRAME<<14),-(TICSPERFRAME<<14),128L,4<<8,4<<8,CLIPMASK0);
                     frameinterpolate = 0;
                     if( slimesoundcnt[snum] >= 0 ) {
                          slimesoundcnt[snum] -= TICSPERFRAME;

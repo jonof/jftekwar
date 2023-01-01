@@ -210,10 +210,9 @@ setupdigi(void)
      }
 }
 
-static void
+/*static void
 setupmidi(void)
 {
-     /*
      int       i;
 
      if( musicmode == MM_NOHARDWARE ) {
@@ -243,8 +242,7 @@ setupmidi(void)
      songptr[2]->buffer=&thirdsongdata;
 
      totalsongsperlevel=SONGSPERLEVEL*AVAILMODES;
-     */
-}
+}*/
 
 static void
 soundcallback(unsigned int i)
