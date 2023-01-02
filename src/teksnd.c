@@ -7,6 +7,7 @@
 #include "cache1d.h"
 #include "pragmas.h"
 #include "fx_man.h"
+#include "music.h"
 #include "tekwar.h"
 
 #ifdef _WIN32
@@ -41,14 +42,6 @@ static struct    soundtype     dsound[MAXSOUNDS];
 #define NULL_HANDLE (-1)
 #define  AMBUPDATEDIST  4000L
 
-#if 0
-
-/***************************************************************************
- *   TEKSND.C  - HMI library replaces Kens sound stuff                     *
- *               Also timer routine and keytimerstuff is here              *
- *                                                                         *
- ***************************************************************************/
-
 #define   BASESONG            0
 #define   MAXBASESONGLENGTH   44136
 #define   AVAILMODES          3
@@ -56,124 +49,16 @@ static struct    soundtype     dsound[MAXSOUNDS];
 #define   NUMLEVELS       7
 
 int       totalsongsperlevel;
-char      basesongdata[MAXBASESONGLENGTH];
-char      secondsongdata[MAXBASESONGLENGTH];
-char      thirdsongdata[MAXBASESONGLENGTH];
-
-struct    songtype  {
-     int       handle;
-     int       offset;
-     int       playing;
-     int       pending;
-     char     *buffer;
-     long      length;
-};
-struct    songtype  song[SONGSPERLEVEL];
-struct    songtype  *songptr[SONGSPERLEVEL];
-
-int       songlist[4096];
-
-stopsong(int sn)
-{
-     if( musicmode == MM_NOHARDWARE )
-          return;
-
-     if( songptr[sn]->playing == 0 ) {
-          return;
-     }
-     if( songptr[sn]->pending != 0 ) {    // cant stop a pending song
-          return;                         // since may be interrupted
-     }                                    // by trigger function
-
-     sosMIDIStopSong(songptr[sn]->handle);
-     songptr[sn]->playing=0;
-}
-
-removesong(int sn)
-{
-     if( musicmode == MM_NOHARDWARE )
-          return;
-
-     if( songptr[sn]->handle != NULL_HANDLE ) {
-          songptr[sn]->pending=0;
-          sosMIDIStopSong(songptr[sn]->handle);
-          sosMIDIUnInitSong(songptr[sn]->handle);
-          songptr[sn]->handle=NULL_HANDLE;
-          songptr[sn]->playing=0;
-     }
-}
-
-int
-playsong(int sn)
-{
-     int       rv;
-     int       fpos;
-
-     if( (musicmode == MM_NOHARDWARE) || (toggles[TOGGLE_MUSIC] == 0) ) {
-          return(0);
-     }
-     if( (sn < 0) || (sn >= SONGSPERLEVEL) || (songptr[sn]->playing != 0) || (songptr[sn]->pending != 0) ) {
-          return(0);
-     }
-
-     if( songptr[sn]->handle != NULL_HANDLE ) {
-          removesong(sn);
-     }
-     if( songptr[sn]->length == 0 )
-         return(0);
-
-     songdataptr->lpSongData=( LPSTR)songptr[sn]->buffer;
-     songdataptr->lpSongCallback=( VOID _far *)NULL; //songcallback;
-
-     fpos=flushall();
-     if( songptr[sn]->handle == NULL_HANDLE ) {
-          lseek(fhsongs,0,SEEK_SET);
-          fpos=filelength(fhsongs);
-          lseek(fhsongs, songptr[sn]->offset, SEEK_SET);
-          fpos=tell(fhsongs);
-          rv=read(fhsongs, ( void *)songptr[sn]->buffer, songptr[sn]->length);
-          if( rv != songptr[sn]->length ) {
-              crashgame("playsong: bad read");
-          }
-          rv=sosMIDIInitSong(songdataptr, trackmapptr, ( WORD _far *)&(songptr[sn]->handle));
-          if( rv != _ERR_NO_ERROR ) {
-               songptr[sn]->handle=NULL_HANDLE;
-               return(0);
-          }
-     }
-     else {
-          rv=sosMIDIResetSong(songptr[sn]->handle, songdataptr);
-          if( rv != _ERR_NO_ERROR ) {
-               songptr[sn]->handle=NULL_HANDLE;
-              #ifdef MUSICDEBUG
-               showmessage("CANT RESET SONG %2d", sn);
-              #endif
-          }
-     }
-
-     rv=sosMIDIStartSong(songptr[sn]->handle);
-     if( rv != _ERR_NO_ERROR ) {
-          songptr[sn]->handle=NULL_HANDLE;
-          return(0);
-     }
-
-     if( (musicv<<3) > 0 ) {
-          sosMIDIFadeSong(songptr[sn]->handle,_SOS_MIDI_FADE_IN,250,
-                          0,(musicv<<3), 50);
-     }
-
-    #ifdef MUSICDEBUG
-     showmessage("PLAYING SONG %2d", sn);
-    #endif
-     songptr[sn]->playing=1;
-     songptr[sn]->pending=0;
-
-     return(1);
-}
-
-#endif
+int       songplaying=-1;
+char      songdata[MAXBASESONGLENGTH];
+int       songlengths[SONGSPERLEVEL];
+int       songoffsets[SONGSPERLEVEL];
+int       songlist[1024];
 
 static int fxstarted = 0, fhsounds = -1;
+static int musicstarted = 0, fhsongs = -1;
+
+static int transmutehmp(char *filedata);
 
 static void
 setupdigi(void)
@@ -210,39 +95,25 @@ setupdigi(void)
      }
 }
 
-/*static void
+static void
 setupmidi(void)
 {
      int       i;
 
-     if( musicmode == MM_NOHARDWARE ) {
-          return;
+     fhsongs = kopen4load("songs", 0);
+     if( fhsongs < 0 ) {
+          crashgame("setupmidi: cant open songs");
+     }
+     memset(songlist, 0, sizeof(songlist));
+     klseek(fhsongs, -sizeof(songlist), SEEK_END);
+     i = kread(fhsongs, songlist, sizeof(songlist));
+     if( i != sizeof(songlist) ) {
+          crashgame("setupmidi: bad read of songlist");
      }
 
-     if( musicmode != MM_NOHARDWARE ) {
-          if( (fhsongs=open("SONGS",O_RDONLY | O_BINARY)) == -1 ) {
-               crashgame("setupmidi: cant open songs");
-          }
-          lseek(fhsongs, 0, SEEK_SET);
-          lseek(fhsongs, -4096, SEEK_END);
-          read(fhsongs, ( void *)songlist, 4096);
-     }
-
-//jsa venom
-     for( i=0; i<SONGSPERLEVEL; i++ ) {
-          songptr[i]=&song[i];
-          songptr[i]->handle=NULL_HANDLE;
-          songptr[i]->offset=0;
-          songptr[i]->playing= 0;
-          songptr[i]->pending=0;
-          songptr[i]->length=0L;
-     }
-     songptr[0]->buffer=&basesongdata;
-     songptr[1]->buffer=&secondsongdata;
-     songptr[2]->buffer=&thirdsongdata;
-
+     songplaying = -1;
      totalsongsperlevel=SONGSPERLEVEL*AVAILMODES;
-}*/
+}
 
 static void
 soundcallback(unsigned int i)
@@ -281,15 +152,21 @@ initsb(char digistat,char musistat,int mixrate,
      err = FX_Init(ASS_AutoDetect, 16, &channels, &bitspersample, &mixrate, initdata);
      if (err != FX_Ok) {
           buildprintf("FX_Init error: %s\n", FX_ErrorString(err));
-          return;
+     } else {
+          fxstarted = 1;
+
+          FX_SetCallBack(soundcallback);
+          setupdigi();
      }
 
-     fxstarted = 1;
+     err = MUSIC_Init(ASS_AutoDetect, NULL);
+     if (err != MUSIC_Ok) {
+          buildprintf("MUSIC_Init error: %s\n", MUSIC_ErrorString(err));
+     } else {
+          musicstarted = 1;
 
-     FX_SetCallBack(soundcallback);
-     setupdigi();
-
-     //setupmidi();
+          setupmidi();
+     }
 }
 
 void
@@ -297,18 +174,11 @@ uninitsb(void)
 {
      int i;
 
-     /*
-     if( musicmode != MM_NOHARDWARE )  {
-          for( i=0; i<SONGSPERLEVEL; i++ ) {
-               if( songptr[i]->handle == NULL_HANDLE )
-                    continue;
-               sosMIDIStopSong(songptr[i]->handle);
-               sosMIDIUnInitSong(songptr[i]->handle);
-          }
-          sosMIDIUnInitDriver(*fhmididriverptr, _TRUE );
-          sosMIDIUnInitSystem();
+     if( musicstarted )  {
+          MUSIC_StopSong();
+          MUSIC_Shutdown();
+          musicstarted = 0;
      }
-     */
 
      if( fxstarted ) {
           for( i=0; i<MAXSOUNDS; i++ ) {
@@ -317,35 +187,27 @@ uninitsb(void)
                FX_StopSound(dsound[i].handle);
           }
           FX_Shutdown();
+          fxstarted = 0;
      }
 
      if (fhsounds >= 0) {
           kclose(fhsounds);
           fhsounds = -1;
      }
-     /*
      if (fhsongs >= 0) {
           kclose(fhsongs);
           fhsongs = -1;
      }
-     */
 }
 
 void
 musicoff(void)
 {
-     /*
      int  i;
 
-     if( musicmode != MM_NOHARDWARE )  {
-          for( i=0; i<SONGSPERLEVEL; i++ ) {
-               if( songptr[i]->handle == NULL_HANDLE )
-                    continue;
-               sosMIDIStopSong(songptr[i]->handle);
-               sosMIDIUnInitSong(songptr[i]->handle);
-          }
+     if( musicstarted )  {
+          MUSIC_StopSong();
     }
-    */
 }
 
 int
@@ -626,37 +488,83 @@ stopallsounds(void)
      ambsubloop=-1;
 }
 
+
+void
+stopsong(int sn)
+{
+     if( songplaying != sn ) {
+          return;
+     }
+
+     MUSIC_StopSong();
+     songplaying=-1;
+}
+
+void
+removesong(int sn)
+{
+     if(songplaying == sn ) {
+          MUSIC_StopSong();
+          songplaying=-1;
+     }
+}
+
+int
+playsong(int sn)
+{
+     int       rv;
+     int       midilen;
+
+     if( !musicstarted || (toggles[TOGGLE_MUSIC] == 0) ) {
+          return(0);
+     }
+     if( (sn < 0) || (sn >= SONGSPERLEVEL) || (songplaying == sn) ) {
+          return(0);
+     }
+
+     removesong(sn);
+     if( songlengths[sn] == 0 )
+         return(0);
+
+     klseek(fhsongs, songoffsets[sn], SEEK_SET);
+     rv=kread(fhsongs, songdata, songlengths[sn]);
+     if( rv != songlengths[sn] ) {
+         crashgame("playsong: bad read");
+     }
+
+     midilen = transmutehmp(songdata);
+     if (midilen <= 0) {
+          buildprintf("playsong: could not convert song to MIDI\n");
+          return 0;
+     }
+
+     rv = MUSIC_PlaySong(songdata, midilen, 1);
+     if( rv != MUSIC_Ok ) {
+          buildprintf("playsong: could not play song: %s\n", MUSIC_ErrorString(MUSIC_ErrorCode));
+          return 0;
+     }
+
+    #ifdef MUSICDEBUG
+     showmessage("PLAYING SONG %2d", sn);
+    #endif
+     songplaying = sn;
+
+     return(1);
+}
+
 void
 musicfade()
 {
-     /*
-     int i;
-
-     if( musicmode == MM_NOHARDWARE ) {
-          return;
-     }
-     for( i=0; i<SONGSPERLEVEL; i++ ) {
-          if( (songptr[i]->handle != NULL_HANDLE) ) {
-               if( ((musicv<<3) > 0) && (sosMIDISongDone(songptr[i]->handle) == _FALSE) ) {
-                    sosMIDIFadeSong(songptr[i]->handle,_SOS_MIDI_FADE_OUT_STOP, 700,
-                                    (musicv<<3),0,50);
-                    while( (sosMIDISongDone(songptr[i]->handle)==_FALSE) ) {
-                    }
-               }
-               removesong(i);
-          }
-     }
-     */
+     MUSIC_StopSong();
+     songplaying=-1;
 }
 
 void
 menusong(int insubway)
 {
-     (void)insubway;
-     /*
      int i,index;
 
-     if( musicmode == MM_NOHARDWARE )
+     if( !musicstarted )
           return;
 
      for( i=0; i<SONGSPERLEVEL; i++ ) {
@@ -670,30 +578,21 @@ menusong(int insubway)
 
      index+=2;
 
-     for( i=0; i<SONGSPERLEVEL; i++ ) {
-          songptr[0]->handle=NULL_HANDLE;
-          songptr[0]->offset=songlist[index*3]*4096;
-          songptr[0]->playing=0;
-          songptr[0]->pending=0;
-          songptr[0]->length=( WORD)songlist[(index*3)+1];
-          if( songptr[0]->length >= MAXBASESONGLENGTH ) {
-               crashgame("prepsongs: basesong exceeded max length");
-          }
+     songoffsets[BASESONG] = songlist[index*3]*4096;
+     songlengths[BASESONG] = songlist[(index*3)+1];
+     if( songlengths[BASESONG] >= MAXBASESONGLENGTH ) {
+          crashgame("prepsongs: basesong exceeded max length");
      }
-     songptr[0]->buffer=&basesongdata;
 
      playsong(BASESONG);
-     */
 }
 
 void
 startmusic(int level)
 {
-     (void)level;
-     /*
      int       i,index;
 
-     if( musicmode == MM_NOHARDWARE ) {
+     if( !musicstarted ) {
           return;
      }
 
@@ -707,31 +606,220 @@ startmusic(int level)
 
      index=totalsongsperlevel*(level);
 
-     switch( musicmode ) {
-     case MM_MIDIFM:
-          break;
-     case MM_MIDIAWE32:
-           index+=SONGSPERLEVEL;
-          break;
-     case MM_MIDIGEN:
-           index+=SONGSPERLEVEL*2;
-          break;
-     }
+     index+=SONGSPERLEVEL;    // Skip FM.
+     index+=SONGSPERLEVEL;    // Skip AWE32.
 
      for( i=0; i<SONGSPERLEVEL; i++ ) {
-          songptr[i]->handle=NULL_HANDLE;
-          songptr[i]->offset=songlist[(index*3)+(i*3)]*4096;
-          songptr[i]->playing=0;
-          songptr[i]->pending=0;
-          songptr[i]->length=( WORD)songlist[((index*3)+(i*3))+1];
-          if( songptr[i]->length >= MAXBASESONGLENGTH ) {
+          songoffsets[i]=songlist[(index*3)+(i*3)]*4096;
+          songlengths[i]=songlist[((index*3)+(i*3))+1];
+          if( songlengths[i] >= MAXBASESONGLENGTH ) {
                crashgame("prepsongs: basesong exceeded max length");
           }
      }
-     songptr[0]->buffer=&basesongdata;
-     songptr[1]->buffer=&secondsongdata;
-     songptr[2]->buffer=&thirdsongdata;
 
      playsong(BASESONG);
-     */
 }
+
+
+/*
+Brutal in-place transformation of a SOS HMP file (a.k.a. NDMF according to sosm.h)
+into Standard MIDI, mutating global looping controllers into Apogee EMIDI equivalents.
+
+By Jonathon Fowler, 2023
+Provided to the public domain given how dubiously licensed the sources of information
+going into this were. Realised through a combination of:
+  - SOS.H in the Witchaven code dump exposing the file structure
+  - http://www.r-t-c-m.com/knowledge-base/downloads-rtcm/tekwar-tools/sos40.zip
+    providing the SOS special MIDI controller descriptions
+  - A crucial hint about variable length encoding byte order at
+    https://github.com/Mindwerks/wildmidi/blob/master/docs/formats/HmpFileFormat.txt#L84-L96
+
+Overall:
+    struct ndmfheader header;
+    struct ndmftracks tracks[header.numtracks];
+    uint8_t branchtable[];
+
+    NDMF is little-endian, MIDI is big-endian.
+    NDMF variable-length encoding: 0aaaaaaa 0bbbbbbb 1ccccccc
+    MIDI variable-length encoding: 1ccccccc 1bbbbbbb 0aaaaaaa
+
+Transformation can happen in-place because NDMF has a massive header compared to MIDI,
+so every write will be happening onto ground already trodden. Strict aliasing be damned.
+*/
+
+#if defined(__GNUC__) || defined(__clang__)
+#define PACKED_STRUCT struct __attribute__ ((packed))
+#elif defined(_MSC_VER)
+#define PACKED_STRUCT struct
+#pragma pack(1)
+#else
+#define PACKED_STRUCT struct
+#endif
+
+PACKED_STRUCT ndmfheader {
+     uint8_t ident[32];       // "HMIMIDIP013195" \0...
+     uint32_t branchofs;      // File offset to the branch table at the end
+     uint32_t pad[3];
+     uint32_t numtracks;
+     uint32_t ticksperqunote;
+     uint32_t tempo;          // Game clock dependent
+     uint32_t playtime;       // Song length in seconds
+     uint32_t channelprio[16];
+     uint32_t trackmap[32][5];
+     uint8_t  ctrlrestore[128];
+     uint32_t pad2[2];
+};
+
+PACKED_STRUCT ndmftrackheader {
+     uint32_t tracknum;
+     uint32_t tracklen;       // Header length inclusive
+     uint32_t channel;
+     uint8_t data[];          // [tracklen-12]
+};
+
+PACKED_STRUCT smfheader {
+     uint8_t ident[4];        // "MThd"
+     uint32_t headsize;       // 6
+     uint16_t format;
+     uint16_t numtracks;
+     uint16_t ticksperqunote;
+};
+PACKED_STRUCT smftrackheader {
+     uint8_t ident[4];        // "MTrk"
+     uint32_t tracklen;       // Header length exclusive
+     uint8_t data[];          // [tracklen]
+};
+
+static int transmutehmp(char *filedata)
+{
+     const char ndmfident[] = "HMIMIDIP013195";
+     const int commandlengths[8] = { 2, 2, 2, 2, 1, 1, 2, -1 };
+     const int syscomlengths[16] =  { -1, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1 };
+
+     if (memcmp(ndmfident, filedata, sizeof ndmfident)) return -1;
+
+     // Extract the important values from the NDMF header.
+     struct ndmfheader *ndmfhead = (struct ndmfheader *)filedata;
+     int numtracks = B_LITTLE32(ndmfhead->numtracks);
+     int ticksperqunote = B_LITTLE32(ndmfhead->ticksperqunote);
+     int tempo = 120000000 / B_LITTLE32(ndmfhead->tempo);
+     ndmfhead = NULL;
+
+     // Construct a new MIDI header.
+     struct smfheader *smfhead = (struct smfheader *)filedata;
+     memcpy(smfhead->ident, "MThd", 4);
+     smfhead->headsize = B_BIG32(6);
+     smfhead->format = B_BIG16(1);
+     smfhead->numtracks = B_BIG16(numtracks);
+     smfhead->ticksperqunote = B_BIG16(ticksperqunote);
+
+     // Transcribe tracks.
+     int ndmffileofs = sizeof(struct ndmfheader);
+     int smffileofs = sizeof(struct smfheader);
+     for (int trk = 0; trk < numtracks; trk++) {
+          struct ndmftrackheader *ndmftrack = (struct ndmftrackheader *)&filedata[ndmffileofs];
+          struct smftrackheader *smftrack = (struct smftrackheader *)&filedata[smffileofs];
+
+          int ndmfdatalen = B_LITTLE32(ndmftrack->tracklen) - 12;
+          int smfdatalen = ndmfdatalen;
+          if (trk == 0) {
+               // We need to add a tempo event to the first MIDI track.
+               smfdatalen += 7;
+          }
+
+          memcpy(smftrack->ident, "MTrk", 4);
+          smftrack->tracklen = B_BIG32(smfdatalen);
+
+          uint8_t *ndmfdata = (uint8_t *)&ndmftrack->data[0];
+          uint8_t *smfdata = (uint8_t *)&smftrack->data[0];
+
+          if (trk == 0) {
+               // Insert a tempo event.
+               *(smfdata++) = 0;
+               *(smfdata++) = 0xff;
+               *(smfdata++) = 0x51;
+               *(smfdata++) = 3;
+               *(smfdata++) = (tempo>>16)&0xff;
+               *(smfdata++) = (tempo>>8)&0xff;
+               *(smfdata++) = tempo&0xff;
+          }
+
+          // Process events.
+          uint8_t status = 0;
+          for (int i = 0; i < ndmfdatalen; ) {
+               uint8_t b;
+               int copylen = 0;
+
+               // Re-encode the offset.
+               uint8_t vlenbytes[4], vlencnt = 0;
+               do {
+                    b = ndmfdata[i++];
+                    vlenbytes[vlencnt++] = b & 0x7f;
+               } while (!(b & 0x80));
+               do {
+                    b = vlenbytes[--vlencnt];
+                    if (vlencnt) b |= 0x80;
+                    *(smfdata++) = b;
+               } while (vlencnt > 0);
+
+               b = ndmfdata[i];
+               if (b&0x80) {
+                    // A new status byte.
+                    *(smfdata++) = b;
+                    i++;
+
+                    status = b;    // Keep for running status.
+                    copylen = commandlengths[(status & 0x7f)>>4];
+
+                    if ((b&0xf0) == 0xf0) {
+                         switch (b&0x0f) {
+                              case 0x0: // Sysex.
+                                   do *(smfdata++) = (b = ndmfdata[i++]);
+                                   while (!(b&0x80) && b != 0xf7);
+                                   break;
+                              case 0xf: // Meta.
+                                   *(smfdata++) = ndmfdata[i++];  // Type.
+                                   copylen = (*(smfdata++) = ndmfdata[i++]);     // Length.
+                                   break;
+                              default:  // Sys common.
+                                   copylen = syscomlengths[b&0x0f];
+                                   break;
+                         }
+                    } else if ((b&0xf0) == 0xb0) {     // Controller change.
+                         // SOS/EMIDI custom controller range. For whatever reason SOS
+                         // controller values have their high bit set.
+                         if (ndmfdata[i] >= 102 && ndmfdata[i] <= 119) {
+                              if (trk == 1 && ndmfdata[i] == 110) {        // Global loop start
+                                   *(smfdata++) = 118;
+                                   *(smfdata++) = (ndmfdata[i+1] & 0x7f);
+                              } else if (trk == 1 && ndmfdata[i] == 111) { // Global loop end.
+                                   *(smfdata++) = 119;
+                                   *(smfdata++) = 127;
+                              } else {
+                                   *(smfdata++) = 102; // Neuter all other controllers.
+                                   *(smfdata++) = 0;
+                              }
+                              i += 2;
+                              copylen = 0;
+                         }
+                    }
+               } else {
+                    copylen = commandlengths[(status & 0x7f)>>4];
+               }
+
+               for (; copylen>0; copylen--) {     // Copy data bytes.
+                    *(smfdata++) = ndmfdata[i++];
+               }
+          }
+
+          ndmffileofs += ndmfdatalen + 12;
+          smffileofs += smfdatalen + 8;
+     }
+
+     return smffileofs;
+}
+
+#undef PACKED_STRUCT
+#ifdef _MSC_VER
+#pragma pack()
+#endif
