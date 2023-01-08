@@ -26,6 +26,7 @@ You will require game data from an original release of TekWar, specifically:
  * All files with a `.map` extension.
  * `lookup.dat`
  * `nlookup.dat`
+ * `songs`
  * `sounds`
  * All files with a `.smk` extension.
 
