@@ -35,7 +35,7 @@ OURCXXFLAGS=/nologo /MD /Zl /EHsc
 OURCPPFLAGS=/I$(SRC) /I$(ENGINEINC) /I$(AUDIOLIBROOT)\include /I$(LIBSMACKERSRC)
 OURLINKFLAGS=/opt:ref /nologo
 OURRFLAGS=/nologo /i$(SRC) /i$(ENGINEINC)
-OURLIBS=msvcrt.lib
+OURLIBS=msvcrt.lib ole32.lib
 
 !if $(RELEASE)
 # release options
@@ -82,6 +82,8 @@ GAMEOBJS= \
 	$(SRC)\tektag.$o \
 	$(SRC)\tektxt.$o \
 	$(SRC)\tekver.$o \
+	$(SRC)\datascan.$o \
+	$(RSRC)\palette.$o \
 	$(SRC)\gameres.$(res) \
 	$(SRC)\startwin_game.$o
 
@@ -104,6 +106,8 @@ EDITOROBJS=$(EDITOROBJS) $(SRC)\version.$o
 
 # RULES
 {$(SRC)}.c{$(SRC)}.$o:
+	$(CC) /TC /c $(CPPFLAGS) $(OURCPPFLAGS) $(CFLAGS) $(OURCFLAGS) /Fo$@ $<
+{$(RSRC)}.c{$(RSRC)}.$o:
 	$(CC) /TC /c $(CPPFLAGS) $(OURCPPFLAGS) $(CFLAGS) $(OURCFLAGS) /Fo$@ $<
 
 {$(SRC)}.rc{$(SRC)}.$(res):
