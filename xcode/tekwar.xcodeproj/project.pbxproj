@@ -41,6 +41,8 @@
 		AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D01A4E561600CE4329 /* tekcdr.c */; };
 		AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D31A4E565A00CE4329 /* teksmk.c */; };
 		AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D41A4E565A00CE4329 /* teksnd.c */; };
+		AB8927792B6E3E350055B555 /* datascan.c in Sources */ = {isa = PBXBuildFile; fileRef = AB8927772B6E3E350055B555 /* datascan.c */; };
+		AB89277B2B6E3E600055B555 /* palette.c in Sources */ = {isa = PBXBuildFile; fileRef = AB89277A2B6E3E600055B555 /* palette.c */; };
 		AB98B2DF1A6B87E6009E8749 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = AB98B2DE1A6B87E6009E8749 /* config.c */; };
 		AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
 		AB9C0F2D2551AB90007AF521 /* version-auto.c in Sources */ = {isa = PBXBuildFile; fileRef = AB5BD5FD23123FA500BC4BEF /* version-auto.c */; };
@@ -241,6 +243,9 @@
 		AB3AE6D31A4E565A00CE4329 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
 		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; tabWidth = 5; };
 		AB5BD5FD23123FA500BC4BEF /* version-auto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "version-auto.c"; sourceTree = "<group>"; };
+		AB8927772B6E3E350055B555 /* datascan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = datascan.c; sourceTree = "<group>"; };
+		AB8927782B6E3E350055B555 /* datascan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datascan.h; sourceTree = "<group>"; };
+		AB89277A2B6E3E600055B555 /* palette.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = palette.c; sourceTree = "<group>"; };
 		AB98B2DE1A6B87E6009E8749 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
 		AB9C0F142551AAF3007AF521 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABB2753425BEBFAD006709E2 /* startwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = startwin.h; sourceTree = "<group>"; };
@@ -326,6 +331,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		AB8927762B6E3BC00055B555 /* rsrc */ = {
+			isa = PBXGroup;
+			children = (
+				AB89277A2B6E3E600055B555 /* palette.c */,
+			);
+			name = rsrc;
+			path = ../rsrc;
+			sourceTree = "<group>";
+		};
 		ABC75B921A49BC18007D0D43 = {
 			isa = PBXGroup;
 			children = (
@@ -369,6 +383,7 @@
 				AB9C0F142551AAF3007AF521 /* Images.xcassets */,
 				ABD03E2B1A522B970012B9D1 /* libsmacker */,
 				ABC75BE41A49C3DB007D0D43 /* src */,
+				AB8927762B6E3BC00055B555 /* rsrc */,
 				ABC75BD61A49C19A007D0D43 /* startwin.game.nib */,
 				AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */,
 				ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */,
@@ -389,6 +404,8 @@
 			isa = PBXGroup;
 			children = (
 				AB98B2DE1A6B87E6009E8749 /* config.c */,
+				AB8927772B6E3E350055B555 /* datascan.c */,
+				AB8927782B6E3E350055B555 /* datascan.h */,
 				ABD03E151A5181020012B9D1 /* StartupWinController.m */,
 				ABB2753425BEBFAD006709E2 /* startwin.h */,
 				AB3AE6C11A4D423600CE4329 /* b5compat.c */,
@@ -683,10 +700,12 @@
 				AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */,
 				ABC75C001A49C3DB007D0D43 /* tekldsv.c in Sources */,
 				ABC75C031A49C3DB007D0D43 /* tekprep.c in Sources */,
+				AB8927792B6E3E350055B555 /* datascan.c in Sources */,
 				ABD03E311A5230830012B9D1 /* smacker.c in Sources */,
 				ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */,
 				AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */,
 				ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */,
+				AB89277B2B6E3E600055B555 /* palette.c in Sources */,
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
 				AB98B2DF1A6B87E6009E8749 /* config.c in Sources */,
 				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,

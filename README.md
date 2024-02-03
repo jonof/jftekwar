@@ -30,7 +30,7 @@ You will require game data from an original release of TekWar, specifically:
  * `sounds`
  * All files with a `.smk` extension.
 
-Use `palette.dat` from the _data_ directory of this repository.
+Use `palette.dat` from the _rsrc_ directory of this repository.
 
 Compilation
 -----------

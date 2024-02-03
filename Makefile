@@ -94,7 +94,9 @@ GAMEOBJS= \
 	$(SRC)/tekstat.$o \
 	$(SRC)/tektag.$o \
 	$(SRC)/tektxt.$o \
-	$(SRC)/tekver.$o
+	$(SRC)/tekver.$o \
+	$(SRC)/datascan.$o \
+	$(RSRC)/palette.$o
 
 GAMEOBJS+= \
 	$(LIBSMACKERSRC)/smacker.$o \
@@ -191,6 +193,8 @@ $(RSRC)/%.$o: $(RSRC)/%.c
 $(SRC)/%.$(res): $(SRC)/%.rc
 	$(RC) -i $< -o $@ --include-dir=$(SRC) --include-dir=$(ENGINEINC)
 
+$(RSRC)/%.c: $(RSRC)/%.dat | $(ENGINEROOT)/bin2c$(EXESUFFIX)
+	$(ENGINEROOT)/bin2c$(EXESUFFIX) $< default_$* > $@
 $(RSRC)/%_gresource.c $(RSRC)/%_gresource.h: $(RSRC)/%.gresource.xml
 	glib-compile-resources --generate --manual-register --c-name=startgtk --target=$@ --sourcedir=$(RSRC) $<
 $(RSRC)/sdlappicon_%.c: $(RSRC)/%.png | $(ENGINEROOT)/generatesdlappicon$(EXESUFFIX)
