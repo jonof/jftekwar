@@ -23,7 +23,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = AB5BD5F023123F0300BC4BEF /* Build configuration list for PBXAggregateTarget "Version stamp" */;
 			buildPhases = (
-				AB5BD5FA23123F1C00BC4BEF /* ShellScript */,
+				AB5BD5FA23123F1C00BC4BEF /* Generate version.c */,
 			);
 			dependencies = (
 			);
@@ -33,6 +33,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		AB13204B2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
+		AB13204C2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
+		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
 		AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */; };
 		AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755DB25BC470100C581C8 /* AudioToolbox.framework */; };
@@ -45,9 +48,6 @@
 		AB89277B2B6E3E600055B555 /* palette.c in Sources */ = {isa = PBXBuildFile; fileRef = AB89277A2B6E3E600055B555 /* palette.c */; };
 		AB98B2DF1A6B87E6009E8749 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = AB98B2DE1A6B87E6009E8749 /* config.c */; };
 		AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
-		AB9C0F2D2551AB90007AF521 /* version-auto.c in Sources */ = {isa = PBXBuildFile; fileRef = AB5BD5FD23123FA500BC4BEF /* version-auto.c */; };
-		AB9E4ABD23125D810008A90E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; };
-		AB9E4ABE23125D810008A90E /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABC75BD61A49C19A007D0D43 /* startwin.game.nib */; };
 		ABC75BDB1A49C2D8007D0D43 /* libengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BC91A49BFB1007D0D43 /* libengine.a */; };
 		ABC75BE01A49C347007D0D43 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
@@ -214,7 +214,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				AB9E4ABE23125D810008A90E /* SDL2.framework in Embed Frameworks */,
+				AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,6 +233,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB13204A2B89DAFF00530E73 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JFTekWar.entitlements; sourceTree = "<group>"; };
 		AB1754DD25A7F83000C581C8 /* Build Editor for JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Build Editor for JFTekWar.entitlements"; sourceTree = "<group>"; };
 		AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jfaudiolib.xcodeproj; path = ../jfaudiolib/jfaudiolib.xcodeproj; sourceTree = "<group>"; };
@@ -242,7 +243,6 @@
 		AB3AE6D01A4E561600CE4329 /* tekcdr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekcdr.c; sourceTree = "<group>"; };
 		AB3AE6D31A4E565A00CE4329 /* teksmk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = teksmk.c; sourceTree = "<group>"; };
 		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; tabWidth = 5; };
-		AB5BD5FD23123FA500BC4BEF /* version-auto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "version-auto.c"; sourceTree = "<group>"; };
 		AB8927772B6E3E350055B555 /* datascan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = datascan.c; sourceTree = "<group>"; };
 		AB8927782B6E3E350055B555 /* datascan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datascan.h; sourceTree = "<group>"; };
 		AB89277A2B6E3E600055B555 /* palette.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = palette.c; sourceTree = "<group>"; };
@@ -253,7 +253,7 @@
 		ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JFTekWar-Info.plist"; sourceTree = "<group>"; };
 		ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = engine.xcodeproj; path = ../jfbuild/xcode/engine.xcodeproj; sourceTree = "<group>"; };
 		ABC75BD61A49C19A007D0D43 /* startwin.game.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = startwin.game.nib; sourceTree = "<group>"; };
-		ABC75BDC1A49C30C007D0D43 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = /Users/jonof/Library/Frameworks/SDL2.framework; sourceTree = "<absolute>"; };
+		ABC75BDC1A49C30C007D0D43 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../jfbuild/xcode/frameworks/SDL2.framework; sourceTree = SOURCE_ROOT; };
 		ABC75BDF1A49C347007D0D43 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		ABC75BE61A49C3DB007D0D43 /* names.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = names.h; sourceTree = "<group>"; };
 		ABC75BE91A49C3DB007D0D43 /* tekchng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tekchng.c; sourceTree = "<group>"; };
@@ -292,7 +292,6 @@
 				AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */,
 				ABC75BE01A49C347007D0D43 /* AppKit.framework in Frameworks */,
 				ABC75BE11A49C36C007D0D43 /* SDL2.framework in Frameworks */,
-				AB9E4ABD23125D810008A90E /* SDL2.framework in Frameworks */,
 				AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */,
 				AB1755DE25BC471200C581C8 /* AudioUnit.framework in Frameworks */,
 			);
@@ -347,6 +346,7 @@
 				AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */,
 				ABC75BD41A49C16E007D0D43 /* Game */,
 				ABD03E681A52726F0012B9D1 /* Editor */,
+				AB13204A2B89DAFF00530E73 /* version.c */,
 				ABC75B9E1A49BCC3007D0D43 /* Products */,
 				ABC75BDE1A49C311007D0D43 /* Linked Frameworks */,
 				AB1755D925BC46F100C581C8 /* Frameworks */,
@@ -426,7 +426,6 @@
 				ABC75BF61A49C3DB007D0D43 /* tektxt.c */,
 				ABC75BF71A49C3DB007D0D43 /* tekver.c */,
 				ABC75BF91A49C3DB007D0D43 /* tekwar.h */,
-				AB5BD5FD23123FA500BC4BEF /* version-auto.c */,
 			);
 			name = src;
 			path = ../src;
@@ -662,7 +661,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AB5BD5FA23123F1C00BC4BEF /* ShellScript */ = {
+		AB5BD5FA23123F1C00BC4BEF /* Generate version.c */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -672,14 +671,16 @@
 			);
 			inputPaths = (
 			);
+			name = "Generate version.c";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SOURCE_ROOT)/../src/version-auto.c",
+				"$(BUILT_PRODUCTS_DIR)/version.c",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd $PROJECT_DIR/..\ngitdescribe=$(git describe --always 2>/dev/null || echo git error)\n\ncat >src/version-auto.c <<EOT\nconst char *game_version = \"$gitdescribe\";\nconst char *game_date = __DATE__;\nconst char *game_time = __TIME__;\nEOT\n";
+			shellScript = "cd $PROJECT_DIR/..\ngitdescribe=$(git describe --always 2>/dev/null || echo git error)\n\ncat >$BUILT_PRODUCTS_DIR/version.c <<EOT\nconst char *game_version = \"$gitdescribe\";\nconst char *game_date = __DATE__;\nconst char *game_time = __TIME__;\nEOT\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -689,7 +690,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABC75BFE1A49C3DB007D0D43 /* tekgame.c in Sources */,
-				AB9C0F2D2551AB90007AF521 /* version-auto.c in Sources */,
 				ABC75C021A49C3DB007D0D43 /* tekmsc.c in Sources */,
 				ABC75C071A49C3DB007D0D43 /* tekstat.c in Sources */,
 				ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */,
@@ -708,6 +708,7 @@
 				AB89277B2B6E3E600055B555 /* palette.c in Sources */,
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
 				AB98B2DF1A6B87E6009E8749 /* config.c in Sources */,
+				AB13204B2B89DAFF00530E73 /* version.c in Sources */,
 				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,
 				ABC75C061A49C3DB007D0D43 /* tekspr.c in Sources */,
 				ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */,
@@ -719,6 +720,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB13204C2B89DAFF00530E73 /* version.c in Sources */,
 				ABD03E811A5275670012B9D1 /* bstub.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,6 +810,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = ../jfbuild/xcode/frameworks;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -839,6 +842,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = ../jfbuild/xcode/frameworks;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -866,22 +870,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = JFTekWar.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S7U4E54CHC;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
-					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = au.id.jonof.jftekwar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -890,22 +888,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = JFTekWar.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = S7U4E54CHC;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/JFTekWar-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
-					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = au.id.jonof.jftekwar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -916,14 +908,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Build Editor for JFTekWar.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
-					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_BUNDLE_IDENTIFIER = au.id.jonof.jftekwar.build;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -935,14 +926,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Build Editor for JFTekWar.entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(USER_LIBRARY_DIR)/Frameworks";
 				INFOPLIST_FILE = "$(SRCROOT)/Build Editor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@loader_path/../Frameworks",
-					"@executable_path/../Frameworks",
 				);
 				OTHER_LDFLAGS = "-lstdc++";
+				PRODUCT_BUNDLE_IDENTIFIER = au.id.jonof.jftekwar.build;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
