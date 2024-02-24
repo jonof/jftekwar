@@ -234,6 +234,7 @@
 
 /* Begin PBXFileReference section */
 		AB13204A2B89DAFF00530E73 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB1320612B89E55100530E73 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JFTekWar.entitlements; sourceTree = "<group>"; };
 		AB1754DD25A7F83000C581C8 /* Build Editor for JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Build Editor for JFTekWar.entitlements"; sourceTree = "<group>"; };
 		AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = jfaudiolib.xcodeproj; path = ../jfaudiolib/jfaudiolib.xcodeproj; sourceTree = "<group>"; };
@@ -347,6 +348,7 @@
 				ABC75BD41A49C16E007D0D43 /* Game */,
 				ABD03E681A52726F0012B9D1 /* Editor */,
 				AB13204A2B89DAFF00530E73 /* version.c */,
+				AB1320612B89E55100530E73 /* Common.xcconfig */,
 				ABC75B9E1A49BCC3007D0D43 /* Products */,
 				ABC75BDE1A49C311007D0D43 /* Linked Frameworks */,
 				AB1755D925BC46F100C581C8 /* Frameworks */,
@@ -805,6 +807,7 @@
 		};
 		ABC75B971A49BC18007D0D43 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB1320612B89E55100530E73 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
@@ -837,6 +840,7 @@
 		};
 		ABC75B981A49BC18007D0D43 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB1320612B89E55100530E73 /* Common.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
