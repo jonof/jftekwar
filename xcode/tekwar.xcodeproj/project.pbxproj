@@ -35,7 +35,7 @@
 /* Begin PBXBuildFile section */
 		AB13204B2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
 		AB13204C2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
-		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = ( ); }; };
 		AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
 		AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */; };
 		AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755DB25BC470100C581C8 /* AudioToolbox.framework */; };
@@ -70,7 +70,7 @@
 		ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */; };
 		ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABD03E751A52745C0012B9D1 /* startwin.editor.nib */; };
 		ABD03E781A52747F0012B9D1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; };
-		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = ( ); }; };
 		ABD03E7B1A5274870012B9D1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
 		ABD03E7C1A5274910012B9D1 /* libeditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCB1A49BFB1007D0D43 /* libeditor.a */; };
 		ABD03E7D1A5274910012B9D1 /* libeditorsupp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCD1A49BFB1007D0D43 /* libeditorsupp.a */; };
