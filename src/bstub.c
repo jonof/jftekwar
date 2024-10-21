@@ -84,7 +84,6 @@ int nextvoxid = 0;
 static   char tempbuf[256];
 static   char lo[32];
 static   char hi[32];
-static   const char *levelname;
 static   short curwall=0,wallpicnum=0,curwallnum=0;
 static   short cursprite=0,curspritenum=0;
 static   char wallsprite=0;
@@ -201,14 +200,14 @@ void
 PrintStatus(char *string,int num,char x,char y,char color)
 {
      sprintf(tempbuf,"%s %d",string,num);
-     printext16(x*8,ydim16+y*8,color,-1,tempbuf,0);
+     printext16(x*8,y*8,color,-1,tempbuf,0);
 }
 
 void
 PrintStatusStr(char *string,char *s,char x,char y,char color)
 {
      sprintf(tempbuf,"%s %s",string,s);
-     printext16(x*8,ydim16+y*8,color,-1,tempbuf,0);
+     printext16(x*8,y*8,color,-1,tempbuf,0);
 }
 
 void
@@ -1293,8 +1292,6 @@ int ExtInit(void)
 				"There was a problem initialising the Build engine: %s", engineerrstr);
 		return -1;
 	}
-	initinput();
-	initmouse();
 
 		//You can load your own palette lookup tables here if you just
 		//copy the right code!
@@ -1343,7 +1340,7 @@ void ExtCheckKeys(void)
 		if (i != j) averagefps = ((mul3(averagefps)+((AVERAGEFRAMES*1000)/(j-i)) )>>2);
 		Bsprintf(tempbuf,"%d",averagefps);
 		printext256(0L,0L,31,-1,tempbuf,1);
-		
+
 		editinput();
 	}
 	else
@@ -1659,10 +1656,8 @@ void ExtShowSectorData(short sectnum)   //F5
           i=nextspritesect[i];
      }
      clearmidstatbar16();
-     sprintf(tempbuf,"Level %s",levelname);
-     printmessage16(tempbuf);
      sprintf(tempbuf,"Effects for Sector %d (type=%s)",sectnum,secttype);
-     printext16(1*8,ydim16+4*8,11,-1,tempbuf,0);
+     printext16(1*8,4*8,11,-1,tempbuf,0);
      PrintStatusStr("Lighting Effect =",lighting,2,6,11);
      PrintStatus("Tic Delay       =",delay,2,7,11);
      PrintStatusStr("Wall Effects    =",walleffect,2,8,11);
@@ -1683,7 +1678,7 @@ void ExtShowWallData(short wallnum)       //F6
 		clearmidstatbar16();             //Clear middle of status bar
 
 		sprintf(tempbuf,"Wall %d",wallnum);
-		printext16(8,ydim16+32,11,-1,tempbuf,0);
+		printext16(8,32,11,-1,tempbuf,0);
 	}
 }
 
