@@ -35,7 +35,7 @@
 /* Begin PBXBuildFile section */
 		AB13204B2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
 		AB13204C2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
-		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = ( ); }; };
+		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (); }; };
 		AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
 		AB1755DA25BC46F100C581C8 /* libjfaudiolib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755CC25BC46AC00C581C8 /* libjfaudiolib.a */; };
 		AB1755DC25BC470100C581C8 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1755DB25BC470100C581C8 /* AudioToolbox.framework */; };
@@ -65,12 +65,10 @@
 		ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF61A49C3DB007D0D43 /* tektxt.c */; };
 		ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */ = {isa = PBXBuildFile; fileRef = ABC75BF71A49C3DB007D0D43 /* tekver.c */; };
 		ABD03E161A5181020012B9D1 /* StartupWinController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E151A5181020012B9D1 /* StartupWinController.m */; };
-		ABD03E311A5230830012B9D1 /* smacker.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E301A5230830012B9D1 /* smacker.c */; };
-		ABD03E371A5230CD0012B9D1 /* smk_bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */; };
-		ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */; };
+		ABD03E311A5230830012B9D1 /* smacker_jftekwar.c in Sources */ = {isa = PBXBuildFile; fileRef = ABD03E301A5230830012B9D1 /* smacker_jftekwar.c */; };
 		ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABD03E751A52745C0012B9D1 /* startwin.editor.nib */; };
 		ABD03E781A52747F0012B9D1 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; };
-		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = ( ); }; };
+		ABD03E791A52747F0012B9D1 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (); }; };
 		ABD03E7B1A5274870012B9D1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDF1A49C347007D0D43 /* AppKit.framework */; };
 		ABD03E7C1A5274910012B9D1 /* libeditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCB1A49BFB1007D0D43 /* libeditor.a */; };
 		ABD03E7D1A5274910012B9D1 /* libeditorsupp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BCD1A49BFB1007D0D43 /* libeditorsupp.a */; };
@@ -134,6 +132,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AB5BD5EF23123F0300BC4BEF;
 			remoteInfo = "Version stamp";
+		};
+		ABC0F1D22CCE3B2D0016D4DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB392FF52B9427BA002B0F5D;
+			remoteInfo = klist;
 		};
 		ABC75BC81A49BFB1007D0D43 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -257,6 +262,7 @@
 		AB98B2DE1A6B87E6009E8749 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
 		AB9C0F142551AAF3007AF521 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABB2753425BEBFAD006709E2 /* startwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = startwin.h; sourceTree = "<group>"; };
+		ABC0F1D52CCE3B8C0016D4DC /* smacker.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = smacker.c; sourceTree = "<group>"; };
 		ABC75B9D1A49BCC3007D0D43 /* JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JFTekWar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC75BA11A49BCC3007D0D43 /* JFTekWar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JFTekWar-Info.plist"; sourceTree = "<group>"; };
 		ABC75BBE1A49BFB1007D0D43 /* engine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = engine.xcodeproj; path = ../jfbuild/xcode/engine.xcodeproj; sourceTree = "<group>"; };
@@ -279,11 +285,7 @@
 		ABC75BF91A49C3DB007D0D43 /* tekwar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tekwar.h; sourceTree = "<group>"; };
 		ABD03E151A5181020012B9D1 /* StartupWinController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupWinController.m; sourceTree = "<group>"; };
 		ABD03E2F1A5230340012B9D1 /* smacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smacker.h; sourceTree = "<group>"; };
-		ABD03E301A5230830012B9D1 /* smacker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smacker.c; sourceTree = "<group>"; };
-		ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk_bitstream.c; sourceTree = "<group>"; };
-		ABD03E331A5230CD0012B9D1 /* smk_bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_bitstream.h; sourceTree = "<group>"; };
-		ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smk_hufftree.c; sourceTree = "<group>"; };
-		ABD03E351A5230CD0012B9D1 /* smk_hufftree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_hufftree.h; sourceTree = "<group>"; };
+		ABD03E301A5230830012B9D1 /* smacker_jftekwar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smacker_jftekwar.c; sourceTree = "<group>"; };
 		ABD03E361A5230CD0012B9D1 /* smk_malloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smk_malloc.h; sourceTree = "<group>"; };
 		ABD03E481A52720F0012B9D1 /* Build Editor for JFTekWar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Build Editor for JFTekWar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABD03E6A1A5272920012B9D1 /* Build Editor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Build Editor-Info.plist"; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				AB5BD5E023123DA000BC4BEF /* bin2c */,
 				ABC75BD11A49BFB1007D0D43 /* kextract */,
 				ABC75BD31A49BFB1007D0D43 /* kgroup */,
+				ABC0F1D32CCE3B2D0016D4DC /* klist */,
 				ABD03E2E1A522B970012B9D1 /* transpal */,
 			);
 			name = Products;
@@ -443,12 +446,9 @@
 		ABD03E2B1A522B970012B9D1 /* libsmacker */ = {
 			isa = PBXGroup;
 			children = (
-				ABD03E321A5230CD0012B9D1 /* smk_bitstream.c */,
-				ABD03E331A5230CD0012B9D1 /* smk_bitstream.h */,
-				ABD03E341A5230CD0012B9D1 /* smk_hufftree.c */,
-				ABD03E351A5230CD0012B9D1 /* smk_hufftree.h */,
 				ABD03E361A5230CD0012B9D1 /* smk_malloc.h */,
-				ABD03E301A5230830012B9D1 /* smacker.c */,
+				ABC0F1D52CCE3B8C0016D4DC /* smacker.c */,
+				ABD03E301A5230830012B9D1 /* smacker_jftekwar.c */,
 				ABD03E2F1A5230340012B9D1 /* smacker.h */,
 			);
 			name = libsmacker;
@@ -598,6 +598,13 @@
 			remoteRef = AB5BD5DF23123DA000BC4BEF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		ABC0F1D32CCE3B2D0016D4DC /* klist */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = klist;
+			remoteRef = ABC0F1D22CCE3B2D0016D4DC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		ABC75BC91A49BFB1007D0D43 /* libengine.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -704,14 +711,13 @@
 				ABC75C071A49C3DB007D0D43 /* tekstat.c in Sources */,
 				ABC75C0A1A49C3DB007D0D43 /* tekver.c in Sources */,
 				AB3AE6C21A4D423600CE4329 /* b5compat.c in Sources */,
-				ABD03E371A5230CD0012B9D1 /* smk_bitstream.c in Sources */,
 				ABC75C011A49C3DB007D0D43 /* tekmap.c in Sources */,
 				ABC75BFF1A49C3DB007D0D43 /* tekgun.c in Sources */,
 				AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */,
 				ABC75C001A49C3DB007D0D43 /* tekldsv.c in Sources */,
 				ABC75C031A49C3DB007D0D43 /* tekprep.c in Sources */,
 				AB8927792B6E3E350055B555 /* datascan.c in Sources */,
-				ABD03E311A5230830012B9D1 /* smacker.c in Sources */,
+				ABD03E311A5230830012B9D1 /* smacker_jftekwar.c in Sources */,
 				ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */,
 				AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */,
 				ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */,
@@ -721,7 +727,6 @@
 				AB13204B2B89DAFF00530E73 /* version.c in Sources */,
 				AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */,
 				ABC75C061A49C3DB007D0D43 /* tekspr.c in Sources */,
-				ABD03E381A5230CD0012B9D1 /* smk_hufftree.c in Sources */,
 				ABD03E161A5181020012B9D1 /* StartupWinController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,6 +15,9 @@
 #include "fx_man.h"
 #include "smacker.h"
 
+/* jump to and render a specific frame */
+char smk_render_frame(smk object, unsigned long frame);
+
 static smk smkmenu, smkseq;
 #define NUMSMKTILES 3
 #define SMKPICNUM0 (MAXTILES-NUMSMKTILES)

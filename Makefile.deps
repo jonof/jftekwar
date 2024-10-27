@@ -20,6 +20,7 @@ $(SRC)/tekver.$o: $(SRC)/tekver.c
 $(SRC)/datascan.$o: $(SRC)/datascan.c $(ENGINEINC)/compat.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/build.h $(SRC)/datascan.h
 $(SRC)/version.$o: $(SRC)/version.c
 $(SRC)/version-auto.$o: $(SRC)/version-auto.c
+$(LIBSMACKERSRC)/smacker_jftekwar.$o: $(LIBSMACKERSRC)/smacker_jftekwar.c $(LIBSMACKERSRC)/smacker.c
 
 $(SRC)/bstub.$o: $(SRC)/bstub.c $(build_h) $(ENGINEINC)/editor.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/cache1d.h $(SRC)/names.h
 

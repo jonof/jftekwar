@@ -99,9 +99,7 @@ GAMEOBJS= \
 	$(RSRC)/palette.$o
 
 GAMEOBJS+= \
-	$(LIBSMACKERSRC)/smacker.$o \
-	$(LIBSMACKERSRC)/smk_bitstream.$o \
-	$(LIBSMACKERSRC)/smk_hufftree.$o
+	$(LIBSMACKERSRC)/smacker_jftekwar.$o
 
 EDITOROBJS=$(SRC)/bstub.$o
 
