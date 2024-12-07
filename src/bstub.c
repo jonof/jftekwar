@@ -983,6 +983,7 @@ JS_SpriteXTManual(void)
 
           printmessage16(" Manual Page: Sprites...");
 
+          setstatusbarviewport16();
           PrintStatusStr("      Valid State Types","",1,4,11);
 
           PrintStatusStr("  0","INANIMATE",1,6,0);
@@ -1032,6 +1033,7 @@ JS_SpriteXTManual(void)
           PrintStatusStr("9  SECURITYDROID", "",62,8,0);
           PrintStatusStr("10 TEKBOSS",""       ,62,9,0);
           PrintStatusStr("11 TEKLORD",""       ,62,10,0);
+          restoreviewport16();
                                                        
  return(0);
 }
