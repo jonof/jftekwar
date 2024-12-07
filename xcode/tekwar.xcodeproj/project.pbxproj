@@ -79,6 +79,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AB0AC20C2CC66FD100445D46 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ABC75B931A49BC18007D0D43 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB5BD5EF23123F0300BC4BEF;
+			remoteInfo = "Version stamp";
+		};
 		AB1755CB25BC46AC00C581C8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AB1755C625BC46AC00C581C8 /* jfaudiolib.xcodeproj */;
@@ -503,6 +510,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				AB0AC20D2CC66FD100445D46 /* PBXTargetDependency */,
 				ABD03E6D1A5273AE0012B9D1 /* PBXTargetDependency */,
 				ABD03E6F1A5273AE0012B9D1 /* PBXTargetDependency */,
 				ABD03E711A5273AE0012B9D1 /* PBXTargetDependency */,
@@ -730,6 +738,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AB0AC20D2CC66FD100445D46 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB5BD5EF23123F0300BC4BEF /* Version stamp */;
+			targetProxy = AB0AC20C2CC66FD100445D46 /* PBXContainerItemProxy */;
+		};
 		AB1755D825BC46DC00C581C8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = jfaudiolib;
