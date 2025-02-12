@@ -33,11 +33,11 @@ static void smkplayfeeder(char **ptr, unsigned int *length) {
      smkaudioread = (smkaudioread + 2048) % SMKAUDIOBUFSZ;
 }
 
-void
+int
 smkplayseq(char *name)
 {
      char path[BMAX_PATH], result = SMK_DONE;
-     int fh, flen, i;
+     int fh, flen, i, ret = 0;
 
      unsigned char smkpal[NUMSMKTILES][768], smkchannels[7], smkbitdepth[7], *smkbuf = NULL;
      unsigned char *smkframes = NULL;
@@ -54,7 +54,7 @@ smkplayseq(char *name)
      }
      if (fh < 0) {
           debugprintf("smkplayseq(\"%s\") failed\n", name);
-          return;
+          return -1;
      }
 
      flen = kfilelength(fh);
@@ -62,7 +62,7 @@ smkplayseq(char *name)
      if (smkbuf == NULL) {
           kclose(fh);
           debugprintf("smkplayseq(\"%s\") malloc of %d bytes failed\n", name, flen);
-          return;
+          return -1;
      }
 
      kread(fh, smkbuf, flen);
@@ -72,7 +72,7 @@ smkplayseq(char *name)
      if (!smkseq) {
           free(smkbuf);
           debugprintf("smk_open_memory() returned null\n");
-          return;
+          return -1;
      }
 
      smk_enable_all(smkseq, SMK_VIDEO_TRACK | SMK_AUDIO_TRACK_0);
@@ -81,6 +81,7 @@ smkplayseq(char *name)
      smk_info_audio(smkseq, NULL, smkchannels, smkbitdepth, smkaudrate);
      if (smkbitdepth[0] != 8 || smkchannels[0] > 2) {
           debugprintf("smkplayseq(\"%s\") is not 8-bit mono/stereo audio\n", name);
+          ret = -1;
           goto end;
      }
 
@@ -91,6 +92,7 @@ smkplayseq(char *name)
      smkframes = malloc(NUMSMKTILES * smkx*smky);
      if (!smkframes) {
           debugprintf("smkplayseq(\"%s\") malloc of frames failed\n", name);
+          ret = -1;
           goto end;
      }
      for (i = 0; i < NUMSMKTILES; i++) {
@@ -138,7 +140,10 @@ smkplayseq(char *name)
 
                decodeframe++;
                result = smk_next(smkseq);
-               if (result == SMK_ERROR) goto end;
+               if (result == SMK_ERROR) {
+                    ret = -1;
+                    goto end;
+               }
           }
 
           nowtime = (double)getusecticks();
@@ -148,6 +153,7 @@ smkplayseq(char *name)
                     0, 63, 63, 63, 1, (unsigned int)-1);
                if (voice < 0) {
                     debugprintf("smkplayseq(\"%s\") failed to start audio playback\n", name);
+                    ret = -1;
                     goto end;
                }
 
@@ -169,6 +175,7 @@ smkplayseq(char *name)
           handleevents();
           if (keystatus[0x1]|keystatus[0x1c]|keystatus[0x39]|keystatus[0x9c]) {
                keystatus[0x1]=keystatus[0x1c]=keystatus[0x39]=keystatus[0x9c]=0;
+               ret = 1;
                break;
           }
           if (!FX_SoundActive(voice)) { // If the audio stops for some reason.
@@ -185,6 +192,8 @@ end:
 
      for (i = 0; i < NUMSMKTILES; i++) waloff[SMKPICNUM0+i] = 0;
      if (smkframes) free(smkframes);
+
+     return ret;
 }
 
 void

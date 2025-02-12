@@ -752,7 +752,7 @@ void tekview(int *x1,int *y1, int *x2,int *y2);
 void smkclosemenu();
 void smkmenuframe(int fn);
 void smkopenmenu(char *name);
-void smkplayseq(char *name);
+int smkplayseq(char *name);
 void smkshowmenu();
 
 // teksnd.c

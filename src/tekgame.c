@@ -495,6 +495,9 @@ app_main(int argc, char const * const argv[])
      }
 
      if( option[4] == 0 ) {
+          i = smkplayseq("tvopen");
+          if (i < 1) i = smkplayseq("tekndie");
+          if (i < 1) i = smkplayseq("tekintro");
           smkplayseq("intro");
      }
 
