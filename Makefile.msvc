@@ -83,7 +83,6 @@ GAMEOBJS= \
 	$(SRC)\tektxt.$o \
 	$(SRC)\tekver.$o \
 	$(SRC)\datascan.$o \
-	$(RSRC)\palette.$o \
 	$(SRC)\gameres.$(res) \
 	$(SRC)\startwin_game.$o
 

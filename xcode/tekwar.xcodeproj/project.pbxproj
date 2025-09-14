@@ -47,7 +47,6 @@
 		AB3AE6D71A4E565A00CE4329 /* teksmk.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D31A4E565A00CE4329 /* teksmk.c */; };
 		AB3AE6D81A4E565A00CE4329 /* teksnd.c in Sources */ = {isa = PBXBuildFile; fileRef = AB3AE6D41A4E565A00CE4329 /* teksnd.c */; };
 		AB8927792B6E3E350055B555 /* datascan.c in Sources */ = {isa = PBXBuildFile; fileRef = AB8927772B6E3E350055B555 /* datascan.c */; };
-		AB89277B2B6E3E600055B555 /* palette.c in Sources */ = {isa = PBXBuildFile; fileRef = AB89277A2B6E3E600055B555 /* palette.c */; };
 		AB98B2DF1A6B87E6009E8749 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = AB98B2DE1A6B87E6009E8749 /* config.c */; };
 		AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB9C0F142551AAF3007AF521 /* Images.xcassets */; };
 		ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */ = {isa = PBXBuildFile; fileRef = ABC75BD61A49C19A007D0D43 /* startwin.game.nib */; };
@@ -261,7 +260,6 @@
 		AB3AE6D41A4E565A00CE4329 /* teksnd.c */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 5; lastKnownFileType = sourcecode.c.c; path = teksnd.c; sourceTree = "<group>"; tabWidth = 5; };
 		AB8927772B6E3E350055B555 /* datascan.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = datascan.c; sourceTree = "<group>"; };
 		AB8927782B6E3E350055B555 /* datascan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = datascan.h; sourceTree = "<group>"; };
-		AB89277A2B6E3E600055B555 /* palette.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = palette.c; sourceTree = "<group>"; };
 		AB98B2DE1A6B87E6009E8749 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
 		AB9C0F142551AAF3007AF521 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABB2753425BEBFAD006709E2 /* startwin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = startwin.h; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 		AB8927762B6E3BC00055B555 /* rsrc */ = {
 			isa = PBXGroup;
 			children = (
-				AB89277A2B6E3E600055B555 /* palette.c */,
 			);
 			name = rsrc;
 			path = ../rsrc;
@@ -727,7 +724,6 @@
 				ABC75C081A49C3DB007D0D43 /* tektag.c in Sources */,
 				AB3AE6D11A4E561600CE4329 /* tekcdr.c in Sources */,
 				ABC75C091A49C3DB007D0D43 /* tektxt.c in Sources */,
-				AB89277B2B6E3E600055B555 /* palette.c in Sources */,
 				ABC75BFC1A49C3DB007D0D43 /* tekchng.c in Sources */,
 				AB98B2DF1A6B87E6009E8749 /* config.c in Sources */,
 				AB13204B2B89DAFF00530E73 /* version.c in Sources */,

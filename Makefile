@@ -95,8 +95,7 @@ GAMEOBJS= \
 	$(SRC)/tektag.$o \
 	$(SRC)/tektxt.$o \
 	$(SRC)/tekver.$o \
-	$(SRC)/datascan.$o \
-	$(RSRC)/palette.$o
+	$(SRC)/datascan.$o
 
 GAMEOBJS+= \
 	$(LIBSMACKERSRC)/smacker_jftekwar.$o
