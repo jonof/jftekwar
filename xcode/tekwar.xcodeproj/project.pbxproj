@@ -33,6 +33,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		AB04280B2E7684EF00E2A322 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = AB04280A2E7684EF00E2A322 /* gamecontrollerdb.txt */; };
+		AB04280C2E7684EF00E2A322 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = AB04280A2E7684EF00E2A322 /* gamecontrollerdb.txt */; };
 		AB13204B2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
 		AB13204C2B89DAFF00530E73 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = AB13204A2B89DAFF00530E73 /* version.c */; };
 		AB13205A2B89DD5700530E73 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ABC75BDC1A49C30C007D0D43 /* SDL2.framework */; settings = {ATTRIBUTES = (); }; };
@@ -245,6 +247,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AB04280A2E7684EF00E2A322 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = gamecontrollerdb.txt; path = ../rsrc/gamecontrollerdb.txt; sourceTree = SOURCE_ROOT; };
 		AB13204A2B89DAFF00530E73 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = version.c; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB1320612B89E55100530E73 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		AB1754DA25A7F82400C581C8 /* JFTekWar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JFTekWar.entitlements; sourceTree = "<group>"; };
@@ -392,6 +395,7 @@
 		ABC75BD41A49C16E007D0D43 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				AB04280A2E7684EF00E2A322 /* gamecontrollerdb.txt */,
 				AB9C0F142551AAF3007AF521 /* Images.xcassets */,
 				ABD03E2B1A522B970012B9D1 /* libsmacker */,
 				ABC75BE41A49C3DB007D0D43 /* src */,
@@ -661,6 +665,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB04280B2E7684EF00E2A322 /* gamecontrollerdb.txt in Resources */,
 				AB9C0F1B2551AAF3007AF521 /* Images.xcassets in Resources */,
 				ABC75BD81A49C19A007D0D43 /* startwin.game.nib in Resources */,
 			);
@@ -670,6 +675,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB04280C2E7684EF00E2A322 /* gamecontrollerdb.txt in Resources */,
 				ABD03E771A52745C0012B9D1 /* startwin.editor.nib in Resources */,
 				AB1755BD25B9BD1600C581C8 /* Images.xcassets in Resources */,
 			);
