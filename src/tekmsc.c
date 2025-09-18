@@ -535,8 +535,8 @@ tekgamestarted(void)
      seconds=minutes=hours=0;
      show2dsprite[playersprite[myconnectindex]>>3]|=
           (1<<(playersprite[myconnectindex]&7));
-     songmastervolume(musicv<<3);
-     soundmastervolume(soundv<<11);
+     songmastervolume(musicv);
+     soundmastervolume(soundv);
 }
 
 int
@@ -2100,7 +2100,7 @@ domenuinput(void)
                     if (activemenu == 8) {
                          if (soundv > 0) {
                               soundv--;
-                              soundmastervolume(soundv<<11);
+                              soundmastervolume(soundv);
                          }
                     }
                     else {
@@ -2112,7 +2112,7 @@ domenuinput(void)
                case 2:
                     if (musicv > 0) {
                          musicv--;
-                         songmastervolume(musicv<<3);
+                         songmastervolume(musicv);
                     }
                     break;
                }
@@ -2125,7 +2125,7 @@ domenuinput(void)
                     if (activemenu == 8) {
                          if (soundv < 16) {
                               soundv++;
-                              soundmastervolume(soundv<<11);
+                              soundmastervolume(soundv);
                          }
                     }
                     else {
@@ -2137,7 +2137,7 @@ domenuinput(void)
                case 2:
                     if (musicv < 16) {
                          musicv++;
-                         songmastervolume(musicv<<3);
+                         songmastervolume(musicv);
                     }
                     break;
                }

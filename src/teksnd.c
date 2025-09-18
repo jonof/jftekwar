@@ -57,6 +57,7 @@ int       songlist[1024];
 
 static int fxstarted = 0, fhsounds = -1;
 static int musicstarted = 0, fhsongs = -1;
+extern int musicv,soundv;
 
 static int transmutehmp(char *filedata);
 
@@ -135,6 +136,13 @@ soundcallback(unsigned int i)
      }
 }
 
+static void
+stoploop(unsigned short i)
+{
+     if (dsound[i].handle >= 0 && FX_SoundActive(dsound[i].handle))
+          FX_EndLooping(dsound[i].handle);
+}
+
 
 void
 initsb(char digistat,char musistat,int mixrate,
@@ -156,6 +164,7 @@ initsb(char digistat,char musistat,int mixrate,
           fxstarted = 1;
 
           FX_SetCallBack(soundcallback);
+          FX_SetVolume((soundv<<4)-1);
           setupdigi();
      }
 
@@ -165,6 +174,7 @@ initsb(char digistat,char musistat,int mixrate,
      } else {
           musicstarted = 1;
 
+          MUSIC_SetVolume((musicv<<4)-1);
           setupmidi();
      }
 }
@@ -267,32 +277,6 @@ playsound(int sn, int sndx, int sndy, int loop, short type)
           pan=0;
      }
      else {
-          /*
-          dist=klabs(posx[screenpeek]-sndx)+klabs(posy[screenpeek]-sndy);
-          if( (type&ST_AMBUPDATE) || (type&ST_VEHUPDATE) ) {
-               if( dist < AMBUPDATEDIST ) {
-                   vol = (AMBUPDATEDIST<<3)-(dist<<3);
-               }
-               else {
-                   vol=0;
-               }
-          }
-          else {
-               if(dist < 1500L)
-                    vol = 0x7fff;
-               else if(dist > 8500L) {
-                    if(sn >= S_MALE_COMEONYOU)
-                         vol = 0x0000;
-                    else
-                         vol = 0x1f00;
-               }
-               else
-                    vol = 39000L-(dist<<2);
-          }
-          pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
-          if( (pan < 0) || (pan > 35) )
-              pan=13;
-          */
           dx = klabs(posx[screenpeek]-sndx);
           dy = klabs(posy[screenpeek]-sndy);
           dist = ksqrt(dx*dx+dy*dy) >> 6;
@@ -301,7 +285,13 @@ playsound(int sn, int sndx, int sndy, int loop, short type)
           pan = (pan & 2047) >> 6;
      }
 
-     dsound[i].handle = FX_PlayRaw3D(sbuf[sn].cache_ptr, sbuf[sn].cache_length, 11025, 0, pan, dist, 1, i );
+     if (loop) {
+          dsound[i].handle = FX_PlayLoopedRaw(sbuf[sn].cache_ptr, sbuf[sn].cache_length,
+               sbuf[sn].cache_ptr, (char*)sbuf[sn].cache_ptr+sbuf[sn].cache_length-1,
+               11025, 0, 255, 255, 255, 1, i);
+     } else {
+          dsound[i].handle = FX_PlayRaw3D(sbuf[sn].cache_ptr, sbuf[sn].cache_length, 11025, 0, pan, dist, 1, i );
+     }
      if (dsound[i].handle < 0) {
           dsound[i].handle=NULL_HANDLE;
           dsound[i].plevel=0;
@@ -317,6 +307,7 @@ playsound(int sn, int sndx, int sndy, int loop, short type)
           showmessage("SND %03d ADDR %08ld USRS %02d", sn, sbuf[sn].cache_ptr, sbuf[sn].users);
          #endif
           dsound[i].sndnum=sn;
+          if (loop>0) teksetdelayfunc((void(*)(short))stoploop,i,loop*CLKIPS*sbuf[sn].cache_length/11025);
      }
 
      return(i);
@@ -335,25 +326,6 @@ updatevehiclesnds(int i, int sndx, int sndy)
 
      dsound[i].x=sndx;
      dsound[i].y=sndy;
-
-     /*
-     dist=labs(posx[screenpeek]-sndx)+labs(posy[screenpeek]-sndy);
-     if( dist < 1000L ) {
-          vol = 0x7fff;
-     }
-     else if( dist > 9000L ) {
-          vol = 0x0000;
-     }
-     else {
-          vol = 36000L-(dist<<2);
-     }
-     if( (vol < 0) || (vol > 0x7FFF) ) {
-          vol=0x7fff;
-     }
-     pan=((getangle(posx[screenpeek]-dsoundptr[i]->x,posy[screenpeek]-dsoundptr[i]->y)+(2047-ang[screenpeek]))&2047) >> 6;
-     if( (pan < 0) || (pan > 35) )
-          pan=13;
-     */
 
      dx = klabs(posx[screenpeek]-sndx);
      dy = klabs(posy[screenpeek]-sndy);
@@ -378,11 +350,12 @@ stopsound(int i)
           return;
 
      FX_StopSound(dsound[i].handle);
-     sbuf[dsound[i].sndnum].users--;
-     if( sbuf[dsound[i].sndnum].users < 0 )
-              sbuf[dsound[i].sndnum].users=0;
-     if( sbuf[dsound[i].sndnum].users == 0 ) {
-         sbuf[dsound[i].sndnum].cache_lock=199;
+     if( dsound[i].sndnum>=0 ) {
+          sbuf[dsound[i].sndnum].users--;
+          if( sbuf[dsound[i].sndnum].users < 0 )
+               sbuf[dsound[i].sndnum].users=0;
+          if( sbuf[dsound[i].sndnum].users == 0 )
+               sbuf[dsound[i].sndnum].cache_lock=199;
      }
      dsound[i].handle=NULL_HANDLE;
      dsound[i].plevel=0;
@@ -392,23 +365,15 @@ stopsound(int i)
 void
 songmastervolume(int vol)
 {
-     (void)vol;
-     /*
-     if( musicmode == MM_NOHARDWARE )
-          return;
-
-     if( (vol < 0) || (vol > 127) )
-          vol=127;
-     sosMIDISetMasterVolume(vol);
-     */
+     if (!musicstarted) return;
+     MUSIC_SetVolume((vol<<4)-1);
 }
 
 void
 soundmastervolume(int vol)
 {
-     // SOS used a range of 0-0x7fff, AudioLib uses 0-255.
      if (!fxstarted) return;
-     FX_SetVolume(vol >> 7);
+     FX_SetVolume((vol<<4)-1);
 }
 
 void
@@ -471,11 +436,12 @@ stopallsounds(void)
           if( dsound[i].handle == NULL_HANDLE )
                continue;
           FX_StopSound(dsound[i].handle);
-          sbuf[dsound[i].sndnum].users--;
-          if( sbuf[dsound[i].sndnum].users < 0 )
-              sbuf[dsound[i].sndnum].users=0;
-          if( sbuf[dsound[i].sndnum].users == 0 ) {
-               sbuf[dsound[i].sndnum].cache_lock=199;
+          if( dsound[i].sndnum >= 0) {
+               sbuf[dsound[i].sndnum].users--;
+               if( sbuf[dsound[i].sndnum].users < 0 )
+                    sbuf[dsound[i].sndnum].users=0;
+               if( sbuf[dsound[i].sndnum].users == 0 )
+                    sbuf[dsound[i].sndnum].cache_lock=199;
           }
           dsound[i].handle=NULL_HANDLE;
           dsound[i].plevel=0;
