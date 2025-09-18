@@ -661,11 +661,11 @@ spritedeflect(int sn, short angin)
           angout=(angin+1024)&2047;
           switch( (int)RMOD2("STAT697 ") ) {
           case 0:
-               angout=leftof[angout];
+               angout=leftof[angout>>7];
                break;
           case 1:
           default:
-               angout=rightof[angout];
+               angout=rightof[angout>>7];
                break;
           }
           break;
