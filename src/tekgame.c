@@ -107,7 +107,7 @@ int moreoptions[MAXMOREOPTIONS] = {
         0,     // 14 N/U
         0      // 15 N/U
 };
-int toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
+char toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
 int  gamestuff[MAXGAMESTUFF] = {
      -1,       // 0  joyxcenter
      -1,       // 1  joyycenter

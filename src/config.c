@@ -17,6 +17,7 @@ enum {
 	type_double = 1,
 	type_int = 2,
 	type_hex = 3,
+	type_charbool = 4,
 };
 
 #if USE_POLYMOST
@@ -161,13 +162,13 @@ static struct {
 	{ "screensize", type_int, &gamestuff[2], "; Screen size\n" },
 	{ "biasthreshold", type_int, &gamestuff[4], "; Bias threshold\n" },
 
-	{ "showreticule", type_bool, &toggles[TOGGLE_RETICULE], "; Show reticule\n" },
-	{ "showtime", type_bool, &toggles[TOGGLE_TIME], "; Show time\n" },
-	{ "showscore", type_bool, &toggles[TOGGLE_SCORE], "; Show score\n" },
-	{ "showrearview", type_bool, &toggles[TOGGLE_REARVIEW], "; Show rear view\n" },
-	{ "showprepareditem", type_bool, &toggles[TOGGLE_UPRT], "; Show prepared item\n" },
-	{ "showhealth", type_bool, &toggles[TOGGLE_HEALTH], "; Show health\n" },
-	{ "showinventory", type_bool, &toggles[TOGGLE_INVENTORY], "; Show inventory\n" },
+	{ "showreticule", type_charbool, &toggles[TOGGLE_RETICULE], "; Show reticule\n" },
+	{ "showtime", type_charbool, &toggles[TOGGLE_TIME], "; Show time\n" },
+	{ "showscore", type_charbool, &toggles[TOGGLE_SCORE], "; Show score\n" },
+	{ "showrearview", type_charbool, &toggles[TOGGLE_REARVIEW], "; Show rear view\n" },
+	{ "showprepareditem", type_charbool, &toggles[TOGGLE_UPRT], "; Show prepared item\n" },
+	{ "showhealth", type_charbool, &toggles[TOGGLE_HEALTH], "; Show health\n" },
+	{ "showinventory", type_charbool, &toggles[TOGGLE_INVENTORY], "; Show inventory\n" },
 
 	{ NULL, 0, NULL, NULL }
 };
@@ -202,6 +203,12 @@ int loadsetup(const char *fn)
 						int value = 0;
 						if (scriptfile_getnumber(cfg, &value)) break;
 						*(int*)configspec[item].store = (value != 0);
+						break;
+					}
+					case type_charbool: {
+						int value = 0;
+						if (scriptfile_getnumber(cfg, &value)) break;
+						*(char*)configspec[item].store = (value != 0);
 						break;
 					}
 					case type_int: {
@@ -301,6 +308,10 @@ int writesetup(const char *fn)
 		switch (configspec[item].type) {
 			case type_bool: {
 				fprintf(fp, "%d\n", (*(int*)configspec[item].store != 0));
+				break;
+			}
+			case type_charbool: {
+				fprintf(fp, "%d\n", (*(char*)configspec[item].store != 0));
 				break;
 			}
 			case type_int: {

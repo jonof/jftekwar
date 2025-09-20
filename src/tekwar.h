@@ -44,7 +44,7 @@ extern int forcesetup;
 extern unsigned char option[NUMOPTIONS];
 extern int keys[NUMKEYS];
 extern int moreoptions[MAXMOREOPTIONS];
-extern int toggles[MAXTOGGLES];
+extern char toggles[MAXTOGGLES];
 extern int  gamestuff[MAXGAMESTUFF];
 extern int digihz[8];
 
