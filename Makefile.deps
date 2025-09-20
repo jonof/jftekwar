@@ -4,7 +4,7 @@ $(SRC)/b5compat.$o: $(SRC)/b5compat.c $(build_h)
 $(SRC)/config.$o: $(SRC)/config.c $(ENGINEINC)/build.h $(SRC)/tekwar.h $(ENGINEINC)/osd.h $(ENGINEINC)/scriptfile.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/winlayer.h
 $(SRC)/tekcdr.$o: $(SRC)/tekcdr.c
 $(SRC)/tekchng.$o: $(SRC)/tekchng.c $(build_h) $(SRC)/names.h $(SRC)/tekwar.h
-$(SRC)/tekgame.$o: $(SRC)/tekgame.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h $(SRC)/tekver.c $(SRC)/startwin.h $(SRC)/version.h
+$(SRC)/tekgame.$o: $(SRC)/tekgame.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/mmulti.h $(ENGINEINC)/osd.h $(SRC)/tekwar.h $(SRC)/tekver.c $(SRC)/startwin.h $(SRC)/version.h
 $(SRC)/tekgun.$o: $(SRC)/tekgun.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tekldsv.$o: $(SRC)/tekldsv.c $(build_h) $(SRC)/names.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tekmap.$o: $(SRC)/tekmap.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(SRC)/tekwar.h

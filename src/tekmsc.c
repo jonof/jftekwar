@@ -1715,23 +1715,23 @@ mprintf(short x,short y,char prop,char shade,char palnum,char *stg,...)
 void
 showmenu(void)
 {
-    if (xdim < 640) {
+    if (xdim <= 640 && ydim <= 400) {
         rotatesprite(160<<16,100<<16, 65536, 0, MENUSTATION, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
         rotatesprite(160<<16,100<<16, 65536, 0, MENUGLASS, 0, 0, 1+2+8, 0, 0, xdim-1, ydim-1);
     } else {
-        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[MENUPANEL4801]), 0, MENUPANEL4801, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
-        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[MENUPANEL4802]), 0, MENUPANEL4802, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[MENUPANEL4801]), 0, MENUPANEL4801, 0, 0, 2+8+256, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[MENUPANEL4802]), 0, MENUPANEL4802, 0, 0, 2+8+256, 0, 0, xdim-1, ydim-1);
     }
 }
 
 void
 showhelpscreen(void)
 {
-    if (xdim < 640) {
-        rotatesprite(160<<16,160<<16, 65536, 0, HELPSCREENPIC, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+    if (xdim <= 640 && ydim <= 400) {
+        rotatesprite(160<<16,100<<16, 65536, 0, HELPSCREENPIC, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
     } else {
-        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[HELPSCREEN4801]), 0, HELPSCREEN4801, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
-        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[HELPSCREEN4802]), 0, HELPSCREEN4802, 0, 0, 2+8, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,50<<16, divscale15(200, tilesizy[HELPSCREEN4801]), 0, HELPSCREEN4801, 0, 0, 2+8+256, 0, 0, xdim-1, ydim-1);
+        rotatesprite(160<<16,150<<16, divscale15(200, tilesizy[HELPSCREEN4802]), 0, HELPSCREEN4802, 0, 0, 2+8+256, 0, 0, xdim-1, ydim-1);
     }
 }
 
@@ -2360,6 +2360,7 @@ tekendscreen()
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
           memset(keystatus, 0, sizeof(keystatus));
           loadtile(ES2A_SVGA);
@@ -2368,6 +2369,7 @@ tekendscreen()
           overwritesprite(0L,239L,ES2B_SVGA,0,0,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
      }
      else if( xdim == 320 ) {
@@ -2377,12 +2379,14 @@ tekendscreen()
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
           memset(keystatus, 0, sizeof(keystatus));
           loadtile(ES2_VGA);
           overwritesprite(0L,0L,ES2_VGA,0,0,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
      }
      else {
@@ -2392,12 +2396,14 @@ tekendscreen()
           nextpage();
           fadein(0,255,50);
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
           memset(keystatus, 0, sizeof(keystatus));
           loadtile(ES2_VGA);
           overwritesprite(0,0,ES2_VGA,0,0x02,0);
           nextpage();
           while( (keystatus[1] == 0) && (keystatus[57] == 0) && (keystatus[28] == 0) ) {
+              handleevents();
           }
      }
 }

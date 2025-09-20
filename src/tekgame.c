@@ -4,6 +4,7 @@
 #include "cache1d.h"
 #include "baselayer.h"
 #include "mmulti.h"
+#include "osd.h"
 #include "startwin.h"
 #include "version.h"
 
@@ -554,8 +555,12 @@ missionselection:
      screenpeek=myconnectindex;
      while( !gameover ) {
         handleevents();
+        OSD_DispatchQueued();
           while( movefifoplc != movefifoend ) {
                domovethings();
+          }
+          if( activemenu != 0 ) {
+               domenuinput();
           }
           drawscreen(screenpeek,(totalclock-gotlastpacketclock)*(65536/TICSPERFRAME));
      }
@@ -1444,10 +1449,6 @@ getinput()
      int      mvel=0, msvel=0, mangvel=0, mhorizvel=0;
      int      jvel=0, jsvel=0, jangvel=0, jhorizvel=0;
      short    moving=0,strafing=0,turning=0;
-
-     if( activemenu != 0 ) {
-          domenuinput();
-     }
 
      // normal game keys active
      if( typemode == 0 ) {

@@ -169,7 +169,7 @@ smkplayseq(char *name)
 #endif
           clearallviews(0);
           rotatesprite(160<<16, 100<<16, divscale16(200, tilesizx[SMKPICNUM0+frame]),
-                      512, SMKPICNUM0+frame, 0, 0, 2+4+64, 0, 0, xdim-1, ydim-1);
+                      512, SMKPICNUM0+frame, 0, 0, 2+4+8+64, 0, 0, xdim-1, ydim-1);
           nextpage();
 
           handleevents();
@@ -276,7 +276,7 @@ smkshowmenu()
 
      clearallviews(0);
      rotatesprite(160<<16, 100<<16, divscale16(200, tilesizx[SMKPICNUM0]),
-                 512, SMKPICNUM0, 0, 0, 2+4, 0, 0, xdim-1, ydim-1);
+                 512, SMKPICNUM0, 0, 0, 2+4+8+256, 0, 0, xdim-1, ydim-1);
      nextpage();
 }
 
