@@ -38,7 +38,7 @@ void printext(int x, int y, char *buffer, short tilenum, unsigned char invisible
 
     for(i=0;buffer[i]!=0;i++) {
         ch = (unsigned char)buffer[i];
-        rotatesprite((x-((ch&15)<<3))<<16,(y-((ch>>4)<<3))<<16,65536L,0,tilenum,0,0,8+16+128,x,y,x+7,y+7);
+        rotatesprite((x-((ch&15)<<3))<<16,(y-((ch>>4)<<3))<<16,65536L,0,tilenum,0,0,8+16,x,y,x+7,y+7);
         x += 8;
     }
 }

@@ -167,7 +167,7 @@ short fsyncsvel[MAXPLAYERS], osyncsvel[MAXPLAYERS], syncsvel[MAXPLAYERS];       
 short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAXPLAYERS]; // Les 09/27/95
 unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
 
-char frameinterpolate = 1, detailmode = 0, ready2send = 0;
+char frameinterpolate = 1, ready2send = 0;
 int ototalclock = 0, gotlastpacketclock = 0, smoothratio;
 int oposx[MAXPLAYERS], oposy[MAXPLAYERS], oposz[MAXPLAYERS];
 int ohoriz[MAXPLAYERS], ozoom[MAXPLAYERS];
@@ -1022,7 +1022,7 @@ processinput(short snum)
           }
 #endif
           if( snum == screenpeek ) {
-               if (dimensionmode[snum] == 2) setview(0L,0L,xdim-1,(ydim-1)>>detailmode);
+               if (dimensionmode[snum] == 2) setview(0L,0L,xdim-1,ydim-1);
                if (dimensionmode[snum] == 3) setup3dscreen();
           }
      }
@@ -1138,59 +1138,17 @@ drawscreen(short snum, int dasmoothratio)
           if( dimensionmode[myconnectindex] == 3 ) {
                tempint = screensize;
                if( ((locbits&32) > (screensizeflag&32)) && (screensize > 64) ) {
-                    ox1 = (xdim>>1)-(screensize>>1);
-                    ox2 = ox1+screensize-1;
-                    oy1 = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
-                    oy2 = oy1+((screensize*(ydim-32))/xdim)-1;
-                    tekview(&ox1,&oy1, &ox2,&oy2);
                     screensize -= (screensize>>3);
-                    if( tempint > xdim ) {
-                         screensize = xdim;
-                         permanentwritesprite((xdim-320)>>1,ydim-32,STATUSBAR,0,0,0,xdim-1,ydim-1,0);
-                         i = ((xdim-320)>>1);
-                         while( i >= 8 ) {
-                              i -= 8, permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0);
-                         }
-                         if( i >= 4 ) {
-                              i -= 4, permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0);
-                         }
-                         i = ((xdim-320)>>1)+320;
-                         while( i <= xdim-8 ) {
-                              permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0), i += 8;
-                         }
-                         if( i <= xdim-4 ) {
-                              permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0), i += 4;
-                         }
-                    }
-                    x1 = (xdim>>1)-(screensize>>1);
-                    x2 = x1+screensize-1;
-                    y1 = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
-                    y2 = y1+((screensize*(ydim-32))/xdim)-1;
-                    tekview(&x1,&y1,&x2,&y2);
-                    setview(x1,y1>>detailmode,x2,y2>>detailmode);
-                    permanentwritespritetile(0L,0L,BACKGROUND,0,ox1,oy1,x1-1,oy2,0);
-                    permanentwritespritetile(0L,0L,BACKGROUND,0,x2+1,oy1,ox2,oy2,0);
-                    permanentwritespritetile(0L,0L,BACKGROUND,0,x1,oy1,x2,y1-1,0);
-                    permanentwritespritetile(0L,0L,BACKGROUND,0,x1,y2+1,x2,oy2,0);
+                    if( tempint > 320 ) screensize = 320;
+                    screensizeflag = 1;
                }
-               if( ((locbits&16) > (screensizeflag&16)) && (screensize <= xdim) ) {
+               if( ((locbits&16) > (screensizeflag&16)) && (screensize <= 320) ) {
                     screensize += (screensize>>3);
-                    if( (screensize > xdim) && (tempint == xdim) ) {
-                         screensize = xdim+1;
-                         x1 = 0; y1 = 0;
-                         x2 = xdim-1; y2 = ydim-1;
-                    }
-                    else {
-                         if (screensize > xdim) screensize = xdim;
-                         x1 = (xdim>>1)-(screensize>>1);
-                         x2 = x1+screensize-1;
-                         y1 = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
-                         y2 = y1+((screensize*(ydim-32))/xdim)-1;
-                    }
-                    tekview(&x1,&y1,&x2,&y2);
-                    setview(x1,y1>>detailmode,x2,y2>>detailmode);
+                    if( (screensize > 320) && (tempint == 320) ) screensize = 320+1;
+                    else if (screensize > 320) screensize = 320;
+                    screensizeflag = 1;
                }
-               screensizeflag = locbits;
+               screensizeflag = (locbits&48) | (screensizeflag&1);
           }
      }
 
@@ -1249,23 +1207,6 @@ drawscreen(short snum, int dasmoothratio)
      if( dofadein != 0 ) {
           fadein(0,255,dofadein);
      }
-
-    #ifdef OOGIE
-     // F5 key
-     if( keystatus[0x3f] > 0 ) {
-          keystatus[0x3f] = 0;
-          detailmode ^= 1;
-          if( detailmode == 0 ) {
-               setview(windowx1,windowy1<<1,windowx2,(windowy2<<1)+1);
-               outp(0x3d4,0x9); outp(0x3d5,(inp(0x3d5)&~31)|1);
-          }
-          else {
-               setview(windowx1,windowy1>>detailmode,windowx2,windowy2>>detailmode);
-               setaspect(yxaspect>>1);
-               outp(0x3d4,0x9); outp(0x3d5,(inp(0x3d5)&~31)|3);
-          }
-     }
-    #endif
 
      // F12 key
      if( keystatus[0x58] > 0 ) {
@@ -1772,7 +1713,7 @@ getinput()
           }
           else {
                dimensionmode[screenpeek]=2;
-               setview(0L,0L,xdim-1,(ydim-1)>>detailmode);
+               setview(0L,0L,xdim-1,ydim-1);
           }
      }
     #endif
@@ -1916,7 +1857,7 @@ playback()
                keystatus[keys[14]] = 0;
                dimensionmode[screenpeek]++;
                if (dimensionmode[screenpeek] > 3) dimensionmode[screenpeek] = 1;
-               if (dimensionmode[screenpeek] == 2) setview(0L,0L,xdim-1,(ydim-1)>>detailmode);
+               if (dimensionmode[screenpeek] == 2) setview(0L,0L,xdim-1,ydim-1);
                if (dimensionmode[screenpeek] == 3) setup3dscreen();
           }
      }

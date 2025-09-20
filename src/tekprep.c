@@ -708,7 +708,7 @@ tekpreinit(void)
      initmenu();
      initmoreoptions();
      if( screensize == 0 ) {
-          screensize=MAXXDIM;
+          screensize=320;
      }
      activemenu=0;
 
@@ -822,7 +822,7 @@ void
 tekview(int *x1, int *y1, int *x2, int *y2)
 {
     (void)x1; (void)x2;
-     if( screensize <= xdim ) {
+     if( screensize <= 320 ) {
           *y1+=16;
           *y2+=16;
      }

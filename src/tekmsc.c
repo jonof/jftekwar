@@ -436,28 +436,27 @@ setup3dscreen()
 {
      int      i, dax, day, dax2, day2;
 
-     if( screensize > xdim ) {
+     flushperms();
+     if( screensize > 320 ) {
           dax = 0; day = 0;
           dax2 = xdim-1; day2 = ydim-1;
      }
      else {
-          dax = (xdim>>1)-(screensize>>1);
-          dax2 = dax+screensize-1;
-          day = ((ydim-32)>>1)-(((screensize*(ydim-32))/xdim)>>1);
-          day2 = day + ((screensize*(ydim-32))/xdim)-1;
-          tekview(&dax,&day,&dax2,&day2);
-          setview(dax,day>>detailmode,dax2,day2>>detailmode);
+          i = scale(xdim, screensize, 320);
+          dax = (xdim>>1)-(i>>1);
+          dax2 = dax+i-1;
+          day = ((ydim-32)>>1)-(((i*(ydim-32))/xdim)>>1);
+          day2 = day + ((i*(ydim-32))/xdim)-1;
      }
-     if( screensize <= xdim ) {
-          permanentwritespritetile(0L,0L,BACKGROUND,0,0L,0L,xdim-1,ydim-1,0);
-          permanentwritesprite((xdim-320)>>1,ydim-32,STATUSBAR,0,0,0,xdim-1,ydim-1,0);
-          i = ((xdim-320)>>1);
-          while (i >= 8) i -= 8, permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0);
-          if (i >= 4) i -= 4, permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0);
-          i = ((xdim-320)>>1)+320;
-          while (i <= xdim-8) permanentwritesprite(i,ydim-32,STATUSBARFILL8,0,0,0,xdim-1,ydim-1,0), i += 8;
-          if (i <= xdim-4) permanentwritesprite(i,ydim-32,STATUSBARFILL4,0,0,0,xdim-1,ydim-1,0), i += 4;
+     tekview(&dax,&day,&dax2,&day2);
+     setview(dax,day,dax2,day2);
+     if( screensize <= 320 ) {
+          permanentwritespritetile(0L,0L,BACKGROUND,8,0,0,dax-1,ydim-1,0);
+          permanentwritespritetile(0L,0L,BACKGROUND,8,dax2+1,0,xdim-1,ydim-1,0);
+          permanentwritespritetile(0L,0L,BACKGROUND,8,dax,0,dax2,day-1,0);
+          permanentwritespritetile(0L,0L,BACKGROUND,8,dax,day2+1,dax2,ydim-1,0);
      }
+     screensizeflag &= ~1;
 }
 
 void
@@ -717,12 +716,13 @@ void
 redrawbackfx(void)
 {
      memmove(otoggles,toggles,MAXTOGGLES);
+     if (screensizeflag&1) setup3dscreen();
 }
 
 void
 holyon()
 {
-     if( screensize <= xdim ) {
+     if( screensize <= 320 ) {
           printext((xdim>>1)-16,4,"HOLY",ALPHABET2,255);
      }
 }
@@ -730,7 +730,7 @@ holyon()
 void
 holyoff()
 {
-     if( screensize <= xdim ) {
+     if( screensize <= 320 ) {
           permanentwritesprite((xdim>>1)-16,4,TIMERESTORE,
                                0,(xdim>>1)-16,4,xdim-1,ydim-1,0);
      }
@@ -741,7 +741,7 @@ showtime()
 {
      int   alphabet=ALPHABET+(xdim > 360);
 
-     if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
+     if( (screensize > 320) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_TIME] ) {
                sprintf(tektempbuf,"%02d:%02d:%02d", hours,minutes,seconds);
                printext(xdim-72,ydim-12,tektempbuf,alphabet,255);
@@ -775,7 +775,7 @@ showscore()
 {
      int   alphabet=ALPHABET+(xdim > 360);
 
-     if( (screensize > xdim) || (dimensionmode[screenpeek] == 2) ) {
+     if( (screensize > 320) || (dimensionmode[screenpeek] == 2) ) {
           if( toggles[TOGGLE_SCORE] ) {
                if( score[screenpeek] == 1 ) {
                     sprintf(tektempbuf,"%08d", 0);
@@ -822,7 +822,7 @@ showinv(int snum)
      char      ti=toggles[TOGGLE_INVENTORY];
      char      shade;
 
-     if( (screensize < xdim) || (toggles[TOGGLE_INVENTORY] == 0) ) {
+     if( (screensize < 320) || (toggles[TOGGLE_INVENTORY] == 0) ) {
           goto skipsyms;
      }
      if( symbols[0] ) {
@@ -1029,7 +1029,7 @@ netstats()
                     }
                }
               #endif
-               if( (toggles[TOGGLE_SCORE]) && (screensize >= xdim) ) {
+               if( (toggles[TOGGLE_SCORE]) && (screensize >= 320) ) {
                     sprintf(tektempbuf,"%2d %10s %6d",i,netnames[i],score[i]);
                     printext(12,(windowy1+32)+(i<<3),tektempbuf,ALPHABET,255);
                }
@@ -1188,7 +1188,7 @@ tekscreenfx(void)
      if( activemenu == 0 ) {
           showinv(screenpeek);
      }
-     if( toggles[TOGGLE_GODMODE] && (screensize > xdim) ) {
+     if( toggles[TOGGLE_GODMODE] && (screensize > 320) ) {
            printext((xdim>>1)-16,4,"HOLY",ALPHABET2,255);
      }
      if (otoggles[TOGGLE_HEALTH]) {
@@ -1773,23 +1773,12 @@ domenu(void)
           }
          #endif
           playsound( S_MENUSOUND2 ,0,0,0,ST_IMMEDIATE);
-          setup3dscreen();
           activemenu=0;
           firstpass=0;
           return;
      }
      vel=svel=angvel=0;
      mptr=&menu[activemenu][0];
-     if (redrawborders) {
-          dax=windowx1;
-          dax2=windowx2;
-          day=windowy1;
-          day2=windowy2;
-          if (dax2-dax < xdim-1 || day2-day < ydim-1) {
-               setup3dscreen();
-          }
-          redrawborders=0;
-     }
      if (selopt == 0) {
           switch (activemenu) {
           case MENULOADGAME:
@@ -2420,6 +2409,8 @@ choosemission()
      char      onlymission8=0;
      //char      cdstopped=0;
 
+     flushperms();
+     setview(0,0,xdim-1,ydim-1);
      if( generalplay ) {
           return(choosemap());
      }
