@@ -30,11 +30,12 @@ int       jlowx,jlowy,
 char      oldjoyb;
 //** Les  END  - 09/26/95
 short     yaw,pitch,roll,vrangle,vrpitch;
+int       mouselookmode,mouselook;
 
 #endif
 
-int vel, svel, angvel;
-int vel2, svel2, angvel2;
+int vel, svel, angvel, horizvel;
+int vel2, svel2, angvel2, horizvel2;
 
 int recording = -2;
 
@@ -49,7 +50,7 @@ unsigned char option[NUMOPTIONS] = {
       1,       // 0  VIDEO MODE CHAINED OR NO
       0,       // 1  SOUND CHOICE
       0,       // 2  MUSIC CHOICE
-      1,       // 3  MOUSE ON/OFF
+      1,       // 3  MOUSE ON/OFF, +2 JOYSTICK ON/OFF
       0,       // 4  MULTIPLAYER COUNT
       0,       // 5  MULTIPLYER SETTING
       2,       // 6  VIDEO RES CHOICE
@@ -85,15 +86,13 @@ int keys[NUMKEYS] = {
       23,         // 26 TOGGLE INVENTORY
       53,         // 27 CONCEAL WEAPON
       58,         // 28 MOUSE LOOKUP/DOWN
-      26,         // 29 N/U
-      26,         // 30 N/U
-      26          // 31 N/U
+      69,         // 29 CONSOLE
 };
 int moreoptions[MAXMOREOPTIONS] = {
-        1,     // 0  MOUSE ON/OFF
-       29,     // 1  MOUSE BUTTON 1 MAP
-      200,     // 2  MOUSE BUTTON 2 MAP
-        0,     // 3  JOYSTICK ON/OFF
+        0,     // 0  N/U
+        6,     // 1  MOUSE BUTTON 1 MAP
+        7,     // 2  MOUSE BUTTON 2 MAP
+        0,     // 3  N/U
         4,     // 4  JOYSTICK BUTTON 1 MAP
         6,     // 5  JOYSTICK BUTTON 2 MAP
        10,     // 6  JOYSTICK BUTTON 3 MAP
@@ -152,6 +151,7 @@ int locselectedgun;
 signed char locvel, olocvel;
 short locsvel, olocsvel;                          // Les 09/27/95
 short locangvel, olocangvel;                      // Les 09/27/95
+signed char lochorizvel, olochorizvel;
 short locbits, olocbits;
 
      //Local multiplayer variables for second player
@@ -159,12 +159,14 @@ int locselectedgun2;
 signed char locvel2, olocvel2;
 short locsvel2, olocsvel2;                        // Les 09/27/95
 short locangvel2, olocangvel2;                    // Les 09/27/95
+signed char lochorizvel2, olochorizvel2;
 short locbits2, olocbits2;
 
   //Multiplayer syncing variables
 signed char fsyncvel[MAXPLAYERS], osyncvel[MAXPLAYERS], syncvel[MAXPLAYERS];
 short fsyncsvel[MAXPLAYERS], osyncsvel[MAXPLAYERS], syncsvel[MAXPLAYERS];       // Les 09/27/95
 short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAXPLAYERS]; // Les 09/27/95
+signed char fsynchorizvel[MAXPLAYERS], osynchorizvel[MAXPLAYERS], synchorizvel[MAXPLAYERS];
 unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
 
 char frameinterpolate = 1, ready2send = 0;
@@ -179,6 +181,7 @@ int movefifoplc, movefifoend;
 signed char baksyncvel[MOVEFIFOSIZ][MAXPLAYERS];
 short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/27/95
 short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/27/95
+signed char baksynchorizvel[MOVEFIFOSIZ][MAXPLAYERS];
 short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
      //GAME.C sync state variables
@@ -196,6 +199,7 @@ int reccnt, recstat = 1;
 signed char recsyncvel[16384][2];
 short recsyncsvel[16384][2];                      // Les 09/27/95
 short recsyncangvel[16384][2];                    // Les 09/27/95
+signed char recsynchorizvel[16384][2];
 short recsyncbits[16384][2];
 
      //Miscellaneous variables
@@ -516,6 +520,7 @@ missionselection:
      olocvel = 0; olocvel2 = 0;
      olocsvel = 0; olocsvel2 = 0;
      olocangvel = 0; olocangvel2 = 0;
+     olochorizvel = 0; olochorizvel2 = 0;
      olocbits = 0; olocbits2 = 0;
      lockclock = 0;
      ototalclock = 0;
@@ -525,6 +530,7 @@ missionselection:
           fsyncvel[i] = syncvel[i] = osyncvel[i] = 0;
           fsyncsvel[i] = syncsvel[i] = osyncsvel[i] = 0;
           fsyncangvel[i] = syncangvel[i] = osyncangvel[i] = 0;
+          fsynchorizvel[i] = synchorizvel[i] = osynchorizvel[i] = 0;
           fsyncbits[i] = syncbits[i] = osyncbits[i] = 0;
      }
      resettiming();
@@ -669,7 +675,7 @@ processinput(short snum)
           if( health[snum] <= -160 ) {
                hvel[snum] = 0;
                if( snum == myconnectindex ) {
-                    vel = 0, svel = 0, angvel = 0, keystatus[3] = 1;
+                    vel = 0, svel = 0, angvel = 0, horizvel = 0, keystatus[3] = 1;
                }
                deaths[snum]++;
                if( (option[4] == 0) && (numplayers == 1) ) {
@@ -723,6 +729,12 @@ processinput(short snum)
      if( (syncbits[snum]&64) != 0 ) {
           autocenter[snum]=1;
      }
+     if( synchorizvel[snum] != 0 ) {
+          horiz[snum] += synchorizvel[snum];
+          if(horiz[snum] < 0) horiz[snum]=0;
+          else if(horiz[snum] > 200) horiz[snum]=200;
+          autocenter[snum]=0;
+     }
      if( autocenter[snum] ) {
           if( horiz[snum] > 100 ) {
                horiz[snum]-=4;
@@ -741,8 +753,8 @@ processinput(short snum)
           }
      }
 
-     if (((syncbits[snum]&8) > 0) && (horiz[snum] > 100-(200>>1))) horiz[snum] -= 4;     //-
-     if (((syncbits[snum]&4) > 0) && (horiz[snum] < 100+(200>>1))) horiz[snum] += 4;   //+
+     // if (((syncbits[snum]&8) > 0) && (horiz[snum] > 100-(200>>1))) horiz[snum] -= 4;     //-
+     // if (((syncbits[snum]&4) > 0) && (horiz[snum] < 100+(200>>1))) horiz[snum] += 4;   //+
 
      // 32 pixels above floor is where player should be
      goalz = globloz-(KENSPLAYERHEIGHT<<8);
@@ -1283,6 +1295,7 @@ movethings()
           baksyncvel[movefifoend][i] = fsyncvel[i];
           baksyncsvel[movefifoend][i] = fsyncsvel[i];
           baksyncangvel[movefifoend][i] = fsyncangvel[i];
+          baksynchorizvel[movefifoend][i] = fsynchorizvel[i];
           baksyncbits[movefifoend][i] = fsyncbits[i];
      }
      movefifoend = ((movefifoend+1)&(MOVEFIFOSIZ-1));
@@ -1310,6 +1323,7 @@ domovethings()
           syncvel[i] = baksyncvel[movefifoplc][i];
           syncsvel[i] = baksyncsvel[movefifoplc][i];
           syncangvel[i] = baksyncangvel[movefifoplc][i];
+          synchorizvel[i] = baksynchorizvel[movefifoplc][i];
           syncbits[i] = baksyncbits[movefifoplc][i];
      }
      movefifoplc = ((movefifoplc+1)&(MOVEFIFOSIZ-1));
@@ -1344,6 +1358,7 @@ domovethings()
                recsyncvel[reccnt][j] = syncvel[i];
                recsyncsvel[reccnt][j] = syncsvel[i];
                recsyncangvel[reccnt][j] = syncangvel[i];
+               recsynchorizvel[reccnt][j] = synchorizvel[i];
                recsyncbits[reccnt][j] = syncbits[i];
                j++;
           }
@@ -1386,7 +1401,7 @@ adjustbiasthreshhold(short mousy)
 }
 
 //** Les START - 09/27/95
-short moreoptionbits[]={
+short moreoptionbits[NUMKEYS]={
      -1,                           //  0 move forward
      -1,                           //  1 move backward
      -1,                           //  2 turn right
@@ -1415,7 +1430,8 @@ short moreoptionbits[]={
      -1,                           // 25 score
      -1,                           // 26 inventory
       7,                           // 27 conceal weapon
-     -1                            // 28 mouse look mode
+     -1,                           // 28 mouse look mode
+     -1,                           // 29 console
 };
 //** Les END   - 09/27/95
 
@@ -1423,9 +1439,11 @@ void
 getinput()
 {
      int      ch, keystate;
-     int      i, j;
-     int     mousx, mousy, bstatus;
-     short     moving,strafing,turning;
+     int      i, j, clocbits=0;
+     int      mousx=0, mousy=0, bstatus=0;
+     int      mvel=0, msvel=0, mangvel=0, mhorizvel=0;
+     int      jvel=0, jsvel=0, jangvel=0, jhorizvel=0;
+     short    moving=0,strafing=0,turning=0;
 
      if( activemenu != 0 ) {
           domenuinput();
@@ -1456,118 +1474,49 @@ getinput()
           }
      }
 
-//** Les  - moved from below to apply button movements to vel, svel and angvel
-//**        if needed
-
-     mousx=mousy=bstatus=0;
-     if( moreoptions[0] != 0 ) {
+     if( option[3] & 1 ) {
           getmousevalues(&mousx,&mousy,&bstatus);
-          if( biasthreshholdon && (bstatus&6) ) {
-               adjustbiasthreshhold(mousy);
-               bstatus=0;
-          }
-          // if horizon key down
-          if( keystatus[58] == 0 ) {
-               if( mousy > (biasthreshhold) ) {
-                    mousebias=-1;
+          for(i=0; i<2; i++) {
+               if (!(bstatus&(1<<i)) || moreoptions[i+1] < 0 || moreoptions[i+1] >= NUMKEYS-1)
+                    continue;
+               switch (moreoptions[i+1]) {
+                    case 0: moving=1; break;
+                    case 1: moving=-1; break;
+                    case 2: turning=1; break;
+                    case 3: turning=-1; break;
+                    case 5: strafing=2; break;
+                    case 12: strafing=-1; break;
+                    case 13: strafing=1; break;
+                    default:
+                         if (moreoptionbits[moreoptions[i+1]] >= 0) {
+                              clocbits |= 1<<moreoptionbits[moreoptions[i+1]];
+                         }
+                         break;
                }
-               else if( mousy < -(biasthreshhold) ) {
-                    mousebias=+1;
-               }
           }
+          oldmousebstatus = bstatus;
      }
-//** Les START - 09/26/95
-     locbits=(locselectedgun<<13);                          // Les 09/28/95 moved from below
-     if (jstickenabled) {
-//          showmessage("X: %05d Y: %05d B:%04X",joyx,joyy,joyb);
-          if (joyaxis[0] < jlowx) {
-               angvel=max(min(angvel-joyaxis[0],127),-128);
-          }
-          else if (joyaxis[0] > jhighx) {
-               angvel=min(max(angvel+joyaxis[0],-128),127);
-          }
-          if (joyaxis[1] < jlowy) {
-               vel=min(max(vel+joyaxis[1],-128),127);
-          }
-          else if (joyaxis[1] > jhighy) {
-               vel=max(min(vel-joyaxis[1],127),-128);
-          }
-          for (i=0 ; i < 4 ; i++) {
-               if ((joyb&(0x10<<i)) == 0) {
-                    if (moreoptions[i+4] == 0) {
-                         moving=1;
-                    }
-                    else if (moreoptions[i+4] == 1) {
-                         moving=-1;
-                    }
-                    else if (moreoptions[i+4] == 2) {
-                         turning=1;
-                    }
-                    else if (moreoptions[i+4] == 3) {
-                         turning=-1;
-                    }
-                    else if (moreoptions[i+4] == 5) {
-                         strafing=2;
-                    }
-                    else if (moreoptions[i+4] == 12) {
-                         strafing=-1;
-                    }
-                    else if (moreoptions[i+4] == 13) {
-                         strafing=1;
-                    }
-                    else if (moreoptionbits[moreoptions[i+4]] >= 0) {
-                         locbits|=(1<<moreoptionbits[moreoptions[i+4]]);
-                    }
+     if ( option[3] & 2 ) {
+          for(i=0; i<4; i++) {
+               if (!(joyb&(1<<i)) || moreoptions[i+4] < 0 || moreoptions[i+4] >= NUMKEYS-1)
+                    continue;
+               switch (moreoptions[i+4]) {
+                    case 0: moving=1; break;
+                    case 1: moving=-1; break;
+                    case 2: turning=1; break;
+                    case 3: turning=-1; break;
+                    case 5: strafing=2; break;
+                    case 12: strafing=-1; break;
+                    case 13: strafing=1; break;
+                    default:
+                         if (moreoptionbits[moreoptions[i+4]] >= 0) {
+                              clocbits |= 1<<moreoptionbits[moreoptions[i+4]];
+                         }
+                         break;
                }
           }
           oldjoyb=joyb;
      }
-//** Les END   - 09/26/95
-
-//** Les START - 09/28/95
-     moving=strafing=turning=0;
-     if (moreoptions[0] != 0) {
-          for (i=0 ; i < 3 ; i++) {
-               if (bstatus&(1<<i)) {
-                    switch (i) {
-                    case 0:
-                         j=1;
-                         break;
-                    case 1:
-                         j=20;
-                         break;
-                    case 2:
-                         j=2;
-                         break;
-                    }
-                    if (moreoptions[j] == 0) {
-                         moving=1;
-                    }
-                    else if (moreoptions[j] == 1) {
-                         moving=-1;
-                    }
-                    else if (moreoptions[j] == 2) {
-                         turning=1;
-                    }
-                    else if (moreoptions[j] == 3) {
-                         turning=-1;
-                    }
-                    else if (moreoptions[j] == 5) {
-                         strafing=2;
-                    }
-                    else if (moreoptions[j] == 12) {
-                         strafing=-1;
-                    }
-                    else if (moreoptions[j] == 13) {
-                         strafing=1;
-                    }
-                    else {
-                         locbits|=(1<<moreoptionbits[moreoptions[j]]);
-                    }
-               }
-          }
-     }
-//** Les END   - 09/28/95
 
      // keyboard survey - use to be keytimerstuff() called from keyhandler
      if( keystatus[keys[5]] == 0 && strafing == 0 ) {    // Les 09/28/95
@@ -1610,47 +1559,52 @@ getinput()
           if( vel2  < 0 )   vel2    = min(vel2+2*TICSPERFRAME,0);
           if( vel2  > 0 )   vel2    = max(vel2-2*TICSPERFRAME,0);
      }
-     if( keystatus[keys[28]] ) {
-          i=horiz[myconnectindex]+((( int)mousy)>>3);
-          if( i > 200 ) i=200;
-          if( i < 0   ) i=0;
-          horiz[myconnectindex]=i;
-          keyedhorizon=1;
-          mousy=0;
-     }
-     else {
-          if( (keyedhorizon) && (horiz[myconnectindex] != 100) )
-               autocenter[myconnectindex]=1;
-          keyedhorizon=0;
-          mousx*=mousesensitivity;
-     }
-//     if( (bstatus&6) != 0 ) {
-//          vel=min(vel+(1<<(8+mousesensitivity)),127);
-//          vel*=mousebias;
-//     }
-     locvel = min(max(vel,-128+8),127-8);
-     locsvel = min(max(svel,-128+8),127-8);
-     locangvel = min(max(angvel,-512+16),511-16);            // Les 09/27/95
 
-     if (strafing == 2) {                                   // Les 09/28/95
-          locsvel=max(min(svel-mousx,511-16),-512+16);      // Les 09/28/95
-     }                                                      // Les 09/28/95
-     else {                                                 // Les 09/28/95
-          locangvel=min(max(locangvel+mousx,-512),511);     // Les 09/27/95
-     }                                                      // Les 09/28/95
-//** Les START - 09/28/95
-     if (mousy < 0) {
-          mousy-=(1<<mousesensitivity);
+     if( option[3] & 1 ) {
+          if(keystatus[keys[5]]) msvel-=(mousx*mousesensitivity);
+          else mangvel+=(mousx*mousesensitivity);
+
+          if (mouselookmode) {
+               if (keystatus[keys[28]]) {
+                    mouselook ^= 1;
+                    if (mouselook) showmessage("MOUSELOOK ON");
+                    else showmessage("MOUSELOOK OFF");
+                    keystatus[keys[28]]=0;
+               }
+          }
+          else {
+               mouselook = keystatus[keys[28]] > 0;
+          }
+          if (mouselook) mhorizvel-=(mousy>>1);
+          else mvel-=(mousy*mousesensitivity);
      }
-     else if (mousy > 0) {
-          mousy+=(1<<mousesensitivity);
+     if ( option[3] & 2 ) {
+          const int deadzone = 4096;
+          if (joynumaxes == 2) {
+               jangvel  = joyaxis[0];
+               jvel     =-joyaxis[1];
+          } else if (joynumaxes >= 4) {
+               jangvel  = joyaxis[2];
+               jvel     =-joyaxis[1];
+               jsvel    =-joyaxis[0];
+               jhorizvel=-joyaxis[3];
+          }
+          if (klabs(jvel) < deadzone) jvel=0;
+          if (klabs(jsvel) < deadzone) jsvel=0;
+          if (klabs(jangvel) < deadzone) jangvel=0;
+          if (klabs(jhorizvel) < deadzone) jhorizvel=0;
+          jvel = 127*(jvel-ksgn(jvel)*deadzone)/(32767-deadzone);
+          jsvel = 127*(jsvel-ksgn(jsvel)*deadzone)/(32767-deadzone);
+          jangvel = 127*(jangvel-ksgn(jangvel)*deadzone)/(32767-deadzone);
+          jhorizvel = (200/8)*(jhorizvel-ksgn(jhorizvel)*deadzone)/(32767-deadzone);
      }
-//** Les END   - 09/28/95
 
-     locvel=min(max(locvel-mousy,-128),127);
-//    locbits = (locselectedgun<<13); moved up to joystick section
+     locvel = min(max(vel+mvel+jvel,-128+8),127-8);
+     locsvel = min(max(svel+msvel+jsvel,-128+8),127-8);
+     locangvel = min(max(angvel+mangvel+jangvel,-512+16),511-16);            // Les 09/27/95
+     lochorizvel = max(-100,min(100,horizvel+mhorizvel+jhorizvel));
 
-
+     locbits = clocbits|(locselectedgun<<13);
      if( typemode == 0 ) {
          #ifdef MASTERSWITCHING
           locbits |= (keystatus[0x32]<<9);                  //M (be master)
@@ -1659,8 +1613,8 @@ getinput()
      }
      locbits |= keystatus[keys[8]];                         //Stand high
      locbits |= (keystatus[keys[9]] <<1);                   //Stand low
-     locbits |= (keystatus[keys[10]]<<2);                   //Look up
-     locbits |= (keystatus[keys[11]]<<3);                   //Look down
+     //locbits |= (keystatus[keys[10]]<<2);                   //Look up
+     //locbits |= (keystatus[keys[11]]<<3);                   //Look down
      locbits |= (keystatus[keys[16]]<<4);                   //Zoom in
      locbits |= (keystatus[keys[17]]<<5);                   //Zoom out
      locbits |= (keystatus[keys[19]]<<6);                   //AutoCenter     TekWar
@@ -1678,17 +1632,16 @@ getinput()
           locbits &= ~((keystatus[keys[14]]==1)<<12);
      }
 
-     if( (joyb == 236) || (joyb == 220) || (joyb == 124) || (joyb == 188) ) {
+     /*if( (joyb == 236) || (joyb == 220) || (joyb == 124) || (joyb == 188) ) {
           keystatus[keys[moreoptions[4]]]=0;
           keystatus[keys[moreoptions[5]]]=0;
           keystatus[keys[moreoptions[6]]]=0;
           keystatus[keys[moreoptions[7]]]=0;
-     }
+     }*/
 
-     oldmousebstatus = bstatus;
-     if( (locbits&2048) > 0 ) {
+     /*if( (locbits&2048) > 0 ) {
           oldmousebstatus &= ~1;
-     }
+     }*/
 
      // trap print scrn key
      if( keystatus[0xb7] > 0 ) {
@@ -1837,6 +1790,7 @@ playback()
                     fsyncvel[j] = recsyncvel[i][k];
                     fsyncsvel[j] = recsyncsvel[i][k];
                     fsyncangvel[j] = recsyncangvel[i][k];
+                    fsynchorizvel[j] = recsynchorizvel[i][k];
                     fsyncbits[j] = recsyncbits[i][k];
                     k++;
                }
@@ -1954,12 +1908,14 @@ checkmasterslaveswitch()
                olocvel = locvel+1; olocvel2 = locvel2+1;
                olocsvel = locsvel+1; olocsvel2 = locsvel2+1;
                olocangvel = locangvel+1; olocangvel2 = locangvel2+1;
+               olochorizvel = lochorizvel+1; olochorizvel2 = lochorizvel2+1;
                olocbits = locbits+1; olocbits2 = locbits2+1;
                for(i=0;i<MAXPLAYERS;i++)
                {
                     osyncvel[i] = fsyncvel[i]+1;
                     osyncsvel[i] = fsyncsvel[i]+1;
                     osyncangvel[i] = fsyncangvel[i]+1;
+                    osynchorizvel[i] = fsynchorizvel[i]+1;
                     osyncbits[i] = fsyncbits[i]+1;
                }
 
@@ -2000,6 +1956,7 @@ faketimerhandler()
                fsyncvel[myconnectindex] = locvel;
                fsyncsvel[myconnectindex] = locsvel;
                fsyncangvel[myconnectindex] = locangvel;
+               fsynchorizvel[myconnectindex] = lochorizvel;
                fsyncbits[myconnectindex] = locbits;
 
                if (option[4] != 0)
@@ -2011,7 +1968,11 @@ faketimerhandler()
                     for(i=connecthead;i>=0;i=connectpoint2[i])
                     {
                          l = 0;
-                         if (fsyncvel[i] != osyncvel[i]) tempbuf[j++] = fsyncvel[i], l |= 1;
+                         if (fsyncvel[i] != osyncvel[i] || fsynchorizvel[i] != osynchorizvel[i]) {
+                              tempbuf[j++] = fsyncvel[i];
+                              tempbuf[j++] = fsynchorizvel[i];
+                              l |= 1;
+                         }
 //** Les START - 09/27/95
                          if (fsyncsvel[i] != osyncsvel[i]) {
                               tempbuf[j++]=(fsyncsvel[i]&0xFF);
@@ -2036,6 +1997,7 @@ faketimerhandler()
                          osyncvel[i] = fsyncvel[i];
                          osyncsvel[i] = fsyncsvel[i];
                          osyncangvel[i] = fsyncangvel[i];
+                         osynchorizvel[i] = fsynchorizvel[i];
                          osyncbits[i] = fsyncbits[i];
                     }
 #if 0
@@ -2063,12 +2025,13 @@ faketimerhandler()
                     locvel2 = min(max(vel2,-128+8),127-8);
                     locsvel2 = min(max(svel2,-128+8),127-8);
                     locangvel2 = min(max(angvel2,-128+16),127-16);
+                    lochorizvel2 = min(max(horizvel2,-128+8),127-8);
                     locbits2 = (locselectedgun2<<13);
                     locbits2 |= keystatus[0x45];                  //Stand high
                     locbits2 |= (keystatus[0x47]<<1);             //Stand low
                     locbits2 |= (1<<8);                           //Run
-                    locbits2 |= (keystatus[0x49]<<2);             //Look up
-                    locbits2 |= (keystatus[0x37]<<3);             //Look down
+                    //locbits2 |= (keystatus[0x49]<<2);             //Look up
+                    //locbits2 |= (keystatus[0x37]<<3);             //Look down
                     locbits2 |= (keystatus[0x50]<<10);            //Space
                     locbits2 |= (keystatus[0x52]<<11);            //Shoot
 
@@ -2078,6 +2041,7 @@ faketimerhandler()
                     fsyncvel[other] = locvel2;
                     fsyncsvel[other] = locsvel2;
                     fsyncangvel[other] = locangvel2;
+                    fsynchorizvel[other] = lochorizvel2;
                     fsyncbits[other] = locbits2;
                }
                movethings();  //Move EVERYTHING (you too!)
@@ -2094,7 +2058,11 @@ faketimerhandler()
                tempbuf[0] = 1; k = 0;
                j = 2;
 
-               if (locvel != olocvel) tempbuf[j++] = locvel, k |= 1;
+               if (locvel != olocvel || lochorizvel != olochorizvel) {
+                    tempbuf[j++] = locvel;
+                    tempbuf[j++] = lochorizvel;
+                    k |= 1;
+               }
 //** Les START - 09/27/95
                if (locsvel != olocsvel) {
                     tempbuf[j++]=locsvel&0xFF;
@@ -2115,6 +2083,7 @@ faketimerhandler()
                olocvel = locvel;
                olocsvel = locsvel;
                olocangvel = locangvel;
+               olochorizvel = lochorizvel;
                olocbits = locbits;
 
                sendpacket(connecthead,tempbuf,j);
@@ -2139,7 +2108,10 @@ getpackets()
                     for(i=connecthead;i>=0;i=connectpoint2[i])
                     {
                          l = (tempbuf[k>>3]>>(k&7));
-                         if (l&1) fsyncvel[i] = tempbuf[j++];
+                         if (l&1) {
+                              fsyncvel[i] = tempbuf[j++];
+                              fsynchorizvel[i] = tempbuf[j++];
+                         }
 //** Les START - 09/27/95
                          if (l&2) {
                               fsyncsvel[i]=tempbuf[j++];
@@ -2193,7 +2165,10 @@ getpackets()
                     break;
                case 1:  //[1] (receive slave sync buffer)
                     j = 2; k = tempbuf[1];
-                    if (k&1) fsyncvel[other] = tempbuf[j++];
+                    if (k&1) {
+                         fsyncvel[other] = tempbuf[j++];
+                         fsynchorizvel[other] = tempbuf[j++];
+                    }
 //** Les START - 09/27/95
                      if (k&2) {
                          fsyncsvel[other]=tempbuf[j++];

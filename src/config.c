@@ -140,27 +140,63 @@ static struct {
 	{ "keystrafe", type_hex, &keys[5], NULL },
 	{ "keyfire", type_hex, &keys[6], NULL },
 	{ "keyuse", type_hex, &keys[7], NULL },
-	{ "keystandhigh", type_hex, &keys[8], NULL },
-	{ "keystandlow", type_hex, &keys[9], NULL },
+	{ "keyjump", type_hex, &keys[8], NULL },
+	{ "keycrouch", type_hex, &keys[9], NULL },
 	{ "keylookup", type_hex, &keys[10], NULL },
 	{ "keylookdown", type_hex, &keys[11], NULL },
+	{ "keycentre", type_hex, &keys[19], NULL },
 	{ "keystrafeleft", type_hex, &keys[12], NULL },
 	{ "keystraferight", type_hex, &keys[13], NULL },
-	{ "key2dmode", type_hex, &keys[14], NULL },
-	{ "keyviewcycle", type_hex, &keys[15], NULL },
-	{ "key2dzoomin", type_hex, &keys[16], NULL },
-	{ "key2dzoomout", type_hex, &keys[17], NULL },
+	{ "keymap", type_hex, &keys[14], NULL },
+	// { "keyviewcycle", type_hex, &keys[15], NULL },
+	{ "keyzoomin", type_hex, &keys[16], NULL },
+	{ "keyzoomout", type_hex, &keys[17], NULL },
 	{ "keychat", type_hex, &keys[18], NULL },
-	{ "keyconsole", type_hex, &keys[19], NULL },
+	{ "keyrearview", type_hex, &keys[20], NULL },
+	{ "keyprepareditem", type_hex, &keys[21], NULL },
+	{ "keyhealthmeter", type_hex, &keys[22], NULL },
+	{ "keycrosshairs", type_hex, &keys[23], NULL },
+	{ "keyelapsedtime", type_hex, &keys[24], NULL },
+	{ "keyscore", type_hex, &keys[25], NULL },
+	{ "keyinventory", type_hex, &keys[26], NULL },
+	{ "keyconceal", type_hex, &keys[27], NULL },
+	{ "keylooking", type_hex, &keys[28], NULL },
+	{ "keyconsole", type_hex, &keys[29], NULL },
 
 	{ "difficulty", type_int, &moreoptions[8], "; Difficulty\n" },
 	{ "soundvolume", type_int, &moreoptions[9], "; Sound volume\n" },
 	{ "musicvolume", type_int, &moreoptions[10], "; Music volume\n" },
+
+    { "mousebutton1", type_int, &moreoptions[1],
+        "; Mouse Button Actions\n"
+        ";   4 - Run\n"
+        ";   5 - Strafe\n"
+        ";   6 - Fire\n"
+        ";   7 - Use\n"
+        ";   8 - Jump\n"
+        ";   9 - Crouch\n"
+    },
+    { "mousebutton2", type_int, &moreoptions[2], NULL },
 	{ "mousesensitivity", type_int, &moreoptions[11], "; Mouse sensitivity\n" },
+    { "mouselookmode", type_bool, &mouselookmode,
+        "; Mouse look mode\n"
+        ";   0 - Momentary\n"
+        ";   1 - Toggle\n"
+    },
+    { "mouselook", type_bool, &mouselook,
+        "; Mouse look enabled (if Toggle mode)\n"
+    },
+
+    { "joystickbutton1", type_int, &moreoptions[4],
+        "; Joystick Button Actions (see Mouse Buttons Actions above)\n"
+    },
+    { "joystickbutton2", type_int, &moreoptions[5], NULL },
+    { "joystickbutton3", type_int, &moreoptions[6], NULL },
+    { "joystickbutton4", type_int, &moreoptions[7], NULL },
+
 	{ "headbob", type_bool, &moreoptions[12], "; Head bob\n" },
 
 	{ "screensize", type_int, &gamestuff[2], "; Screen size\n" },
-	{ "biasthreshold", type_int, &gamestuff[4], "; Bias threshold\n" },
 
 	{ "showreticule", type_charbool, &toggles[TOGGLE_RETICULE], "; Show reticule\n" },
 	{ "showtime", type_charbool, &toggles[TOGGLE_TIME], "; Show time\n" },
@@ -269,7 +305,7 @@ int loadsetup(const char *fn)
 	} else if (tmpjoystick > 0) {
 		option[3] |= 2;
 	}
-	OSD_CaptureKey(keys[19]);
+	OSD_CaptureKey(keys[29]);
 
 	gamestuff[3] = min(max(gamestuff[3],0),15);	// Brightness.
 

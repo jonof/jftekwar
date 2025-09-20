@@ -27,15 +27,15 @@ typedef struct
      int x, y, z;
 } point3d;
 
-extern int vel, svel, angvel;
-extern int vel2, svel2, angvel2;
+extern int vel, svel, angvel, horizvel;
+extern int vel2, svel2, angvel2, horizvel2;
 
 extern volatile int recsnddone, recsndoffs;
 extern int recording;
 
 
 #define   NUMOPTIONS          8
-#define   NUMKEYS             32
+#define   NUMKEYS             30
 #define   MAXMOREOPTIONS      21
 #define   MAXTOGGLES          16
 #define   MAXGAMESTUFF        16
@@ -47,6 +47,7 @@ extern int moreoptions[MAXMOREOPTIONS];
 extern char toggles[MAXTOGGLES];
 extern int  gamestuff[MAXGAMESTUFF];
 extern int digihz[8];
+extern int mouselookmode,mouselook;
 
 extern char frame2draw[MAXPLAYERS];
 extern int frameskipcnt[MAXPLAYERS];
@@ -70,6 +71,7 @@ extern int locselectedgun;
 extern signed char locvel, olocvel;
 extern short locsvel, olocsvel;                          // Les 09/30/95
 extern short locangvel, olocangvel;                      // Les 09/30/95
+extern signed char lochorizvel, olochorizvel;
 extern short locbits, olocbits;
 
      //Local multiplayer variables for second player
@@ -77,12 +79,14 @@ extern int locselectedgun2;
 extern signed char locvel2, olocvel2;
 extern short locsvel2, olocsvel2;                        // Les 09/30/95
 extern short locangvel2, olocangvel2;                    // Les 09/30/95
+extern signed char lochorizvel2, olochorizvel2;
 extern short locbits2, olocbits2;
 
   //Multiplayer syncing variables
 extern signed char fsyncvel[MAXPLAYERS], osyncvel[MAXPLAYERS], syncvel[MAXPLAYERS];
 extern short fsyncsvel[MAXPLAYERS], osyncsvel[MAXPLAYERS], syncsvel[MAXPLAYERS];  // Les 09/30/95
 extern short fsyncangvel[MAXPLAYERS], osyncangvel[MAXPLAYERS], syncangvel[MAXPLAYERS]; // Les 09/30/95
+extern signed char fsynchorizvel[MAXPLAYERS], osynchorizvel[MAXPLAYERS], synchorizvel[MAXPLAYERS];
 extern unsigned short fsyncbits[MAXPLAYERS], osyncbits[MAXPLAYERS], syncbits[MAXPLAYERS];
 
 extern char frameinterpolate, detailmode, ready2send;
@@ -97,6 +101,7 @@ extern int movefifoplc, movefifoend;
 extern signed char baksyncvel[MOVEFIFOSIZ][MAXPLAYERS];
 extern short baksyncsvel[MOVEFIFOSIZ][MAXPLAYERS];       // Les 09/30/95
 extern short baksyncangvel[MOVEFIFOSIZ][MAXPLAYERS];     // Les 09/30/95
+extern signed char baksynchorizvel[MOVEFIFOSIZ][MAXPLAYERS];
 extern short baksyncbits[MOVEFIFOSIZ][MAXPLAYERS];
 
      //GAME.C sync state variables
@@ -115,6 +120,7 @@ extern int reccnt, recstat;
 extern signed char recsyncvel[16384][2];
 extern short recsyncsvel[16384][2];                      // Les 09/30/95
 extern short recsyncangvel[16384][2];                    // Les 09/30/95
+extern signed char recsynchorizvel[16384][2];
 extern short recsyncbits[16384][2];
 
      //Miscellaneous variables

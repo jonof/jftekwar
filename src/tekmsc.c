@@ -944,11 +944,13 @@ nextnetlevel()
           syncvel[i]=fsyncvel[i]=osyncvel[i]=0;
           syncsvel[i]=fsyncsvel[i]=osyncsvel[i]=0;
           syncangvel[i]=fsyncangvel[i]=osyncangvel[i]=0;
+          synchorizvel[i]=fsynchorizvel[i]=osynchorizvel[i]=0;
           syncbits[i]=fsyncbits[i]=osyncbits[i]=0;
           for (j=0 ; j < MOVEFIFOSIZ ; j++) {
                baksyncvel[j][i]=0;
                baksyncsvel[j][i]=0;
                baksyncangvel[j][i]=0;
+               baksynchorizvel[j][i]=0;
                baksyncbits[j][i]=0;
           }
      }
@@ -959,6 +961,7 @@ nextnetlevel()
      olocvel=olocvel2=0;
      olocsvel=olocsvel2=0;
      olocangvel=olocangvel2=0;
+     olochorizvel=olochorizvel2=0;
      olocbits=olocbits2=0;
 #endif
      randomseed=17L;
@@ -1605,6 +1608,7 @@ newmap(int mapno)
      vel=0;
      svel=0;
      angvel=0;
+     horizvel=0;
 
      currentmapno=mapno;
      strcpy(tektempbuf, mapnames[mapno]);
@@ -1777,7 +1781,7 @@ domenu(void)
           firstpass=0;
           return;
      }
-     vel=svel=angvel=0;
+     vel=svel=angvel=horizvel=0;
      mptr=&menu[activemenu][0];
      if (selopt == 0) {
           switch (activemenu) {
@@ -1976,8 +1980,8 @@ domenuinput(void)
                activemenu=255;
           }
      }
-     else if (keystatus[keys[0]]) {     // up arrow
-          keystatus[keys[0]]=0;
+     else if (keystatus[0xc8] || keystatus[0x48]) {     // up arrow
+          keystatus[0xc8]=keystatus[0x48]=0;
           playsound( S_BOOP ,0,0,0,ST_IMMEDIATE);
           tries=0;
           while (tries < MAXSUBOPTIONS) {
@@ -1992,8 +1996,8 @@ domenuinput(void)
                tries++;
           }
      }
-     else if (keystatus[keys[1]]) {     // down arrow
-          keystatus[keys[1]]=0;
+     else if (keystatus[0xd0] || keystatus[0x50]) {     // down arrow
+          keystatus[0xd0]=keystatus[0x50]=0;
           playsound( S_BOOP ,0,0,0,ST_IMMEDIATE);
           tries=0;
           while (tries < MAXSUBOPTIONS) {

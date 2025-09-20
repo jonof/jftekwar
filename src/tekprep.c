@@ -111,6 +111,7 @@ prepareboard(char *daboardfilename)
                fsyncvel[i] = syncvel[i] = osyncvel[i] = 0;
                fsyncsvel[i] = syncsvel[i] = osyncsvel[i] = 0;
                fsyncangvel[i] = syncangvel[i] = osyncangvel[i] = 0;
+               fsynchorizvel[i] = synchorizvel[i] = osynchorizvel[i] = 0;
                fsyncbits[i] = syncbits[i] = osyncbits[i] = 0;
           }
      }

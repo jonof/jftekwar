@@ -136,6 +136,7 @@ loadgame(int loadno)
      read(fil,&vel,4);
      read(fil,&svel,4);
      read(fil,&angvel,4);
+     read(fil,&horizvel,4);
 
      read(fil,&locselectedgun,4);
      read(fil,&locvel,1);
@@ -144,6 +145,8 @@ loadgame(int loadno)
      read(fil,&olocsvel,2);                                  // Les 09/28/95
      read(fil,&locangvel,2);                                 // Les 09/28/95
      read(fil,&olocangvel,2);                                // Les 09/28/95
+     read(fil,&lochorizvel,1);
+     read(fil,&olochorizvel,1);
      read(fil,&locbits,2);
      read(fil,&olocbits,2);
 
@@ -154,6 +157,8 @@ loadgame(int loadno)
      read(fil,&olocsvel2,2);                                 // Les 09/28/95
      read(fil,&locangvel2,2);                                // Les 09/28/95
      read(fil,&olocangvel2,2);                               // Les 09/28/95
+     read(fil,&lochorizvel2,1);
+     read(fil,&olochorizvel2,1);
      read(fil,&locbits2,2);
      read(fil,&olocbits2,2);
 
@@ -163,6 +168,8 @@ loadgame(int loadno)
      read(fil,osyncsvel,MAXPLAYERS<<1);                      // Les 09/28/95
      read(fil,syncangvel,MAXPLAYERS<<1);                     // Les 09/28/95
      read(fil,osyncangvel,MAXPLAYERS<<1);                    // Les 09/28/95
+     read(fil,synchorizvel,MAXPLAYERS);
+     read(fil,osynchorizvel,MAXPLAYERS);
      read(fil,syncbits,MAXPLAYERS<<1);
      read(fil,osyncbits,MAXPLAYERS<<1);
 
@@ -349,6 +356,7 @@ savegame(int saveno)
      write(fil,&vel,4);
      write(fil,&svel,4);
      write(fil,&angvel,4);
+     write(fil,&horizvel,4);
 
      write(fil,&locselectedgun,4);
      write(fil,&locvel,1);
@@ -357,6 +365,8 @@ savegame(int saveno)
      write(fil,&olocsvel,2);                                 // Les 09/28/95
      write(fil,&locangvel,2);                                // Les 09/28/95
      write(fil,&olocangvel,2);                               // Les 09/28/95
+     write(fil,&lochorizvel,1);
+     write(fil,&olochorizvel,1);
      write(fil,&locbits,2);
      write(fil,&olocbits,2);
 
@@ -367,6 +377,8 @@ savegame(int saveno)
      write(fil,&olocsvel2,2);                                // Les 09/28/95
      write(fil,&locangvel2,2);                               // Les 09/28/95
      write(fil,&olocangvel2,2);                              // Les 09/28/95
+     write(fil,&lochorizvel2,1);
+     write(fil,&olochorizvel2,1);
      write(fil,&locbits2,2);
      write(fil,&olocbits2,2);
 
@@ -376,6 +388,8 @@ savegame(int saveno)
      write(fil,osyncsvel,MAXPLAYERS<<1);                     // Les 09/28/95
      write(fil,syncangvel,MAXPLAYERS<<1);                    // Les 09/28/95
      write(fil,osyncangvel,MAXPLAYERS<<1);                   // Les 09/28/95
+     write(fil,synchorizvel,MAXPLAYERS);
+     write(fil,osynchorizvel,MAXPLAYERS);
      write(fil,syncbits,MAXPLAYERS<<1);
      write(fil,osyncbits,MAXPLAYERS<<1);
 
