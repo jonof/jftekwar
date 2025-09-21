@@ -57,7 +57,8 @@ unsigned char option[NUMOPTIONS] = {
       2,       // 6  VIDEO RES CHOICE
       64+4+2   // 7  SOUND FREQ (22kHz 16bit stereo)
 };
-int keys[NUMKEYS] = {
+int keys[NUMKEYS];
+const int defaultkeys[NUMKEYS] = {
      200,         // 0  FWD
      208,         // 1  BKWD
      203,         // 2  RIGHT
@@ -87,6 +88,38 @@ int keys[NUMKEYS] = {
       23,         // 26 TOGGLE INVENTORY
       53,         // 27 CONCEAL WEAPON
       58,         // 28 MOUSE LOOKUP/DOWN
+      69,         // 29 CONSOLE
+};
+const int modernkeys[NUMKEYS] = {
+      17,         // 0  FWD (W)
+      31,         // 1  BKWD (S)
+     203,         // 2  RIGHT
+     205,         // 3  LEFT
+      42,         // 4  RUN / AMPLIFY
+     184,         // 5  STRAFE (RAlt)
+      29,         // 6  SHOOT
+      18,         // 7  USE (E)
+      57,         // 8  JUMP (Space)
+      56,         // 9  CROUCH (LAlt)
+     201,         // 10 LOOK UP
+     209,         // 11 LOOK DOWN
+      30,         // 12 SLIDE LEFT (E)
+      32,         // 13 SLIDE RIGHT (D)
+      15,         // 14 MAP MODE
+     156,         // 15 SWITCH PLAYER
+      13,         // 16 EXPAND VIEW
+      12,         // 17 SHRINK VIEW
+      50,         // 18 MESSAGE MODE
+     199,         // 19 AUTOCENTER
+      19,         // 20 TOGGLE REARVIEW
+      16,         // 21 TOGGLE PREPARED ITEM (Q)
+      35,         // 22 TOGGLE HEALTH METER
+      34,         // 23 TOGGLE CROSSHAIRS
+      20,         // 24 TOGGLE ELAPSED TIME
+      46,         // 25 TOGGLE SCORE (C)
+      23,         // 26 TOGGLE INVENTORY
+      53,         // 27 CONCEAL WEAPON
+      22,         // 28 MOUSE LOOKUP/DOWN (U)
       69,         // 29 CONSOLE
 };
 int moreoptions[MAXMOREOPTIONS] = {
@@ -269,6 +302,14 @@ char scantoascwithshift[128] =
      //See the setanimation(), and getanimategoal() functions for more details.
 int *animateptr[MAXANIMATES], animategoal[MAXANIMATES];
 int animatevel[MAXANIMATES], animateacc[MAXANIMATES], animatecnt = 0;
+
+#define AVERAGEFRAMES 32
+static unsigned int showfps, averagefps, framecnt, frameval[AVERAGEFRAMES];
+
+static int osdcmd_showfps(const osdfuncparm_t *parm);
+static int osdcmd_vidmode(const osdfuncparm_t *parm);
+static int osdcmd_setkeys(const osdfuncparm_t *parm);
+static int osdcmd_setting(const osdfuncparm_t *parm);
 
 void
 debugout(short p)
@@ -464,6 +505,16 @@ app_main(int argc, char const * const argv[])
 
      lm("initsb");
      initsb(option[1],option[2],digihz[option[7]>>4],((option[7]&4)>0)+1,((option[7]&2)>0)+1,0,0);
+
+     OSD_RegisterFunction("showfps","showfps [state]: show frame rate", osdcmd_showfps);
+     OSD_RegisterFunction("restartvid","restartvid: reinitialise the video mode",osdcmd_vidmode);
+     OSD_RegisterFunction("vidmode","vidmode [xdim ydim] [bpp] [fullscreen]: immediately change the video mode",osdcmd_vidmode);
+     OSD_RegisterFunction("setkeys","setkeys [modern|default]: set keys to modern (WASD) or default (arrows)", osdcmd_setkeys);
+     OSD_RegisterFunction("mouselookmode","mouselookmode [onf]: set mouse look mode (0 momentary, 1 toggle)", osdcmd_setting);
+     OSD_RegisterFunction("mousespeed","mousespeed [x] [y]: set mouse sensitivity (range 1 to 16)", osdcmd_setting);
+     OSD_RegisterFunction("mousebutton","mousebutton [button] [action]: set mouse button actions (use 'mousebutton list' to show actions)", osdcmd_setting);
+     OSD_RegisterFunction("joystickbutton","joystickbutton [button] [action]: set joystick button actions (use 'joystickbutton list' to show actions)", osdcmd_setting);
+     OSD_RegisterFunction("keybutton","keybutton [scancode] [action]: set an action to a key scancode (use 'keybutton list' to show actions)", osdcmd_setting);
 
      if( option[4] > 0 ) {
         lm("multiplayer init");
@@ -1219,6 +1270,16 @@ drawscreen(short snum, int dasmoothratio)
           printext(windowx2-48,windowy2-64,tektempbuf,ALPHABET2,255);
      }
     #endif
+
+    if (showfps) {
+        int i,j;
+        char fps[60];
+        i = frameval[framecnt&(AVERAGEFRAMES-1)];
+        j = frameval[framecnt&(AVERAGEFRAMES-1)] = getticks(); framecnt++;
+        if (i != j) averagefps = ((mul3(averagefps)+((AVERAGEFRAMES*1000)/(j-i)) )>>2);
+        snprintf(fps,sizeof(fps),"fps %d",averagefps);
+        printext256(0L,0L,31,-1,fps,0);
+    }
 
      nextpage();
      if( dofadein != 0 ) {
@@ -2291,3 +2352,190 @@ getsyncstat()
 }
 #endif
 
+
+static int osdcmd_showfps(const osdfuncparm_t *parm)
+{
+    if (parm->numparms == 1) {
+        if (parm->numparms == 1) showfps = min(1,(unsigned)atoi(parm->parms[0]));
+        buildprintf("showfps is %u\n", showfps);
+        return OSDCMD_OK;
+    }
+    return OSDCMD_SHOWHELP;
+}
+
+static int osdcmd_vidmode(const osdfuncparm_t *parm)
+{
+    int newx = xdim, newy = ydim, newbpp = bpp, newfullscreen = fullscreen;
+
+    if (!strcasecmp(parm->name, "restartvid")) {
+        resetvideomode();
+    } else {
+        if (parm->numparms < 1 || parm->numparms > 4) return OSDCMD_SHOWHELP;
+        switch (parm->numparms) {
+            case 1:   // bpp switch
+                newbpp = atoi(parm->parms[0]);
+                break;
+            case 2: // res switch
+                newx = atoi(parm->parms[0]);
+                newy = atoi(parm->parms[1]);
+                break;
+            case 3:   // res & bpp switch
+            case 4:
+                newx = atoi(parm->parms[0]);
+                newy = atoi(parm->parms[1]);
+                newbpp = atoi(parm->parms[2]);
+                if (parm->numparms == 4)
+                    newfullscreen = (atoi(parm->parms[3]) != 0);
+                break;
+        }
+        if (checkvideomode(&newx, &newy, newbpp, newfullscreen, 0) < 0) {
+            buildputs("vidmode: unrecognised video mode.\n");
+            return OSDCMD_OK;
+        }
+    }
+
+    if (setgamemode(newfullscreen,newx,newy,newbpp))
+        buildputs("vidmode: Mode change failed!\n");
+    else {
+        xdimgame = newx;
+        ydimgame = newy;
+        bppgame = newbpp;
+        fullscreen = newfullscreen;
+        setup3dscreen();
+    }
+    return OSDCMD_OK;
+}
+
+static int osdcmd_setkeys(const osdfuncparm_t *parm)
+{
+    if (parm->numparms == 1) {
+        if (!strcasecmp(parm->parms[0], "modern")) {
+            memcpy(keys,modernkeys,sizeof(keys)-sizeof(keys[29]));
+            buildputs("keys set to modern\n");
+            return OSDCMD_OK;
+        }
+        else if (!strcasecmp(parm->parms[0], "default")) {
+            memcpy(keys,defaultkeys,sizeof(keys)-sizeof(keys[29]));
+            buildputs("keys set to default\n");
+            return OSDCMD_OK;
+        }
+    }
+    return OSDCMD_SHOWHELP;
+}
+
+static const struct {
+    const char *name;
+    int key;
+} keymap[] = {
+     { "backward", 1 },
+     { "turnleft", 2 },
+     { "turnright", 3 },
+     { "run", 4 },
+     { "strafe", 5 },
+     { "fire", 6 },
+     { "use", 7 },
+     { "jump", 8 },
+     { "crouch", 9 },
+     { "lookup", 10 },
+     { "lookdown", 11 },
+     { "centre", 19 },
+     { "strafeleft", 12 },
+     { "straferight", 13 },
+     { "map", 14 },
+     // { "viewcycle", 15 },
+     { "zoomin", 16 },
+     { "zoomout", 17 },
+     { "chat", 18 },
+     { "rearview", 20 },
+     { "prepareditem", 21 },
+     { "healthmeter", 22 },
+     { "crosshairs", 23 },
+     { "elapsedtime", 24 },
+     { "score", 25 },
+     { "inventory", 26 },
+     { "conceal", 27 },
+     { "looking", 28 },
+     { "console", 29 },
+};
+static int matchkeyname(const char *name) {
+    for (unsigned i=0; i<Barraylen(keymap); i++)
+        if (!strcasecmp(name, keymap[i].name))
+            return keymap[i].key;
+    return -1;
+}
+static const char * matchkeynum(int key) {
+    for (unsigned i=0; i<Barraylen(keymap); i++)
+        if (keymap[i].key == key)
+            return keymap[i].name;
+    return NULL;
+}
+
+static int osdcmd_setting(const osdfuncparm_t *parm)
+{
+    int button, action;
+    const char *name;
+
+    if (!strcasecmp(parm->name, "mouselookmode")) {
+        if (parm->numparms == 1) mouselookmode = (int)max(0,min(1,(unsigned)atoi(parm->parms[0])));
+        buildprintf("mouselookmode is %d\n", mouselookmode);
+        return OSDCMD_OK;
+    }
+    else if (!strcasecmp(parm->name, "mousespeed")) {
+        if (parm->numparms == 2) {
+            moreoptions[11] = max(1,min(16,(unsigned)atoi(parm->parms[0])));
+        }
+        buildprintf("mousespeed is %d\n", moreoptions[11]);
+        return OSDCMD_OK;
+    }
+    else if (!strcasecmp(parm->name, "mousebutton")) {
+        if (parm->numparms == 1 && !strcasecmp("list", parm->parms[0])) {
+            buildputs("mouse buttons\n");
+            for (button=0; button<2; button++) {
+                name = matchkeynum(moreoptions[button+1]);
+                buildprintf(" %u ... %s\n", button+1, name ? name : "");
+            }
+            return OSDCMD_OK;
+        } else if (parm->numparms == 2) {
+            button = atoi(parm->parms[0]);
+            action = matchkeyname(parm->parms[1]);
+            if (button < 1 || button > 2) return OSDCMD_SHOWHELP;
+            if (action < 0 || action == 29) return OSDCMD_SHOWHELP;
+            moreoptions[button-1] = action;
+            return OSDCMD_OK;
+        }
+    }
+    else if (!strcasecmp(parm->name, "joystickbutton")) {
+        if (parm->numparms == 1 && !strcasecmp("list", parm->parms[0])) {
+            buildputs("joystick buttons\n");
+            for (button=0; button<4; button++) {
+                const char *name = matchkeynum(moreoptions[button+4]);
+                buildprintf(" %u ... %s\n", button+1, name ? name : "");
+            }
+            return OSDCMD_OK;
+        } else if (parm->numparms == 2) {
+            button = atoi(parm->parms[0]);
+            action = matchkeyname(parm->parms[1]);
+            if (button < 1 || button > 4) return OSDCMD_SHOWHELP;
+            if (action < 0 || action == 29) return OSDCMD_SHOWHELP;
+            moreoptions[button-4] = action;
+            return OSDCMD_OK;
+        }
+    }
+    else if (!strcasecmp(parm->name, "keybutton")) {
+        if (parm->numparms == 1 && !strcasecmp("list", parm->parms[0])) {
+            buildputs("key buttons\n");
+            for (int i=0; i < (int)Barraylen(keymap); i++)
+                buildprintf(" %-11s ... %02X\n", keymap[i].name, keys[keymap[i].key]);
+            return OSDCMD_OK;
+        } else if (parm->numparms == 2) {
+            button = (int)strtoul(parm->parms[0], NULL, 16);
+            action = matchkeyname(parm->parms[1]);
+            if (button < 2 || button > 255) return OSDCMD_SHOWHELP;
+            if (action < 0) return OSDCMD_SHOWHELP;
+            keys[action] = button;
+            if (action == 29) OSD_CaptureKey(button);
+            return OSDCMD_OK;
+        }
+    }
+    return OSDCMD_SHOWHELP;
+}
