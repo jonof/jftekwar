@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -11,6 +11,7 @@
                 <outlet property="alwaysShowButton" destination="37" id="59"/>
                 <outlet property="cancelButton" destination="22" id="65"/>
                 <outlet property="chooseImportButton" destination="JOs-rr-g3e" id="d5o-nG-C4L"/>
+                <outlet property="displayPUButton" destination="3io-Lg-UsL" id="Zgg-tR-ufP"/>
                 <outlet property="fullscreenButton" destination="14" id="58"/>
                 <outlet property="importInfoButton" destination="EAO-7h-qoA" id="0i1-Xq-YNE"/>
                 <outlet property="importStatusCancel" destination="KAB-dn-0TH" id="iKV-CS-dBM"/>
@@ -33,7 +34,7 @@
         <window title="Startup" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="23" userLabel="StartupWin">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="469" y="258" width="595" height="390"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="944"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="10">
                 <rect key="frame" x="0.0" y="0.0" width="595" height="390"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -79,7 +80,8 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="fullscreenClicked:" target="-2" id="60"/>
+                                                <action selector="fullscreenOrDisplayClicked:" target="-2" id="iab-qo-u4C"/>
+                                                <outlet property="nextKeyView" destination="3io-Lg-UsL" id="Hef-24-8PS"/>
                                             </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67">
@@ -87,20 +89,23 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="XXX x YYY Z-bpp" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="69" id="78">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
+                                                <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="OtherViews" id="68">
                                                     <items>
                                                         <menuItem title="XXX x YYY Z-bpp" state="on" id="69"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <outlet property="nextKeyView" destination="14" id="rQ0-KQ-UuY"/>
+                                            </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q8z-7T-rue">
                                             <rect key="frame" x="132" y="192" width="249" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="XX kHz Y-bit, Mono" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="iEk-PZ-RSa" id="B6c-FT-r3V">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
+                                                <font key="font" metaFont="message"/>
                                                 <menu key="menu" id="YHS-6a-LH4">
                                                     <items>
                                                         <menuItem title="XX kHz Y-bit, Mono" state="on" id="iEk-PZ-RSa"/>
@@ -109,6 +114,9 @@
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <outlet property="nextKeyView" destination="FBS-R8-SLf" id="1vt-oI-bG5"/>
+                                            </connections>
                                         </popUpButton>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8KI-D9-dwr">
                                             <rect key="frame" x="15" y="197" width="91" height="17"/>
@@ -126,6 +134,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <outlet property="nextKeyView" destination="uyv-SE-7D1" id="AFE-US-nlN"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uyv-SE-7D1">
                                             <rect key="frame" x="220" y="156" width="72" height="18"/>
@@ -134,6 +145,9 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <outlet property="nextKeyView" destination="JOs-rr-g3e" id="3Y8-7K-fHR"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Itz-Ag-oh2">
                                             <rect key="frame" x="15" y="156" width="89" height="17"/>
@@ -176,6 +190,25 @@
                                                 <outlet property="nextKeyView" destination="EAO-7h-qoA" id="X4e-KT-3Th"/>
                                             </connections>
                                         </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3io-Lg-UsL">
+                                            <rect key="frame" x="222" y="229" width="159" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Display 0" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eDa-TQ-JMZ" id="Oiq-vE-MU6">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="message"/>
+                                                <menu key="menu" id="1HH-CQ-9yJ">
+                                                    <items>
+                                                        <menuItem title="Display 0" state="on" id="eDa-TQ-JMZ"/>
+                                                        <menuItem title="Item 2" id="OeF-x5-V3X"/>
+                                                        <menuItem title="Item 3" id="cge-Cd-2cz"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="fullscreenOrDisplayClicked:" target="-2" id="xZY-JU-VmV"/>
+                                                <outlet property="nextKeyView" destination="Q8z-7T-rue" id="RdU-Bo-6bd"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -189,14 +222,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" id="vRG-Qb-rJ5">
                                                 <rect key="frame" x="1" y="1" width="398" height="272"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView editable="NO" selectable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="63">
                                                         <rect key="frame" x="0.0" y="0.0" width="391" height="272"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="398" height="272"/>
+                                                        <size key="minSize" width="391" height="272"/>
                                                         <size key="maxSize" width="400" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     </textView>
@@ -228,6 +261,7 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="start:" target="-2" id="51"/>
+                            <outlet property="nextKeyView" destination="22" id="UxD-RX-77X"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="22">
@@ -242,6 +276,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="cancel:" target="-2" id="50"/>
+                            <outlet property="nextKeyView" destination="37" id="8Gb-jh-E0z"/>
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="37">
@@ -251,6 +286,9 @@ Gw
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <outlet property="nextKeyView" destination="8" id="iVN-6B-zm7"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>
@@ -264,7 +302,7 @@ Gw
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="56"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1512" height="944"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1175"/>
             <view key="contentView" id="ZCh-gR-jR5">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="56"/>
                 <autoresizingMask key="autoresizingMask"/>
