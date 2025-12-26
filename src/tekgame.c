@@ -338,7 +338,11 @@ debugout(short p)
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
 
-#if defined RENDERTYPEWIN || (defined RENDERTYPESDL && (defined __APPLE__ || defined HAVE_GTK))
+#if defined(RENDERTYPEWIN)
+# define HAVE_STARTWIN
+#elif defined(RENDERTYPESDL) && defined(__APPLE__) && defined(HAVE_OSX_FRAMEWORKS)
+# define HAVE_STARTWIN
+#elif defined(RENDERTYPESDL) && defined(HAVE_GTK)
 # define HAVE_STARTWIN
 #endif
 
