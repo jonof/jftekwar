@@ -10,7 +10,7 @@
 #include "music.h"
 #include "tekwar.h"
 
-#ifdef _WIN32
+#ifdef RENDERTYPEWIN
 #include "winlayer.h"
 #endif
 
@@ -153,7 +153,7 @@ initsb(char digistat,char musistat,int mixrate,
 
      (void)digistat; (void)musistat; (void)intspersec; (void)quality;
 
-     #ifdef _WIN32
+     #ifdef RENDERTYPEWIN
      initdata = (void *) win_gethwnd();
      #endif
 

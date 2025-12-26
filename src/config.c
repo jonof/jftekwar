@@ -6,10 +6,6 @@
 #include "tekwar.h"
 #include "osd.h"
 #include "scriptfile.h"
-
-#ifdef RENDERTYPEWIN
-#include "winlayer.h"
-#endif
 #include "baselayer.h"
 
 enum {
@@ -24,9 +20,7 @@ enum {
 static int tmprenderer = -1;
 #endif
 static int tmpfullscreen = -1, tmpdisplay = -1;
-#ifdef RENDERTYPEWIN
-static unsigned tmpmaxrefreshfreq = -1;
-#endif
+static unsigned tmpmaxrefreshfreq = 0;
 static int tmpsamplerate = -1;
 static int tmpmusic = -1;
 static int tmpmouse = -1;
@@ -84,11 +78,9 @@ static struct {
 		"; OpenGL mode options\n"
 	},
 #endif
-#ifdef RENDERTYPEWIN
 	{ "maxrefreshfreq", type_int, &tmpmaxrefreshfreq,
-		"; Maximum OpenGL mode refresh rate (Windows only, in Hertz)\n"
+		"; Maximum fullscreen mode refresh rate (in Hertz, 0 indicates no limit)\n"
 	},
-#endif
 	{ "samplerate", type_int, &tmpsamplerate,
 		"; Sound sample frequency\n"
 		";   0 - 6 KHz\n"
@@ -289,9 +281,7 @@ int loadsetup(const char *fn)
 		setrendermode(tmprenderer);
 	}
 #endif
-#ifdef RENDERTYPEWIN
-	win_setmaxrefreshfreq(tmpmaxrefreshfreq);
-#endif
+	setmaxrefreshfreq(tmpmaxrefreshfreq);
 	fullscreen = 0;
 	if (tmpfullscreen >= 0) {
 		fullscreen = tmpfullscreen;
@@ -340,9 +330,7 @@ int writesetup(const char *fn)
 #if USE_POLYMOST
 	tmprenderer = getrendermode();
 #endif
-#ifdef RENDERTYPEWIN
-	tmpmaxrefreshfreq = win_getmaxrefreshfreq();
-#endif
+	tmpmaxrefreshfreq = getmaxrefreshfreq();
 	tmpsamplerate = option[7]>>4;
 	tmpmusic = option[2];
 	tmpmouse = !!(option[3]&1);
