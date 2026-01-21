@@ -4,7 +4,7 @@ $(SRC)/b5compat.$o: $(SRC)/b5compat.c $(build_h)
 $(SRC)/config.$o: $(SRC)/config.c $(ENGINEINC)/build.h $(SRC)/tekwar.h $(ENGINEINC)/osd.h $(ENGINEINC)/scriptfile.h $(ENGINEINC)/baselayer.h
 $(SRC)/tekcdr.$o: $(SRC)/tekcdr.c
 $(SRC)/tekchng.$o: $(SRC)/tekchng.c $(build_h) $(SRC)/names.h $(SRC)/tekwar.h
-$(SRC)/tekgame.$o: $(SRC)/tekgame.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/mmulti.h $(ENGINEINC)/osd.h $(SRC)/tekwar.h $(SRC)/tekver.c $(SRC)/startwin.h $(SRC)/version.h
+$(SRC)/tekgame.$o: $(SRC)/tekgame.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/mmulti.h $(ENGINEINC)/osd.h $(SRC)/tekwar.h $(SRC)/tekver.c $(ENGINEINC)/startwin.h $(SRC)/version.h
 $(SRC)/tekgun.$o: $(SRC)/tekgun.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tekldsv.$o: $(SRC)/tekldsv.c $(build_h) $(SRC)/names.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tekmap.$o: $(SRC)/tekmap.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(SRC)/tekwar.h
@@ -17,24 +17,20 @@ $(SRC)/tekstat.$o: $(SRC)/tekstat.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragm
 $(SRC)/tektag.$o: $(SRC)/tektag.c $(build_h) $(SRC)/names.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tektxt.$o: $(SRC)/tektxt.c $(build_h) $(ENGINEINC)/baselayer.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/mmulti.h $(SRC)/tekwar.h
 $(SRC)/tekver.$o: $(SRC)/tekver.c
-$(SRC)/datascan.$o: $(SRC)/datascan.c $(ENGINEINC)/compat.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/cache1d.h $(ENGINEINC)/build.h $(SRC)/datascan.h
 $(SRC)/version.$o: $(SRC)/version.c
 $(SRC)/version-auto.$o: $(SRC)/version-auto.c
 $(LIBSMACKERSRC)/smacker_jftekwar.$o: $(LIBSMACKERSRC)/smacker_jftekwar.c $(LIBSMACKERSRC)/smacker.c
 
 $(SRC)/bstub.$o: $(SRC)/bstub.c $(build_h) $(ENGINEINC)/editor.h $(ENGINEINC)/pragmas.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/cache1d.h $(SRC)/names.h
 
-$(SRC)/startwin_game.$o: $(SRC)/startwin_game.c $(ENGINEINC)/build.h $(ENGINEINC)/winlayer.h $(ENGINEINC)/compat.h $(SRC)/startwin.h $(SRC)/gameres.h $(SRC)/version.h
-$(SRC)/startgtk_game.$o: $(SRC)/startgtk_game.c $(ENGINEINC)/build.h $(ENGINEINC)/baselayer.h $(ENGINEINC)/compat.h $(SRC)/startwin.h
-
 # Derived source files from art assets
-$(RSRC)/startgtk_game_gresource.c $(RSRC)/startgtk_game_gresource.h: $(RSRC)/startgtk_game.gresource.xml $(RSRC)/game.png $(RSRC)/startgtk_game.glade
-$(RSRC)/startgtk_build_gresource.c $(RSRC)/startgtk_build_gresource.h: $(RSRC)/startgtk_build.gresource.xml $(RSRC)/build.png $(RSRC)/startgtk_build.glade
-$(RSRC)/game_bmp.c: $(RSRC)/game.bmp
-$(RSRC)/game_bmp.$o: $(RSRC)/game_bmp.c
-$(RSRC)/build_bmp.c: $(RSRC)/build.bmp
 $(RSRC)/build_bmp.$o: $(RSRC)/build_bmp.c
+$(RSRC)/build_bmp.c: $(RSRC)/build.bmp
+$(RSRC)/build_startwin_gtk_gresource.c $(RSRC)/build_startwin_gtk_gresource.h: $(RSRC)/build_startwin_gtk.gresource.xml $(RSRC)/build.png $(ENGINERSRC)/startwin_gtk.glade $(RSRC)/build_startwin_gtk_appname.txt $(RSRC)/startwin_gtk_website.txt $(RSRC)/startwin_gtk_version.txt
+$(RSRC)/game_bmp.$o: $(RSRC)/game_bmp.c
+$(RSRC)/game_bmp.c: $(RSRC)/game.bmp
+$(RSRC)/game_startwin_gtk_gresource.c $(RSRC)/game_startwin_gtk_gresource.h: $(RSRC)/game_startwin_gtk.gresource.xml $(RSRC)/game.png $(ENGINERSRC)/startwin_gtk.glade $(RSRC)/game_startwin_gtk_appname.txt $(RSRC)/startwin_gtk_website.txt $(RSRC)/startwin_gtk_version.txt
 
-$(SRC)/gameres.$(res): $(SRC)/gameres.rc $(SRC)/gameres.h $(RSRC)/startwin_game.bmp $(RSRC)/game_icon.ico $(RSRC)/game.manifest
-$(SRC)/buildres.$(res): $(SRC)/buildres.rc $(ENGINEINC)/buildres.h $(RSRC)/startwin_build.bmp $(RSRC)/build_icon.ico $(RSRC)/build.manifest
+$(SRC)/gameres.$(res): $(SRC)/gameres.rc $(ENGINEINC)/startwin_win.rc $(ENGINEINC)/startwin_win.h $(RSRC)/startwin_game.bmp $(RSRC)/game_icon.ico $(RSRC)/game.manifest
+$(SRC)/buildres.$(res): $(SRC)/buildres.rc $(ENGINEINC)/startwin_win.rc $(ENGINEINC)/startwin_win.h $(RSRC)/startwin_build.bmp $(RSRC)/build_icon.ico $(RSRC)/build.manifest
 

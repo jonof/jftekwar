@@ -311,6 +311,100 @@ static int osdcmd_vidmode(const osdfuncparm_t *parm);
 static int osdcmd_setkeys(const osdfuncparm_t *parm);
 static int osdcmd_setting(const osdfuncparm_t *parm);
 
+enum {
+    GAMETYPE_BASE = 1,
+};
+
+struct startwin_settings startwin_settings = {
+     .features = {
+          .video = 1,
+          .audio = 1,
+          .input = 1,
+          .game = 1,
+     },
+     .game = {
+          .gamedatafilepatterns = (const char *[]) { "*.art", "*.map", "*.dat", "songs", "sounds", "*.smk", NULL },
+          .gamedata = (struct startwin_dataset []) {
+               {
+                    .name = "TekWar",
+                    .id = 1,
+                    .type = GAMETYPE_BASE,
+                    .filespec = (struct startwin_datasetfilespec []) {
+                         { .name = "beach1.map",   .size =  158356, .crc = 0xf95e6ad4, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "city1.map",    .size =  261297, .crc = 0xc79c6df0, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "final1.map",   .size =   63825, .crc = 0xf1f2d7fe, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "free1.map",    .size =  141526, .crc = 0xdcf54bf1, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "free2.map",    .size =  121696, .crc = 0xd25adb49, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "inds1.map",    .size =   91952, .crc = 0x8d96151a, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "level1.map",   .size =   80411, .crc = 0xe631f8a8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "level2.map",   .size =  272666, .crc = 0x05e8f027, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "load.map",     .size =     268, .crc = 0xc315e455, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "lookup.dat",   .size =    2828, .crc = 0x59223c00, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "matrix.map",   .size =  340076, .crc = 0x8a87e90f, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "mid1.map",     .size =  167751, .crc = 0xedb7d97a, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "mid2.map",     .size =  104404, .crc = 0xf8cfd990, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "mid3.map",     .size =   77978, .crc = 0xbc419b1a, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net1.map",     .size =   42973, .crc = 0x0c84bf15, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net2.map",     .size =   57968, .crc = 0x11302df4, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net3.map",     .size =   52335, .crc = 0xe3f13195, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net4.map",     .size =   57719, .crc = 0x07c20afe, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net5.map",     .size =   57432, .crc = 0x20504455, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net6.map",     .size =   84446, .crc = 0x37fe34f5, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "net7.map",     .size =   47361, .crc = 0x339ab0ec, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "nlookup.dat",  .size =    3856, .crc = 0x97b2bd62, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "palette.dat",  .size =   41600, .crc = 0x7e6d817a, .presence = STARTWIN_PRESENCE_OPTIONAL, .alternate = 1 },
+                         { .name = "palette.dat",  .size =   41600, .crc = 0xe8bd12c1, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "park1.map",    .size =  166286, .crc = 0xfc87d026, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "sewer1.map",   .size =  121243, .crc = 0xc6db911e, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "sewer2.map",   .size =   89889, .crc = 0xf7932ed8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "smkgm.smk",    .size =  719400, .crc = 0x3eb82e06, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "smkmm.smk",    .size =  206008, .crc = 0x3e97cca8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "songs",        .size =  983040, .crc = 0x92ba83e6, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "sounds",       .size = 3686400, .crc = 0xed83df0e, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "subway0.map",  .size =  104010, .crc = 0xbee1d051, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "subway1.map",  .size =  142235, .crc = 0x71d0031e, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "subway2.map",  .size =  142189, .crc = 0xd7a25ab4, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "subway3.map",  .size =  154259, .crc = 0xfeb8a4f7, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles000.art", .size = 3328822, .crc = 0xd710fd00, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles001.art", .size = 1972761, .crc = 0x9a522f73, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles002.art", .size = 3112023, .crc = 0xb85b7b74, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles003.art", .size = 3400168, .crc = 0x6c0d3952, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles004.art", .size = 1602561, .crc = 0x23070855, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles005.art", .size = 2285946, .crc = 0xa6458db7, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles006.art", .size = 1274706, .crc = 0x9e9b37f0, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles007.art", .size = 2308371, .crc = 0xa6c25fd8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles008.art", .size = 1956966, .crc = 0x75d363f0, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles009.art", .size = 2152534, .crc = 0x90a59087, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles010.art", .size = 2270690, .crc = 0x599e72c8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles011.art", .size = 2382200, .crc = 0x79fea151, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles012.art", .size = 1521814, .crc = 0x8a07aaa7, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles013.art", .size =    2960, .crc = 0x3a8459b8, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles014.art", .size = 1925621, .crc = 0x2f65e9a5, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "tiles015.art", .size = 3986059, .crc = 0x796236f6, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "ware1.map",    .size =   72314, .crc = 0x3148cd06, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "ware2.map",    .size =   72371, .crc = 0x2d171173, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "ware3.map",    .size =   50194, .crc = 0xf95856c9, .presence = STARTWIN_PRESENCE_REQUIRED },
+                         { .name = "*.smk", .presence = STARTWIN_PRESENCE_OPTIONAL },
+                         { 0 }
+                    }
+               },
+               { 0 }
+          },
+          .moreinfobrief = "JFTekWar can scan locations of your choosing for TekWar game data",
+          .moreinfodetail = "Click the 'Choose a location...' button, then locate a folder to scan.\n\n"
+               #ifdef _WIN32
+               # define BUL " \x95 "
+               #else
+               # define BUL " • "
+               #endif
+               "Common locations to check include:\n"
+               BUL "CD/DVD drives\n"
+               BUL "Unzipped data from copies of the full DOS game",
+               #undef BUL
+     },
+};
+
+
 void
 debugout(short p)
 {
@@ -334,17 +428,33 @@ debugout(short p)
      }
 }
 
+void
+patch_palette(void)
+{
+     int ofh;
+     ssize_t b;
+     unsigned char palette[768];
+     const char *fname = "palette.dat";
+
+     ofh = open(fname, O_RDWR|O_BINARY, BS_IREAD|BS_IWRITE);
+     if (ofh < 0) { debugprintf("%s: %s could not be opened.\n", __func__, fname); return; }
+     b = read(ofh, palette, sizeof(palette));
+     if (b == sizeof(palette) && !memcmp(&palette[225*3], "\x0c\x00\x00", 3)) {
+          palette[225*3+0] = 0x0c;
+          palette[225*3+1] = 0x01;
+          palette[225*3+2] = 0x01;
+          if (lseek(ofh, 0, SEEK_SET) == 0) {
+               if (write(ofh, palette, sizeof(palette)) == sizeof(palette)) {
+                    buildprintf("%s: palette patch applied\n", __func__);
+               }
+          }
+    }
+    close(ofh);
+}
+
 
 char      localname[MAXNAMESIZE];
 char      netnames[MAXPLAYERS][MAXNAMESIZE];
-
-#if defined(RENDERTYPEWIN)
-# define HAVE_STARTWIN
-#elif defined(RENDERTYPESDL) && defined(__APPLE__) && defined(HAVE_OSX_FRAMEWORKS)
-# define HAVE_STARTWIN
-#elif defined(RENDERTYPESDL) && defined(HAVE_GTK)
-# define HAVE_STARTWIN
-#endif
 
 int
 app_main(int argc, char const * const argv[])
@@ -435,42 +545,48 @@ app_main(int argc, char const * const argv[])
      lm("tekloadsetup");
      tekloadsetup();
 
-#ifdef HAVE_STARTWIN
-    {
-        struct startwin_settings settings;
+     if (startwin_scan_gamedata()) {
+          const struct startwin_datasetfound *df = startwin_find_filename("palette.dat");
+          if (df) startwin_settings.game.gamedataid = df->dataset->id;
+     }
 
-        memset(&settings, 0, sizeof(settings));
-        settings.fullscreen = fullscreen;
-        settings.xdim3d = xdimgame;
-        settings.ydim3d = ydimgame;
-        settings.bpp3d = bppgame;
-        settings.forcesetup = forcesetup;
-        settings.usemouse = !!(option[3]&1);
-        settings.usejoy = !!(option[3]&2);
-        settings.samplerate = digihz[option[7]>>4];
-        settings.bitspersample = 1<<(((option[7]&2)>0)+3);
-        settings.channels = ((option[7]&4)>0)+1;
+     startwin_settings.video.fullscreen = fullscreen&255;
+     startwin_settings.video.display = fullscreen>>8;
+     startwin_settings.video.xdim = xdimgame;
+     startwin_settings.video.ydim = ydimgame;
+     startwin_settings.video.bpp = bppgame;
+     startwin_settings.audio.samplerate = digihz[option[7]>>4];
+     startwin_settings.audio.channels = 1+((option[7]&4)>0);
+     startwin_settings.audio.bitspersample = 1<<(((option[7]&2)>0)+3);
+     startwin_settings.input.mouse = (option[3]&1)>0;
+     startwin_settings.input.controller = (option[3]&2)>0;
+     startwin_settings.alwaysshow = forcesetup;
 
-        if (forcesetup) {
-            if (startwin_run(&settings) == STARTWIN_CANCEL) {
-                uninitengine();
-                exit(0);
-            }
-        }
+     if (forcesetup) {
+          int startretval = startwin_run();
+          if (startretval == STARTWIN_CANCEL) {
+               uninitengine();
+               exit(0);
+          } else {
+               fullscreen = SETGAMEMODE_FULLSCREEN(startwin_settings.video.display,
+                    startwin_settings.video.fullscreen);
+               xdimgame = startwin_settings.video.xdim;
+               ydimgame = startwin_settings.video.ydim;
+               bppgame = startwin_settings.video.bpp;
+               option[3] = 0;
+               option[3] |= startwin_settings.input.mouse ? 1 : 0;
+               option[3] |= startwin_settings.input.controller ? 2 : 0;
+               option[7] = 1;
+               for (size_t i=0; i<Barraylen(digihz) && digihz[i] <= startwin_settings.audio.samplerate; i++)
+                    option[7] = (i<<4)|1;
+               option[7] |= startwin_settings.audio.channels == 2 ? 4 : 0;
+               option[7] |= startwin_settings.audio.bitspersample == 16 ? 2 : 0;
+               forcesetup = startwin_settings.alwaysshow;
+          }
+     }
 
-        fullscreen = settings.fullscreen;
-        xdimgame = settings.xdim3d;
-        ydimgame = settings.ydim3d;
-        bppgame = settings.bpp3d;
-        forcesetup = settings.forcesetup;
-        option[3] = (option[3]&~1)|(settings.usemouse);
-        option[3] = (option[3]&~2)|(settings.usejoy<<1);
-        option[7] = 0;
-        for (i=0;i<8;i++) if (digihz[i] <= settings.samplerate) option[7] = i<<4;
-        option[7] |= (settings.bitspersample == 16)<<1;
-        option[7] |= (settings.channels == 2)<<2;
-    }
-#endif
+     patch_palette();
+     startwin_free_gamedata();
 
      lm("initgroupfile");
      initgroupfile("stuff.dat");

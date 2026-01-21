@@ -27,5 +27,7 @@
 	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>See BUILDLIC.TXT for terms</string>
 </dict>
 </plist>
