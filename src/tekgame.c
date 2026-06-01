@@ -432,6 +432,7 @@ app_main(int argc, char const * const argv[])
           exit(1);
      }
 
+     memcpy(keys,defaultkeys,sizeof(keys));
      lm("tekloadsetup");
      tekloadsetup();
 
