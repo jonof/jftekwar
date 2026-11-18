@@ -2351,7 +2351,11 @@ tekendscreen()
          return;
 
      memset(keystatus, 0, sizeof(keystatus));
+#ifdef MISTER_HYBRID
+     if( xdim == 640 && ydim >= 400 ) { // MiSTer: the SVGA pictures need 480 lines
+#else
      if( xdim == 640 ) {
+#endif
           setview(0L,0L,xdim-1,ydim-1);
           loadtile(ES1A_SVGA);
           overwritesprite(0L,0L,ES1A_SVGA,0,0,0);
@@ -3430,3 +3434,43 @@ debriefing()
      }
 }
 
+
+#ifdef MISTER_HYBRID
+// The core's OSD Cheats page, once a frame while a level plays (tekgame.c)
+int misternoclip;
+void mistercheats(int playing)
+{
+	static int lastgod = -1, lastclip = -1;
+	int god, clip, i, p = myconnectindex;
+	int triggers = mistercheatbits(&god, &clip);
+
+	if (!playing) {
+		lastgod = lastclip = -1;
+		return;
+	}
+	if (lastgod >= 0 && god != lastgod) showmessage("GOD MODE %s", god ? "ON" : "OFF");
+	if (god) toggles[TOGGLE_GODMODE] = 1;
+	else if (lastgod > 0) toggles[TOGGLE_GODMODE] = 0;
+	lastgod = god;
+	if (lastclip >= 0 && clip != lastclip) showmessage("NO CLIPPING %s", clip ? "ON" : "OFF");
+	lastclip = misternoclip = clip;
+	if (triggers & 1) { // Give All: every gun, full ammo, full health
+		weapons[p] = flags32[GUN1FLAG] | flags32[GUN2FLAG] | flags32[GUN3FLAG] | flags32[GUN4FLAG]
+			| flags32[GUN5FLAG] | flags32[GUN6FLAG] | flags32[GUN7FLAG] | flags32[GUN8FLAG];
+		ammo1[p] = ammo2[p] = ammo3[p] = ammo4[p] = ammo5[p] = ammo6[p] = ammo7[p] = ammo8[p] = MAXAMMO;
+		health[p] = MAXHEALTH;
+		showmessage("GIVE ALL");
+	}
+	if (triggers & 2) { // Next Level: the mission's next map after this one
+		int cur = -1, next = -1;
+		for (i = 0; i < MAXMAPSPERMISSION; i++)
+			if (missionset[mission][i] == currentmapno) { cur = i; break; }
+		for (i = cur + 1; i < MAXMAPSPERMISSION; i++) {
+			int mn = missionset[mission][i];
+			if (mn >= 4 && accessiblemap(mn)) { next = mn; break; }
+		}
+		if (next >= 0) newmap(next);
+		else showmessage("NO NEXT MAP IN THIS MISSION");
+	}
+}
+#endif
