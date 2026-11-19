@@ -585,7 +585,8 @@ app_main(int argc, char const * const argv[])
           initplayersprite((short)i);
      }
 
-     if( option[4] == 0 ) {
+     // MISTER_HYBRID_NOINTRO=1 (the set's eduke32_env.sh): no intro videos
+     if( option[4] == 0 && !(getenv("MISTER_HYBRID_NOINTRO") && atoi(getenv("MISTER_HYBRID_NOINTRO"))) ) {
           i = smkplayseq("tvopen");
           if (i < 1) i = smkplayseq("tekndie");
           if (i < 1) i = smkplayseq("tekintro");

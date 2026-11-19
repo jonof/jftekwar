@@ -20,6 +20,7 @@ char smk_render_frame(smk object, unsigned long frame);
 
 static smk smkmenu, smkseq;
 static unsigned char *smkmenubuf;
+static int smkmenulight = 0, smkmenudark = 0, smkmenufn = 0; // smkmenuframe(), smkmenulettering()
 #define NUMSMKTILES 3
 #define SMKPICNUM0 (MAXTILES-NUMSMKTILES)
 
@@ -259,12 +260,102 @@ smkmenuframe(int fn)
      for (palptr = smk_get_palette(smkmenu), i=256*3-1; i>=0; i--)
           spal[i] = palptr[i] >> 2;
 
+     // the brightest and the darkest colour, for the lettering drawn over
+     // the frame when the screen cannot show its own (smkmenulettering)
+     {
+          int best = -1, worst = 1000;
+          smkmenulight = 0; smkmenudark = 0;
+          for (i = 0; i < 255; i++) {
+               int v = spal[i*3] + spal[i*3+1] + spal[i*3+2];
+               if (v > best) { best = v; smkmenulight = i; }
+               if (v < worst) { worst = v; smkmenudark = i; }
+          }
+     }
+     smkmenufn = fn;
+
      waloff[SMKPICNUM0] = (intptr_t)smk_get_video(smkmenu);
 #if USE_POLYMOST && USE_OPENGL
      invalidatetile(SMKPICNUM0, 0, -1);
 #endif
 
      setbrightness(-1, spal, 2|4);
+}
+
+// MiSTer: the menu frame is 640x480 and the core shows 200 or 240 lines, so
+// the frame's lettering is squeezed to a smear. The words are drawn again in
+// the engine's 4x6 font (two pixels a column in the 640-wide modes), each
+// padded to its box so the smear under it is covered. Positions are the
+// lettering's in the frame (640x480), mapped onto the picture as drawn: 4:3,
+// the screen's height, centred (pillarboxed on the 320-column screen).
+static void
+smkmenutext(int fx, int fy, const char *s, int width)
+{
+     char buf[40];
+     const int fw = tilesizy[SMKPICNUM0], fh = tilesizx[SMKPICNUM0]; // the frame's size (the tile is rotated)
+     const int pw = scale(fw, 200, fh);                               // the picture's width in 320x200 terms
+     int len = (int)strlen(s), pad = width > len ? width - len : 0, i, cx, y;
+     const int cw = 4 * (xdim == 640 && ydim <= 240 ? 2 : 1);
+
+     if (width > 39) width = 39;
+     for (i = 0; i < width; i++) buf[i] = ' ';
+     for (i = 0; i < len && pad/2 + i < width; i++) buf[pad/2 + i] = s[i];
+     buf[width] = 0;
+     cx = 160 - pw/2 + scale(fx, pw, fw);
+     y = scale(fy, 200, fh);
+     printext256(scale(cx, xdim, 320) - width*cw/2, scale(y, ydim, 200),
+                 smkmenulight, smkmenudark, buf, 1);
+}
+
+static void
+smkmenulettering(void)
+{
+     static const char *names[7][2] = {
+          { "MARTY", "DOLLAR" }, { "DALLAS", "DIMARCO" }, { "CARLYLE", "ROSSI" },
+          { "CONRAD", "LOWELL" }, { "SONNY", "HOKOURI" }, { "MILES", "CONNOR" },
+          { "", "JANUS" } };
+     static const int slotx[7] = { 57, 148, 230, 317, 404, 487, 573 };
+     static const char *help[] = {
+          "USE THE ARROW KEYS TO", "CHOOSE FROM THE BELOW 7", "MISSIONS - OR THE MATRIX",
+          "IF YOU HAVE ACQUIRED A", "SYMBOL FROM A PREVIOUS", "MISSION" };
+     int i;
+
+     // the picture under every frame: the names, the keys in both emblems
+     for (i = 0; i < 7; i++) {
+          smkmenutext(slotx[i], 250, names[i][0], 9);
+          smkmenutext(slotx[i], 263, names[i][1], 9);
+     }
+     for (i = 0; i < 2; i++) {
+          const int ex = i ? 508 : 100;
+          smkmenutext(ex, 146, "ENTER START MISSION", 19);
+          smkmenutext(ex, 158, "ESC   QUIT GAME", 19);
+          smkmenutext(ex, 170, "L     LOAD A GAME", 19);
+     }
+     switch (smkmenufn) {
+     case 49: // the stats box (its lines are the game's own text)
+          smkmenutext(320, 33, "YOUR STATS SO FAR...", 22);
+          break;
+     case 51:
+          smkmenutext(320, 114, "MATRIX", 8);
+          smkmenutext(320, 164, "EXIT TO DOS ?", 15);
+          smkmenutext(320, 182, "Y/N", 5);
+          break;
+     case 53:
+          smkmenutext(320, 114, "MATRIX", 8);
+          smkmenutext(320, 161, "CANNOT ACCESS MATRIX", 22);
+          smkmenutext(320, 178, "WITHOUT A SYMBOL", 18);
+          break;
+     case 55: // the help box
+          for (i = 0; i < 6; i++)
+               smkmenutext(320, 35 + i*18, help[i], 26);
+          smkmenutext(320, 150, "PRESS \"ENTER\" OR \"SPACE\"", 26);
+          smkmenutext(320, 162, "TO START SELECTED MISSION", 26);
+          smkmenutext(320, 186, "PRESS \"ESC\" TO QUIT", 26);
+          smkmenutext(320, 204, "PRESS \"L\" TO LOAD A GAME", 26);
+          break;
+     default:
+          smkmenutext(320, 114, "MATRIX", 8);
+          break;
+     }
 }
 
 void
@@ -277,6 +368,8 @@ smkshowmenu()
      clearallviews(0);
      rotatesprite(160<<16, 100<<16, divscale16(200, tilesizx[SMKPICNUM0]),
                  512, SMKPICNUM0, 0, 0, 2+4+8+256, 0, 0, xdim-1, ydim-1);
+     if (tilesizx[SMKPICNUM0] > ydim)
+          smkmenulettering();
      nextpage();
 }
 
