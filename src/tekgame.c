@@ -435,7 +435,11 @@ app_main(int argc, char const * const argv[])
 #ifdef MISTER_HYBRID
      MiSTer_Init(); // the launcher keeps what the game prints
 #else
+#ifdef MISTER_HYBRID
+     MiSTer_Init(); // the launcher keeps what the game prints
+#else
      buildsetlogfile("tekwar.log");
+#endif
 #endif
 
      wm_setapptitle("JFTekWar");
@@ -1611,7 +1615,7 @@ getinput()
 #ifdef MISTER_HYBRID
           // MiSTer: the core's eight buttons (joyb bits 2..9: R B A L Y X
           // Select Start) and their actions, in the game's numbering
-          static const int misterjoyactions[8] = { 6, 8, 7, 4, 21, 26, 14, -1 };
+          static const int misterjoyactions[8] = { 6, 7, 8, 4, 21, 26, 14, -1 };
           for(i=0; i<8; i++) {
                int action = misterjoyactions[i];
                if (!(joyb&(4<<i)) || action < 0 || action >= NUMKEYS-1)
@@ -1647,6 +1651,7 @@ getinput()
      }
 
      // keyboard survey - use to be keytimerstuff() called from keyhandler
+     { extern int misterjoydpadstrafekey; misterjoydpadstrafekey = keys[5]; }   // MiSTer: d-pad left/right strafe (patch_dpadstrafe_game.py)
      if( keystatus[keys[5]] == 0 && strafing == 0 ) {    // Les 09/28/95
           if( keystatus[keys[2]] > 0 || turning == 1) angvel = max(angvel-16*TICSPERFRAME,-128); // Les 09/28/95
           if( keystatus[keys[3]] > 0 || turning == -1) angvel = min(angvel+16*TICSPERFRAME,127); // Les 09/28/95
