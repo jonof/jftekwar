@@ -669,6 +669,15 @@ tekanimweap(int gun,short p)
                               break;
 
                     }
+#ifdef MISTER_HYBRID
+                    {
+                         extern int myconnectindex;
+                         void misterrumble(int strong, int weak, int ms);
+                         if (p == myconnectindex) {
+                              misterrumble(0, 150, 110); // MiSTer: the weapon
+                         }
+                    }
+#endif
                     shootgun(p,posx[p],posy[p],posz[p],ang[p],horiz[p],
                               cursectnum[p],usegun);
                     if (option[4] != 0) {

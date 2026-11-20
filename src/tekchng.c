@@ -19,6 +19,14 @@ int
 changehealth(short snum, short deltahealth)
 {
      int       healthmax;
+#ifdef MISTER_HYBRID
+     extern int myconnectindex;
+     void misterrumble(int strong, int weak, int ms);
+     if (snum == myconnectindex && deltahealth < 0) { // MiSTer: hit; harder for a bigger one
+          int strong = 80 - deltahealth / 4;
+          misterrumble(strong > 255 ? 255 : strong, 60, 220);
+     }
+#endif
 
      if( !validplayer(snum) ) {
           crashgame("chnghlth bad plrnum");

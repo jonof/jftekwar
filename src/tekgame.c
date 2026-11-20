@@ -9,6 +9,9 @@
 #include "version.h"
 
 #include "tekwar.h"
+#ifdef MISTER_HYBRID
+#include "mister_port.h"
+#endif
 #include "tekver.c"
 
 #define   SECT_LOTAG_CLIMB                    5060
@@ -141,6 +144,10 @@ int moreoptions[MAXMOREOPTIONS] = {
         0      // 15 N/U
 };
 char toggles[MAXTOGGLES] = { 1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0 };
+#ifdef MISTER_HYBRID
+void mistercheats(int playing); // tekmsc.c: the core's OSD Cheats page
+extern int misternoclip;
+#endif
 int  gamestuff[MAXGAMESTUFF] = {
      -1,       // 0  joyxcenter
      -1,       // 1  joyycenter
@@ -386,8 +393,15 @@ app_main(int argc, char const * const argv[])
      // creating a 'user_profiles_disabled' file in the current working
      // directory where the game was launched makes the installation
      // "portable" by writing into the working directory
+#ifdef MISTER_HYBRID
+     // MiSTer: the game data, the settings and the saved games are all in
+     // the folder the launcher starts the game in
+     if (1) {
+          char cwd[BMAX_PATH+1];
+#else
      if (access("user_profiles_disabled", F_OK) == 0) {
           char cwd[BMAX_PATH+1];
+#endif
           if (getcwd(cwd, sizeof(cwd))) {
                addsearchpath(cwd);
           }
@@ -418,7 +432,15 @@ app_main(int argc, char const * const argv[])
           }
      }
 
+#ifdef MISTER_HYBRID
+     MiSTer_Init(); // the launcher keeps what the game prints
+#else
+#ifdef MISTER_HYBRID
+     MiSTer_Init(); // the launcher keeps what the game prints
+#else
      buildsetlogfile("tekwar.log");
+#endif
+#endif
 
      wm_setapptitle("JFTekWar");
      buildprintf("\nJFTekWar\n"
@@ -435,6 +457,9 @@ app_main(int argc, char const * const argv[])
      memcpy(keys,defaultkeys,sizeof(keys));
      lm("tekloadsetup");
      tekloadsetup();
+#ifdef MISTER_HYBRID
+     option[3] |= 2; // MiSTer: the pad is always on
+#endif
 
 #ifdef HAVE_STARTWIN
     {
@@ -473,6 +498,15 @@ app_main(int argc, char const * const argv[])
     }
 #endif
 
+#ifdef MISTER_HYBRID
+     // MiSTer: the screen of the core, and its data check with the logo
+     fullscreen = 0;
+     xdimgame = MiSTer_ScreenWidth();
+     ydimgame = MiSTer_ScreenHeight();
+     bppgame = 8;
+     MiSTer_Loading();
+     MiSTer_PickGame();
+#endif
      lm("initgroupfile");
      initgroupfile("stuff.dat");
 
@@ -555,7 +589,8 @@ app_main(int argc, char const * const argv[])
           initplayersprite((short)i);
      }
 
-     if( option[4] == 0 ) {
+     // MISTER_HYBRID_NOINTRO=1 (the set's eduke32_env.sh): no intro videos
+     if( option[4] == 0 && !(getenv("MISTER_HYBRID_NOINTRO") && atoi(getenv("MISTER_HYBRID_NOINTRO"))) ) {
           i = smkplayseq("tvopen");
           if (i < 1) i = smkplayseq("tekndie");
           if (i < 1) i = smkplayseq("tekintro");
@@ -612,6 +647,9 @@ missionselection:
      while( !gameover ) {
         handleevents();
         OSD_DispatchQueued();
+#ifdef MISTER_HYBRID
+        mistercheats(activemenu == 0 && option[4] == 0);
+#endif
           while( movefifoplc != movefifoend ) {
                domovethings();
           }
@@ -683,6 +721,16 @@ processinput(short snum)
                xvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+2048)&2047])>>3);
                yvect += ((((int)syncsvel[snum])*doubvel*(int)sintable[(ang[snum]+1536)&2047])>>3);
           }
+#ifdef MISTER_HYBRID
+          if (misternoclip) { // the OSD's No Clipping: through the walls
+               __typeof__(cursectnum[snum]) ns = cursectnum[snum];
+               posx[snum] += xvect >> 14;
+               posy[snum] += yvect >> 14;
+               updatesector(posx[snum], posy[snum], &ns);
+               if (ns >= 0) cursectnum[snum] = ns;
+          }
+          else
+#endif
           clipmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],xvect,yvect,128L,4<<8,4<<8,CLIPMASK0);
           frameinterpolate = 1;
           revolvedoorstat[snum] = 1;
@@ -696,7 +744,7 @@ processinput(short snum)
      }
 
      // push player away from walls if clipmove doesn't work
-     if( pushmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],128L,4<<8,4<<8,CLIPMASK0) < 0 ) {
+     if( !misternoclip && pushmove(&posx[snum],&posy[snum],&posz[snum],&cursectnum[snum],128L,4<<8,4<<8,CLIPMASK0) < 0 ) {
           changehealth(snum,-1000);  // if this fails then instant death
           changescore(snum,-5);
      }
@@ -1564,10 +1612,21 @@ getinput()
           oldmousebstatus = bstatus;
      }
      if ( option[3] & 2 ) {
+#ifdef MISTER_HYBRID
+          // MiSTer: the core's eight buttons (joyb bits 2..9: R B A L Y X
+          // Select Start) and their actions, in the game's numbering
+          static const int misterjoyactions[8] = { 6, 7, 8, 4, 21, 26, 14, -1 };
+          for(i=0; i<8; i++) {
+               int action = misterjoyactions[i];
+               if (!(joyb&(4<<i)) || action < 0 || action >= NUMKEYS-1)
+                    continue;
+               switch (action) {
+#else
           for(i=0; i<4; i++) {
                if (!(joyb&(1<<i)) || moreoptions[i+4] < 0 || moreoptions[i+4] >= NUMKEYS-1)
                     continue;
                switch (moreoptions[i+4]) {
+#endif
                     case 0: moving=1; break;
                     case 1: moving=-1; break;
                     case 2: turning=1; break;
@@ -1576,9 +1635,15 @@ getinput()
                     case 12: strafing=-1; break;
                     case 13: strafing=1; break;
                     default:
+#ifdef MISTER_HYBRID
+                         if (moreoptionbits[action] >= 0) {
+                              clocbits |= 1<<moreoptionbits[action];
+                         }
+#else
                          if (moreoptionbits[moreoptions[i+4]] >= 0) {
                               clocbits |= 1<<moreoptionbits[moreoptions[i+4]];
                          }
+#endif
                          break;
                }
           }
@@ -1586,6 +1651,7 @@ getinput()
      }
 
      // keyboard survey - use to be keytimerstuff() called from keyhandler
+     { extern int misterjoydpadstrafekey; misterjoydpadstrafekey = keys[5]; }   // MiSTer: d-pad left/right strafe (patch_dpadstrafe_game.py)
      if( keystatus[keys[5]] == 0 && strafing == 0 ) {    // Les 09/28/95
           if( keystatus[keys[2]] > 0 || turning == 1) angvel = max(angvel-16*TICSPERFRAME,-128); // Les 09/28/95
           if( keystatus[keys[3]] > 0 || turning == -1) angvel = min(angvel+16*TICSPERFRAME,127); // Les 09/28/95
